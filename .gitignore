@@ -1,6 +1,2 @@
-!.gitignore
-!readme.md
-!home/.emacs
-!home/.emacs.d/init.el
-!home/.emacs.d/bin/*
-*
+home/.emacs.d/
+bin/lein.bat
