@@ -1,6 +1,7 @@
 ;;如果是windows系统，则修改HOME到DEVELOP_HOME/home目录下
 (if (memq window-system '(w32))
     (progn
+      (setenv "GIT_ASKPASS" "git-gui--askpass");;修复https的git push不了的问题
       (setenv "HOME" (concat DEVELOP_HOME "home/"))
       (add-to-list 'load-path "~/emacs/site-lisp")))
 
@@ -19,6 +20,7 @@
 				clojure-cheatsheet
 				web-mode
 				markdown-mode
+				magit
 				rainbow-delimiters))
 
 (dolist (p melpa-stable-packages)
@@ -100,8 +102,6 @@
  '(rainbow-delimiters-depth-8-face ((t (:foreground "#A000FF"))))
  '(rainbow-delimiters-depth-9-face ((t (:foreground "#00FF80")))))
 
-
-
 ;;开启ido模式，方便寻找文件
 (ido-mode t)
 
@@ -143,4 +143,3 @@
 (require 'sr-speedbar)
 (add-hook 'after-init-hook '(lambda () (sr-speedbar-toggle)))
 (global-set-key [f9] 'sr-speedbar-toggle)
-
