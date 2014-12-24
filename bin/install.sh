@@ -1,15 +1,15 @@
-#leinÄ¬ÈÏ°²×°Â·¾¶£¬¿É¸ü¸Ä
+ï»¿#leiné»˜è®¤å®‰è£…è·¯å¾„ï¼Œå¯æ›´æ”¹
 LEIN_DIR=~/bin
 
-#É¾³ıÖ®Ç°µÄleinÎÄ¼ş£¬±£Ö¤ÏÂÔØµ½×îĞÂÎÄ¼ş
+#åˆ é™¤ä¹‹å‰çš„leinæ–‡ä»¶ï¼Œä¿è¯ä¸‹è½½åˆ°æœ€æ–°æ–‡ä»¶
 rm $LEIN_DIR/lein
 
-#ÏÂÔØleinÎÄ¼şµ½LEIN_DIR
+#ä¸‹è½½leinæ–‡ä»¶åˆ°LEIN_DIR
 wget --no-check-certificate https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein -P $LEIN_DIR/
 
-#¸øleinÌí¼ÓÔËĞĞÈ¨ÏŞ
+#ç»™leinæ·»åŠ è¿è¡Œæƒé™
 chmod a+x $LEIN_DIR/lein
 
-#ÏÂÔØleinÒÀÀµµÄleingingen-VERSION-standalone.jar°ü
+#ä¸‹è½½leinä¾èµ–çš„leingingen-VERSION-standalone.jaråŒ…
 $LEIN_DIR/lein self-install
 

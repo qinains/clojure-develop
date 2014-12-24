@@ -1,114 +1,137 @@
-ÓÃemacs24¿ª·¢clojure
+ï»¿ç”¨emacs24å¼€å‘clojure
 
-#WindowsÏÂ°²×°leinºÍemacs
+#Windowsä¸‹å®‰è£…leinå’Œemacs
 
-##Ç°ÆÚ×¼±¸
+##å‰æœŸå‡†å¤‡
 
-¼ÙÉè±¾ÎÄ¼şÎ»ÓÚC:/developÎÄ¼ş¼ĞÖĞ£¬ÓĞÄ¿Â¼½á¹¹
+å‡è®¾æœ¬æ–‡ä»¶ä½äºC:/developæ–‡ä»¶å¤¹ä¸­ï¼Œæœ‰ç›®å½•ç»“æ„
 
-    /README.md --±¾ÎÄ¼ş
-    /bin/ --³£ÓÃµÄ¿ÉÖ´ĞĞÎÄ¼ş£¬°üÀ¨install.bat¡¢lein.bat(Ö´ĞĞinstall.batºóÉú³É)¡¢wget¡¢markdown
-    /home/ --Ö÷ÅäÖÃÎÄ¼ş¼Ğ£¬emacsµÄÖ÷ÒªÅäÖÃÎÄ¼ş¾Í·ÅÓÚ´Ë
+    /README.md --æœ¬æ–‡ä»¶
+    /bin/ --å¸¸ç”¨çš„å¯æ‰§è¡Œæ–‡ä»¶ï¼ŒåŒ…æ‹¬install.batã€lein.bat(æ‰§è¡Œinstall.batåç”Ÿæˆ)ã€wgetã€markdown
+    /home/ --ä¸»é…ç½®æ–‡ä»¶å¤¹ï¼Œemacsçš„ä¸»è¦é…ç½®æ–‡ä»¶å°±æ”¾äºæ­¤
 
-##½«bin/ÎÄ¼ş¼ĞÌí¼Óµ½PATHÖĞ
-ÒÔWin7ÎªÀı£¬
-¼ÆËã»ú-ÓÒ¼ü-ÊôĞÔ-¸ß¼¶ÏµÍ³ÉèÖÃ-»·¾³±äÁ¿-ÏµÍ³±äÁ¿-Ë«»÷Path-ÔÚ¡°±äÁ¿Öµ¡±ÖĞÌí¼Ó£º
+##å°†bin/æ–‡ä»¶å¤¹æ·»åŠ åˆ°PATHä¸­
+ä»¥Win7ä¸ºä¾‹ï¼Œ
+è®¡ç®—æœº-å³é”®-å±æ€§-é«˜çº§ç³»ç»Ÿè®¾ç½®-ç¯å¢ƒå˜é‡-ç³»ç»Ÿå˜é‡-åŒå‡»Path-åœ¨â€œå˜é‡å€¼â€ä¸­æ·»åŠ ï¼š
 
     C:\develop\bin;
 
-##°²×°lein
-Ë«»÷
+##å®‰è£…lein
+åŒå‡»
 
     C:/develop/bin/install.bat
 
-¼´¿É×Ô¶¯°²×°×îĞÂ°æµÄlein.batµ½C:/develop/bin/Ä¿Â¼ÏÂ¡£
+å³å¯è‡ªåŠ¨å®‰è£…æœ€æ–°ç‰ˆçš„lein.batåˆ°C:/develop/bin/ç›®å½•ä¸‹ã€‚
 
 
-##°²×°emacs
-¿Éµ½ http://ftp.gnu.org/pub/gnu/emacs/windows/ ÏÂÔØ°²×°°ü¡£
-¼ÙÉèemacs°²×°ÔÚC:\develop\Ä¿Â¼ÏÂ£¬Ë«»÷C:\develop\emacs\bin\addpm.exe¼´¿ÉÌí¼Óemacsµ½³ÌĞòÆô¶¯ÏîÖĞ¡£
+##å®‰è£…emacs
+å¯åˆ° http://ftp.gnu.org/pub/gnu/emacs/windows/ ä¸‹è½½å®‰è£…åŒ…ã€‚
+å‡è®¾emacså®‰è£…åœ¨C:\develop\ç›®å½•ä¸‹ï¼ŒåŒå‡»C:\develop\emacs\bin\addpm.exeå³å¯æ·»åŠ emacsåˆ°ç¨‹åºå¯åŠ¨é¡¹ä¸­ã€‚
 
-###¸ü¸Ä.emacsµÄÄ¬ÈÏÂ·¾¶
-Win7ÏÂ£¬.emacsÎÄ¼şÎ»ÓÚC:\Users\xxx\AppData\Roaming\ÎÄ¼ş¼ĞÖĞ¡£
-´ò¿ªemacs£¬ÊäÈëC-x C-f ~/.emacs <»Ø³µ>£¬Ìí¼Ó
+###æ›´æ”¹.emacsçš„é»˜è®¤è·¯å¾„
+Win7ä¸‹ï¼Œ.emacsæ–‡ä»¶ä½äºC:\Users\xxx\AppData\Roaming\æ–‡ä»¶å¤¹ä¸­ã€‚
+æ‰“å¼€emacsï¼Œè¾“å…¥C-x C-f ~/.emacs <å›è½¦>ï¼Œæ·»åŠ 
 
     (setq DEVELOP_HOME "C:/develop/")
     (load-file (concat DEVELOP_HOME "home/.emacs"))
 
-Ö®ºóÕæÕıµÄ.emacsÅäÖÃÎÄ¼ş¾ÍÔÚC:/develop/home/.emacsÎÄ¼şÖĞ¡£
+ä¹‹åçœŸæ­£çš„.emacsé…ç½®æ–‡ä»¶å°±åœ¨C:/develop/home/.emacsæ–‡ä»¶ä¸­ã€‚
 
-**×¢Òâ£ºÈç¹ûÔÙ´ÎÊäÈëC-x C-f ~/.emacs <»Ø³µ>£¬Ôò´ò¿ªµÄÊÇC:/develop/home/.emacsµÄ.emacsÎÄ¼ş¡£Èç¹ûÒª±à¼­Ô­À´µÄ.emacsÎÄ¼ş£¬ÔòĞèÒªÓÃÏµÍ³×Ô´øµÄ¼ÇÊÂ±¾´ò¿ªC:/Users/xxx/AppData/Roaming/.emacsÎÄ¼ş¡£**
+**æ³¨æ„ï¼šå¦‚æœå†æ¬¡è¾“å…¥C-x C-f ~/.emacs <å›è½¦>ï¼Œåˆ™æ‰“å¼€çš„æ˜¯C:/develop/home/.emacsçš„.emacsæ–‡ä»¶ã€‚å¦‚æœè¦ç¼–è¾‘åŸæ¥çš„.emacsæ–‡ä»¶ï¼Œåˆ™éœ€è¦ç”¨ç³»ç»Ÿè‡ªå¸¦çš„è®°äº‹æœ¬æ‰“å¼€C:/Users/xxx/AppData/Roaming/.emacsæ–‡ä»¶ã€‚**
 
 
-#LinuxÏÂ°²×°leinºÍemacs
+#Linuxä¸‹å®‰è£…leinå’Œemacs
 
-lein°²×°µ½µÄÄ¬ÈÏÄ¿Â¼ÊÇ ~/bin/ £¬git clone±¾ÏîÄ¿ºó£¬ÔÚ¿ØÖÆÌ¨ÖĞÖ´ĞĞ
+leinå®‰è£…åˆ°çš„é»˜è®¤ç›®å½•æ˜¯ ~/bin/ ï¼Œgit cloneæœ¬é¡¹ç›®åï¼Œåœ¨æ§åˆ¶å°ä¸­æ‰§è¡Œ
 
 	cd /path/to/this/dir/
-	chmod a+x bin/install.sh #ÈçĞèÒªĞŞ¸ÄÄ¬ÈÏÄ¿Â¼£¬ÔòĞŞ¸ÄLEIN_DIRµÄÖµ
+	chmod a+x bin/install.sh #å¦‚éœ€è¦ä¿®æ”¹é»˜è®¤ç›®å½•ï¼Œåˆ™ä¿®æ”¹LEIN_DIRçš„å€¼
 	./bin/install.sh
 
-Èç¹ûemacs»¹Ã»ÓĞ°²×°£¬Ôò°²×°£¨ÒÔUbuntuÎªÀı£©
+
+å¦‚æœemacsè¿˜æ²¡æœ‰å®‰è£…ï¼Œåˆ™å®‰è£…ï¼ˆä»¥Ubuntuä¸ºä¾‹ï¼‰
 
 	sudo apt-get install -y emacs
 
-Èç¹ûĞèÒªmarkdownÔ¤ÀÀ¹¦ÄÜ£¬Ôò°²×°
+ä¹‹åå°†home/.emacsæ–‡ä»¶å¤åˆ¶åˆ°ç”¨æˆ·ç›®å½•ä¸­(å¦‚æœæœ‰å¯ä»¥è¦†ç›–)
+
+
+å¦‚æœéœ€è¦markdowné¢„è§ˆåŠŸèƒ½ï¼Œåˆ™å®‰è£…
 
 	sudo apt-get install -y markdown 
 
 
-#°²×°clojure¿ª·¢Ïà¹Ø²å¼ş
-´ò¿ªhome/.emacs¼´¿É¿´µ½Ïà¹ØµÄÅäÖÃ¡£
-µÚÒ»´ÎÆô¶¯µÄÊ±ºò£¬´ò¿ª»á±È½Ï¾Ã£¬ÕâÊÇÒòÎªemacs»á×Ô¶¯È¥ÏÂÔØÏà¹ØµÄ²å¼ş¡£
+#å®‰è£…clojureå¼€å‘ç›¸å…³æ’ä»¶
+æ‰“å¼€home/.emacså³å¯çœ‹åˆ°ç›¸å…³çš„é…ç½®ã€‚
+ç¬¬ä¸€æ¬¡å¯åŠ¨çš„æ—¶å€™ï¼Œæ‰“å¼€ä¼šæ¯”è¾ƒä¹…ï¼Œè¿™æ˜¯å› ä¸ºemacsä¼šè‡ªåŠ¨å»ä¸‹è½½ç›¸å…³çš„æ’ä»¶ã€‚
 
-#Ê¹ÓÃleinµÄ×¢ÒâÊÂÏî
+#ä½¿ç”¨leinçš„æ³¨æ„äº‹é¡¹
 
-## jar°üÏÂÔØ²»ÁË
+## jaråŒ…ä¸‹è½½ä¸äº†
 
-https://clojars.org/ Èç¹ûĞèÒª·­Ç½²ÅÄÜ·ÃÎÊ£¬ÔòĞèÒªÅäÖÃleinµÄ´úÀí¡£±ÈÈçÎÒ¿ÉÓÃµÄ´úÀíÁ´½ÓÎªhttp://127.0.0.1:8580 £¬
+https://clojars.org/ å¦‚æœéœ€è¦ç¿»å¢™æ‰èƒ½è®¿é—®ï¼Œåˆ™éœ€è¦é…ç½®leinçš„ä»£ç†ã€‚æ¯”å¦‚æˆ‘å¯ç”¨çš„ä»£ç†é“¾æ¥ä¸ºhttp://127.0.0.1:8580 ï¼Œ
 
-·½·¨1£º
-WindowsÏµÍ³ÏÂ£¬
-±à¼­bin/lein.batÎÄ¼ş£¬ÔÚ¡°@echo off¡±ÏÂ£¬Ìí¼Ó
+æ–¹æ³•1ï¼š
+Windowsç³»ç»Ÿä¸‹ï¼Œ
+ç¼–è¾‘bin/lein.batæ–‡ä»¶ï¼Œåœ¨â€œ@echo offâ€ä¸‹ï¼Œæ·»åŠ 
 
         set http_proxy=127.0.0.1:8580
         set https_proxy=127.0.0.1:8580
 
-**Ã¿´ÎÔËĞĞC:/develop/bin/install.batÎÄ¼şÖ®ºó£¬¶¼ÒªÖØĞÂ±à¼­¡£**
+**æ¯æ¬¡è¿è¡ŒC:/develop/bin/install.batæ–‡ä»¶ä¹‹åï¼Œéƒ½è¦é‡æ–°ç¼–è¾‘ã€‚**
 
 
-ÔÚLinuxÏµÍ³ÏÂ£¬
-±à¼­~/bin/leinÎÄ¼ş£¬ÔÚ¡°#!/usr/bin/env bash¡±ÏÂ£¬Ìí¼Ó
+åœ¨Linuxç³»ç»Ÿä¸‹ï¼Œ
+ç¼–è¾‘~/bin/leinæ–‡ä»¶ï¼Œåœ¨â€œ#!/usr/bin/env bashâ€ä¸‹ï¼Œæ·»åŠ 
 
 	http_proxy=127.0.0.1:8580
 	https_proxy=127.0.0.1:8580
 
-**Ã¿´ÎÔËĞĞbin/install.shÎÄ¼şÖ®ºó£¬¶¼ÒªÖØĞÂ±à¼­¡£**
+**æ¯æ¬¡è¿è¡Œbin/install.shæ–‡ä»¶ä¹‹åï¼Œéƒ½è¦é‡æ–°ç¼–è¾‘ã€‚**
 
-·½·¨2£º
-Ìí¼Ó»·¾³±äÁ¿ http_proxy ºÍ https_proxy£¬Öµ¶¼ÊÇ127.0.0.1:8580¡£
+æ–¹æ³•2ï¼š
+æ·»åŠ ç¯å¢ƒå˜é‡ http\_proxy å’Œ https_proxyï¼Œå€¼éƒ½æ˜¯127.0.0.1:8580ã€‚
 
 
-## .clj´úÂë×Ô¶¯ÌáÊ¾ÎÊÌâ
+## .cljä»£ç è‡ªåŠ¨æç¤ºé—®é¢˜
 
-´úÂëÌáÊ¾¹¦ÄÜÊÇÓÃcompany²å¼şÀ´ÆôÓÃµÄ¡£ÔÚcider-modeÄ£Ê½ÏÂ£¬²Å¸üºÃµÄ¿ªÆô´úÂë¹¦ÄÜ¡£ÒªÊ¹cider-modeÄÜ¹»ÆôÓÃ£¬ÔÚÓÃlein´´½¨ÏîÄ¿Ö®ºó£¬ĞèÒªÔÚlein¸ùÅäÖÃÎÄ¼ş(~/.lein/profiles.clj (windowsÏµÍ³.lein/ÎÄ¼ş¼ĞÔÚÓÃ»§Ä¿Â¼ÏÂ£¬ÈçC:\Users\xxx\.lein\) )»òleinÏîÄ¿ÖĞÌí¼Ócider-nrepl²å¼ş:
+ä»£ç æç¤ºåŠŸèƒ½æ˜¯ç”¨companyæ’ä»¶æ¥å¯ç”¨çš„ã€‚åœ¨cider-modeæ¨¡å¼ä¸‹ï¼Œæ‰æ›´å¥½çš„å¼€å¯ä»£ç åŠŸèƒ½ã€‚è¦ä½¿cider-modeèƒ½å¤Ÿå¯ç”¨ï¼Œåœ¨ç”¨leinåˆ›å»ºé¡¹ç›®ä¹‹åï¼Œéœ€è¦åœ¨leinæ ¹é…ç½®æ–‡ä»¶(~/.lein/profiles.clj (windowsç³»ç»Ÿ.lein/æ–‡ä»¶å¤¹åœ¨ç”¨æˆ·ç›®å½•ä¸‹ï¼Œå¦‚C:\Users\xxx\.lein\) )æˆ–leiné¡¹ç›®ä¸­æ·»åŠ cider-nreplæ’ä»¶:
 
-ÔÚlein¸ùÅäÖÃÎÄ¼şÌí¼Ó£¬´ò¿ª~/.lein/profiles.cljÎÄ¼ş£¬Ìí¼Ó
+åœ¨leinæ ¹é…ç½®æ–‡ä»¶æ·»åŠ ï¼Œæ‰“å¼€~/.lein/profiles.cljæ–‡ä»¶ï¼Œæ·»åŠ 
 
-	:plugins [[cider/cider-nrepl "0.7.0"]]
+	:plugins [[cider/cider-nrepl "0.8.2"]]
 
-Èç¹ûprofiles.clj»¹Î´´´½¨£¬Ôò´´½¨ÎÄ¼ş²¢Ìí¼ÓÒÔÏÂÄÚÈİ
+å¦‚æœprofiles.cljè¿˜æœªåˆ›å»ºï¼Œåˆ™åˆ›å»ºæ–‡ä»¶å¹¶æ·»åŠ ä»¥ä¸‹å†…å®¹
 
-	{:user {:plugins [[cider/cider-nrepl "0.7.0"]]}}
+	{:user {:plugins [[cider/cider-nrepl "0.8.2"]]}}
 
-ÔÚleinÏîÄ¿ÖĞÌí¼Ó£¬´ò¿ªproject.cljÎÄ¼ş£¬Ìí¼Ó
+æˆ–è€…åœ¨leiné¡¹ç›®ä¸­æ·»åŠ ï¼Œæ‰“å¼€project.cljæ–‡ä»¶ï¼Œæ·»åŠ 
 
-	:plugins [[cider/cider-nrepl "0.7.0"]]
+	:plugins [[cider/cider-nrepl "0.8.2"]]
 
-**½ØÖ¹2014-11-13£¬ciderµÄÎÈ¶¨°æ±¾ÊÇ0.7.0¡£Èç¹ûÊ¹ÓÃ×îĞÂ°æ±¾£¬ÔòÉÏÃæµÄ¡°0.7.0¡±ĞèÒªĞŞ¸Ä³É¡°0.8.0-SNAPSHOT¡±£¬»òÕß¸ü¸ßµÄ°æ±¾(ĞèÒª¸ù¾İËùÏÂÔØµÄcider°æ±¾¶ø¶¨)**
+**æˆªæ­¢2014-12-24ï¼Œciderçš„ç¨³å®šç‰ˆæœ¬æ˜¯0.8.2ã€‚å¦‚æœä½¿ç”¨æœ€æ–°ç‰ˆæœ¬ï¼Œåˆ™ä¸Šé¢çš„â€œ0.8.2â€éœ€è¦ä¿®æ”¹æˆâ€œ0.9.0-SNAPSHOTâ€ï¼Œæˆ–è€…æ›´é«˜çš„ç‰ˆæœ¬(éœ€è¦æ ¹æ®æ‰€ä¸‹è½½çš„ciderç‰ˆæœ¬è€Œå®š)**
 
-Ö®ºóÓÃemacs´ò¿ª.cljÎÄ¼ş£¬Ö´ĞĞ
+ä¹‹åç”¨emacsæ‰“å¼€.cljæ–‡ä»¶ï¼Œæ‰§è¡Œ
 
-    M-x cider-jack-in »òÕß C-c M-j
+    M-x cider-jack-in æˆ–è€… C-c M-j
 
-¼´¿É¿ªÆôcider-modeÄ£Ê½£¬ÏíÊÜ´úÂë×Ô¶¯ÌáÊ¾°É :-)
+å³å¯å¼€å¯cider-modeæ¨¡å¼ï¼Œäº«å—ä»£ç è‡ªåŠ¨æç¤ºå§ :-)
+
+#å¦‚ä½•åœ¨REPLæ¨¡å¼ä¸‹è¿›è¡ŒWEBå¼€å‘
+
+ä»¥luminusæ¡†æ¶ä¸ºä¾‹ï¼Œ
+
+	lein new luminus example
+	cd example
+	emacs project.clj
+	#ä¹‹å
+	#æŒ‰C-c M-jé”®ï¼Œåœ¨å¯åŠ¨çš„cider-replçš„shellä¸­ï¼Œè¾“å…¥
+	(start-server)
+
+å³å¯å¯åŠ¨webæœåŠ¡å™¨ã€‚å¦‚æœæƒ³åœæ­¢æœåŠ¡å™¨ï¼Œåœ¨cider-replçš„shellä¸­è¾“å…¥
+
+	(stop-server)
+
+å³å¯ã€‚
+
+**å¦‚æœæ²¡æœ‰(start-server)å‡½æ•°ï¼Œè¯´æ˜æºç ä¸­æœ‰é”™è¯¯ã€‚å¯ä»¥åœ¨å‘½ä»¤è¡Œä¸­è¾“å…¥â€œlein ring serverâ€ï¼Œæ‰‹åŠ¨å¯åŠ¨æœåŠ¡ï¼Œå¦‚æœæºç ä¸­æœ‰é”™è¯¯ï¼Œå³å¯çœ‹åˆ°é”™è¯¯ä¿¡æ¯**

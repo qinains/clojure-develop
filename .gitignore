@@ -1,2 +1,3 @@
-home/.emacs.d/
+﻿home/.emacs.d/
+home/.emacs.d/*
 bin/lein.bat

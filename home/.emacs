@@ -1,40 +1,95 @@
-;;Èç¹ûÊÇwindowsÏµÍ³£¬ÔòĞŞ¸ÄHOMEµ½DEVELOP_HOME/homeÄ¿Â¼ÏÂ
+;;å¦‚æœæ˜¯windowsç³»ç»Ÿï¼Œåˆ™ä¿®æ”¹HOMEåˆ°DEVELOP_HOME/homeç›®å½•ä¸‹
 (if (memq window-system '(w32))
     (progn
       (setenv "HOME" (concat DEVELOP_HOME "home/"))
-      (add-to-list 'load-path "~/emacs/site-lisp")
-      ))
+      (add-to-list 'load-path "~/emacs/site-lisp")))
 
-;;C-x C-fºóÄ¬ÈÏ´ò¿ªµÄÎÄ¼ş¼Ğ
+(require 'package)
+;;å®‰è£…melpa-stableæ’ä»¶
+(add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/"))
+(package-initialize)
+(unless (package-installed-p 'cider) (package-refresh-contents))
+(defvar melpa-stable-packages '(projectile
+				company
+				clojure-mode
+				clojure-mode-extra-font-locking
+				clj-refactor
+				cider
+				clojure-snippets   
+				clojure-cheatsheet
+				web-mode
+				markdown-mode
+				rainbow-delimiters))
+
+(dolist (p melpa-stable-packages)
+  (unless (package-installed-p p)
+    (package-install p)))
+
+;;å®‰è£…melpaæ’ä»¶
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+(package-initialize)
+
+(unless (package-installed-p 'smartparens) (package-refresh-contents))
+
+(defvar melpa-packages '(sr-speedbar
+			 smartparens
+			 ssh
+			 4clojure))
+
+(dolist (p melpa-packages)
+  (unless (package-installed-p p)
+    (package-install p)))
+
+;;C-x C-fåé»˜è®¤æ‰“å¼€çš„æ–‡ä»¶å¤¹
 (setq default-directory "~/")
 
-;; µ±Òª»Ø´ğyes»ònoÊ±£¬Ö±½ÓÊäÈëy»òn
+;; å½“è¦å›ç­”yesæˆ–noæ—¶ï¼Œç›´æ¥è¾“å…¥yæˆ–n
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;;ÏÔÊ¾ĞĞÁĞºÅ
-(setq global-linum-mode t)
-(setq column-number-mode t)
-(setq column-number-mode t)
-
-;;Òş²Øtoolbar
-(tool-bar-mode -1)
-
-;;¹Ø±ÕÌáÊ¾Éù
+;;å…³é—­æç¤ºå£°
 (setq visible-bell t)
 
-;;Ö÷Ìâ
+;;è®°ä½ä¸Šæ¬¡æ‰“å¼€çš„æ–‡ä»¶
+(load "desktop")
+(desktop-load-default)
+(desktop-read)
+(setq desktop-save-mode t)
+
+;;ä¸»é¢˜
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(inhibit-startup-screen t))
+ '(column-number-mode t)
+ '(cua-mode t nil (cua-base))
+ '(current-language-environment "UTF-8")
+ '(desktop-base-file-name ".emacs-desktop")
+ '(desktop-dirname "~/.emacs.d/" t)
+ '(desktop-path (quote ("~/.emacs.d/")))
+ '(display-battery-mode t)
+ '(display-time-24hr-format t)
+ '(display-time-day-and-date t)
+ '(display-time-interval 10)
+ '(display-time-mode t)
+ '(display-time-use-mail-icon t)
+ '(global-linum-mode t)
+ '(inhibit-startup-screen t)
+ '(scroll-bar-mode nil)
+ '(show-paren-mode t)
+ '(speedbar-default-position (quote left))
+ '(speedbar-show-unknown-files t)
+ '(speedbar-verbosity-level 0)
+ '(sr-speedbar-default-width 17)
+ '(sr-speedbar-right-side nil)
+ '(tool-bar-mode nil))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Î¢ÈíÑÅºÚ" :foundry "outline" :slant normal :weight normal :height 98 :width normal))))
+ '(default ((t (:family "å¾®è½¯é›…é»‘" :foundry "outline" :slant normal :weight normal :height 105 :width normal))))
  '(rainbow-delimiters-depth-1-face ((t (:foreground "#E52020"))))
  '(rainbow-delimiters-depth-2-face ((t (:foreground "#68A8FF"))))
  '(rainbow-delimiters-depth-3-face ((t (:foreground "#FA2473"))))
@@ -45,49 +100,12 @@
  '(rainbow-delimiters-depth-8-face ((t (:foreground "#A000FF"))))
  '(rainbow-delimiters-depth-9-face ((t (:foreground "#00FF80")))))
 
-;;¿ªÆôidoÄ£Ê½£¬·½±ãÑ°ÕÒÎÄ¼ş
+
+
+;;å¼€å¯idoæ¨¡å¼ï¼Œæ–¹ä¾¿å¯»æ‰¾æ–‡ä»¶
 (ido-mode t)
 
-(require 'package)
-;;°²×°melpa-stable²å¼ş
-(add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/"))
-(package-initialize)
-(unless (package-installed-p 'cider) (package-refresh-contents))
-(defvar melpa-stable-packages '(
-                                projectile
-                                company
-                                clojure-mode
-                                clojure-mode-extra-font-locking
-                                clj-refactor
-                                cider
-                                clojure-snippets   
-                                clojure-cheatsheet
-                                web-mode
-                                markdown-mode
-                                rainbow-delimiters
-                                ))
-
-(dolist (p melpa-stable-packages)
-  (unless (package-installed-p p)
-    (package-install p)))
-
-;;°²×°melpa²å¼ş
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
-(package-initialize)
-
-(unless (package-installed-p 'smartparens) (package-refresh-contents))
-
-(defvar melpa-packages '(
-                         smartparens
-                         ssh
-                         4clojure
-                         ))
-
-(dolist (p melpa-packages)
-  (unless (package-installed-p p)
-    (package-install p)))
-
-;;ÅäÖÃmarkdown²å¼ş
+;;é…ç½®markdownæ’ä»¶
 (autoload 'markdown-mode "markdown-mode"
   "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
@@ -98,25 +116,31 @@
   (setq markdown-command "markdown"))
 (add-hook 'markdown-mode-hook '(lambda() (markdown-custom)))
 
-;;ÅäÖÃclojure-mode
+;;é…ç½®clojure-mode
 (require 'clojure-mode-extra-font-locking)
 (add-hook 'clojure-mode-hook 'subword-mode)
 (add-hook 'clojure-mode-hook 'turn-on-eldoc-mode)
 
-;;ĞÂĞĞ×Ô¶¯Ëõ½ø
+;;æ–°è¡Œè‡ªåŠ¨ç¼©è¿›
 (global-set-key (kbd "RET") 'newline-and-indent)
+(global-set-key (kbd "C-<return>") 'newline)
 
-;;ÅäÖÃclj-refactor
+;;é…ç½®clj-refactor
 (require 'clj-refactor)
-(add-hook 'clojure-mode-hook (lambda ()
-                               (clj-refactor-mode 1)
+(add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)
                                ;; insert keybinding setup here
-                               ))
-;;ÅäÖÃcider
+			       ))
 
-;;±à³ÌÄ£Ê½µÄÅäÖÃ
-(add-hook 'prog-mode-hook 'smartparens-strict-mode)
+;;é…ç½®cider
+
+;;ç¼–ç¨‹æ¨¡å¼çš„é…ç½®
+(add-hook 'prog-mode-hook 'smartparens-global-mode)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 (global-company-mode)
 (global-set-key "\t" 'company-complete-common)
-(show-paren-mode 1)
+
+;;æ˜¾ç¤ºå·¦ä¾§å¯¼èˆªï¼ŒæŒ‰F9é”®å¯ä»¥åˆ‡æ¢
+(require 'sr-speedbar)
+(add-hook 'after-init-hook '(lambda () (sr-speedbar-toggle)))
+(global-set-key [f9] 'sr-speedbar-toggle)
+
