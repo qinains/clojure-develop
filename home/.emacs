@@ -62,8 +62,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
- '(cua-mode t nil (cua-base))
- '(current-language-environment "UTF-8")
  '(desktop-base-file-name ".emacs-desktop")
  '(desktop-dirname "~/.emacs.d/" t)
  '(desktop-path (quote ("~/.emacs.d/")))
@@ -72,9 +70,9 @@
  '(display-time-interval 10)
  '(display-time-mode t)
  '(display-time-use-mail-icon t)
- '(visible-bell t)
  '(global-linum-mode t)
  '(inhibit-startup-screen t)
+ '(current-language-environment "UTF-8")
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
  '(speedbar-default-position (quote left))
@@ -82,14 +80,18 @@
  '(speedbar-verbosity-level 0)
  '(sr-speedbar-default-width 17)
  '(sr-speedbar-right-side nil)
- '(tool-bar-mode nil))
+ '(tool-bar-mode nil)
+ '(visible-bell t))
+
+;;字体去这里下载
+;;https://github.com/adobe-fonts/source-code-pro/releases/latest
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "微软雅黑" :foundry "outline" :slant normal :weight normal :height 105 :width normal))))
+ '(default ((t (:family "Source Code Pro" :foundry "outline" :slant normal :weight bold :height 113 :width normal))))
  '(rainbow-delimiters-depth-1-face ((t (:foreground "#E52020"))))
  '(rainbow-delimiters-depth-2-face ((t (:foreground "#68A8FF"))))
  '(rainbow-delimiters-depth-3-face ((t (:foreground "#FA2473"))))
