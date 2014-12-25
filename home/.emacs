@@ -21,6 +21,8 @@
 				web-mode
 				markdown-mode
 				magit
+				smex
+				window-number
 				rainbow-delimiters))
 
 (dolist (p melpa-stable-packages)
@@ -35,7 +37,6 @@
 
 (defvar melpa-packages '(sr-speedbar
 			 smartparens
-			 ssh
 			 4clojure))
 
 (dolist (p melpa-packages)
@@ -47,9 +48,6 @@
 
 ;; 当要回答yes或no时，直接输入y或n
 (fset 'yes-or-no-p 'y-or-n-p)
-
-;;关闭提示声
-(setq visible-bell t)
 
 ;;记住上次打开的文件
 (load "desktop")
@@ -69,12 +67,12 @@
  '(desktop-base-file-name ".emacs-desktop")
  '(desktop-dirname "~/.emacs.d/" t)
  '(desktop-path (quote ("~/.emacs.d/")))
- '(display-battery-mode t)
  '(display-time-24hr-format t)
  '(display-time-day-and-date t)
  '(display-time-interval 10)
  '(display-time-mode t)
  '(display-time-use-mail-icon t)
+ '(visible-bell t)
  '(global-linum-mode t)
  '(inhibit-startup-screen t)
  '(scroll-bar-mode nil)
@@ -143,3 +141,18 @@
 (require 'sr-speedbar)
 (add-hook 'after-init-hook '(lambda () (sr-speedbar-toggle)))
 (global-set-key [f9] 'sr-speedbar-toggle)
+
+;;按F12键启动magit-status
+(global-set-key [f12] 'magit-status)
+
+;;扩展M-x功能
+(require 'smex)
+(smex-initialize)
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+;;原配的M-x
+(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+
+;;按M-数字键(1,2,3……)即可切换窗口
+(require 'window-number)
+(window-number-meta-mode 1)
