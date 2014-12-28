@@ -11,18 +11,19 @@
 (package-initialize)
 (unless (package-installed-p 'cider) (package-refresh-contents))
 (defvar melpa-stable-packages '(projectile
-				company
-				clojure-mode
-				clojure-mode-extra-font-locking
-				clj-refactor
-				cider
-				clojure-snippets   
-				clojure-cheatsheet
-				web-mode
-				markdown-mode
-				magit
-				smex
-				rainbow-delimiters))
+                                company
+                                clojure-mode
+                                clojure-mode-extra-font-locking
+                                clj-refactor
+                                cider
+                                clojure-snippets
+                                clojure-cheatsheet
+                                web-mode
+                                markdown-mode
+                                magit
+                                smex
+                                undo-tree
+                                rainbow-delimiters))
 
 (dolist (p melpa-stable-packages)
   (unless (package-installed-p p)
@@ -35,9 +36,9 @@
 (unless (package-installed-p 'smartparens) (package-refresh-contents))
 
 (defvar melpa-packages '(sr-speedbar
-			 smartparens
-			 window-number
-			 4clojure))
+                         smartparens
+                         window-number
+                         4clojure))
 
 (dolist (p melpa-packages)
   (unless (package-installed-p p)
@@ -46,7 +47,7 @@
 ;;C-x C-f后默认打开的文件夹
 (setq default-directory "~/")
 
-;; 当要回答yes或no时，直接输入y或n
+;;当要回答yes或no时，直接输入y或n
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;;记住上次打开的文件
@@ -54,6 +55,20 @@
 (desktop-load-default)
 (desktop-read)
 (setq desktop-save-mode t)
+
+;;编码
+(set-language-environment 'UTF-8)
+(set-locale-environment "UTF-8")
+
+;;tab键和新行自动缩进
+(setq c-basic-offset 4)
+(setq indent-tabs-mode nil)
+(setq default-tab-width 4)
+(setq tab-width 4)
+(setq tab-stop-list ())
+
+(global-set-key (kbd "RET") 'newline-and-indent)
+(global-set-key (kbd "C-<return>") 'newline)
 
 ;;主题
 (custom-set-variables
@@ -72,9 +87,9 @@
  '(display-time-use-mail-icon t)
  '(global-linum-mode t)
  '(inhibit-startup-screen t)
- '(current-language-environment "UTF-8")
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
+ '(size-indication-mode t)
  '(speedbar-default-position (quote left))
  '(speedbar-show-unknown-files t)
  '(speedbar-verbosity-level 0)
@@ -84,14 +99,13 @@
  '(visible-bell t))
 
 ;;字体去这里下载
-;;https://github.com/adobe-fonts/source-code-pro/releases/latest
-
+;;http://sourceforge.net/projects/wqy/files/wqy-microhei/
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Source Code Pro" :foundry "outline" :slant normal :weight bold :height 113 :width normal))))
+ '(default ((t (:family "文泉驿等宽微米黑" :foundry "outline" :slant normal :weight normal :height 105 :width normal))))
  '(rainbow-delimiters-depth-1-face ((t (:foreground "#E52020"))))
  '(rainbow-delimiters-depth-2-face ((t (:foreground "#68A8FF"))))
  '(rainbow-delimiters-depth-3-face ((t (:foreground "#FA2473"))))
@@ -121,15 +135,11 @@
 (add-hook 'clojure-mode-hook 'subword-mode)
 (add-hook 'clojure-mode-hook 'turn-on-eldoc-mode)
 
-;;新行自动缩进
-(global-set-key (kbd "RET") 'newline-and-indent)
-(global-set-key (kbd "C-<return>") 'newline)
-
 ;;配置clj-refactor
 (require 'clj-refactor)
 (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)
                                ;; insert keybinding setup here
-			       ))
+                               ))
 
 ;;配置cider
 
@@ -158,3 +168,7 @@
 ;;按M-数字键(1,2,3……)即可切换窗口
 (require 'window-number)
 (window-number-meta-mode 1)
+
+;;C-x u开启。p n f b q试试这几个键
+(require 'undo-tree)
+(global-undo-tree-mode)

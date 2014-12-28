@@ -4,13 +4,15 @@
 
 ##前期准备
 
-建议去[这里下载](https://github.com/adobe-fonts/source-code-pro/releases/latest)等宽字体，之后解压安装。
-
+###目录结构
 假设本文件位于C:/develop文件夹中，有目录结构
 
     /README.md --本文件
-    /bin/ --常用的可执行文件，包括install.bat、lein.bat(执行install.bat后生成)、wget、markdown
+    /bin/ --常用的可执行文件，包括install.bat、lein.bat(执行install.bat后生成)、wget、markdown、字体文件
     /home/ --主配置文件夹，emacs的主要配置文件就放于此
+
+###安装字体
+双击bin/wqy-microhei-0.2.0-beta.tar.gz或者去[这里下载](http://sourceforge.net/projects/wqy/files/wqy-microhei/)等宽字体之后解压安装。
 
 ##将bin/文件夹添加到PATH中
 以Win7为例，
