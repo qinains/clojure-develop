@@ -1,4 +1,4 @@
-;;如果是windows系统，则修改HOME到DEVELOP_HOME/home目录下
+﻿;;如果是windows系统，则修改HOME到DEVELOP_HOME/home目录下
 (if (memq window-system '(w32))
     (progn
       (setenv "GIT_ASKPASS" "git-gui--askpass");;修复https的git push不了的问题
@@ -22,7 +22,6 @@
 				markdown-mode
 				magit
 				smex
-				window-number
 				rainbow-delimiters))
 
 (dolist (p melpa-stable-packages)
@@ -37,6 +36,7 @@
 
 (defvar melpa-packages '(sr-speedbar
 			 smartparens
+			 window-number
 			 4clojure))
 
 (dolist (p melpa-packages)

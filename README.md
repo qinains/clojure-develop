@@ -4,6 +4,8 @@
 
 ##前期准备
 
+建议去[这里下载](https://github.com/adobe-fonts/source-code-pro/releases/latest)等宽字体，之后解压安装。
+
 假设本文件位于C:/develop文件夹中，有目录结构
 
     /README.md --本文件
