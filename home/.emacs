@@ -50,12 +50,6 @@
 ;;当要回答yes或no时，直接输入y或n
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;;记住上次打开的文件
-(load "desktop")
-(desktop-load-default)
-(desktop-read)
-(setq desktop-save-mode t)
-
 ;;编码
 (set-language-environment 'UTF-8)
 (set-locale-environment "UTF-8")
@@ -135,11 +129,10 @@
 (add-hook 'clojure-mode-hook 'subword-mode)
 (add-hook 'clojure-mode-hook 'turn-on-eldoc-mode)
 
-;;配置clj-refactor
+;;配置clj-refactor,用C-c C-m键开启
 (require 'clj-refactor)
-(add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)
-                               ;; insert keybinding setup here
-                               ))
+(add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1) (cljr-add-keybindings-with-prefix "C-c C-m")))
+(setq cljr-sort-comparator 'cljr--semantic-comparator)
 
 ;;配置cider
 
@@ -172,3 +165,9 @@
 ;;C-x u开启。p n f b q试试这几个键
 (require 'undo-tree)
 (global-undo-tree-mode)
+
+;;记住上次打开的文件
+(load "desktop")
+(desktop-load-default)
+(desktop-read)
+(setq desktop-save-mode t)

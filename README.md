@@ -121,6 +121,14 @@ Windows系统下，
 
 即可开启cider-mode模式，享受代码自动提示吧 :-)
 
+##重构
+添加
+
+	:plugins [[refactor-nrepl "0.2.2"]]
+
+到依赖文件中。
+按C-c C-m .. 即可启用重构插件。详情请看[演示](https://github.com/clojure-emacs/clj-refactor.el#usage)
+
 #如何在REPL模式下进行WEB开发
 
 以luminus框架为例，
