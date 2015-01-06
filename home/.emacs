@@ -1,4 +1,4 @@
-﻿;;如果是windows系统，则修改HOME到DEVELOP_HOME/home目录下
+;;如果是windows系统，则修改HOME到DEVELOP_HOME/home目录下
 (if (memq window-system '(w32))
     (progn
       (setenv "GIT_ASKPASS" "git-gui--askpass");;修复https的git push不了的问题
@@ -11,8 +11,8 @@
 (package-initialize)
 (unless (package-installed-p 'cider) (package-refresh-contents))
 (defvar melpa-stable-packages '(cider
-								clj-refactor
-								projectile
+                                clj-refactor
+                                projectile
                                 company
                                 clojure-mode
                                 clojure-mode-extra-font-locking
@@ -36,8 +36,8 @@
 (unless (package-installed-p 'smartparens) (package-refresh-contents))
 
 (defvar melpa-packages '(smartparens
-						 ecb
-						 4clojure))
+                         ecb
+                         4clojure))
 
 (dolist (p melpa-packages)
   (unless (package-installed-p p)
@@ -50,8 +50,10 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;;编码
-(set-language-environment 'UTF-8)
-(set-locale-environment "UTF-8")
+(prefer-coding-system 'utf-8)
+(setq default-buffer-file-coding-system 'utf-8)
+(set-language-environment 'utf-8)
+(set-locale-environment "utf-8")
 
 ;;tab键和新行自动缩进
 (setq c-basic-offset 4)
@@ -59,6 +61,7 @@
 (setq default-tab-width 4)
 (setq tab-width 4)
 (setq tab-stop-list ())
+(setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80 84 88 92 96 100 104 108 112 116 120))
 
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-<return>") 'newline)
@@ -70,7 +73,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
- '(current-language-environment "UTF-8")
  '(display-time-24hr-format t)
  '(display-time-day-and-date t)
  '(display-time-interval 10)
@@ -78,6 +80,7 @@
  '(display-time-use-mail-icon t)
  '(ecb-auto-activate t)
  '(ecb-options-version "2.40")
+ '(ecb-primary-secondary-mouse-buttons (quote mouse-1--mouse-2))
  '(ecb-tip-of-the-day nil)
  '(global-linum-mode t)
  '(inhibit-startup-screen t)
