@@ -10,12 +10,12 @@
 (add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/"))
 (package-initialize)
 (unless (package-installed-p 'cider) (package-refresh-contents))
-(defvar melpa-stable-packages '(projectile
+(defvar melpa-stable-packages '(cider
+								clj-refactor
+								projectile
                                 company
                                 clojure-mode
                                 clojure-mode-extra-font-locking
-                                clj-refactor
-                                cider
                                 clojure-snippets
                                 clojure-cheatsheet
                                 web-mode
@@ -35,10 +35,9 @@
 
 (unless (package-installed-p 'smartparens) (package-refresh-contents))
 
-(defvar melpa-packages '(sr-speedbar
-                         smartparens
-                         window-number
-                         4clojure))
+(defvar melpa-packages '(smartparens
+						 ecb
+						 4clojure))
 
 (dolist (p melpa-packages)
   (unless (package-installed-p p)
@@ -71,24 +70,20 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
- '(desktop-base-file-name ".emacs-desktop")
- '(desktop-dirname "~/.emacs.d/" t)
- '(desktop-path (quote ("~/.emacs.d/")))
+ '(current-language-environment "UTF-8")
  '(display-time-24hr-format t)
  '(display-time-day-and-date t)
  '(display-time-interval 10)
  '(display-time-mode t)
  '(display-time-use-mail-icon t)
+ '(ecb-auto-activate t)
+ '(ecb-options-version "2.40")
+ '(ecb-tip-of-the-day nil)
  '(global-linum-mode t)
  '(inhibit-startup-screen t)
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
  '(size-indication-mode t)
- '(speedbar-default-position (quote left))
- '(speedbar-show-unknown-files t)
- '(speedbar-verbosity-level 0)
- '(sr-speedbar-default-width 17)
- '(sr-speedbar-right-side nil)
  '(tool-bar-mode nil)
  '(visible-bell t))
 
@@ -142,11 +137,6 @@
 (global-company-mode)
 (global-set-key "\t" 'company-complete-common)
 
-;;显示左侧导航，按F9键可以切换
-(require 'sr-speedbar)
-(add-hook 'after-init-hook '(lambda () (sr-speedbar-toggle)))
-(global-set-key [f9] 'sr-speedbar-toggle)
-
 ;;按F12键启动magit-status
 (global-set-key [f12] 'magit-status)
 
@@ -158,16 +148,21 @@
 ;;原配的M-x
 (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
 
-;;按M-数字键(1,2,3……)即可切换窗口
-(require 'window-number)
-(window-number-meta-mode 1)
+;;按Shift+方向键即可切换窗口
+(when (fboundp 'windmove-default-keybindings)
+  (windmove-default-keybindings))
 
 ;;C-x u开启。p n f b q试试这几个键
 (require 'undo-tree)
 (global-undo-tree-mode)
 
+;;ECB,按F9键可以切换
+(require 'ecb)
+(global-set-key [f9] 'ecb-toggle-ecb-windows)
+
+;;文件有更改时自动更新
+(global-auto-revert-mode)
+
 ;;记住上次打开的文件
 (load "desktop")
-(desktop-load-default)
-(desktop-read)
-(setq desktop-save-mode t)
+(desktop-save-mode 1)
