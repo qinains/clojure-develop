@@ -45,6 +45,11 @@ Win7下，.emacs文件位于C:\Users\xxx\AppData\Roaming\文件夹中。
 
 
 #Linux下安装lein和emacs
+添加 ~/bin/ 到PATH。打开~/.bash_profile或者~/.profile,添加
+
+	export PATH="$PATH:~/bin/"
+
+到文件的末尾。
 
 lein安装到的默认目录是 ~/bin/ ，git clone本项目后，在控制台中执行
 
@@ -53,16 +58,19 @@ lein安装到的默认目录是 ~/bin/ ，git clone本项目后，在控制台�
 	./bin/install.sh
 
 
-如果emacs还没有安装，则安装（以Ubuntu为例）
+如果emacs还没有安装，则安装
 
-	sudo apt-get install -y emacs
+	sudo apt-get install -y emacs xfonts-base ttf-wqy-microhei #Ubuntu系统
+	sudo pacman -S emacs xorg-fonts-encodings wqy-microhei #ArchLinux系统
+
 
 之后将home/.emacs文件复制到用户目录中(如果有可以覆盖)
 
 
 如果需要markdown预览功能，则安装
 
-	sudo apt-get install -y markdown 
+	sudo apt-get install -y markdown #Ubuntu系统
+	sudo pacman -S markdown #ArchLinux系统
 
 
 #安装clojure开发相关插件
@@ -103,7 +111,7 @@ Windows系统下，
 
 在lein根配置文件添加，打开~/.lein/profiles.clj文件，添加
 
-	:plugins [[cider/cider-nrepl "0.8.2"]]
+	:plugins [[..其他包..][cider/cider-nrepl "0.8.2"]]
 
 如果profiles.clj还未创建，则创建文件并添加以下内容
 
@@ -124,7 +132,7 @@ Windows系统下，
 ##重构
 添加
 
-	:plugins [[refactor-nrepl "0.2.2"]]
+	:plugins [[..其他包..][refactor-nrepl "0.2.2"]]
 
 到依赖文件中。
 按C-c C-m .. 即可启用重构插件。详情请看[演示](https://github.com/clojure-emacs/clj-refactor.el#usage)
