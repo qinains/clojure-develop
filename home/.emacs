@@ -5,6 +5,13 @@
       (setenv "HOME" (concat DEVELOP_HOME "home/"))
       (add-to-list 'load-path "~/emacs/site-lisp")))
 
+;;光标显示为一竖线
+(setq-default cursor-type 'bar)
+
+;;设置标题栏显示文件的完整路径名
+(setq frame-title-format
+	  '("%S" (buffer-file-name "%f" (dired-directory dired-directory "%b"))))
+
 (require 'package)
 ;;安装melpa-stable插件
 (add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/"))
@@ -13,6 +20,7 @@
 (defvar melpa-stable-packages '(cider
                                 clj-refactor
                                 projectile
+                                flx-ido
                                 company
                                 clojure-mode
                                 clojure-mode-extra-font-locking
@@ -50,10 +58,12 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;;编码
+;;显示当前文件编码，C-h C (或者M-x describe-current-coding-system)
+;;如果打开的文件有乱码，还原成文件默认编码：C-x <RET> r <RET> (或者 M-x revert-buffer-with-coding-system) 
+;;如果想转码，改变当前buffer的编码为UTF-8：C-x <RET> f utf-8 （或者 M-x set-buffer-file-coding-system）
 (prefer-coding-system 'utf-8)
+;;新建的文件都保存成UTF-8编码
 (setq default-buffer-file-coding-system 'utf-8)
-(set-language-environment 'utf-8)
-(set-locale-environment "utf-8")
 
 ;;tab键和新行自动缩进
 (setq c-basic-offset 4)
@@ -108,8 +118,17 @@
  '(rainbow-delimiters-depth-8-face ((t (:foreground "#A000FF"))))
  '(rainbow-delimiters-depth-9-face ((t (:foreground "#00FF80")))))
 
-;;开启ido模式，方便寻找文件
-(ido-mode t)
+;;开启ido模式，显示备选项
+(require 'flx-ido)
+(ido-mode 1)
+(ido-everywhere 1)
+(flx-ido-mode 1)
+;; disable ido faces to see flx highlights.
+(setq ido-enable-flex-matching t)
+(setq ido-use-faces nil)
+
+;;开启projectile,用于查找文件名(C-c p f)和查找文件内容(C-c p o)
+(projectile-global-mode)
 
 ;;配置markdown插件
 (autoload 'markdown-mode "markdown-mode"
