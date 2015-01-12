@@ -1,9 +1,8 @@
-;;如果是windows系统，则修改HOME到DEVELOP_HOME/home目录下
+;;如果是windows系统
 (if (memq window-system '(w32))
     (progn
-      (setenv "GIT_ASKPASS" "git-gui--askpass");;修复https的git push不了的问题
-      (setenv "HOME" (concat DEVELOP_HOME "home/"))
-      (add-to-list 'load-path "~/emacs/site-lisp")))
+	  ;;修复https的git push不了的问题
+      (setenv "GIT_ASKPASS" "git-gui--askpass")))
 
 ;;光标显示为一竖线
 (setq-default cursor-type 'bar)
@@ -16,7 +15,7 @@
 ;;安装melpa-stable插件
 (add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/"))
 (package-initialize)
-(unless (package-installed-p 'cider) (package-refresh-contents))
+(when (not package-archive-contents) (package-refresh-contents))
 (defvar melpa-stable-packages '(cider
                                 clj-refactor
                                 projectile
@@ -152,6 +151,10 @@
 (setq cljr-sort-comparator 'cljr--semantic-comparator)
 
 ;;配置cider
+(setq cider-repl-wrap-history t)
+(setq nrepl-log-messages t)
+(setq cider-repl-history-size 1000)
+(setq cider-repl-history-file "~/.emacs.d/cider-history")
 
 ;;编程模式的配置
 (add-hook 'prog-mode-hook 'smartparens-global-mode)

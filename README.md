@@ -5,11 +5,12 @@
 ##前期准备
 
 ###目录结构
-假设本文件位于C:/develop文件夹中，有目录结构
+假设本文件位于C:/path/to/this/dir/文件夹中，有目录结构
 
     /README.md --本文件
-    /bin/ --常用的可执行文件，包括install.bat、lein.bat(执行install.bat后生成)、wget、markdown、字体文件
-    /home/ --主配置文件夹，emacs的主要配置文件就放于此
+    /init.el --配置文件,插件的按键以及细节说明请看该文件注解
+    /bin/ --常用的可执行文件，包括install.sh、install.bat、lein.bat(执行install.bat后生成)、wget、markdown、字体文件
+
 
 ###安装字体
 双击bin/wqy-microhei-0.2.0-beta.tar.gz或者去[这里下载](http://sourceforge.net/projects/wqy/files/wqy-microhei/)等宽字体之后解压安装。
@@ -18,12 +19,12 @@
 以Win7为例，
 计算机-右键-属性-高级系统设置-环境变量-系统变量-双击Path-在“变量值”中添加：
 
-    C:\develop\bin;
+    C:\path\to\this\dir\bin\;
 
 ##安装lein
 双击
 
-    C:/develop/bin/install.bat
+    C:/path/to/this/dir/bin/install.bat
 
 即可自动安装最新版的lein.bat到C:/develop/bin/目录下。
 
@@ -33,15 +34,11 @@
 假设emacs安装在C:\develop\目录下，双击C:\develop\emacs\bin\addpm.exe即可添加emacs到程序启动项中。
 
 ###更改.emacs的默认路径
-Win7下，.emacs文件位于C:\Users\xxx\AppData\Roaming\文件夹中。
 打开emacs，输入C-x C-f ~/.emacs <回车>，添加
 
-    (setq DEVELOP_HOME "C:/develop/")
-    (load-file (concat DEVELOP_HOME "home/.emacs"))
+    (load-file "/path/to/this/dir/init.el")
 
-之后真正的.emacs配置文件就在C:/develop/home/.emacs文件中。
-
-**注意：如果再次输入C-x C-f ~/.emacs <回车>，则打开的是C:/develop/home/.emacs的.emacs文件。如果要编辑原来的.emacs文件，则需要用系统自带的记事本打开C:/Users/xxx/AppData/Roaming/.emacs文件。**
+。
 
 
 #Linux下安装lein和emacs
