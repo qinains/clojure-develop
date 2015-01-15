@@ -30,6 +30,7 @@
                                 magit
                                 smex
                                 undo-tree
+                                hl-sexp
                                 rainbow-delimiters))
 
 (dolist (p melpa-stable-packages)
@@ -107,6 +108,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "文泉驿等宽微米黑" :foundry "outline" :slant normal :weight normal :height 105 :width normal))))
+ '(hl-sexp-face ((t (:background "#d0d0d0"))))
  '(rainbow-delimiters-depth-1-face ((t (:foreground "#E52020"))))
  '(rainbow-delimiters-depth-2-face ((t (:foreground "#68A8FF"))))
  '(rainbow-delimiters-depth-3-face ((t (:foreground "#FA2473"))))
@@ -155,6 +157,9 @@
 (setq nrepl-log-messages t)
 (setq cider-repl-history-size 1000)
 (setq cider-repl-history-file "~/.emacs.d/cider-history")
+(setq cider-show-error-buffer nil)
+(setq cider-repl-use-clojure-font-lock t)
+(add-hook 'cider-mode-hook #'eldoc-mode)
 
 ;;编程模式的配置
 (add-hook 'prog-mode-hook 'smartparens-global-mode)
@@ -176,6 +181,10 @@
 ;;按Shift+方向键即可切换窗口
 (when (fboundp 'windmove-default-keybindings)
   (windmove-default-keybindings))
+
+;;光标所在行高亮
+(require 'hl-sexp)
+(global-hl-sexp-mode)
 
 ;;C-x u开启。p n f b q试试这几个键
 (require 'undo-tree)
