@@ -64,7 +64,6 @@
 (prefer-coding-system 'utf-8)
 ;;新建的文件都保存成UTF-8编码
 (setq default-buffer-file-coding-system 'utf-8)
-
 ;;tab键和新行自动缩进
 (setq c-basic-offset 4)
 (setq indent-tabs-mode nil)
@@ -199,4 +198,11 @@
 
 ;;记住上次打开的文件
 (load "desktop")
+(setq desktop-save t)
+(setq desktop-load-locked-desktop t)
+(setq *desktop-dir* (list (expand-file-name "~/.emacs.d/desktop")))
+(setq desktop-path '("~/.emacs.d/"))
+(setq desktop-dirname "~/.emacs.d/")
+(setq desktop-base-file-name ".emacs-desktop")
 (desktop-save-mode 1)
+(desktop-read)
