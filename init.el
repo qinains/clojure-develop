@@ -159,6 +159,7 @@
 (setq cider-show-error-buffer nil)
 (setq cider-repl-use-clojure-font-lock t)
 (add-hook 'cider-mode-hook #'eldoc-mode)
+(global-set-key (kbd "C-c C-z") 'cider-switch-to-repl-buffer)
 
 ;;编程模式的配置
 (add-hook 'prog-mode-hook 'smartparens-global-mode)
