@@ -26,7 +26,7 @@
 
     C:/path/to/this/dir/bin/install.bat
 
-即可自动安装最新版的lein.bat到C:/develop/bin/目录下。
+即可安装lein的依赖包。
 
 
 ##安装emacs

@@ -44,7 +44,6 @@
 (unless (package-installed-p 'smartparens) (package-refresh-contents))
 
 (defvar melpa-packages '(smartparens
-                         ecb
                          4clojure))
 
 (dolist (p melpa-packages)
@@ -87,10 +86,6 @@
  '(display-time-interval 10)
  '(display-time-mode t)
  '(display-time-use-mail-icon t)
- '(ecb-auto-activate t)
- '(ecb-options-version "2.40")
- '(ecb-primary-secondary-mouse-buttons (quote mouse-1--mouse-2))
- '(ecb-tip-of-the-day nil)
  '(global-linum-mode t)
  '(inhibit-startup-screen t)
  '(scroll-bar-mode nil)
@@ -161,6 +156,24 @@
 (add-hook 'cider-mode-hook #'eldoc-mode)
 (global-set-key (kbd "C-c C-z") 'cider-switch-to-repl-buffer)
 
+;;配置web-mode
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(defun my-web-mode-hook ()
+  "Hooks for Web mode."
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-enable-auto-pairing t)
+  (setq web-mode-enable-current-element-highlight t))
+(add-hook 'web-mode-hook  'my-web-mode-hook)
+
 ;;编程模式的配置
 (add-hook 'prog-mode-hook 'smartparens-global-mode)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
@@ -190,20 +203,15 @@
 (require 'undo-tree)
 (global-undo-tree-mode)
 
-;;ECB,按F9键可以切换
-(require 'ecb)
-(global-set-key [f9] 'ecb-toggle-ecb-windows)
-
 ;;文件有更改时自动更新
 (global-auto-revert-mode)
 
 ;;记住上次打开的文件
-(load "desktop")
-(setq desktop-save t)
-(setq desktop-load-locked-desktop t)
-(setq *desktop-dir* (list (expand-file-name "~/.emacs.d/desktop")))
-(setq desktop-path '("~/.emacs.d/"))
-(setq desktop-dirname "~/.emacs.d/")
-(setq desktop-base-file-name ".emacs-desktop")
+(require 'desktop)
 (desktop-save-mode 1)
-(desktop-read)
+(defun my-desktop-save ()
+  (interactive)
+  ;; Don't call desktop-save-in-desktop-dir, as it prints a message.
+  (if (eq (desktop-owner) (emacs-pid))
+	  (desktop-save desktop-dirname)))
+(add-hook 'auto-save-hook 'my-desktop-save)
