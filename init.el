@@ -43,7 +43,8 @@
 
 (unless (package-installed-p 'smartparens) (package-refresh-contents))
 
-(defvar melpa-packages '(smartparens
+(defvar melpa-packages '(sr-speedbar
+                         smartparens
                          4clojure))
 
 (dolist (p melpa-packages)
@@ -91,6 +92,11 @@
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
  '(size-indication-mode t)
+ '(speedbar-default-position (quote left))
+ '(speedbar-show-unknown-files t)
+ '(speedbar-verbosity-level 0)
+ '(sr-speedbar-default-width 17)
+ '(sr-speedbar-right-side nil)
  '(tool-bar-mode nil)
  '(visible-bell t))
 
@@ -141,10 +147,15 @@
 (add-hook 'clojure-mode-hook 'subword-mode)
 (add-hook 'clojure-mode-hook 'turn-on-eldoc-mode)
 
-;;配置clj-refactor,用C-c C-m键开启
+;;开启Yasnippet
+(require 'yasnippet)
+(yas/global-mode 1)
+
+;;配置clj-refactor,用C-c RET键开启
 (require 'clj-refactor)
-(add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1) (cljr-add-keybindings-with-prefix "C-c C-m")))
+(add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1) (cljr-add-keybindings-with-prefix "C-c RET")))
 (setq cljr-sort-comparator 'cljr--semantic-comparator)
+
 
 ;;配置cider
 (setq cider-repl-wrap-history t)
@@ -183,6 +194,10 @@
 ;;按F12键启动magit-status
 (global-set-key [f12] 'magit-status)
 
+;;显示左侧导航，按F9键可以切换
+(require 'sr-speedbar)
+(global-set-key [f9] 'sr-speedbar-toggle)
+
 ;;扩展M-x功能
 (require 'smex)
 (smex-initialize)
@@ -206,12 +221,3 @@
 ;;文件有更改时自动更新
 (global-auto-revert-mode)
 
-;;记住上次打开的文件
-(require 'desktop)
-(desktop-save-mode 1)
-(defun my-desktop-save ()
-  (interactive)
-  ;; Don't call desktop-save-in-desktop-dir, as it prints a message.
-  (if (eq (desktop-owner) (emacs-pid))
-	  (desktop-save desktop-dirname)))
-(add-hook 'auto-save-hook 'my-desktop-save)
