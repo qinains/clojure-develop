@@ -45,7 +45,8 @@
 
 (defvar melpa-packages '(sr-speedbar
                          smartparens
-                         4clojure))
+                         4clojure
+                         moe-theme))
 
 (dolist (p melpa-packages)
   (unless (package-installed-p p)
@@ -108,16 +109,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "文泉驿等宽微米黑" :foundry "outline" :slant normal :weight normal :height 105 :width normal))))
- '(hl-sexp-face ((t (:background "#d0d0d0"))))
- '(rainbow-delimiters-depth-1-face ((t (:foreground "#E52020"))))
- '(rainbow-delimiters-depth-2-face ((t (:foreground "#68A8FF"))))
- '(rainbow-delimiters-depth-3-face ((t (:foreground "#FA2473"))))
- '(rainbow-delimiters-depth-4-face ((t (:foreground "#A6E12B"))))
- '(rainbow-delimiters-depth-5-face ((t (:foreground "#FB951D"))))
- '(rainbow-delimiters-depth-6-face ((t (:foreground "#FF3040"))))
- '(rainbow-delimiters-depth-7-face ((t (:foreground "#0040FF"))))
- '(rainbow-delimiters-depth-8-face ((t (:foreground "#A000FF"))))
- '(rainbow-delimiters-depth-9-face ((t (:foreground "#00FF80")))))
+ '(hl-sexp-face ((t (:background "#d0d0d0")))))
 
 ;;开启ido模式，显示备选项
 (require 'flx-ido)
@@ -221,3 +213,6 @@
 ;;文件有更改时自动更新
 (global-auto-revert-mode)
 
+;;添加主题。白天黑夜自动切换主题，19:00自动切换
+(require 'moe-theme)
+(require 'moe-theme-switcher)
