@@ -7,6 +7,9 @@
 ;;光标显示为一竖线
 (setq-default cursor-type 'bar)
 
+;;选择文字后输入文字，不再追加，而是直接替换
+(delete-selection-mode 1)
+
 ;;设置标题栏显示文件的完整路径名
 (setq frame-title-format
 	  '("%S" (buffer-file-name "%f" (dired-directory dired-directory "%b"))))
@@ -46,6 +49,7 @@
 (defvar melpa-packages '(sr-speedbar
                          smartparens
                          4clojure
+                         flycheck-clojure
                          moe-theme))
 
 (dolist (p melpa-packages)
@@ -67,11 +71,14 @@
 (setq default-buffer-file-coding-system 'utf-8)
 ;;tab键和新行自动缩进
 (setq c-basic-offset 4)
-(setq indent-tabs-mode nil)
-(setq default-tab-width 4)
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
 (setq tab-width 4)
 (setq tab-stop-list ())
 (setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80 84 88 92 96 100 104 108 112 116 120))
+(electric-indent-mode)
+
+(global-prettify-symbols-mode 1)
 
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-<return>") 'newline)
@@ -93,11 +100,6 @@
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
  '(size-indication-mode t)
- '(speedbar-default-position (quote left))
- '(speedbar-show-unknown-files t)
- '(speedbar-verbosity-level 0)
- '(sr-speedbar-default-width 17)
- '(sr-speedbar-right-side nil)
  '(tool-bar-mode nil)
  '(visible-bell t))
 
@@ -108,8 +110,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "文泉驿等宽微米黑" :foundry "outline" :slant normal :weight normal :height 105 :width normal))))
- '(hl-sexp-face ((t (:background "#d0d0d0")))))
+ '(default ((t (:family "文泉驿等宽微米黑" :foundry "outline" :slant normal :weight normal :height 105 :width normal)))))
 
 ;;开启ido模式，显示备选项
 (require 'flx-ido)
@@ -148,16 +149,19 @@
 (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1) (cljr-add-keybindings-with-prefix "C-c RET")))
 (setq cljr-sort-comparator 'cljr--semantic-comparator)
 
-
 ;;配置cider
 (setq cider-repl-wrap-history t)
 (setq nrepl-log-messages t)
 (setq cider-repl-history-size 1000)
 (setq cider-repl-history-file "~/.emacs.d/cider-history")
-(setq cider-show-error-buffer nil)
 (setq cider-repl-use-clojure-font-lock t)
 (add-hook 'cider-mode-hook #'eldoc-mode)
 (global-set-key (kbd "C-c C-z") 'cider-switch-to-repl-buffer)
+
+;;配置flycheck-clojure
+(require 'flycheck-clojure)
+(eval-after-load 'flycheck '(flycheck-clojure-setup))
+(add-hook 'after-init-hook #'global-flycheck-mode)
 
 ;;配置web-mode
 (require 'web-mode)
@@ -189,6 +193,10 @@
 ;;显示左侧导航，按F9键可以切换
 (require 'sr-speedbar)
 (global-set-key [f9] 'sr-speedbar-toggle)
+(setq speedbar-show-unknown-files t)
+(setq speedbar-verbosity-level 1)
+(setq sr-speedbar-auto-refresh nil)
+(setq sr-speedbar-right-side nil)
 
 ;;扩展M-x功能
 (require 'smex)

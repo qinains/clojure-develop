@@ -108,17 +108,20 @@ Windows系统下，
 
 在lein根配置文件添加，打开~/.lein/profiles.clj文件，添加
 
-	:plugins [[..其他包..][cider/cider-nrepl "0.8.2"]]
+	:plugins [[..其他包..][cider/cider-nrepl "0.9.1"]]
+	:dependencies [[org.clojure/tools.nrepl "0.2.10"]]
 
 如果profiles.clj还未创建，则创建文件并添加以下内容
 
-	{:user {:plugins [[cider/cider-nrepl "0.8.2"]]}}
+	{:user {:plugins [[cider/cider-nrepl "0.9.1"]]
+	        :dependencies [[org.clojure/tools.nrepl "0.2.10"]]}}
 
 或者在lein项目中添加，打开project.clj文件，添加
 
-	:plugins [[cider/cider-nrepl "0.8.2"]]
+	:plugins [[cider/cider-nrepl "0.9.1"]]
+	:dependencies [[org.clojure/tools.nrepl "0.2.10"]]
 
-**截止2014-12-24，cider的稳定版本是0.8.2。如果使用最新版本，则上面的“0.8.2”需要修改成“0.9.0-SNAPSHOT”，或者更高的版本(需要根据所下载的cider版本而定)**
+**截止2015-07-03，cider的稳定版本是0.9.1。如果使用最新版本，则上面的“0.9.1”需要修改成“0.10.0-SNAPSHOT”，或者更高的版本(需要根据所下载的cider版本而定)**
 
 之后用emacs打开.clj文件，执行
 
@@ -129,7 +132,7 @@ Windows系统下，
 ##重构
 添加
 
-	:plugins [[..其他包..][refactor-nrepl "0.2.2"]]
+	:plugins [[..其他包..][refactor-nrepl "1.1.0"]]
 
 到依赖文件中。
 按C-c C-m .. 即可启用重构插件。详情请看[演示](https://github.com/clojure-emacs/clj-refactor.el#usage)
@@ -152,3 +155,9 @@ Windows系统下，
 即可。
 
 **如果没有(start-server)函数，说明源码中有错误。可以在命令行中输入“lein ring server”，手动启动服务，如果源码中有错误，即可看到错误信息**
+
+#其他问题
+
+1. 启动或者进行某个操作的时候提示“The directory ~/.emacs.d/server is unsafe”，如何修复？
+解决方法：右击“~/.emacs.d/server”文件夹 => 属性 => 安全 => 高级 => 所有者 => 编辑 => 选择当前用户 => 勾选“替换子容器和对象的所有者” => 确定
+
