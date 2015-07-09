@@ -1,3 +1,10 @@
+;;; init.el --- Clojure 开发常用配置
+
+;;; Commentary:
+;; 请查看 README.md 文件
+
+;;; Code:
+
 ;;如果是windows系统
 (if (memq window-system '(w32))
     (progn
@@ -27,7 +34,6 @@
                                 clojure-mode
                                 clojure-mode-extra-font-locking
                                 clojure-snippets
-                                clojure-cheatsheet
                                 web-mode
                                 markdown-mode
                                 magit
@@ -50,6 +56,7 @@
                          smartparens
                          4clojure
                          flycheck-clojure
+                         flycheck-pos-tip
                          moe-theme))
 
 (dolist (p melpa-packages)
@@ -64,13 +71,12 @@
 
 ;;编码
 ;;显示当前文件编码，C-h C (或者M-x describe-current-coding-system)
-;;如果打开的文件有乱码，还原成文件默认编码：C-x <RET> r <RET> (或者 M-x revert-buffer-with-coding-system) 
+;;如果打开的文件有乱码，还原成文件默认编码：C-x <RET> r <RET> (或者 M-x revert-buffer-with-coding-system)
 ;;如果想转码，改变当前buffer的编码为UTF-8：C-x <RET> f utf-8 （或者 M-x set-buffer-file-coding-system）
 (prefer-coding-system 'utf-8)
 ;;新建的文件都保存成UTF-8编码
-(setq default-buffer-file-coding-system 'utf-8)
+(setq buffer-file-coding-system 'utf-8)
 ;;tab键和新行自动缩进
-(setq c-basic-offset 4)
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq tab-width 4)
@@ -78,6 +84,7 @@
 (setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80 84 88 92 96 100 104 108 112 116 120))
 (electric-indent-mode)
 
+;;更好的显示函数名
 (global-prettify-symbols-mode 1)
 
 (global-set-key (kbd "RET") 'newline-and-indent)
@@ -162,6 +169,8 @@
 (require 'flycheck-clojure)
 (eval-after-load 'flycheck '(flycheck-clojure-setup))
 (add-hook 'after-init-hook #'global-flycheck-mode)
+(eval-after-load 'flycheck
+  '(setq flycheck-display-errors-function #'flycheck-pos-tip-error-messages))
 
 ;;配置web-mode
 (require 'web-mode)
@@ -224,3 +233,5 @@
 ;;添加主题。白天黑夜自动切换主题，19:00自动切换
 (require 'moe-theme)
 (require 'moe-theme-switcher)
+
+;;; init.el ends here

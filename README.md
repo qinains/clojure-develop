@@ -137,6 +137,21 @@ Windows系统下，
 到依赖文件中。
 按C-c C-m .. 即可启用重构插件。详情请看[演示](https://github.com/clojure-emacs/clj-refactor.el#usage)
 
+##语法检查
+添加
+
+	:dependencies [[acyclic/squiggly-clojure "0.1.2-SNAPSHOT"]]
+
+到依赖文件中。
+
+最后~/.lein/profiles.clj文件内容为
+
+	{:user {:plugins [[cider/cider-nrepl "0.9.1"]
+	                  [refactor-nrepl "1.1.1"]]
+	        :dependencies [[acyclic/squigglyf-clojure "0.1.2-SNAPSHOT"]
+	                       [org.clojure/tools.nrepl "0.2.10"]]}}
+
+
 #如何在REPL模式下进行WEB开发
 
 以luminus框架为例，
