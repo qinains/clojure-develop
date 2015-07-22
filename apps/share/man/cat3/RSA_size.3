@@ -1,0 +1,30 @@
+RSA_size(3)                         OpenSSL                        RSA_size(3)
+
+
+
+NNAAMMEE
+       RSA_size - get RSA modulus size
+
+SSYYNNOOPPSSIISS
+        #include <openssl/rsa.h>
+
+        int RSA_size(const RSA *rsa);
+
+DDEESSCCRRIIPPTTIIOONN
+       This function returns the RSA modulus size in bytes. It can be used to
+       determine how much memory must be allocated for an RSA encrypted value.
+
+       rrssaa-->>nn must not be NNUULLLL.
+
+RREETTUURRNN VVAALLUUEE
+       The size in bytes.
+
+SSEEEE AALLSSOO
+       _r_s_a(3)
+
+HHIISSTTOORRYY
+       _R_S_A___s_i_z_e_(_) is available in all versions of SSLeay and OpenSSL.
+
+
+
+1.0.0g                            2002-08-05                       RSA_size(3)

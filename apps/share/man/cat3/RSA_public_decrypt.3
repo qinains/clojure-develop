@@ -1,0 +1,61 @@
+RSA_private_encrypt(3)              OpenSSL             RSA_private_encrypt(3)
+
+
+
+NNAAMMEE
+       RSA_private_encrypt, RSA_public_decrypt - low level signature opera-
+       tions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/rsa.h>
+
+        int RSA_private_encrypt(int flen, unsigned char *from,
+           unsigned char *to, RSA *rsa, int padding);
+
+        int RSA_public_decrypt(int flen, unsigned char *from,
+           unsigned char *to, RSA *rsa, int padding);
+
+DDEESSCCRRIIPPTTIIOONN
+       These functions handle RSA signatures at a low level.
+
+       _R_S_A___p_r_i_v_a_t_e___e_n_c_r_y_p_t_(_) signs the fflleenn bytes at ffrroomm (usually a message
+       digest with an algorithm identifier) using the private key rrssaa and
+       stores the signature in ttoo. ttoo must point to RRSSAA__ssiizzee((rrssaa)) bytes of
+       memory.
+
+       ppaaddddiinngg denotes one of the following modes:
+
+       RSA_PKCS1_PADDING
+           PKCS #1 v1.5 padding. This function does not handle the aallggoorriitthhmmII--
+           ddeennttiiffiieerr specified in PKCS #1. When generating or verifying PKCS
+           #1 signatures, _R_S_A___s_i_g_n(3) and _R_S_A___v_e_r_i_f_y(3) should be used.
+
+       RSA_NO_PADDING
+           Raw RSA signature. This mode should _o_n_l_y be used to implement cryp-
+           tographically sound padding modes in the application code.  Signing
+           user data directly with RSA is insecure.
+
+       _R_S_A___p_u_b_l_i_c___d_e_c_r_y_p_t_(_) recovers the message digest from the fflleenn bytes
+       long signature at ffrroomm using the signer's public key rrssaa. ttoo must point
+       to a memory section large enough to hold the message digest (which is
+       smaller than RRSSAA__ssiizzee((rrssaa)) -- 1111). ppaaddddiinngg is the padding mode that was
+       used to sign the data.
+
+RREETTUURRNN VVAALLUUEESS
+       _R_S_A___p_r_i_v_a_t_e___e_n_c_r_y_p_t_(_) returns the size of the signature (i.e.,
+       RSA_size(rsa)). _R_S_A___p_u_b_l_i_c___d_e_c_r_y_p_t_(_) returns the size of the recovered
+       message digest.
+
+       On error, -1 is returned; the error codes can be obtained by
+       _E_R_R___g_e_t___e_r_r_o_r(3).
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _r_s_a(3), _R_S_A___s_i_g_n(3), _R_S_A___v_e_r_i_f_y(3)
+
+HHIISSTTOORRYY
+       The ppaaddddiinngg argument was added in SSLeay 0.8. RSA_NO_PADDING is avail-
+       able since SSLeay 0.9.0.
+
+
+
+1.0.0g                            2002-09-25            RSA_private_encrypt(3)

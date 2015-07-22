@@ -1,0 +1,73 @@
+CMS_get0_SignerInfos(3)             OpenSSL            CMS_get0_SignerInfos(3)
+
+
+
+NNAAMMEE
+        CMS_get0_SignerInfos, CMS_SignerInfo_get0_signer_id, CMS_SignerInfo_cert_cmp, CMS_set1_signer_certs - CMS signedData signer functions.
+
+SSYYNNOOPPSSIISS
+        #include <openssl/cms.h>
+
+        STACK_OF(CMS_SignerInfo) *CMS_get0_SignerInfos(CMS_ContentInfo *cms);
+
+        int CMS_SignerInfo_get0_signer_id(CMS_SignerInfo *si, ASN1_OCTET_STRING **keyid, X509_NAME **issuer, ASN1_INTEGER **sno);
+        int CMS_SignerInfo_cert_cmp(CMS_SignerInfo *si, X509 *cert);
+        void CMS_SignerInfo_set1_signer_cert(CMS_SignerInfo *si, X509 *signer);
+
+DDEESSCCRRIIPPTTIIOONN
+       The function _C_M_S___g_e_t_0___S_i_g_n_e_r_I_n_f_o_s_(_) returns all the CMS_SignerInfo
+       structures associated with a CMS signedData structure.
+
+       _C_M_S___S_i_g_n_e_r_I_n_f_o___g_e_t_0___s_i_g_n_e_r___i_d_(_) retrieves the certificate signer iden-
+       tifier associated with a specific CMS_SignerInfo structure ssii. Either
+       the keyidentifier will be set in kkeeyyiidd or bbootthh issuer name and serial
+       number in iissssuueerr and ssnnoo.
+
+       _C_M_S___S_i_g_n_e_r_I_n_f_o___c_e_r_t___c_m_p_(_) compares the certificate cceerrtt against the
+       signer identifier ssii. It returns zero if the comparison is successful
+       and non zero if not.
+
+       _C_M_S___S_i_g_n_e_r_I_n_f_o___s_e_t_1___s_i_g_n_e_r___c_e_r_t_(_) sets the signers certificate of ssii to
+       ssiiggnneerr.
+
+NNOOTTEESS
+       The main purpose of these functions is to enable an application to
+       lookup signers certificates using any appropriate technique when the
+       simpler method of _C_M_S___v_e_r_i_f_y_(_) is not appropriate.
+
+       In typical usage and application will retrieve all CMS_SignerInfo
+       structures using _C_M_S___g_e_t_0___S_i_g_n_e_r_I_n_f_o_(_) and retrieve the identifier
+       information using CMS. It will then obtain the signer certificate by
+       some unspecified means (or return and error if it cannot be found) and
+       set it using _C_M_S___S_i_g_n_e_r_I_n_f_o___s_e_t_1___s_i_g_n_e_r___c_e_r_t_(_).
+
+       Once all signer certificates have been set _C_M_S___v_e_r_i_f_y_(_) can be used.
+
+       Although _C_M_S___g_e_t_0___S_i_g_n_e_r_I_n_f_o_s_(_) can return NULL is an error occur oorr if
+       there are no signers this is not a problem in practice because the only
+       error which can occur is if the ccmmss structure is not of type signedData
+       due to application error.
+
+RREETTUURRNN VVAALLUUEESS
+       _C_M_S___g_e_t_0___S_i_g_n_e_r_I_n_f_o_s_(_) returns all CMS_SignerInfo structures, or NULL
+       there are no signers or an error occurs.
+
+       _C_M_S___S_i_g_n_e_r_I_n_f_o___g_e_t_0___s_i_g_n_e_r___i_d_(_) returns 1 for success and 0 for fail-
+       ure.
+
+       _C_M_S___S_i_g_n_e_r_I_n_f_o___c_e_r_t___c_m_p_(_) returns 0 for a successful comparison and non
+       zero otherwise.
+
+       _C_M_S___S_i_g_n_e_r_I_n_f_o___s_e_t_1___s_i_g_n_e_r___c_e_r_t_(_) does not return a value.
+
+       Any error can be obtained from _E_R_R___g_e_t___e_r_r_o_r(3)
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _C_M_S___v_e_r_i_f_y(3)
+
+HHIISSTTOORRYY
+       These functions were first was added to OpenSSL 0.9.8
+
+
+
+1.0.0g                            2008-04-11           CMS_get0_SignerInfos(3)

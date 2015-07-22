@@ -1,0 +1,62 @@
+SSL_get_session(3)                  OpenSSL                 SSL_get_session(3)
+
+
+
+NNAAMMEE
+       SSL_get_session - retrieve TLS/SSL session data
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        SSL_SESSION *SSL_get_session(const SSL *ssl);
+        SSL_SESSION *SSL_get0_session(const SSL *ssl);
+        SSL_SESSION *SSL_get1_session(SSL *ssl);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___g_e_t___s_e_s_s_i_o_n_(_) returns a pointer to the SSSSLL__SSEESSSSIIOONN actually used in
+       ssssll. The reference count of the SSSSLL__SSEESSSSIIOONN is not incremented, so that
+       the pointer can become invalid by other operations.
+
+       _S_S_L___g_e_t_0___s_e_s_s_i_o_n_(_) is the same as _S_S_L___g_e_t___s_e_s_s_i_o_n_(_).
+
+       _S_S_L___g_e_t_1___s_e_s_s_i_o_n_(_) is the same as _S_S_L___g_e_t___s_e_s_s_i_o_n_(_), but the reference
+       count of the SSSSLL__SSEESSSSIIOONN is incremented by one.
+
+NNOOTTEESS
+       The ssl session contains all information required to re-establish the
+       connection without a new handshake.
+
+       _S_S_L___g_e_t_0___s_e_s_s_i_o_n_(_) returns a pointer to the actual session. As the ref-
+       erence counter is not incremented, the pointer is only valid while the
+       connection is in use. If _S_S_L___c_l_e_a_r(3) or _S_S_L___f_r_e_e(3) is called, the
+       session may be removed completely (if considered bad), and the pointer
+       obtained will become invalid. Even if the session is valid, it can be
+       removed at any time due to timeout during _S_S_L___C_T_X___f_l_u_s_h___s_e_s_s_i_o_n_s(3).
+
+       If the data is to be kept, _S_S_L___g_e_t_1___s_e_s_s_i_o_n_(_) will increment the refer-
+       ence count, so that the session will not be implicitly removed by other
+       operations but stays in memory. In order to remove the session _S_S_L___S_E_S_-
+       _S_I_O_N___f_r_e_e(3) must be explicitly called once to decrement the reference
+       count again.
+
+       SSL_SESSION objects keep internal link information about the session
+       cache list, when being inserted into one SSL_CTX object's session
+       cache.  One SSL_SESSION object, regardless of its reference count, must
+       therefore only be used with one SSL_CTX object (and the SSL objects
+       created from this SSL_CTX object).
+
+RREETTUURRNN VVAALLUUEESS
+       The following return values can occur:
+
+       NULL
+           There is no session available in ssssll.
+
+       Pointer to an SSL
+           The return value points to the data of an SSL session.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___f_r_e_e(3), _S_S_L___c_l_e_a_r(3), _S_S_L___S_E_S_S_I_O_N___f_r_e_e(3)
+
+
+
+1.0.0g                            2005-03-30                SSL_get_session(3)

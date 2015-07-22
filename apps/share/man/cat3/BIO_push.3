@@ -1,0 +1,68 @@
+BIO_push(3)                         OpenSSL                        BIO_push(3)
+
+
+
+NNAAMMEE
+       BIO_push, BIO_pop - add and remove BIOs from a chain.
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bio.h>
+
+        BIO *  BIO_push(BIO *b,BIO *append);
+        BIO *  BIO_pop(BIO *b);
+
+DDEESSCCRRIIPPTTIIOONN
+       The _B_I_O___p_u_s_h_(_) function appends the BIO aappppeenndd to bb, it returns bb.
+
+       _B_I_O___p_o_p_(_) removes the BIO bb from a chain and returns the next BIO in
+       the chain, or NULL if there is no next BIO. The removed BIO then
+       becomes a single BIO with no association with the original chain, it
+       can thus be freed or attached to a different chain.
+
+NNOOTTEESS
+       The names of these functions are perhaps a little misleading.
+       _B_I_O___p_u_s_h_(_) joins two BIO chains whereas _B_I_O___p_o_p_(_) deletes a single BIO
+       from a chain, the deleted BIO does not need to be at the end of a
+       chain.
+
+       The process of calling _B_I_O___p_u_s_h_(_) and _B_I_O___p_o_p_(_) on a BIO may have addi-
+       tional consequences (a control call is made to the affected BIOs) any
+       effects will be noted in the descriptions of individual BIOs.
+
+EEXXAAMMPPLLEESS
+       For these examples suppose mmdd11 and mmdd22 are digest BIOs, bb6644 is a base64
+       BIO and ff is a file BIO.
+
+       If the call:
+
+        BIO_push(b64, f);
+
+       is made then the new chain will be bb6644--cchhaaiinn. After making the calls
+
+        BIO_push(md2, b64);
+        BIO_push(md1, md2);
+
+       the new chain is mmdd11--mmdd22--bb6644--ff. Data written to mmdd11 will be digested by
+       mmdd11 and mmdd22, bbaassee6644 encoded and written to ff.
+
+       It should be noted that reading causes data to pass in the reverse
+       direction, that is data is read from ff, base64 ddeeccooddeedd and digested by
+       mmdd11 and mmdd22. If the call:
+
+        BIO_pop(md2);
+
+       The call will return bb6644 and the new chain will be mmdd11--bb6644--ff data can
+       be written to mmdd11 as before.
+
+RREETTUURRNN VVAALLUUEESS
+       _B_I_O___p_u_s_h_(_) returns the end of the chain, bb.
+
+       _B_I_O___p_o_p_(_) returns the next BIO in the chain, or NULL if there is no
+       next BIO.
+
+SSEEEE AALLSSOO
+       TBA
+
+
+
+1.0.0g                            2000-09-14                       BIO_push(3)

@@ -1,0 +1,118 @@
+BN_add(3)                           OpenSSL                          BN_add(3)
+
+
+
+NNAAMMEE
+       BN_add, BN_sub, BN_mul, BN_sqr, BN_div, BN_mod, BN_nnmod, BN_mod_add,
+       BN_mod_sub, BN_mod_mul, BN_mod_sqr, BN_exp, BN_mod_exp, BN_gcd - arith-
+       metic operations on BIGNUMs
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bn.h>
+
+        int BN_add(BIGNUM *r, const BIGNUM *a, const BIGNUM *b);
+
+        int BN_sub(BIGNUM *r, const BIGNUM *a, const BIGNUM *b);
+
+        int BN_mul(BIGNUM *r, BIGNUM *a, BIGNUM *b, BN_CTX *ctx);
+
+        int BN_sqr(BIGNUM *r, BIGNUM *a, BN_CTX *ctx);
+
+        int BN_div(BIGNUM *dv, BIGNUM *rem, const BIGNUM *a, const BIGNUM *d,
+                BN_CTX *ctx);
+
+        int BN_mod(BIGNUM *rem, const BIGNUM *a, const BIGNUM *m, BN_CTX *ctx);
+
+        int BN_nnmod(BIGNUM *r, const BIGNUM *a, const BIGNUM *m, BN_CTX *ctx);
+
+        int BN_mod_add(BIGNUM *r, BIGNUM *a, BIGNUM *b, const BIGNUM *m,
+                BN_CTX *ctx);
+
+        int BN_mod_sub(BIGNUM *r, BIGNUM *a, BIGNUM *b, const BIGNUM *m,
+                BN_CTX *ctx);
+
+        int BN_mod_mul(BIGNUM *r, BIGNUM *a, BIGNUM *b, const BIGNUM *m,
+                BN_CTX *ctx);
+
+        int BN_mod_sqr(BIGNUM *r, BIGNUM *a, const BIGNUM *m, BN_CTX *ctx);
+
+        int BN_exp(BIGNUM *r, BIGNUM *a, BIGNUM *p, BN_CTX *ctx);
+
+        int BN_mod_exp(BIGNUM *r, BIGNUM *a, const BIGNUM *p,
+                const BIGNUM *m, BN_CTX *ctx);
+
+        int BN_gcd(BIGNUM *r, BIGNUM *a, BIGNUM *b, BN_CTX *ctx);
+
+DDEESSCCRRIIPPTTIIOONN
+       _B_N___a_d_d_(_) adds _a and _b and places the result in _r ("r=a+b").  _r may be
+       the same BBIIGGNNUUMM as _a or _b.
+
+       _B_N___s_u_b_(_) subtracts _b from _a and places the result in _r ("r=a-b").
+
+       _B_N___m_u_l_(_) multiplies _a and _b and places the result in _r ("r=a*b").  _r
+       may be the same BBIIGGNNUUMM as _a or _b.  For multiplication by powers of 2,
+       use _B_N___l_s_h_i_f_t(3).
+
+       _B_N___s_q_r_(_) takes the square of _a and places the result in _r ("r=a^2"). _r
+       and _a may be the same BBIIGGNNUUMM.  This function is faster than
+       BN_mul(r,a,a).
+
+       _B_N___d_i_v_(_) divides _a by _d and places the result in _d_v and the remainder
+       in _r_e_m ("dv=a/d, rem=a%d"). Either of _d_v and _r_e_m may be NNUULLLL, in which
+       case the respective value is not returned.  The result is rounded
+       towards zero; thus if _a is negative, the remainder will be zero or neg-
+       ative.  For division by powers of 2, use _B_N___r_s_h_i_f_t(3).
+
+       _B_N___m_o_d_(_) corresponds to _B_N___d_i_v_(_) with _d_v set to NNUULLLL.
+
+       _B_N___n_n_m_o_d_(_) reduces _a modulo _m and places the non-negative remainder in
+       _r.
+
+       _B_N___m_o_d___a_d_d_(_) adds _a to _b modulo _m and places the non-negative result in
+       _r.
+
+       _B_N___m_o_d___s_u_b_(_) subtracts _b from _a modulo _m and places the non-negative
+       result in _r.
+
+       _B_N___m_o_d___m_u_l_(_) multiplies _a by _b and finds the non-negative remainder
+       respective to modulus _m ("r=(a*b) mod m"). _r may be the same BBIIGGNNUUMM as
+       _a or _b. For more efficient algorithms for repeated computations using
+       the same modulus, see _B_N___m_o_d___m_u_l___m_o_n_t_g_o_m_e_r_y(3) and _B_N___m_o_d___m_u_l___r_e_c_i_p_r_o_-
+       _c_a_l(3).
+
+       _B_N___m_o_d___s_q_r_(_) takes the square of _a modulo mm and places the result in _r.
+
+       _B_N___e_x_p_(_) raises _a to the _p-th power and places the result in _r
+       ("r=a^p"). This function is faster than repeated applications of
+       _B_N___m_u_l_(_).
+
+       _B_N___m_o_d___e_x_p_(_) computes _a to the _p-th power modulo _m ("r=a^p % m"). This
+       function uses less time and space than _B_N___e_x_p_(_).
+
+       _B_N___g_c_d_(_) computes the greatest common divisor of _a and _b and places the
+       result in _r. _r may be the same BBIIGGNNUUMM as _a or _b.
+
+       For all functions, _c_t_x is a previously allocated BBNN__CCTTXX used for tempo-
+       rary variables; see _B_N___C_T_X___n_e_w(3).
+
+       Unless noted otherwise, the result BBIIGGNNUUMM must be different from the
+       arguments.
+
+RREETTUURRNN VVAALLUUEESS
+       For all functions, 1 is returned for success, 0 on error. The return
+       value should always be checked (e.g., "if (!BN_add(r,a,b)) goto err;").
+       The error codes can be obtained by _E_R_R___g_e_t___e_r_r_o_r(3).
+
+SSEEEE AALLSSOO
+       _b_n(3), _E_R_R___g_e_t___e_r_r_o_r(3), _B_N___C_T_X___n_e_w(3), _B_N___a_d_d___w_o_r_d(3), _B_N___s_e_t___b_i_t(3)
+
+HHIISSTTOORRYY
+       _B_N___a_d_d_(_), _B_N___s_u_b_(_), _B_N___s_q_r_(_), _B_N___d_i_v_(_), _B_N___m_o_d_(_), _B_N___m_o_d___m_u_l_(_),
+       _B_N___m_o_d___e_x_p_(_) and _B_N___g_c_d_(_) are available in all versions of SSLeay and
+       OpenSSL. The _c_t_x argument to _B_N___m_u_l_(_) was added in SSLeay 0.9.1b.
+       _B_N___e_x_p_(_) appeared in SSLeay 0.9.0.  _B_N___n_n_m_o_d_(_), _B_N___m_o_d___a_d_d_(_),
+       _B_N___m_o_d___s_u_b_(_), and _B_N___m_o_d___s_q_r_(_) were added in OpenSSL 0.9.7.
+
+
+
+1.0.0g                            2002-09-25                         BN_add(3)

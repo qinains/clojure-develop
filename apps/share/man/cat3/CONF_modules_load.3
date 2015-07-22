@@ -1,0 +1,58 @@
+CONF_modules_load_file(3)           OpenSSL          CONF_modules_load_file(3)
+
+
+
+NNAAMMEE
+        CONF_modules_load_file, CONF_modules_load - OpenSSL configuration functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/conf.h>
+
+        int CONF_modules_load_file(const char *filename, const char *appname,
+                                  unsigned long flags);
+        int CONF_modules_load(const CONF *cnf, const char *appname,
+                             unsigned long flags);
+
+DDEESSCCRRIIPPTTIIOONN
+       The function _C_O_N_F___m_o_d_u_l_e_s___l_o_a_d___f_i_l_e_(_) configures OpenSSL using file
+       ffiilleennaammee and application name aappppnnaammee. If ffiilleennaammee is NULL the standard
+       OpenSSL configuration file is used. If aappppnnaammee is NULL the standard
+       OpenSSL application name ooppeennssssll__ccoonnff is used.  The behaviour can be
+       cutomized using ffllaaggss.
+
+       _C_O_N_F___m_o_d_u_l_e_s___l_o_a_d_(_) is idential to _C_O_N_F___m_o_d_u_l_e_s___l_o_a_d___f_i_l_e_(_) except it
+       read configuration information from ccnnff.
+
+NNOOTTEESS
+       The following ffllaaggss are currently recognized:
+
+       CCOONNFF__MMFFLLAAGGSS__IIGGNNOORREE__EERRRROORRSS if set errors returned by individual configu-
+       ration modules are ignored. If not set the first module error is con-
+       sidered fatal and no further modules are loads.
+
+       Normally any modules errors will add error information to the error
+       queue. If CCOONNFF__MMFFLLAAGGSS__SSIILLEENNTT is set no error information is added.
+
+       If CCOONNFF__MMFFLLAAGGSS__NNOO__DDSSOO is set configuration module loading from DSOs is
+       disabled.
+
+       CCOONNFF__MMFFLLAAGGSS__IIGGNNOORREE__MMIISSSSIINNGG__FFIILLEE if set will make _C_O_N_F___l_o_a_d___m_o_d_-
+       _u_l_e_s___f_i_l_e_(_) ignore missing configuration files. Normally a missing con-
+       figuration file return an error.
+
+RREETTUURRNN VVAALLUUEE
+       These functions return 1 for success and a zero or negative value for
+       failure. If module errors are not ignored the return code will reflect
+       the return value of the failing module (this will always be zero or
+       negative).
+
+SSEEEE AALLSSOO
+       _c_o_n_f(5), _O_P_E_N_S_S_L___c_o_n_f_i_g(3), "_C_O_N_F___f_r_e_e(3), _C_O_N_F___f_r_e_e(3)", _e_r_r(3),_e_r_r(3)
+
+HHIISSTTOORRYY
+       CONF_modules_load_file and CONF_modules_load first appeared in OpenSSL
+       0.9.7.
+
+
+
+1.0.0g                            2004-03-02         CONF_modules_load_file(3)

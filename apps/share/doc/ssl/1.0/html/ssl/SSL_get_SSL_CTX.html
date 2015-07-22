@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_get_SSL_CTX - get the SSL_CTX from which an SSL is created</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_get_SSL_CTX - get the SSL_CTX from which an SSL is created</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ SSL_CTX *SSL_get_SSL_CTX(const SSL *ssl);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_get_SSL_CTX()</code> returns a pointer to the SSL_CTX object, from which
+<strong>ssl</strong> was created with <a href="../ssl/SSL_new.html">SSL_new</a>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>The pointer to the SSL_CTX object is returned.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a>, <a href="../ssl/SSL_new.html">SSL_new</a></p>
+
+</body>
+
+</html>

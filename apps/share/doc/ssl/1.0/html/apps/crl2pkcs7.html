@@ -1,0 +1,134 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>crl2pkcs7 - Create a PKCS#7 structure from a CRL and certificates.</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#command_options">COMMAND OPTIONS</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>crl2pkcs7 - Create a PKCS#7 structure from a CRL and certificates.</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>openssl</strong> <strong>crl2pkcs7</strong>
+[<strong>-inform PEM|DER</strong>]
+[<strong>-outform PEM|DER</strong>]
+[<strong>-in filename</strong>]
+[<strong>-out filename</strong>]
+[<strong>-certfile filename</strong>]
+[<strong>-nocrl</strong>]</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>crl2pkcs7</strong> command takes an optional CRL and one or more
+certificates and converts them into a PKCS#7 degenerate ``certificates
+only'' structure.</p>
+<p>
+</p>
+<hr />
+<h1><a name="command_options">COMMAND OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item__2dinform_der_7cpem"><strong>-inform DER|PEM</strong></a></strong>
+
+<dd>
+<p>This specifies the CRL input format. <strong>DER</strong> format is DER encoded CRL
+structure.<strong>PEM</strong> (the default) is a base64 encoded version of
+the DER form with header and footer lines.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2doutform_der_7cpem"><strong>-outform DER|PEM</strong></a></strong>
+
+<dd>
+<p>This specifies the PKCS#7 structure output format. <strong>DER</strong> format is DER
+encoded PKCS#7 structure.<strong>PEM</strong> (the default) is a base64 encoded version of
+the DER form with header and footer lines.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2din_filename"><strong>-in filename</strong></a></strong>
+
+<dd>
+<p>This specifies the input filename to read a CRL from or standard input if this
+option is not specified.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dout_filename"><strong>-out filename</strong></a></strong>
+
+<dd>
+<p>specifies the output filename to write the PKCS#7 structure to or standard
+output by default.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dcertfile_filename"><strong>-certfile filename</strong></a></strong>
+
+<dd>
+<p>specifies a filename containing one or more certificates in <strong>PEM</strong> format.
+All certificates in the file will be added to the PKCS#7 structure. This
+option can be used more than once to read certificates form multiple
+files.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dnocrl"><strong>-nocrl</strong></a></strong>
+
+<dd>
+<p>normally a CRL is included in the output file. With this option no CRL is
+included in the output file and a CRL is not read from the input file.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>Create a PKCS#7 structure from a certificate and CRL:</p>
+<pre>
+ openssl crl2pkcs7 -in crl.pem -certfile cert.pem -out p7.pem</pre>
+<p>Creates a PKCS#7 structure in DER format with no CRL from several
+different certificates:</p>
+<pre>
+ openssl crl2pkcs7 -nocrl -certfile newcert.pem 
+        -certfile demoCA/cacert.pem -outform DER -out p7.der</pre>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>The output file is a PKCS#7 signed data structure containing no signers and
+just certificates and an optional CRL.</p>
+<p>This utility can be used to send certificates and CAs to Netscape as part of
+the certificate enrollment process. This involves sending the DER encoded output
+as MIME type application/x-x509-user-cert.</p>
+<p>The <strong>PEM</strong> encoded form with the header and footer lines removed can be used to
+install user certificates and CAs in MSIE using the Xenroll control.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../apps/pkcs7.html">pkcs7</a></p>
+
+</body>
+
+</html>

@@ -1,0 +1,57 @@
+RSA_sign(3)                         OpenSSL                        RSA_sign(3)
+
+
+
+NNAAMMEE
+       RSA_sign, RSA_verify - RSA signatures
+
+SSYYNNOOPPSSIISS
+        #include <openssl/rsa.h>
+
+        int RSA_sign(int type, const unsigned char *m, unsigned int m_len,
+           unsigned char *sigret, unsigned int *siglen, RSA *rsa);
+
+        int RSA_verify(int type, const unsigned char *m, unsigned int m_len,
+           unsigned char *sigbuf, unsigned int siglen, RSA *rsa);
+
+DDEESSCCRRIIPPTTIIOONN
+       _R_S_A___s_i_g_n_(_) signs the message digest mm of size mm__lleenn using the private
+       key rrssaa as specified in PKCS #1 v2.0. It stores the signature in ssiiggrreett
+       and the signature size in ssiigglleenn. ssiiggrreett must point to RSA_size(rrssaa)
+       bytes of memory.
+
+       ttyyppee denotes the message digest algorithm that was used to generate mm.
+       It usually is one of NNIIDD__sshhaa11, NNIIDD__rriippeemmdd116600 and NNIIDD__mmdd55; see
+       _o_b_j_e_c_t_s(3) for details. If ttyyppee is NNIIDD__mmdd55__sshhaa11, an SSL signature (MD5
+       and SHA1 message digests with PKCS #1 padding and no algorithm identi-
+       fier) is created.
+
+       _R_S_A___v_e_r_i_f_y_(_) verifies that the signature ssiiggbbuuff of size ssiigglleenn matches
+       a given message digest mm of size mm__lleenn. ttyyppee denotes the message digest
+       algorithm that was used to generate the signature.  rrssaa is the signer's
+       public key.
+
+RREETTUURRNN VVAALLUUEESS
+       _R_S_A___s_i_g_n_(_) returns 1 on success, 0 otherwise.  _R_S_A___v_e_r_i_f_y_(_) returns 1
+       on successful verification, 0 otherwise.
+
+       The error codes can be obtained by _E_R_R___g_e_t___e_r_r_o_r(3).
+
+BBUUGGSS
+       Certain signatures with an improper algorithm identifier are accepted
+       for compatibility with SSLeay 0.4.5 :-)
+
+CCOONNFFOORRMMIINNGG TTOO
+       SSL, PKCS #1 v2.0
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _o_b_j_e_c_t_s(3), _r_s_a(3), _R_S_A___p_r_i_v_a_t_e___e_n_c_r_y_p_t(3), _R_S_A___p_u_b_-
+       _l_i_c___d_e_c_r_y_p_t(3)
+
+HHIISSTTOORRYY
+       _R_S_A___s_i_g_n_(_) and _R_S_A___v_e_r_i_f_y_(_) are available in all versions of SSLeay and
+       OpenSSL.
+
+
+
+1.0.0g                            2005-04-21                       RSA_sign(3)

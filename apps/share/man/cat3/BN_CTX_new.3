@@ -1,0 +1,48 @@
+BN_CTX_new(3)                       OpenSSL                      BN_CTX_new(3)
+
+
+
+NNAAMMEE
+       BN_CTX_new, BN_CTX_init, BN_CTX_free - allocate and free BN_CTX struc-
+       tures
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bn.h>
+
+        BN_CTX *BN_CTX_new(void);
+
+        void BN_CTX_init(BN_CTX *c);
+
+        void BN_CTX_free(BN_CTX *c);
+
+DDEESSCCRRIIPPTTIIOONN
+       A BBNN__CCTTXX is a structure that holds BBIIGGNNUUMM temporary variables used by
+       library functions. Since dynamic memory allocation to create BBIIGGNNUUMMs is
+       rather expensive when used in conjunction with repeated subroutine
+       calls, the BBNN__CCTTXX structure is used.
+
+       _B_N___C_T_X___n_e_w_(_) allocates and initializes a BBNN__CCTTXX structure.
+       _B_N___C_T_X___i_n_i_t_(_) initializes an existing uninitialized BBNN__CCTTXX.
+
+       _B_N___C_T_X___f_r_e_e_(_) frees the components of the BBNN__CCTTXX, and if it was created
+       by _B_N___C_T_X___n_e_w_(_), also the structure itself.  If _B_N___C_T_X___s_t_a_r_t(3) has
+       been used on the BBNN__CCTTXX, _B_N___C_T_X___e_n_d(3) must be called before the BBNN__CCTTXX
+       may be freed by _B_N___C_T_X___f_r_e_e_(_).
+
+RREETTUURRNN VVAALLUUEESS
+       _B_N___C_T_X___n_e_w_(_) returns a pointer to the BBNN__CCTTXX. If the allocation fails,
+       it returns NNUULLLL and sets an error code that can be obtained by
+       _E_R_R___g_e_t___e_r_r_o_r(3).
+
+       _B_N___C_T_X___i_n_i_t_(_) and _B_N___C_T_X___f_r_e_e_(_) have no return values.
+
+SSEEEE AALLSSOO
+       _b_n(3), _E_R_R___g_e_t___e_r_r_o_r(3), _B_N___a_d_d(3), _B_N___C_T_X___s_t_a_r_t(3)
+
+HHIISSTTOORRYY
+       _B_N___C_T_X___n_e_w_(_) and _B_N___C_T_X___f_r_e_e_(_) are available in all versions on SSLeay
+       and OpenSSL. _B_N___C_T_X___i_n_i_t_(_) was added in SSLeay 0.9.1b.
+
+
+
+1.0.0g                            2002-09-25                     BN_CTX_new(3)

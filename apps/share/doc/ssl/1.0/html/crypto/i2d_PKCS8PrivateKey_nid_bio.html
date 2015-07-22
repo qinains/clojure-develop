@@ -1,0 +1,85 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>i2d_PKCS8PrivateKey_nid_fp - PKCS#8 format private key functions</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>d2i_PKCS8PrivateKey_bio, d2i_PKCS8PrivateKey_fp,
+i2d_PKCS8PrivateKey_bio, i2d_PKCS8PrivateKey_fp,
+i2d_PKCS8PrivateKey_nid_bio, i2d_PKCS8PrivateKey_nid_fp - PKCS#8 format private key functions</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/evp.h&gt;</pre>
+<pre>
+ EVP_PKEY *d2i_PKCS8PrivateKey_bio(BIO *bp, EVP_PKEY **x, pem_password_cb *cb, void *u);
+ EVP_PKEY *d2i_PKCS8PrivateKey_fp(FILE *fp, EVP_PKEY **x, pem_password_cb *cb, void *u);</pre>
+<pre>
+ int i2d_PKCS8PrivateKey_bio(BIO *bp, EVP_PKEY *x, const EVP_CIPHER *enc,
+                                  char *kstr, int klen,
+                                  pem_password_cb *cb, void *u);</pre>
+<pre>
+ int i2d_PKCS8PrivateKey_fp(FILE *fp, EVP_PKEY *x, const EVP_CIPHER *enc,
+                                  char *kstr, int klen,
+                                  pem_password_cb *cb, void *u);</pre>
+<pre>
+ int i2d_PKCS8PrivateKey_nid_bio(BIO *bp, EVP_PKEY *x, int nid,
+                                  char *kstr, int klen,
+                                  pem_password_cb *cb, void *u);</pre>
+<pre>
+ int i2d_PKCS8PrivateKey_nid_fp(FILE *fp, EVP_PKEY *x, int nid,
+                                  char *kstr, int klen,
+                                  pem_password_cb *cb, void *u);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The PKCS#8 functions encode and decode private keys in PKCS#8 format using both
+PKCS#5 v1.5 and PKCS#5 v2.0 password based encryption algorithms.</p>
+<p>Other than the use of DER as opposed to PEM these functions are identical to the
+corresponding <strong>PEM</strong> function as described in the <a href="../crypto/pem.html">pem</a> manual page.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>Before using these functions <a href="../crypto/OpenSSL_add_all_algorithms.html">OpenSSL_add_all_algorithms</a>
+should be called to initialize the internal algorithm lookup tables otherwise errors about
+unknown algorithms will occur if an attempt is made to decrypt a private key.</p>
+<p>These functions are currently the only way to store encrypted private keys using DER format.</p>
+<p>Currently all the functions use BIOs or FILE pointers, there are no functions which
+work directly on memory: this can be readily worked around by converting the buffers
+to memory BIOs, see <a href="../crypto/BIO_s_mem.html">BIO_s_mem</a> for details.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../crypto/pem.html">pem</a></p>
+
+</body>
+
+</html>

@@ -1,0 +1,96 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>CMS_get1_crls, - CMS certificate and CRL utility functions</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<pre>
+ CMS_add0_cert, CMS_add1_cert, CMS_get1_certs, CMS_add0_crl, CMS_get1_crls, - CMS certificate and CRL utility functions</pre>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/cms.h&gt;</pre>
+<pre>
+ int CMS_add0_cert(CMS_ContentInfo *cms, X509 *cert);
+ int CMS_add1_cert(CMS_ContentInfo *cms, X509 *cert);
+ STACK_OF(X509) *CMS_get1_certs(CMS_ContentInfo *cms);</pre>
+<pre>
+ int CMS_add0_crl(CMS_ContentInfo *cms, X509_CRL *crl);
+ int CMS_add1_crl(CMS_ContentInfo *cms, X509_CRL *crl);
+ STACK_OF(X509_CRL) *CMS_get1_crls(CMS_ContentInfo *cms);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>CMS_add0_cert()</code> and <code>CMS_add1_cert()</code> add certificate <strong>cert</strong> to <strong>cms</strong>.
+must be of type signed data or enveloped data.</p>
+<p><code>CMS_get1_certs()</code> returns all certificates in <strong>cms</strong>.</p>
+<p><code>CMS_add0_crl()</code> and <code>CMS_add1_crl()</code> add CRL <strong>crl</strong> to <strong>cms</strong>. <code>CMS_get1_crls()</code>
+returns any CRLs in <strong>cms</strong>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>The CMS_ContentInfo structure <strong>cms</strong> must be of type signed data or enveloped
+data or an error will be returned.</p>
+<p>For signed data certificates and CRLs are added to the <strong>certificates</strong> and
+<strong>crls</strong> fields of SignedData structure. For enveloped data they are added to
+<strong>OriginatorInfo</strong>.</p>
+<p>As the <strong>0</strong> implies <code>CMS_add0_cert()</code> adds <strong>cert</strong> internally to <strong>cms</strong> and it
+must not be freed up after the call as opposed to <code>CMS_add1_cert()</code> where <strong>cert</strong>
+must be freed up.</p>
+<p>The same certificate or CRL must not be added to the same cms structure more
+than once.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>CMS_add0_cert(), <code>CMS_add1_cert()</code> and <code>CMS_add0_crl()</code> and <code>CMS_add1_crl()</code> return
+1 for success and 0 for failure.</p>
+<p><code>CMS_get1_certs()</code> and <code>CMS_get1_crls()</code> return the STACK of certificates or CRLs
+or NULL if there are none or an error occurs. The only error which will occur
+in practice is if the <strong>cms</strong> type is invalid.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../crypto/ERR_get_error.html">ERR_get_error</a>,
+<a href="../crypto/CMS_sign.html">CMS_sign</a>,
+<a href="../crypto/CMS_encrypt.html">CMS_encrypt</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>CMS_add0_cert(), CMS_add1_cert(), CMS_get1_certs(), <code>CMS_add0_crl()</code>
+and <code>CMS_get1_crls()</code> were all first added to OpenSSL 0.9.8</p>
+
+</body>
+
+</html>

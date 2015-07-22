@@ -1,0 +1,103 @@
+X509_NAME_get_index_by_NID(3)       OpenSSL      X509_NAME_get_index_by_NID(3)
+
+
+
+NNAAMMEE
+       X509_NAME_get_index_by_NID, X509_NAME_get_index_by_OBJ,
+       X509_NAME_get_entry, X509_NAME_entry_count, X509_NAME_get_text_by_NID,
+       X509_NAME_get_text_by_OBJ - X509_NAME lookup and enumeration functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/x509.h>
+
+        int X509_NAME_get_index_by_NID(X509_NAME *name,int nid,int lastpos);
+        int X509_NAME_get_index_by_OBJ(X509_NAME *name,ASN1_OBJECT *obj, int lastpos);
+
+        int X509_NAME_entry_count(X509_NAME *name);
+        X509_NAME_ENTRY *X509_NAME_get_entry(X509_NAME *name, int loc);
+
+        int X509_NAME_get_text_by_NID(X509_NAME *name, int nid, char *buf,int len);
+        int X509_NAME_get_text_by_OBJ(X509_NAME *name, ASN1_OBJECT *obj, char *buf,int len);
+
+DDEESSCCRRIIPPTTIIOONN
+       These functions allow an XX550099__NNAAMMEE structure to be examined. The
+       XX550099__NNAAMMEE structure is the same as the NNaammee type defined in RFC2459
+       (and elsewhere) and used for example in certificate subject and issuer
+       names.
+
+       _X_5_0_9___N_A_M_E___g_e_t___i_n_d_e_x___b_y___N_I_D_(_) and _X_5_0_9___N_A_M_E___g_e_t___i_n_d_e_x___b_y___O_B_J_(_) retrieve
+       the next index matching nniidd or oobbjj after llaassttppooss. llaassttppooss should ini-
+       tially be set to -1. If there are no more entries -1 is returned.
+
+       _X_5_0_9___N_A_M_E___e_n_t_r_y___c_o_u_n_t_(_) returns the total number of entries in nnaammee.
+
+       _X_5_0_9___N_A_M_E___g_e_t___e_n_t_r_y_(_) retrieves the XX550099__NNAAMMEE__EENNTTRRYY from nnaammee corre-
+       sponding to index lloocc. Acceptable values for lloocc run from 0 to
+       (X509_NAME_entry_count(name) - 1). The value returned is an internal
+       pointer which must not be freed.
+
+       _X_5_0_9___N_A_M_E___g_e_t___t_e_x_t___b_y___N_I_D_(_), _X_5_0_9___N_A_M_E___g_e_t___t_e_x_t___b_y___O_B_J_(_) retrieve the
+       "text" from the first entry in nnaammee which matches nniidd or oobbjj, if no
+       such entry exists -1 is returned. At most lleenn bytes will be written and
+       the text written to bbuuff will be null terminated. The length of the out-
+       put string written is returned excluding the terminating null. If bbuuff
+       is <NULL> then the amount of space needed in bbuuff (excluding the final
+       null) is returned.
+
+NNOOTTEESS
+       _X_5_0_9___N_A_M_E___g_e_t___t_e_x_t___b_y___N_I_D_(_) and _X_5_0_9___N_A_M_E___g_e_t___t_e_x_t___b_y___O_B_J_(_) are legacy
+       functions which have various limitations which make them of minimal use
+       in practice. They can only find the first matching entry and will copy
+       the contents of the field verbatim: this can be highly confusing if the
+       target is a muticharacter string type like a BMPString or a UTF8String.
+
+       For a more general solution _X_5_0_9___N_A_M_E___g_e_t___i_n_d_e_x___b_y___N_I_D_(_) or
+       _X_5_0_9___N_A_M_E___g_e_t___i_n_d_e_x___b_y___O_B_J_(_) should be used followed by
+       _X_5_0_9___N_A_M_E___g_e_t___e_n_t_r_y_(_) on any matching indices and then the various
+       XX550099__NNAAMMEE__EENNTTRRYY utility functions on the result.
+
+EEXXAAMMPPLLEESS
+       Process all entries:
+
+        int i;
+        X509_NAME_ENTRY *e;
+
+        for (i = 0; i < X509_NAME_entry_count(nm); i++)
+               {
+               e = X509_NAME_get_entry(nm, i);
+               /* Do something with e */
+               }
+
+       Process all commonName entries:
+
+        int loc;
+        X509_NAME_ENTRY *e;
+
+        loc = -1;
+        for (;;)
+               {
+               lastpos = X509_NAME_get_index_by_NID(nm, NID_commonName, lastpos);
+               if (lastpos == -1)
+                       break;
+               e = X509_NAME_get_entry(nm, lastpos);
+               /* Do something with e */
+               }
+
+RREETTUURRNN VVAALLUUEESS
+       _X_5_0_9___N_A_M_E___g_e_t___i_n_d_e_x___b_y___N_I_D_(_) and _X_5_0_9___N_A_M_E___g_e_t___i_n_d_e_x___b_y___O_B_J_(_) return
+       the index of the next matching entry or -1 if not found.
+
+       _X_5_0_9___N_A_M_E___e_n_t_r_y___c_o_u_n_t_(_) returns the total number of entries.
+
+       _X_5_0_9___N_A_M_E___g_e_t___e_n_t_r_y_(_) returns an XX550099__NNAAMMEE pointer to the requested
+       entry or NNUULLLL if the index is invalid.
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _d_2_i___X_5_0_9___N_A_M_E(3)
+
+HHIISSTTOORRYY
+       TBA
+
+
+
+1.0.0g                            2006-05-14     X509_NAME_get_index_by_NID(3)

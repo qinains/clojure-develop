@@ -1,0 +1,63 @@
+RSA_check_key(3)                    OpenSSL                   RSA_check_key(3)
+
+
+
+NNAAMMEE
+       RSA_check_key - validate private RSA keys
+
+SSYYNNOOPPSSIISS
+        #include <openssl/rsa.h>
+
+        int RSA_check_key(RSA *rsa);
+
+DDEESSCCRRIIPPTTIIOONN
+       This function validates RSA keys. It checks that pp and qq are in fact
+       prime, and that nn == pp**qq.
+
+       It also checks that dd**ee == 11 mmoodd ((pp--11**qq--11)), and that ddmmpp11, ddmmqq11 and iiqqmmpp
+       are set correctly or are NNUULLLL.
+
+       As such, this function can not be used with any arbitrary RSA key
+       object, even if it is otherwise fit for regular RSA operation. See
+       NNOOTTEESS for more information.
+
+RREETTUURRNN VVAALLUUEE
+       _R_S_A___c_h_e_c_k___k_e_y_(_) returns 1 if rrssaa is a valid RSA key, and 0 otherwise.
+       -1 is returned if an error occurs while checking the key.
+
+       If the key is invalid or an error occurred, the reason code can be
+       obtained using _E_R_R___g_e_t___e_r_r_o_r(3).
+
+NNOOTTEESS
+       This function does not work on RSA public keys that have only the modu-
+       lus and public exponent elements populated. It performs integrity
+       checks on all the RSA key material, so the RSA key structure must con-
+       tain all the private key data too.
+
+       Unlike most other RSA functions, this function does nnoott work transpar-
+       ently with any underlying ENGINE implementation because it uses the key
+       data in the RSA structure directly. An ENGINE implementation can over-
+       ride the way key data is stored and handled, and can even provide sup-
+       port for HSM keys - in which case the RSA structure may contain nnoo key
+       data at all! If the ENGINE in question is only being used for accelera-
+       tion or analysis purposes, then in all likelihood the RSA key data is
+       complete and untouched, but this can't be assumed in the general case.
+
+BBUUGGSS
+       A method of verifying the RSA key using opaque RSA API functions might
+       need to be considered. Right now _R_S_A___c_h_e_c_k___k_e_y_(_) simply uses the RSA
+       structure elements directly, bypassing the RSA_METHOD table altogether
+       (and completely violating encapsulation and object-orientation in the
+       process).  The best fix will probably be to introduce a "_c_h_e_c_k___k_e_y_(_)"
+       handler to the RSA_METHOD function table so that alternative implemen-
+       tations can also provide their own verifiers.
+
+SSEEEE AALLSSOO
+       _r_s_a(3), _E_R_R___g_e_t___e_r_r_o_r(3)
+
+HHIISSTTOORRYY
+       _R_S_A___c_h_e_c_k___k_e_y_(_) appeared in OpenSSL 0.9.4.
+
+
+
+1.0.0g                            2002-09-25                  RSA_check_key(3)

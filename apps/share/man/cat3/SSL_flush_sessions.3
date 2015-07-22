@@ -1,0 +1,46 @@
+SSL_CTX_flush_sessions(3)           OpenSSL          SSL_CTX_flush_sessions(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_flush_sessions, SSL_flush_sessions - remove expired sessions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        void SSL_CTX_flush_sessions(SSL_CTX *ctx, long tm);
+        void SSL_flush_sessions(SSL_CTX *ctx, long tm);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___C_T_X___f_l_u_s_h___s_e_s_s_i_o_n_s_(_) causes a run through the session cache of ccttxx
+       to remove sessions expired at time ttmm.
+
+       _S_S_L___f_l_u_s_h___s_e_s_s_i_o_n_s_(_) is a synonym for _S_S_L___C_T_X___f_l_u_s_h___s_e_s_s_i_o_n_s_(_).
+
+NNOOTTEESS
+       If enabled, the internal session cache will collect all sessions estab-
+       lished up to the specified maximum number (see
+       _S_S_L___C_T_X___s_e_s_s___s_e_t___c_a_c_h_e___s_i_z_e_(_)).  As sessions will not be reused ones
+       they are expired, they should be removed from the cache to save
+       resources. This can either be done
+        automatically whenever 255 new sessions were established (see
+       _S_S_L___C_T_X___s_e_t___s_e_s_s_i_o_n___c_a_c_h_e___m_o_d_e(3)) or manually by calling
+       _S_S_L___C_T_X___f_l_u_s_h___s_e_s_s_i_o_n_s_(_).
+
+       The parameter ttmm specifies the time which should be used for the expi-
+       ration test, in most cases the actual time given by _t_i_m_e(0) will be
+       used.
+
+       _S_S_L___C_T_X___f_l_u_s_h___s_e_s_s_i_o_n_s_(_) will only check sessions stored in the inter-
+       nal cache. When a session is found and removed, the remove_session_cb
+       is however called to synchronize with the external cache (see
+       _S_S_L___C_T_X___s_e_s_s___s_e_t___g_e_t___c_b(3)).
+
+RREETTUURRNN VVAALLUUEESS
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___C_T_X___s_e_t___s_e_s_s_i_o_n___c_a_c_h_e___m_o_d_e(3), _S_S_L___C_T_X___s_e_t___t_i_m_e_o_u_t(3),
+       _S_S_L___C_T_X___s_e_s_s___s_e_t___g_e_t___c_b(3)
+
+
+
+1.0.0g                            2001-02-04         SSL_CTX_flush_sessions(3)

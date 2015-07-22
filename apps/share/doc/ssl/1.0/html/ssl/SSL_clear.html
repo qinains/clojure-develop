@@ -1,0 +1,103 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_clear - reset SSL object to allow another connection</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#warnings">WARNINGS</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_clear - reset SSL object to allow another connection</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ int SSL_clear(SSL *ssl);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Reset <strong>ssl</strong> to allow another connection. All settings (method, ciphers,
+BIOs) are kept.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>SSL_clear is used to prepare an SSL object for a new connection. While all
+settings are kept, a side effect is the handling of the current SSL session.
+If a session is still <strong>open</strong>, it is considered bad and will be removed
+from the session cache, as required by RFC2246. A session is considered open,
+if <a href="../ssl/SSL_shutdown.html">SSL_shutdown</a> was not called for the connection
+or at least <a href="../ssl/SSL_set_shutdown.html">SSL_set_shutdown</a> was used to
+set the SSL_SENT_SHUTDOWN state.</p>
+<p>If a session was closed cleanly, the session object will be kept and all
+settings corresponding. This explicitly means, that e.g. the special method
+used during the session will be kept for the next handshake. So if the
+session was a TLSv1 session, a SSL client object will use a TLSv1 client
+method for the next handshake and a SSL server object will use a TLSv1
+server method, even if SSLv23_*_methods were chosen on startup. This
+will might lead to connection failures (see <a href="../ssl/SSL_new.html">SSL_new</a>)
+for a description of the method's properties.</p>
+<p>
+</p>
+<hr />
+<h1><a name="warnings">WARNINGS</a></h1>
+<p><code>SSL_clear()</code> resets the SSL object to allow for another connection. The
+reset operation however keeps several settings of the last sessions
+(some of these settings were made automatically during the last
+handshake). It only makes sense for a new connection with the exact
+same peer that shares these settings, and may fail if that peer
+changes its settings between connections. Use the sequence
+<a href="../ssl/SSL_get_session.html">SSL_get_session</a>;
+<a href="../ssl/SSL_new.html">SSL_new</a>;
+<a href="../ssl/SSL_set_session.html">SSL_set_session</a>;
+<a href="../ssl/SSL_free.html">SSL_free</a>
+instead to avoid such failures
+(or simply <a href="../ssl/SSL_free.html">SSL_free</a>; <a href="../ssl/SSL_new.html">SSL_new</a>
+if session reuse is not desired).</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>The following return values can occur:</p>
+<ol>
+<li>
+<p>The <code>SSL_clear()</code> operation could not be performed. Check the error stack to
+find out the reason.</p>
+</li>
+<li>
+<p>The <code>SSL_clear()</code> operation was successful.</p>
+</li>
+</ol>
+<p><a href="../ssl/SSL_new.html">SSL_new</a>, <a href="../ssl/SSL_free.html">SSL_free</a>,
+<a href="../ssl/SSL_shutdown.html">SSL_shutdown</a>, <a href="../ssl/SSL_set_shutdown.html">SSL_set_shutdown</a>,
+<a href="../ssl/SSL_CTX_set_options.html">SSL_CTX_set_options</a>, <a href="../ssl/ssl.html">ssl</a>,
+<a href="../ssl/SSL_CTX_set_client_cert_cb.html">SSL_CTX_set_client_cert_cb</a></p>
+
+</body>
+
+</html>

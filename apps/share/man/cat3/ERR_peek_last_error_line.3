@@ -1,0 +1,71 @@
+ERR_get_error(3)                    OpenSSL                   ERR_get_error(3)
+
+
+
+NNAAMMEE
+       ERR_get_error, ERR_peek_error, ERR_peek_last_error, ERR_get_error_line,
+       ERR_peek_error_line, ERR_peek_last_error_line, ERR_get_error_line_data,
+       ERR_peek_error_line_data, ERR_peek_last_error_line_data - obtain error
+       code and data
+
+SSYYNNOOPPSSIISS
+        #include <openssl/err.h>
+
+        unsigned long ERR_get_error(void);
+        unsigned long ERR_peek_error(void);
+        unsigned long ERR_peek_last_error(void);
+
+        unsigned long ERR_get_error_line(const char **file, int *line);
+        unsigned long ERR_peek_error_line(const char **file, int *line);
+        unsigned long ERR_peek_last_error_line(const char **file, int *line);
+
+        unsigned long ERR_get_error_line_data(const char **file, int *line,
+                const char **data, int *flags);
+        unsigned long ERR_peek_error_line_data(const char **file, int *line,
+                const char **data, int *flags);
+        unsigned long ERR_peek_last_error_line_data(const char **file, int *line,
+                const char **data, int *flags);
+
+DDEESSCCRRIIPPTTIIOONN
+       _E_R_R___g_e_t___e_r_r_o_r_(_) returns the earliest error code from the thread's error
+       queue and removes the entry. This function can be called repeatedly
+       until there are no more error codes to return.
+
+       _E_R_R___p_e_e_k___e_r_r_o_r_(_) returns the earliest error code from the thread's
+       error queue without modifying it.
+
+       _E_R_R___p_e_e_k___l_a_s_t___e_r_r_o_r_(_) returns the latest error code from the thread's
+       error queue without modifying it.
+
+       See _E_R_R___G_E_T___L_I_B(3) for obtaining information about location and reason
+       of the error, and _E_R_R___e_r_r_o_r___s_t_r_i_n_g(3) for human-readable error mes-
+       sages.
+
+       _E_R_R___g_e_t___e_r_r_o_r___l_i_n_e_(_), _E_R_R___p_e_e_k___e_r_r_o_r___l_i_n_e_(_) and
+       _E_R_R___p_e_e_k___l_a_s_t___e_r_r_o_r___l_i_n_e_(_) are the same as the above, but they addi-
+       tionally store the file name and line number where the error occurred
+       in *ffiillee and *lliinnee, unless these are NNUULLLL.
+
+       _E_R_R___g_e_t___e_r_r_o_r___l_i_n_e___d_a_t_a_(_), _E_R_R___p_e_e_k___e_r_r_o_r___l_i_n_e___d_a_t_a_(_) and
+       _E_R_R___g_e_t___l_a_s_t___e_r_r_o_r___l_i_n_e___d_a_t_a_(_) store additional data and flags associ-
+       ated with the error code in *ddaattaa and *ffllaaggss, unless these are NNUULLLL.
+       *ddaattaa contains a string if *ffllaaggss&EERRRR__TTXXTT__SSTTRRIINNGG. If it has been allo-
+       cated by _O_P_E_N_S_S_L___m_a_l_l_o_c_(_), *ffllaaggss&EERRRR__TTXXTT__MMAALLLLOOCCEEDD is true.
+
+RREETTUURRNN VVAALLUUEESS
+       The error code, or 0 if there is no error in the queue.
+
+SSEEEE AALLSSOO
+       _e_r_r(3), _E_R_R___e_r_r_o_r___s_t_r_i_n_g(3), _E_R_R___G_E_T___L_I_B(3)
+
+HHIISSTTOORRYY
+       _E_R_R___g_e_t___e_r_r_o_r_(_), _E_R_R___p_e_e_k___e_r_r_o_r_(_), _E_R_R___g_e_t___e_r_r_o_r___l_i_n_e_(_) and
+       _E_R_R___p_e_e_k___e_r_r_o_r___l_i_n_e_(_) are available in all versions of SSLeay and
+       OpenSSL. _E_R_R___g_e_t___e_r_r_o_r___l_i_n_e___d_a_t_a_(_) and _E_R_R___p_e_e_k___e_r_r_o_r___l_i_n_e___d_a_t_a_(_) were
+       added in SSLeay 0.9.0.  _E_R_R___p_e_e_k___l_a_s_t___e_r_r_o_r_(_),
+       _E_R_R___p_e_e_k___l_a_s_t___e_r_r_o_r___l_i_n_e_(_) and _E_R_R___p_e_e_k___l_a_s_t___e_r_r_o_r___l_i_n_e___d_a_t_a_(_) were
+       added in OpenSSL 0.9.7.
+
+
+
+1.0.0g                            2002-11-29                  ERR_get_error(3)

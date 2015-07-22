@@ -1,0 +1,65 @@
+SMIME_read_CMS(3)                   OpenSSL                  SMIME_read_CMS(3)
+
+
+
+NNAAMMEE
+        SMIME_read_CMS - parse S/MIME message.
+
+SSYYNNOOPPSSIISS
+        #include <openssl/cms.h>
+
+        CMS_ContentInfo *SMIME_read_CMS(BIO *in, BIO **bcont);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_M_I_M_E___r_e_a_d___C_M_S_(_) parses a message in S/MIME format.
+
+       iinn is a BIO to read the message from.
+
+       If cleartext signing is used then the content is saved in a memory bio
+       which is written to **bbccoonntt, otherwise **bbccoonntt is set to NULL.
+
+       The parsed CMS_ContentInfo structure is returned or NULL if an error
+       occurred.
+
+NNOOTTEESS
+       If **bbccoonntt is not NULL then the message is clear text signed. **bbccoonntt can
+       then be passed to _C_M_S___v_e_r_i_f_y_(_) with the CCMMSS__DDEETTAACCHHEEDD flag set.
+
+       Otherwise the type of the returned structure can be determined using
+       _C_M_S___g_e_t_0___t_y_p_e_(_).
+
+       To support future functionality if bbccoonntt is not NULL **bbccoonntt should be
+       initialized to NULL. For example:
+
+        BIO *cont = NULL;
+        CMS_ContentInfo *cms;
+
+        cms = SMIME_read_CMS(in, &cont);
+
+BBUUGGSS
+       The MIME parser used by _S_M_I_M_E___r_e_a_d___C_M_S_(_) is somewhat primitive.  While
+       it will handle most S/MIME messages more complex compound formats may
+       not work.
+
+       The parser assumes that the CMS_ContentInfo structure is always base64
+       encoded and will not handle the case where it is in binary format or
+       uses quoted printable format.
+
+       The use of a memory BIO to hold the signed content limits the size of
+       message which can be processed due to memory restraints: a streaming
+       single pass option should be available.
+
+RREETTUURRNN VVAALLUUEESS
+       _S_M_I_M_E___r_e_a_d___C_M_S_(_) returns a valid CCMMSS__CCoonntteennttIInnffoo structure or NNUULLLL if
+       an error occurred. The error can be obtained from _E_R_R___g_e_t___e_r_r_o_r(3).
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _C_M_S___t_y_p_e(3) _S_M_I_M_E___r_e_a_d___C_M_S(3), _C_M_S___s_i_g_n(3), _C_M_S___v_e_r_-
+       _i_f_y(3), _C_M_S___e_n_c_r_y_p_t(3) _C_M_S___d_e_c_r_y_p_t(3)
+
+HHIISSTTOORRYY
+       _S_M_I_M_E___r_e_a_d___C_M_S_(_) was added to OpenSSL 0.9.8
+
+
+
+1.0.0g                            2008-04-11                 SMIME_read_CMS(3)

@@ -1,0 +1,108 @@
+SSL_shutdown(3)                     OpenSSL                    SSL_shutdown(3)
+
+
+
+NNAAMMEE
+       SSL_shutdown - shut down a TLS/SSL connection
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        int SSL_shutdown(SSL *ssl);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___s_h_u_t_d_o_w_n_(_) shuts down an active TLS/SSL connection. It sends the
+       "close notify" shutdown alert to the peer.
+
+NNOOTTEESS
+       _S_S_L___s_h_u_t_d_o_w_n_(_) tries to send the "close notify" shutdown alert to the
+       peer.  Whether the operation succeeds or not, the SSL_SENT_SHUTDOWN
+       flag is set and a currently open session is considered closed and good
+       and will be kept in the session cache for further reuse.
+
+       The shutdown procedure consists of 2 steps: the sending of the "close
+       notify" shutdown alert and the reception of the peer's "close notify"
+       shutdown alert. According to the TLS standard, it is acceptable for an
+       application to only send its shutdown alert and then close the underly-
+       ing connection without waiting for the peer's response (this way
+       resources can be saved, as the process can already terminate or serve
+       another connection).  When the underlying connection shall be used for
+       more communications, the complete shutdown procedure (bidirectional
+       "close notify" alerts) must be performed, so that the peers stay syn-
+       chronized.
+
+       _S_S_L___s_h_u_t_d_o_w_n_(_) supports both uni- and bidirectional shutdown by its 2
+       step behaviour.
+
+       When the application is the first party to send the "close notify"
+       alert, _S_S_L___s_h_u_t_d_o_w_n_(_) will only send the alert and then set the
+       SSL_SENT_SHUTDOWN flag (so that the session is considered good and will
+       be kept in cache). _S_S_L___s_h_u_t_d_o_w_n_(_) will then return with 0. If a unidi-
+       rectional shutdown is enough (the underlying connection shall be closed
+       anyway), this first call to _S_S_L___s_h_u_t_d_o_w_n_(_) is sufficient. In order to
+       complete the bidirectional shutdown handshake, _S_S_L___s_h_u_t_d_o_w_n_(_) must be
+       called again. The second call will make _S_S_L___s_h_u_t_d_o_w_n_(_) wait for the
+       peer's "close notify" shutdown alert. On success, the second call to
+       _S_S_L___s_h_u_t_d_o_w_n_(_) will return with 1.
+       If the peer already sent the "close notify" alert aanndd it was already
+       processed implicitly inside another function (_S_S_L___r_e_a_d(3)), the
+       SSL_RECEIVED_SHUTDOWN flag is set. _S_S_L___s_h_u_t_d_o_w_n_(_) will send the "close
+       notify" alert, set the SSL_SENT_SHUTDOWN flag and will immediately
+       return with 1. Whether SSL_RECEIVED_SHUTDOWN is already set can be
+       checked using the _S_S_L___g_e_t___s_h_u_t_d_o_w_n_(_) (see also _S_S_L___s_e_t___s_h_u_t_d_o_w_n(3)
+       call.
+
+       It is therefore recommended, to check the return value of _S_S_L___s_h_u_t_-
+       _d_o_w_n_(_) and call _S_S_L___s_h_u_t_d_o_w_n_(_) again, if the bidirectional shutdown is
+       not yet complete (return value of the first call is 0). As the shutdown
+       is not specially handled in the SSLv2 protocol, _S_S_L___s_h_u_t_d_o_w_n_(_) will
+       succeed on the first call.
+
+       The behaviour of _S_S_L___s_h_u_t_d_o_w_n_(_) additionally depends on the underlying
+       BIO.
+
+       If the underlying BIO is bblloocckkiinngg, _S_S_L___s_h_u_t_d_o_w_n_(_) will only return once
+       the handshake step has been finished or an error occurred.
+
+       If the underlying BIO is nnoonn--bblloocckkiinngg, _S_S_L___s_h_u_t_d_o_w_n_(_) will also return
+       when the underlying BIO could not satisfy the needs of _S_S_L___s_h_u_t_d_o_w_n_(_)
+       to continue the handshake. In this case a call to _S_S_L___g_e_t___e_r_r_o_r_(_) with
+       the return value of _S_S_L___s_h_u_t_d_o_w_n_(_) will yield SSSSLL__EERRRROORR__WWAANNTT__RREEAADD or
+       SSSSLL__EERRRROORR__WWAANNTT__WWRRIITTEE. The calling process then must repeat the call
+       after taking appropriate action to satisfy the needs of _S_S_L___s_h_u_t_d_o_w_n_(_).
+       The action depends on the underlying BIO. When using a non-blocking
+       socket, nothing is to be done, but _s_e_l_e_c_t_(_) can be used to check for
+       the required condition. When using a buffering BIO, like a BIO pair,
+       data must be written into or retrieved out of the BIO before being able
+       to continue.
+
+       _S_S_L___s_h_u_t_d_o_w_n_(_) can be modified to only set the connection to "shutdown"
+       state but not actually send the "close notify" alert messages, see
+       _S_S_L___C_T_X___s_e_t___q_u_i_e_t___s_h_u_t_d_o_w_n(3).  When "quiet shutdown" is enabled,
+       _S_S_L___s_h_u_t_d_o_w_n_(_) will always succeed and return 1.
+
+RREETTUURRNN VVAALLUUEESS
+       The following return values can occur:
+
+       1   The shutdown was successfully completed. The "close notify" alert
+           was sent and the peer's "close notify" alert was received.
+
+       0   The shutdown is not yet finished. Call _S_S_L___s_h_u_t_d_o_w_n_(_) for a second
+           time, if a bidirectional shutdown shall be performed.  The output
+           of _S_S_L___g_e_t___e_r_r_o_r(3) may be misleading, as an erroneous
+           SSL_ERROR_SYSCALL may be flagged even though no error occurred.
+
+       -1  The shutdown was not successful because a fatal error occurred
+           either at the protocol level or a connection failure occurred. It
+           can also occur if action is need to continue the operation for non-
+           blocking BIOs.  Call _S_S_L___g_e_t___e_r_r_o_r(3) with the return value rreett to
+           find out the reason.
+
+SSEEEE AALLSSOO
+       _S_S_L___g_e_t___e_r_r_o_r(3), _S_S_L___c_o_n_n_e_c_t(3), _S_S_L___a_c_c_e_p_t(3), _S_S_L___s_e_t___s_h_u_t_d_o_w_n(3),
+       _S_S_L___C_T_X___s_e_t___q_u_i_e_t___s_h_u_t_d_o_w_n(3), _S_S_L___c_l_e_a_r(3), _S_S_L___f_r_e_e(3), _s_s_l(3),
+       _b_i_o(3)
+
+
+
+1.0.0g                            2004-11-14                   SSL_shutdown(3)

@@ -1,0 +1,43 @@
+SSL_get_current_cipher(3)           OpenSSL          SSL_get_current_cipher(3)
+
+
+
+NNAAMMEE
+       SSL_get_current_cipher, SSL_get_cipher, SSL_get_cipher_name,
+       SSL_get_cipher_bits, SSL_get_cipher_version - get SSL_CIPHER of a con-
+       nection
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        SSL_CIPHER *SSL_get_current_cipher(const SSL *ssl);
+        #define SSL_get_cipher(s) \
+                       SSL_CIPHER_get_name(SSL_get_current_cipher(s))
+        #define SSL_get_cipher_name(s) \
+                       SSL_CIPHER_get_name(SSL_get_current_cipher(s))
+        #define SSL_get_cipher_bits(s,np) \
+                       SSL_CIPHER_get_bits(SSL_get_current_cipher(s),np)
+        #define SSL_get_cipher_version(s) \
+                       SSL_CIPHER_get_version(SSL_get_current_cipher(s))
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___g_e_t___c_u_r_r_e_n_t___c_i_p_h_e_r_(_) returns a pointer to an SSL_CIPHER object con-
+       taining the description of the actually used cipher of a connection
+       established with the ssssll object.
+
+       _S_S_L___g_e_t___c_i_p_h_e_r_(_) and _S_S_L___g_e_t___c_i_p_h_e_r___n_a_m_e_(_) are identical macros to
+       obtain the name of the currently used cipher. _S_S_L___g_e_t___c_i_p_h_e_r___b_i_t_s_(_) is
+       a macro to obtain the number of secret/algorithm bits used and
+       _S_S_L___g_e_t___c_i_p_h_e_r___v_e_r_s_i_o_n_(_) returns the protocol name.  See
+       _S_S_L___C_I_P_H_E_R___g_e_t___n_a_m_e(3) for more details.
+
+RREETTUURRNN VVAALLUUEESS
+       _S_S_L___g_e_t___c_u_r_r_e_n_t___c_i_p_h_e_r_(_) returns the cipher actually used or NULL, when
+       no session has been established.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___C_I_P_H_E_R___g_e_t___n_a_m_e(3)
+
+
+
+1.0.0g                            2005-03-30         SSL_get_current_cipher(3)

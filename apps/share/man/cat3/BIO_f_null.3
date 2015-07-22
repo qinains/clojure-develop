@@ -1,0 +1,32 @@
+BIO_f_null(3)                       OpenSSL                      BIO_f_null(3)
+
+
+
+NNAAMMEE
+       BIO_f_null - null filter
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bio.h>
+
+        BIO_METHOD *   BIO_f_null(void);
+
+DDEESSCCRRIIPPTTIIOONN
+       _B_I_O___f___n_u_l_l_(_) returns the null filter BIO method. This is a filter BIO
+       that does nothing.
+
+       All requests to a null filter BIO are passed through to the next BIO in
+       the chain: this means that a BIO chain containing a null filter BIO
+       behaves just as though the BIO was not there.
+
+NNOOTTEESS
+       As may be apparent a null filter BIO is not particularly useful.
+
+RREETTUURRNN VVAALLUUEESS
+       _B_I_O___f___n_u_l_l_(_) returns the null filter BIO method.
+
+SSEEEE AALLSSOO
+       TBA
+
+
+
+1.0.0g                            2000-09-14                     BIO_f_null(3)

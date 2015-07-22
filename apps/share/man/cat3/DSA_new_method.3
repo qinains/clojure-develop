@@ -1,0 +1,141 @@
+DSA_set_method(3)                   OpenSSL                  DSA_set_method(3)
+
+
+
+NNAAMMEE
+       DSA_set_default_method, DSA_get_default_method, DSA_set_method,
+       DSA_new_method, DSA_OpenSSL - select DSA method
+
+SSYYNNOOPPSSIISS
+        #include <openssl/dsa.h>
+        #include <openssl/engine.h>
+
+        void DSA_set_default_method(const DSA_METHOD *meth);
+
+        const DSA_METHOD *DSA_get_default_method(void);
+
+        int DSA_set_method(DSA *dsa, const DSA_METHOD *meth);
+
+        DSA *DSA_new_method(ENGINE *engine);
+
+        DSA_METHOD *DSA_OpenSSL(void);
+
+DDEESSCCRRIIPPTTIIOONN
+       A DDSSAA__MMEETTHHOODD specifies the functions that OpenSSL uses for DSA opera-
+       tions. By modifying the method, alternative implementations such as
+       hardware accelerators may be used. IMPORTANT: See the NOTES section for
+       important information about how these DSA API functions are affected by
+       the use of EENNGGIINNEE API calls.
+
+       Initially, the default DSA_METHOD is the OpenSSL internal implementa-
+       tion, as returned by _D_S_A___O_p_e_n_S_S_L_(_).
+
+       _D_S_A___s_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_) makes mmeetthh the default method for all DSA
+       structures created later. NNBB: This is true only whilst no ENGINE has
+       been set as a default for DSA, so this function is no longer recom-
+       mended.
+
+       _D_S_A___g_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_) returns a pointer to the current default
+       DSA_METHOD. However, the meaningfulness of this result is dependent on
+       whether the ENGINE API is being used, so this function is no longer
+       recommended.
+
+       _D_S_A___s_e_t___m_e_t_h_o_d_(_) selects mmeetthh to perform all operations using the key
+       rrssaa. This will replace the DSA_METHOD used by the DSA key and if the
+       previous method was supplied by an ENGINE, the handle to that ENGINE
+       will be released during the change. It is possible to have DSA keys
+       that only work with certain DSA_METHOD implementations (eg. from an
+       ENGINE module that supports embedded hardware-protected keys), and in
+       such cases attempting to change the DSA_METHOD for the key can have
+       unexpected results.
+
+       _D_S_A___n_e_w___m_e_t_h_o_d_(_) allocates and initializes a DSA structure so that
+       eennggiinnee will be used for the DSA operations. If eennggiinnee is NULL, the
+       default engine for DSA operations is used, and if no default ENGINE is
+       set, the DSA_METHOD controlled by _D_S_A___s_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_) is used.
+
+TTHHEE DDSSAA__MMEETTHHOODD SSTTRRUUCCTTUURREE
+       struct
+        {
+            /* name of the implementation */
+               const char *name;
+
+            /* sign */
+               DSA_SIG *(*dsa_do_sign)(const unsigned char *dgst, int dlen,
+                                        DSA *dsa);
+
+            /* pre-compute k^-1 and r */
+               int (*dsa_sign_setup)(DSA *dsa, BN_CTX *ctx_in, BIGNUM **kinvp,
+                                        BIGNUM **rp);
+
+            /* verify */
+               int (*dsa_do_verify)(const unsigned char *dgst, int dgst_len,
+                                        DSA_SIG *sig, DSA *dsa);
+
+            /* compute rr = a1^p1 * a2^p2 mod m (May be NULL for some
+                                                 implementations) */
+               int (*dsa_mod_exp)(DSA *dsa, BIGNUM *rr, BIGNUM *a1, BIGNUM *p1,
+                                        BIGNUM *a2, BIGNUM *p2, BIGNUM *m,
+                                        BN_CTX *ctx, BN_MONT_CTX *in_mont);
+
+            /* compute r = a ^ p mod m (May be NULL for some implementations) */
+               int (*bn_mod_exp)(DSA *dsa, BIGNUM *r, BIGNUM *a,
+                                        const BIGNUM *p, const BIGNUM *m,
+                                        BN_CTX *ctx, BN_MONT_CTX *m_ctx);
+
+            /* called at DSA_new */
+               int (*init)(DSA *DSA);
+
+            /* called at DSA_free */
+               int (*finish)(DSA *DSA);
+
+               int flags;
+
+               char *app_data; /* ?? */
+
+        } DSA_METHOD;
+
+RREETTUURRNN VVAALLUUEESS
+       _D_S_A___O_p_e_n_S_S_L_(_) and _D_S_A___g_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_) return pointers to the
+       respective DDSSAA__MMEETTHHOODDs.
+
+       _D_S_A___s_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_) returns no value.
+
+       _D_S_A___s_e_t___m_e_t_h_o_d_(_) returns non-zero if the provided mmeetthh was successfully
+       set as the method for ddssaa (including unloading the ENGINE handle if the
+       previous method was supplied by an ENGINE).
+
+       _D_S_A___n_e_w___m_e_t_h_o_d_(_) returns NULL and sets an error code that can be
+       obtained by _E_R_R___g_e_t___e_r_r_o_r(3) if the allocation fails. Otherwise it
+       returns a pointer to the newly allocated structure.
+
+NNOOTTEESS
+       As of version 0.9.7, DSA_METHOD implementations are grouped together
+       with other algorithmic APIs (eg. RSA_METHOD, EVP_CIPHER, etc) in EENNGGIINNEE
+       modules. If a default ENGINE is specified for DSA functionality using
+       an ENGINE API function, that will override any DSA defaults set using
+       the DSA API (ie.  _D_S_A___s_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_)). For this reason, the
+       ENGINE API is the recommended way to control default implementations
+       for use in DSA and other cryptographic algorithms.
+
+SSEEEE AALLSSOO
+       _d_s_a(3), _D_S_A___n_e_w(3)
+
+HHIISSTTOORRYY
+       _D_S_A___s_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_), _D_S_A___g_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_), _D_S_A___s_e_t___m_e_t_h_o_d_(_),
+       _D_S_A___n_e_w___m_e_t_h_o_d_(_) and _D_S_A___O_p_e_n_S_S_L_(_) were added in OpenSSL 0.9.4.
+
+       _D_S_A___s_e_t___d_e_f_a_u_l_t___o_p_e_n_s_s_l___m_e_t_h_o_d_(_) and _D_S_A___g_e_t___d_e_f_a_u_l_t___o_p_e_n_s_s_l___m_e_t_h_o_d_(_)
+       replaced _D_S_A___s_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_) and _D_S_A___g_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_) respec-
+       tively, and _D_S_A___s_e_t___m_e_t_h_o_d_(_) and _D_S_A___n_e_w___m_e_t_h_o_d_(_) were altered to use
+       EENNGGIINNEEs rather than DDSSAA__MMEETTHHOODDs during development of the engine ver-
+       sion of OpenSSL 0.9.6. For 0.9.7, the handling of defaults in the
+       ENGINE API was restructured so that this change was reversed, and be-
+       haviour of the other functions resembled more closely the previous be-
+       haviour. The behaviour of defaults in the ENGINE API now transparently
+       overrides the behaviour of defaults in the DSA API without requiring
+       changing these function prototypes.
+
+
+
+1.0.0g                            2007-11-19                 DSA_set_method(3)

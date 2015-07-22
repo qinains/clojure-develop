@@ -1,0 +1,103 @@
+SSL_get_error(3)                    OpenSSL                   SSL_get_error(3)
+
+
+
+NNAAMMEE
+       SSL_get_error - obtain result code for TLS/SSL I/O operation
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        int SSL_get_error(const SSL *ssl, int ret);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___g_e_t___e_r_r_o_r_(_) returns a result code (suitable for the C "switch"
+       statement) for a preceding call to _S_S_L___c_o_n_n_e_c_t_(_), _S_S_L___a_c_c_e_p_t_(_),
+       _S_S_L___d_o___h_a_n_d_s_h_a_k_e_(_), _S_S_L___r_e_a_d_(_), _S_S_L___p_e_e_k_(_), or _S_S_L___w_r_i_t_e_(_) on ssssll.  The
+       value returned by that TLS/SSL I/O function must be passed to
+       _S_S_L___g_e_t___e_r_r_o_r_(_) in parameter rreett.
+
+       In addition to ssssll and rreett, _S_S_L___g_e_t___e_r_r_o_r_(_) inspects the current
+       thread's OpenSSL error queue.  Thus, _S_S_L___g_e_t___e_r_r_o_r_(_) must be used in
+       the same thread that performed the TLS/SSL I/O operation, and no other
+       OpenSSL function calls should appear in between.  The current thread's
+       error queue must be empty before the TLS/SSL I/O operation is
+       attempted, or _S_S_L___g_e_t___e_r_r_o_r_(_) will not work reliably.
+
+RREETTUURRNN VVAALLUUEESS
+       The following return values can currently occur:
+
+       SSL_ERROR_NONE
+           The TLS/SSL I/O operation completed.  This result code is returned
+           if and only if rreett >> 00.
+
+       SSL_ERROR_ZERO_RETURN
+           The TLS/SSL connection has been closed.  If the protocol version is
+           SSL 3.0 or TLS 1.0, this result code is returned only if a closure
+           alert has occurred in the protocol, i.e. if the connection has been
+           closed cleanly. Note that in this case SSSSLL__EERRRROORR__ZZEERROO__RREETTUURRNN does
+           not necessarily indicate that the underlying transport has been
+           closed.
+
+       SSL_ERROR_WANT_READ, SSL_ERROR_WANT_WRITE
+           The operation did not complete; the same TLS/SSL I/O function
+           should be called again later.  If, by then, the underlying BBIIOO has
+           data available for reading (if the result code is
+           SSSSLL__EERRRROORR__WWAANNTT__RREEAADD) or allows writing data (SSSSLL__EERRRROORR__WWAANNTT__WWRRIITTEE),
+           then some TLS/SSL protocol progress will take place, i.e. at least
+           part of an TLS/SSL record will be read or written.  Note that the
+           retry may again lead to a SSSSLL__EERRRROORR__WWAANNTT__RREEAADD or
+           SSSSLL__EERRRROORR__WWAANNTT__WWRRIITTEE condition.  There is no fixed upper limit for
+           the number of iterations that may be necessary until progress
+           becomes visible at application protocol level.
+
+           For socket BBIIOOs (e.g. when _S_S_L___s_e_t___f_d_(_) was used), _s_e_l_e_c_t_(_) or
+           _p_o_l_l_(_) on the underlying socket can be used to find out when the
+           TLS/SSL I/O function should be retried.
+
+           Caveat: Any TLS/SSL I/O function can lead to either of
+           SSSSLL__EERRRROORR__WWAANNTT__RREEAADD and SSSSLL__EERRRROORR__WWAANNTT__WWRRIITTEE.  In particular,
+           _S_S_L___r_e_a_d_(_) or _S_S_L___p_e_e_k_(_) may want to write data and _S_S_L___w_r_i_t_e_(_) may
+           want to read data.  This is mainly because TLS/SSL handshakes may
+           occur at any time during the protocol (initiated by either the
+           client or the server); _S_S_L___r_e_a_d_(_), _S_S_L___p_e_e_k_(_), and _S_S_L___w_r_i_t_e_(_) will
+           handle any pending handshakes.
+
+       SSL_ERROR_WANT_CONNECT, SSL_ERROR_WANT_ACCEPT
+           The operation did not complete; the same TLS/SSL I/O function
+           should be called again later. The underlying BIO was not connected
+           yet to the peer and the call would block in _c_o_n_n_e_c_t_(_)/_a_c_c_e_p_t_(_). The
+           SSL function should be called again when the connection is estab-
+           lished. These messages can only appear with a _B_I_O___s___c_o_n_n_e_c_t_(_) or
+           _B_I_O___s___a_c_c_e_p_t_(_) BIO, respectively.  In order to find out, when the
+           connection has been successfully established, on many platforms
+           _s_e_l_e_c_t_(_) or _p_o_l_l_(_) for writing on the socket file descriptor can be
+           used.
+
+       SSL_ERROR_WANT_X509_LOOKUP
+           The operation did not complete because an application callback set
+           by _S_S_L___C_T_X___s_e_t___c_l_i_e_n_t___c_e_r_t___c_b_(_) has asked to be called again.  The
+           TLS/SSL I/O function should be called again later.  Details depend
+           on the application.
+
+       SSL_ERROR_SYSCALL
+           Some I/O error occurred.  The OpenSSL error queue may contain more
+           information on the error.  If the error queue is empty (i.e.
+           _E_R_R___g_e_t___e_r_r_o_r_(_) returns 0), rreett can be used to find out more about
+           the error: If rreett ==== 00, an EOF was observed that violates the pro-
+           tocol.  If rreett ==== --11, the underlying BBIIOO reported an I/O error (for
+           socket I/O on Unix systems, consult eerrrrnnoo for details).
+
+       SSL_ERROR_SSL
+           A failure in the SSL library occurred, usually a protocol error.
+           The OpenSSL error queue contains more information on the error.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _e_r_r(3)
+
+HHIISSTTOORRYY
+       _S_S_L___g_e_t___e_r_r_o_r_(_) was added in SSLeay 0.8.
+
+
+
+1.0.0g                            2005-03-30                  SSL_get_error(3)

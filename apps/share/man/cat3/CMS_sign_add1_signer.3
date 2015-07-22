@@ -1,0 +1,97 @@
+CMS_sign_add1_signer(3)             OpenSSL            CMS_sign_add1_signer(3)
+
+
+
+NNAAMMEE
+        CMS_sign_add1_signer, CMS_SignerInfo_sign - add a signer to a CMS_ContentInfo signed data structure.
+
+SSYYNNOOPPSSIISS
+        #include <openssl/cms.h>
+
+        CMS_SignerInfo *CMS_sign_add1_signer(CMS_ContentInfo *cms, X509 *signcert, EVP_PKEY *pkey, const EVP_MD *md, unsigned int flags);
+
+        int CMS_SignerInfo_sign(CMS_SignerInfo *si);
+
+DDEESSCCRRIIPPTTIIOONN
+       _C_M_S___s_i_g_n___a_d_d_1___s_i_g_n_e_r_(_) adds a signer with certificate ssiiggnncceerrtt and pri-
+       vate key ppkkeeyy using message digest mmdd to CMS_ContentInfo SignedData
+       structure ccmmss.
+
+       The CMS_ContentInfo structure should be obtained from an initial call
+       to _C_M_S___s_i_g_n_(_) with the flag CCMMSS__PPAARRTTIIAALL set or in the case or re-sign-
+       ing a valid CMS_ContentInfo SignedData structure.
+
+       If the mmdd parameter is NNUULLLL then the default digest for the public key
+       algorithm will be used.
+
+       Unless the CCMMSS__RREEUUSSEE__DDIIGGEESSTT flag is set the returned CMS_ContentInfo
+       structure is not complete and must be finalized either by streaming (if
+       applicable) or a call to _C_M_S___f_i_n_a_l_(_).
+
+       The _C_M_S___S_i_g_n_e_r_I_n_f_o___s_i_g_n_(_) function will explicitly sign a CMS_Signer-
+       Info structure, its main use is when CCMMSS__RREEUUSSEE__DDIIGGEESSTT and CCMMSS__PPAARRTTIIAALL
+       flags are both set.
+
+NNOOTTEESS
+       The main purpose of _C_M_S___s_i_g_n___a_d_d_1___s_i_g_n_e_r_(_) is to provide finer control
+       over a CMS signed data structure where the simpler _C_M_S___s_i_g_n_(_) function
+       defaults are not appropriate. For example if multiple signers or non
+       default digest algorithms are needed. New attributes can also be added
+       using the returned CMS_SignerInfo structure and the CMS attribute util-
+       ity functions or the CMS signed receipt request functions.
+
+       Any of the following flags (ored together) can be passed in the ffllaaggss
+       parameter.
+
+       If CCMMSS__RREEUUSSEE__DDIIGGEESSTT is set then an attempt is made to copy the content
+       digest value from the CMS_ContentInfo structure: to add a signer to an
+       existing structure.  An error occurs if a matching digest value cannot
+       be found to copy.  The returned CMS_ContentInfo structure will be valid
+       and finalized when this flag is set.
+
+       If CCMMSS__PPAARRTTIIAALL is set in addition to CCMMSS__RREEUUSSEE__DDIIGGEESSTT then the
+       CMS_SignerInfo structure will not be finalized so additional attributes
+       can be added. In this case an explicit call to _C_M_S___S_i_g_n_e_r_I_n_f_o___s_i_g_n_(_) is
+       needed to finalize it.
+
+       If CCMMSS__NNOOCCEERRTTSS is set the signer's certificate will not be included in
+       the CMS_ContentInfo structure, the signer's certificate must still be
+       supplied in the ssiiggnncceerrtt parameter though. This can reduce the size of
+       the signature if the signers certificate can be obtained by other
+       means: for example a previously signed message.
+
+       The SignedData structure includes several CMS signedAttributes includ-
+       ing the signing time, the CMS content type and the supported list of
+       ciphers in an SMIMECapabilities attribute. If CCMMSS__NNOOAATTTTRR is set then no
+       signedAttributes will be used. If CCMMSS__NNOOSSMMIIMMEECCAAPP is set then just the
+       SMIMECapabilities are omitted.
+
+       OpenSSL will by default identify signing certificates using issuer name
+       and serial number. If CCMMSS__UUSSEE__KKEEYYIIDD is set it will use the subject key
+       identifier value instead. An error occurs if the signing certificate
+       does not have a subject key identifier extension.
+
+       If present the SMIMECapabilities attribute indicates support for the
+       following algorithms in preference order: 256 bit AES, Gost R3411-94,
+       Gost 28147-89, 192 bit AES, 128 bit AES, triple DES, 128 bit RC2, 64
+       bit RC2, DES and 40 bit RC2.  If any of these algorithms is not avail-
+       able then it will not be included: for example the GOST algorithms will
+       not be included if the GOST ENGINE is not loaded.
+
+       _C_M_S___s_i_g_n___a_d_d_1___s_i_g_n_e_r_(_) returns an internal pointer to the CMS_Signer-
+       Info structure just added, this can be used to set additional
+       attributes before it is finalized.
+
+RREETTUURRNN VVAALLUUEESS
+       _C_M_S___s_i_g_n_1___a_d_d___s_i_g_n_e_r_s_(_) returns an internal pointer to the CMS_Signer-
+       Info structure just added or NULL if an error occurs.
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _C_M_S___s_i_g_n(3), _C_M_S___f_i_n_a_l(3),
+
+HHIISSTTOORRYY
+       _C_M_S___s_i_g_n___a_d_d_1___s_i_g_n_e_r_(_) was added to OpenSSL 0.9.8
+
+
+
+1.0.0g                            2009-03-08           CMS_sign_add1_signer(3)

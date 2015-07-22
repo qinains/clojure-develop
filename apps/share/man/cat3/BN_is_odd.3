@@ -1,0 +1,46 @@
+BN_cmp(3)                           OpenSSL                          BN_cmp(3)
+
+
+
+NNAAMMEE
+       BN_cmp, BN_ucmp, BN_is_zero, BN_is_one, BN_is_word, BN_is_odd - BIGNUM
+       comparison and test functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bn.h>
+
+        int BN_cmp(BIGNUM *a, BIGNUM *b);
+        int BN_ucmp(BIGNUM *a, BIGNUM *b);
+
+        int BN_is_zero(BIGNUM *a);
+        int BN_is_one(BIGNUM *a);
+        int BN_is_word(BIGNUM *a, BN_ULONG w);
+        int BN_is_odd(BIGNUM *a);
+
+DDEESSCCRRIIPPTTIIOONN
+       _B_N___c_m_p_(_) compares the numbers aa and bb. _B_N___u_c_m_p_(_) compares their abso-
+       lute values.
+
+       _B_N___i_s___z_e_r_o_(_), _B_N___i_s___o_n_e_(_) and _B_N___i_s___w_o_r_d_(_) test if aa equals 0, 1, or ww
+       respectively. _B_N___i_s___o_d_d_(_) tests if a is odd.
+
+       _B_N___i_s___z_e_r_o_(_), _B_N___i_s___o_n_e_(_), _B_N___i_s___w_o_r_d_(_) and _B_N___i_s___o_d_d_(_) are macros.
+
+RREETTUURRNN VVAALLUUEESS
+       _B_N___c_m_p_(_) returns -1 if aa < bb, 0 if aa == bb and 1 if aa > bb. _B_N___u_c_m_p_(_) is
+       the same using the absolute values of aa and bb.
+
+       _B_N___i_s___z_e_r_o_(_), _B_N___i_s___o_n_e_(_) _B_N___i_s___w_o_r_d_(_) and _B_N___i_s___o_d_d_(_) return 1 if the
+       condition is true, 0 otherwise.
+
+SSEEEE AALLSSOO
+       _b_n(3)
+
+HHIISSTTOORRYY
+       _B_N___c_m_p_(_), _B_N___u_c_m_p_(_), _B_N___i_s___z_e_r_o_(_), _B_N___i_s___o_n_e_(_) and _B_N___i_s___w_o_r_d_(_) are
+       available in all versions of SSLeay and OpenSSL.  _B_N___i_s___o_d_d_(_) was added
+       in SSLeay 0.8.
+
+
+
+1.0.0g                            2000-01-27                         BN_cmp(3)

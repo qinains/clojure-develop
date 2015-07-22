@@ -1,0 +1,109 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>EVP_DigestVerifyFinal - EVP signature verification functions</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>EVP_DigestVerifyInit, EVP_DigestVerifyUpdate, EVP_DigestVerifyFinal - EVP signature verification functions</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/evp.h&gt;</pre>
+<pre>
+ int EVP_DigestVerifyInit(EVP_MD_CTX *ctx, EVP_PKEY_CTX **pctx,
+                        const EVP_MD *type, ENGINE *e, EVP_PKEY *pkey);
+ int EVP_DigestVerifyUpdate(EVP_MD_CTX *ctx, const void *d, unsigned int cnt);
+ int EVP_DigestVerifyFinal(EVP_MD_CTX *ctx, unsigned char *sig, size_t siglen);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The EVP signature routines are a high level interface to digital signatures.</p>
+<p><code>EVP_DigestVerifyInit()</code> sets up verification context <strong>ctx</strong> to use digest
+<strong>type</strong> from ENGINE <strong>impl</strong> and public key <strong>pkey</strong>. <strong>ctx</strong> must be initialized
+with <code>EVP_MD_CTX_init()</code> before calling this function. If <strong>pctx</strong> is not NULL the
+EVP_PKEY_CTX of the verification operation will be written to <strong>*pctx</strong>: this
+can be used to set alternative verification options.</p>
+<p><code>EVP_DigestVerifyUpdate()</code> hashes <strong>cnt</strong> bytes of data at <strong>d</strong> into the
+verification context <strong>ctx</strong>. This function can be called several times on the
+same <strong>ctx</strong> to include additional data. This function is currently implemented
+using a macro.</p>
+<p><code>EVP_DigestVerifyFinal()</code> verifies the data in <strong>ctx</strong> against the signature in
+<strong>sig</strong> of length <strong>siglen</strong>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>EVP_DigestVerifyInit()</code> and <code>EVP_DigestVerifyUpdate()</code> return 1 for success and 0
+or a negative value for failure. In particular a return value of -2 indicates
+the operation is not supported by the public key algorithm.</p>
+<p>Unlike other functions the return value 0 from <code>EVP_DigestVerifyFinal()</code> only
+indicates that the signature did not not verify successfully (that is tbs did
+not match the original data or the signature was of invalid form) it is not an
+indication of a more serious error.</p>
+<p>The error codes can be obtained from <a href="../crypto/ERR_get_error.html">ERR_get_error</a>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>The <strong>EVP</strong> interface to digital signatures should almost always be used in
+preference to the low level interfaces. This is because the code then becomes
+transparent to the algorithm used and much more flexible.</p>
+<p>In previous versions of OpenSSL there was a link between message digest types
+and public key algorithms. This meant that ``clone'' digests such as <code>EVP_dss1()</code>
+needed to be used to sign using SHA1 and DSA. This is no longer necessary and
+the use of clone digest is now discouraged.</p>
+<p>For some key types and parameters the random number generator must be seeded
+or the operation will fail.</p>
+<p>The call to <code>EVP_DigestVerifyFinal()</code> internally finalizes a copy of the digest
+context. This means that calls to <code>EVP_VerifyUpdate()</code> and <code>EVP_VerifyFinal()</code> can
+be called later to digest and verify additional data.</p>
+<p>Since only a copy of the digest context is ever finalized the context must
+be cleaned up after use by calling <code>EVP_MD_CTX_cleanup()</code> or a memory leak
+will occur.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../crypto/EVP_DigestSignInit.html">EVP_DigestSignInit</a>,
+<a href="../crypto/EVP_DigestInit.html">EVP_DigestInit</a>, <a href="../crypto/err.html">err</a>,
+<a href="../crypto/evp.html">evp</a>, <a href="../crypto/hmac.html">hmac</a>, <em>md2</em>,
+<a href="../crypto/md5.html">md5</a>, <a href="../crypto/mdc2.html">mdc2</a>, <a href="../crypto/ripemd.html">ripemd</a>,
+<a href="../crypto/sha.html">sha</a>, <a href="../apps/dgst.html">dgst</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>EVP_DigestVerifyInit(), <code>EVP_DigestVerifyUpdate()</code> and <code>EVP_DigestVerifyFinal()</code> 
+were first added to OpenSSL 1.0.0.</p>
+
+</body>
+
+</html>

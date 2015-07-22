@@ -1,0 +1,81 @@
+SSL_CTX_set_client_CA_list(3)       OpenSSL      SSL_CTX_set_client_CA_list(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_set_client_CA_list, SSL_set_client_CA_list,
+       SSL_CTX_add_client_CA, SSL_add_client_CA - set list of CAs sent to the
+       client when requesting a client certificate
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        void SSL_CTX_set_client_CA_list(SSL_CTX *ctx, STACK_OF(X509_NAME) *list);
+        void SSL_set_client_CA_list(SSL *s, STACK_OF(X509_NAME) *list);
+        int SSL_CTX_add_client_CA(SSL_CTX *ctx, X509 *cacert);
+        int SSL_add_client_CA(SSL *ssl, X509 *cacert);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___C_T_X___s_e_t___c_l_i_e_n_t___C_A___l_i_s_t_(_) sets the lliisstt of CAs sent to the client
+       when requesting a client certificate for ccttxx.
+
+       _S_S_L___s_e_t___c_l_i_e_n_t___C_A___l_i_s_t_(_) sets the lliisstt of CAs sent to the client when
+       requesting a client certificate for the chosen ssssll, overriding the set-
+       ting valid for ssssll's SSL_CTX object.
+
+       _S_S_L___C_T_X___a_d_d___c_l_i_e_n_t___C_A_(_) adds the CA name extracted from ccaacceerrtt to the
+       list of CAs sent to the client when requesting a client certificate for
+       ccttxx.
+
+       _S_S_L___a_d_d___c_l_i_e_n_t___C_A_(_) adds the CA name extracted from ccaacceerrtt to the list
+       of CAs sent to the client when requesting a client certificate for the
+       chosen ssssll, overriding the setting valid for ssssll's SSL_CTX object.
+
+NNOOTTEESS
+       When a TLS/SSL server requests a client certificate (see
+       _SS_SS_LL____CC_TT_XX____ss_ee_tt____vv_ee_rr_ii_ff_yy____oo_pp_tt_ii_oo_nn_ss_((_))), it sends a list of CAs, for which it
+       will accept certificates, to the client.
+
+       This list must explicitly be set using _S_S_L___C_T_X___s_e_t___c_l_i_e_n_t___C_A___l_i_s_t_(_) for
+       ccttxx and _S_S_L___s_e_t___c_l_i_e_n_t___C_A___l_i_s_t_(_) for the specific ssssll. The list speci-
+       fied overrides the previous setting. The CAs listed do not become
+       trusted (lliisstt only contains the names, not the complete certificates);
+       use _S_S_L___C_T_X___l_o_a_d___v_e_r_i_f_y___l_o_c_a_t_i_o_n_s(3) to additionally load them for ver-
+       ification.
+
+       If the list of acceptable CAs is compiled in a file, the
+       _S_S_L___l_o_a_d___c_l_i_e_n_t___C_A___f_i_l_e(3) function can be used to help importing the
+       necessary data.
+
+       _S_S_L___C_T_X___a_d_d___c_l_i_e_n_t___C_A_(_) and _S_S_L___a_d_d___c_l_i_e_n_t___C_A_(_) can be used to add
+       additional items the list of client CAs. If no list was specified
+       before using _S_S_L___C_T_X___s_e_t___c_l_i_e_n_t___C_A___l_i_s_t_(_) or _S_S_L___s_e_t___c_l_i_e_n_t___C_A___l_i_s_t_(_),
+       a new client CA list for ccttxx or ssssll (as appropriate) is opened.
+
+       These functions are only useful for TLS/SSL servers.
+
+RREETTUURRNN VVAALLUUEESS
+       _S_S_L___C_T_X___s_e_t___c_l_i_e_n_t___C_A___l_i_s_t_(_) and _S_S_L___s_e_t___c_l_i_e_n_t___C_A___l_i_s_t_(_) do not return
+       diagnostic information.
+
+       _S_S_L___C_T_X___a_d_d___c_l_i_e_n_t___C_A_(_) and _S_S_L___a_d_d___c_l_i_e_n_t___C_A_(_) have the following
+       return values:
+
+       1   The operation succeeded.
+
+       0   A failure while manipulating the STACK_OF(X509_NAME) object
+           occurred or the X509_NAME could not be extracted from ccaacceerrtt. Check
+           the error stack to find out the reason.
+
+EEXXAAMMPPLLEESS
+       Scan all certificates in CCAAffiillee and list them as acceptable CAs:
+
+         SSL_CTX_set_client_CA_list(ctx,SSL_load_client_CA_file(CAfile));
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___g_e_t___c_l_i_e_n_t___C_A___l_i_s_t(3), _S_S_L___l_o_a_d___c_l_i_e_n_t___C_A___f_i_l_e(3),
+       _S_S_L___C_T_X___l_o_a_d___v_e_r_i_f_y___l_o_c_a_t_i_o_n_s(3)
+
+
+
+1.0.0g                            2001-04-12     SSL_CTX_set_client_CA_list(3)

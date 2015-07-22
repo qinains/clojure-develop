@@ -1,0 +1,78 @@
+EVP_PKEY_set1_RSA(3)                OpenSSL               EVP_PKEY_set1_RSA(3)
+
+
+
+NNAAMMEE
+       EVP_PKEY_set1_RSA, EVP_PKEY_set1_DSA, EVP_PKEY_set1_DH,
+       EVP_PKEY_set1_EC_KEY, EVP_PKEY_get1_RSA, EVP_PKEY_get1_DSA,
+       EVP_PKEY_get1_DH, EVP_PKEY_get1_EC_KEY, EVP_PKEY_assign_RSA,
+       EVP_PKEY_assign_DSA, EVP_PKEY_assign_DH, EVP_PKEY_assign_EC_KEY,
+       EVP_PKEY_type - EVP_PKEY assignment functions.
+
+SSYYNNOOPPSSIISS
+        #include <openssl/evp.h>
+
+        int EVP_PKEY_set1_RSA(EVP_PKEY *pkey,RSA *key);
+        int EVP_PKEY_set1_DSA(EVP_PKEY *pkey,DSA *key);
+        int EVP_PKEY_set1_DH(EVP_PKEY *pkey,DH *key);
+        int EVP_PKEY_set1_EC_KEY(EVP_PKEY *pkey,EC_KEY *key);
+
+        RSA *EVP_PKEY_get1_RSA(EVP_PKEY *pkey);
+        DSA *EVP_PKEY_get1_DSA(EVP_PKEY *pkey);
+        DH *EVP_PKEY_get1_DH(EVP_PKEY *pkey);
+        EC_KEY *EVP_PKEY_get1_EC_KEY(EVP_PKEY *pkey);
+
+        int EVP_PKEY_assign_RSA(EVP_PKEY *pkey,RSA *key);
+        int EVP_PKEY_assign_DSA(EVP_PKEY *pkey,DSA *key);
+        int EVP_PKEY_assign_DH(EVP_PKEY *pkey,DH *key);
+        int EVP_PKEY_assign_EC_KEY(EVP_PKEY *pkey,EC_KEY *key);
+
+        int EVP_PKEY_type(int type);
+
+DDEESSCCRRIIPPTTIIOONN
+       _E_V_P___P_K_E_Y___s_e_t_1___R_S_A_(_), _E_V_P___P_K_E_Y___s_e_t_1___D_S_A_(_), _E_V_P___P_K_E_Y___s_e_t_1___D_H_(_) and
+       _E_V_P___P_K_E_Y___s_e_t_1___E_C___K_E_Y_(_) set the key referenced by ppkkeeyy to kkeeyy.
+
+       _E_V_P___P_K_E_Y___g_e_t_1___R_S_A_(_), _E_V_P___P_K_E_Y___g_e_t_1___D_S_A_(_), _E_V_P___P_K_E_Y___g_e_t_1___D_H_(_) and
+       _E_V_P___P_K_E_Y___g_e_t_1___E_C___K_E_Y_(_) return the referenced key in ppkkeeyy or NNUULLLL if the
+       key is not of the correct type.
+
+       _E_V_P___P_K_E_Y___a_s_s_i_g_n___R_S_A_(_) _E_V_P___P_K_E_Y___a_s_s_i_g_n___D_S_A_(_), _E_V_P___P_K_E_Y___a_s_s_i_g_n___D_H_(_) and
+       _E_V_P___P_K_E_Y___a_s_s_i_g_n___E_C___K_E_Y_(_) also set the referenced key to kkeeyy however
+       these use the supplied kkeeyy internally and so kkeeyy will be freed when the
+       parent ppkkeeyy is freed.
+
+       _E_V_P___P_K_E_Y___t_y_p_e_(_) returns the type of key corresponding to the value
+       ttyyppee. The type of a key can be obtained with EVP_PKEY_type(pkey->type).
+       The return value will be EVP_PKEY_RSA, EVP_PKEY_DSA, EVP_PKEY_DH or
+       EVP_PKEY_EC for the corresponding key types or NID_undef if the key
+       type is unassigned.
+
+NNOOTTEESS
+       In accordance with the OpenSSL naming convention the key obtained from
+       or assigned to the ppkkeeyy using the 11 functions must be freed as well as
+       ppkkeeyy.
+
+       _E_V_P___P_K_E_Y___a_s_s_i_g_n___R_S_A_(_) _E_V_P___P_K_E_Y___a_s_s_i_g_n___D_S_A_(_), _E_V_P___P_K_E_Y___a_s_s_i_g_n___D_H_(_)
+       _E_V_P___P_K_E_Y___a_s_s_i_g_n___E_C___K_E_Y_(_) are implemented as macros.
+
+RREETTUURRNN VVAALLUUEESS
+       _E_V_P___P_K_E_Y___s_e_t_1___R_S_A_(_), _E_V_P___P_K_E_Y___s_e_t_1___D_S_A_(_), _E_V_P___P_K_E_Y___s_e_t_1___D_H_(_) and
+       _E_V_P___P_K_E_Y___s_e_t_1___E_C___K_E_Y_(_) return 1 for success or 0 for failure.
+
+       _E_V_P___P_K_E_Y___g_e_t_1___R_S_A_(_), _E_V_P___P_K_E_Y___g_e_t_1___D_S_A_(_), _E_V_P___P_K_E_Y___g_e_t_1___D_H_(_) and
+       _E_V_P___P_K_E_Y___g_e_t_1___E_C___K_E_Y_(_) return the referenced key or NNUULLLL if an error
+       occurred.
+
+       _E_V_P___P_K_E_Y___a_s_s_i_g_n___R_S_A_(_) _E_V_P___P_K_E_Y___a_s_s_i_g_n___D_S_A_(_), _E_V_P___P_K_E_Y___a_s_s_i_g_n___D_H_(_) and
+       _E_V_P___P_K_E_Y___a_s_s_i_g_n___E_C___K_E_Y_(_) return 1 for success and 0 for failure.
+
+SSEEEE AALLSSOO
+       _E_V_P___P_K_E_Y___n_e_w(3)
+
+HHIISSTTOORRYY
+       TBA
+
+
+
+1.0.0g                            2002-10-07              EVP_PKEY_set1_RSA(3)

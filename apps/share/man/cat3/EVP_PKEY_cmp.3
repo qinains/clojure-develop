@@ -1,0 +1,60 @@
+EVP_PKEY_cmp(3)                     OpenSSL                    EVP_PKEY_cmp(3)
+
+
+
+NNAAMMEE
+       EVP_PKEY_copy_parameters, EVP_PKEY_missing_parameters,
+       EVP_PKEY_cmp_parameters, EVP_PKEY_cmp - public key parameter and com-
+       parison functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/evp.h>
+
+        int EVP_PKEY_missing_parameters(const EVP_PKEY *pkey);
+        int EVP_PKEY_copy_parameters(EVP_PKEY *to, const EVP_PKEY *from);
+
+        int EVP_PKEY_cmp_parameters(const EVP_PKEY *a, const EVP_PKEY *b);
+        int EVP_PKEY_cmp(const EVP_PKEY *a, const EVP_PKEY *b);
+
+DDEESSCCRRIIPPTTIIOONN
+       The function _E_V_P___P_K_E_Y___m_i_s_s_i_n_g___p_a_r_a_m_e_t_e_r_s_(_) returns 1 if the public key
+       parameters of ppkkeeyy are missing and 0 if they are present or the algo-
+       rithm doesn't use parameters.
+
+       The function _E_V_P___P_K_E_Y___c_o_p_y___p_a_r_a_m_e_t_e_r_s_(_) copies the parameters from key
+       ffrroomm to key ttoo.
+
+       The funcion _E_V_P___P_K_E_Y___c_m_p___p_a_r_a_m_e_t_e_r_s_(_) compares the parameters of keys aa
+       and bb.
+
+       The funcion _E_V_P___P_K_E_Y___c_m_p_(_) compares the public key components and
+       paramters (if present) of keys aa and bb.
+
+NNOOTTEESS
+       The main purpose of the functions _E_V_P___P_K_E_Y___m_i_s_s_i_n_g___p_a_r_a_m_e_t_e_r_s_(_) and
+       _E_V_P___P_K_E_Y___c_o_p_y___p_a_r_a_m_e_t_e_r_s_(_) is to handle public keys in certificates
+       where the parameters are sometimes omitted from a public key if they
+       are inherited from the CA that signed it.
+
+       Since OpenSSL private keys contain public key components too the func-
+       tion _E_V_P___P_K_E_Y___c_m_p_(_) can also be used to determine if a private key
+       matches a public key.
+
+RREETTUURRNN VVAALLUUEESS
+       The function _E_V_P___P_K_E_Y___m_i_s_s_i_n_g___p_a_r_a_m_e_t_e_r_s_(_) returns 1 if the public key
+       parameters of ppkkeeyy are missing and 0 if they are present or the algo-
+       rithm doesn't use parameters.
+
+       These functions _E_V_P___P_K_E_Y___c_o_p_y___p_a_r_a_m_e_t_e_r_s_(_) returns 1 for success and 0
+       for failure.
+
+       The function _E_V_P___P_K_E_Y___c_m_p___p_a_r_a_m_e_t_e_r_s_(_) and _E_V_P___P_K_E_Y___c_m_p_(_) return 1 if
+       the keys match, 0 if they don't match, -1 if the key types are differ-
+       ent and -2 if the operation is not supported.
+
+SSEEEE AALLSSOO
+       _E_V_P___P_K_E_Y___C_T_X___n_e_w(3), _E_V_P___P_K_E_Y___k_e_y_g_e_n(3)
+
+
+
+1.0.0g                            2006-07-09                   EVP_PKEY_cmp(3)

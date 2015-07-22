@@ -1,0 +1,81 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>CMS_sign_receipt - create a CMS signed receipt</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<pre>
+ CMS_sign_receipt - create a CMS signed receipt</pre>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/cms.h&gt;</pre>
+<pre>
+ CMS_ContentInfo *CMS_sign_receipt(CMS_SignerInfo *si, X509 *signcert, EVP_PKEY *pkey, STACK_OF(X509) *certs, unsigned int flags);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>CMS_sign_receipt()</code> creates and returns a CMS signed receipt structure. <strong>si</strong> is
+the <strong>CMS_SignerInfo</strong> structure containing the signed receipt request.
+<strong>signcert</strong> is the certificate to sign with, <strong>pkey</strong> is the corresponding
+private key.  <strong>certs</strong> is an optional additional set of certificates to include
+in the CMS structure (for example any intermediate CAs in the chain).</p>
+<p><strong>flags</strong> is an optional set of flags.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>This functions behaves in a similar way to <code>CMS_sign()</code> except the flag values
+<strong>CMS_DETACHED</strong>, <strong>CMS_BINARY</strong>, <strong>CMS_NOATTR</strong>, <strong>CMS_TEXT</strong> and <strong>CMS_STREAM</strong>
+are not supported since they do not make sense in the context of signed
+receipts.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>CMS_sign_receipt()</code> returns either a valid CMS_ContentInfo structure or NULL if
+an error occurred.  The error can be obtained from ERR_get_error(3).</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../crypto/ERR_get_error.html">ERR_get_error</a>,
+<a href="../crypto/CMS_verify_receipt.html">CMS_verify_receipt</a>,
+<a href="../crypto/CMS_sign.html">CMS_sign</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p><code>CMS_sign_receipt()</code> was added to OpenSSL 0.9.8</p>
+
+</body>
+
+</html>

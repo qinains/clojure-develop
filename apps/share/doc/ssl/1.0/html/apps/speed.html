@@ -1,0 +1,91 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>speed - test library performance</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#options">OPTIONS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>speed - test library performance</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>openssl speed</strong>
+[<strong>-engine id</strong>]
+[<strong>md2</strong>]
+[<strong>mdc2</strong>]
+[<strong>md5</strong>]
+[<strong>hmac</strong>]
+[<strong>sha1</strong>]
+[<strong>rmd160</strong>]
+[<strong>idea-cbc</strong>]
+[<strong>rc2-cbc</strong>]
+[<strong>rc5-cbc</strong>]
+[<strong>bf-cbc</strong>]
+[<strong>des-cbc</strong>]
+[<strong>des-ede3</strong>]
+[<strong>rc4</strong>]
+[<strong>rsa512</strong>]
+[<strong>rsa1024</strong>]
+[<strong>rsa2048</strong>]
+[<strong>rsa4096</strong>]
+[<strong>dsa512</strong>]
+[<strong>dsa1024</strong>]
+[<strong>dsa2048</strong>]
+[<strong>idea</strong>]
+[<strong>rc2</strong>]
+[<strong>des</strong>]
+[<strong>rsa</strong>]
+[<strong>blowfish</strong>]</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This command is used to test the performance of cryptographic algorithms.</p>
+<p>
+</p>
+<hr />
+<h1><a name="options">OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item__2dengine_id"><strong>-engine id</strong></a></strong>
+
+<dd>
+<p>specifying an engine (by its unique <strong>id</strong> string) will cause <strong>speed</strong>
+to attempt to obtain a functional reference to the specified engine,
+thus initialising it if needed. The engine will then be set as the default
+for all available algorithms.</p>
+</dd>
+</li>
+<dt><strong><a name="item__5bzero_or_more_test_algorithms_5d"><strong>[zero or more test algorithms]</strong></a></strong>
+
+<dd>
+<p>If any options are given, <strong>speed</strong> tests those algorithms, otherwise all of
+the above are tested.</p>
+</dd>
+</li>
+</dl>
+
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+SSL_COMP_add_compression_method(3)  OpenSSL SSL_COMP_add_compression_method(3)
+
+
+
+NNAAMMEE
+       SSL_COMP_add_compression_method - handle SSL/TLS integrated compression
+       methods
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        int SSL_COMP_add_compression_method(int id, COMP_METHOD *cm);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___C_O_M_P___a_d_d___c_o_m_p_r_e_s_s_i_o_n___m_e_t_h_o_d_(_) adds the compression method ccmm with
+       the identifier iidd to the list of available compression methods. This
+       list is globally maintained for all SSL operations within this applica-
+       tion.  It cannot be set for specific SSL_CTX or SSL objects.
+
+NNOOTTEESS
+       The TLS standard (or SSLv3) allows the integration of compression meth-
+       ods into the communication. The TLS RFC does however not specify com-
+       pression methods or their corresponding identifiers, so there is cur-
+       rently no compatible way to integrate compression with unknown peers.
+       It is therefore currently not recommended to integrate compression into
+       applications. Applications for non-public use may agree on certain com-
+       pression methods. Using different compression methods with the same
+       identifier will lead to connection failure.
+
+       An OpenSSL client speaking a protocol that allows compression (SSLv3,
+       TLSv1) will unconditionally send the list of all compression methods
+       enabled with _S_S_L___C_O_M_P___a_d_d___c_o_m_p_r_e_s_s_i_o_n___m_e_t_h_o_d_(_) to the server during the
+       handshake.  Unlike the mechanisms to set a cipher list, there is no
+       method available to restrict the list of compression method on a per
+       connection basis.
+
+       An OpenSSL server will match the identifiers listed by a client against
+       its own compression methods and will unconditionally activate compres-
+       sion when a matching identifier is found. There is no way to restrict
+       the list of compression methods supported on a per connection basis.
+
+       The OpenSSL library has the compression methods _CC_OO_MM_PP____rr_ll_ee_((_)) and (when
+       especially enabled during compilation) _CC_OO_MM_PP____zz_ll_ii_bb_((_)) available.
+
+WWAARRNNIINNGGSS
+       Once the identities of the compression methods for the TLS protocol
+       have been standardized, the compression API will most likely be
+       changed. Using it in the current state is not recommended.
+
+RREETTUURRNN VVAALLUUEESS
+       _S_S_L___C_O_M_P___a_d_d___c_o_m_p_r_e_s_s_i_o_n___m_e_t_h_o_d_(_) may return the following values:
+
+       0   The operation succeeded.
+
+       1   The operation failed. Check the error queue to find out the reason.
+
+SSEEEE AALLSSOO
+       _s_s_l(3)
+
+
+
+1.0.0g                            2003-11-29SSL_COMP_add_compression_method(3)

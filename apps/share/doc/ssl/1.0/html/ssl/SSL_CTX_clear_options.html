@@ -1,0 +1,411 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_get_secure_renegotiation_support - manipulate SSL options</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#secure_renegotiation">SECURE RENEGOTIATION</a></li>
+	<ul>
+
+		<li><a href="#patched_client_and_server">Patched client and server</a></li>
+		<li><a href="#unpatched_client_and_patched_openssl_server">Unpatched client and patched OpenSSL server</a></li>
+		<li><a href="#patched_openssl_client_and_unpatched_server_">Patched OpenSSL client and unpatched server.</a></li>
+	</ul>
+
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_CTX_set_options, SSL_set_options, SSL_CTX_clear_options, SSL_clear_options, SSL_CTX_get_options, SSL_get_options, SSL_get_secure_renegotiation_support - manipulate SSL options</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ long SSL_CTX_set_options(SSL_CTX *ctx, long options);
+ long SSL_set_options(SSL *ssl, long options);</pre>
+<pre>
+ long SSL_CTX_clear_options(SSL_CTX *ctx, long options);
+ long SSL_clear_options(SSL *ssl, long options);</pre>
+<pre>
+ long SSL_CTX_get_options(SSL_CTX *ctx);
+ long SSL_get_options(SSL *ssl);</pre>
+<pre>
+ long SSL_get_secure_renegotiation_support(SSL *ssl);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Note: all these functions are implemented using macros.</p>
+<p><code>SSL_CTX_set_options()</code> adds the options set via bitmask in <strong>options</strong> to <strong>ctx</strong>.
+Options already set before are not cleared!</p>
+<p><code>SSL_set_options()</code> adds the options set via bitmask in <strong>options</strong> to <strong>ssl</strong>.
+Options already set before are not cleared!</p>
+<p><code>SSL_CTX_clear_options()</code> clears the options set via bitmask in <strong>options</strong>
+to <strong>ctx</strong>.</p>
+<p><code>SSL_clear_options()</code> clears the options set via bitmask in <strong>options</strong> to <strong>ssl</strong>.</p>
+<p><code>SSL_CTX_get_options()</code> returns the options set for <strong>ctx</strong>.</p>
+<p><code>SSL_get_options()</code> returns the options set for <strong>ssl</strong>.</p>
+<p><code>SSL_get_secure_renegotiation_support()</code> indicates whether the peer supports
+secure renegotiation.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>The behaviour of the SSL library can be changed by setting several options.
+The options are coded as bitmasks and can be combined by a logical <strong>or</strong>
+operation (|).</p>
+<p><code>SSL_CTX_set_options()</code> and <code>SSL_set_options()</code> affect the (external)
+protocol behaviour of the SSL library. The (internal) behaviour of
+the API can be changed by using the similar
+<a href="../ssl/SSL_CTX_set_mode.html">SSL_CTX_set_mode</a> and <code>SSL_set_mode()</code> functions.</p>
+<p>During a handshake, the option settings of the SSL object are used. When
+a new SSL object is created from a context using SSL_new(), the current
+option setting is copied. Changes to <strong>ctx</strong> do not affect already created
+SSL objects. <code>SSL_clear()</code> does not affect the settings.</p>
+<p>The following <strong>bug workaround</strong> options are available:</p>
+<dl>
+<dt><strong><a name="item_ssl_op_microsoft_sess_id_bug">SSL_OP_MICROSOFT_SESS_ID_BUG</a></strong>
+
+<dd>
+<p>www.microsoft.com - when talking SSLv2, if session-id reuse is
+performed, the session-id passed back in the server-finished message
+is different from the one decided upon.</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_netscape_challenge_bug">SSL_OP_NETSCAPE_CHALLENGE_BUG</a></strong>
+
+<dd>
+<p>Netscape-Commerce/1.12, when talking SSLv2, accepts a 32 byte
+challenge but then appears to only use 16 bytes when generating the
+encryption keys.  Using 16 bytes is ok but it should be ok to use 32.
+According to the SSLv3 spec, one should use 32 bytes for the challenge
+when operating in SSLv2/v3 compatibility mode, but as mentioned above,
+this breaks this server so 16 bytes is the way to go.</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_netscape_reuse_cipher_change_bug">SSL_OP_NETSCAPE_REUSE_CIPHER_CHANGE_BUG</a></strong>
+
+<dd>
+<p>As of OpenSSL 0.9.8q and 1.0.0c, this option has no effect.</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_sslref2_reuse_cert_type_bug">SSL_OP_SSLREF2_REUSE_CERT_TYPE_BUG</a></strong>
+
+<dd>
+<p>...</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_microsoft_big_sslv3_buffer">SSL_OP_MICROSOFT_BIG_SSLV3_BUFFER</a></strong>
+
+<dd>
+<p>...</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_msie_sslv2_rsa_padding">SSL_OP_MSIE_SSLV2_RSA_PADDING</a></strong>
+
+<dd>
+<p>As of OpenSSL 0.9.7h and 0.9.8a, this option has no effect.</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_ssleay_080_client_dh_bug">SSL_OP_SSLEAY_080_CLIENT_DH_BUG</a></strong>
+
+<dd>
+<p>...</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_tls_d5_bug">SSL_OP_TLS_D5_BUG</a></strong>
+
+<dd>
+<p>...</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_tls_block_padding_bug">SSL_OP_TLS_BLOCK_PADDING_BUG</a></strong>
+
+<dd>
+<p>...</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_dont_insert_empty_fragments">SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS</a></strong>
+
+<dd>
+<p>Disables a countermeasure against a SSL 3.0/TLS 1.0 protocol
+vulnerability affecting CBC ciphers, which cannot be handled by some
+broken SSL implementations.  This option has no effect for connections
+using other ciphers.</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_all">SSL_OP_ALL</a></strong>
+
+<dd>
+<p>All of the above bug workarounds.</p>
+</dd>
+</li>
+</dl>
+<p>It is usually safe to use <strong>SSL_OP_ALL</strong> to enable the bug workaround
+options if compatibility with somewhat broken implementations is
+desired.</p>
+<p>The following <strong>modifying</strong> options are available:</p>
+<dl>
+<dt><strong><a name="item_ssl_op_tls_rollback_bug">SSL_OP_TLS_ROLLBACK_BUG</a></strong>
+
+<dd>
+<p>Disable version rollback attack detection.</p>
+</dd>
+<dd>
+<p>During the client key exchange, the client must send the same information
+about acceptable SSL/TLS protocol levels as during the first hello. Some
+clients violate this rule by adapting to the server's answer. (Example:
+the client sends a SSLv2 hello and accepts up to SSLv3.1=TLSv1, the server
+only understands up to SSLv3. In this case the client must still use the
+same SSLv3.1=TLSv1 announcement. Some clients step down to SSLv3 with respect
+to the server's answer and violate the version rollback protection.)</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_single_dh_use">SSL_OP_SINGLE_DH_USE</a></strong>
+
+<dd>
+<p>Always create a new key when using temporary/ephemeral DH parameters
+(see <a href="../ssl/SSL_CTX_set_tmp_dh_callback.html">SSL_CTX_set_tmp_dh_callback</a>).
+This option must be used to prevent small subgroup attacks, when
+the DH parameters were not generated using ``strong'' primes
+(e.g. when using DSA-parameters, see <a href="../apps/dhparam.html">dhparam</a>).
+If ``strong'' primes were used, it is not strictly necessary to generate
+a new DH key during each handshake but it is also recommended.
+<strong>SSL_OP_SINGLE_DH_USE</strong> should therefore be enabled whenever
+temporary/ephemeral DH parameters are used.</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_ephemeral_rsa">SSL_OP_EPHEMERAL_RSA</a></strong>
+
+<dd>
+<p>Always use ephemeral (temporary) RSA key when doing RSA operations
+(see <a href="../ssl/SSL_CTX_set_tmp_rsa_callback.html">SSL_CTX_set_tmp_rsa_callback</a>).
+According to the specifications this is only done, when a RSA key
+can only be used for signature operations (namely under export ciphers
+with restricted RSA keylength). By setting this option, ephemeral
+RSA keys are always used. This option breaks compatibility with the
+SSL/TLS specifications and may lead to interoperability problems with
+clients and should therefore never be used. Ciphers with EDH (ephemeral
+Diffie-Hellman) key exchange should be used instead.</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_cipher_server_preference">SSL_OP_CIPHER_SERVER_PREFERENCE</a></strong>
+
+<dd>
+<p>When choosing a cipher, use the server's preferences instead of the client
+preferences. When not set, the SSL server will always follow the clients
+preferences. When set, the SSLv3/TLSv1 server will choose following its
+own preferences. Because of the different protocol, for SSLv2 the server
+will send its list of preferences to the client and the client chooses.</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_pkcs1_check_1">SSL_OP_PKCS1_CHECK_1</a></strong>
+
+<dd>
+<p>...</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_pkcs1_check_2">SSL_OP_PKCS1_CHECK_2</a></strong>
+
+<dd>
+<p>...</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_netscape_ca_dn_bug">SSL_OP_NETSCAPE_CA_DN_BUG</a></strong>
+
+<dd>
+<p>If we accept a netscape connection, demand a client cert, have a
+non-self-signed CA which does not have its CA in netscape, and the
+browser has a cert, it will crash/hang.  Works for 3.x and 4.xbeta</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_netscape_demo_cipher_change_bug">SSL_OP_NETSCAPE_DEMO_CIPHER_CHANGE_BUG</a></strong>
+
+<dd>
+<p>...</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_no_sslv2">SSL_OP_NO_SSLv2</a></strong>
+
+<dd>
+<p>Do not use the SSLv2 protocol.</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_no_sslv3">SSL_OP_NO_SSLv3</a></strong>
+
+<dd>
+<p>Do not use the SSLv3 protocol.</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_no_tlsv1">SSL_OP_NO_TLSv1</a></strong>
+
+<dd>
+<p>Do not use the TLSv1 protocol.</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_no_session_resumption_on_renegotiation">SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION</a></strong>
+
+<dd>
+<p>When performing renegotiation as a server, always start a new session
+(i.e., session resumption requests are only accepted in the initial
+handshake). This option is not needed for clients.</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_no_ticket">SSL_OP_NO_TICKET</a></strong>
+
+<dd>
+<p>Normally clients and servers will, where possible, transparently make use
+of RFC4507bis tickets for stateless session resumption.</p>
+</dd>
+<dd>
+<p>If this option is set this functionality is disabled and tickets will
+not be used by clients or servers.</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_allow_unsafe_legacy_renegotiation">SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION</a></strong>
+
+<dd>
+<p>Allow legacy insecure renegotiation between OpenSSL and unpatched clients or
+servers. See the <strong>SECURE RENEGOTIATION</strong> section for more details.</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_op_legacy_server_connect">SSL_OP_LEGACY_SERVER_CONNECT</a></strong>
+
+<dd>
+<p>Allow legacy insecure renegotiation between OpenSSL and unpatched servers
+<strong>only</strong>: this option is currently set by default. See the
+<strong>SECURE RENEGOTIATION</strong> section for more details.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="secure_renegotiation">SECURE RENEGOTIATION</a></h1>
+<p>OpenSSL 0.9.8m and later always attempts to use secure renegotiation as
+described in RFC5746. This counters the prefix attack described in
+CVE-2009-3555 and elsewhere.</p>
+<p>The deprecated and highly broken SSLv2 protocol does not support
+renegotiation at all: its use is <strong>strongly</strong> discouraged.</p>
+<p>This attack has far reaching consequences which application writers should be
+aware of. In the description below an implementation supporting secure
+renegotiation is referred to as <em>patched</em>. A server not supporting secure
+renegotiation is referred to as <em>unpatched</em>.</p>
+<p>The following sections describe the operations permitted by OpenSSL's secure
+renegotiation implementation.</p>
+<p>
+</p>
+<h2><a name="patched_client_and_server">Patched client and server</a></h2>
+<p>Connections and renegotiation are always permitted by OpenSSL implementations.</p>
+<p>
+</p>
+<h2><a name="unpatched_client_and_patched_openssl_server">Unpatched client and patched OpenSSL server</a></h2>
+<p>The initial connection suceeds but client renegotiation is denied by the
+server with a <strong>no_renegotiation</strong> warning alert if TLS v1.0 is used or a fatal
+<strong>handshake_failure</strong> alert in SSL v3.0.</p>
+<p>If the patched OpenSSL server attempts to renegotiate a fatal
+<strong>handshake_failure</strong> alert is sent. This is because the server code may be
+unaware of the unpatched nature of the client.</p>
+<p>If the option <strong>SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION</strong> is set then
+renegotiation <strong>always</strong> succeeds.</p>
+<p><strong>NB:</strong> a bug in OpenSSL clients earlier than 0.9.8m (all of which are
+unpatched) will result in the connection hanging if it receives a
+<strong>no_renegotiation</strong> alert. OpenSSL versions 0.9.8m and later will regard
+a <strong>no_renegotiation</strong> alert as fatal and respond with a fatal
+<strong>handshake_failure</strong> alert. This is because the OpenSSL API currently has
+no provision to indicate to an application that a renegotiation attempt
+was refused.</p>
+<p>
+</p>
+<h2><a name="patched_openssl_client_and_unpatched_server_">Patched OpenSSL client and unpatched server.</a></h2>
+<p>If the option <strong>SSL_OP_LEGACY_SERVER_CONNECT</strong> or
+<strong>SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION</strong> is set then initial connections
+and renegotiation between patched OpenSSL clients and unpatched servers
+succeeds. If neither option is set then initial connections to unpatched
+servers will fail.</p>
+<p>The option <strong>SSL_OP_LEGACY_SERVER_CONNECT</strong> is currently set by default even
+though it has security implications: otherwise it would be impossible to
+connect to unpatched servers (i.e. all of them initially) and this is clearly
+not acceptable. Renegotiation is permitted because this does not add any
+additional security issues: during an attack clients do not see any
+renegotiations anyway.</p>
+<p>As more servers become patched the option <strong>SSL_OP_LEGACY_SERVER_CONNECT</strong> will
+<strong>not</strong> be set by default in a future version of OpenSSL.</p>
+<p>OpenSSL client applications wishing to ensure they can connect to unpatched
+servers should always <strong>set</strong> <strong>SSL_OP_LEGACY_SERVER_CONNECT</strong></p>
+<p>OpenSSL client applications that want to ensure they can <strong>not</strong> connect to
+unpatched servers (and thus avoid any security issues) should always <strong>clear</strong>
+<strong>SSL_OP_LEGACY_SERVER_CONNECT</strong> using <code>SSL_CTX_clear_options()</code> or
+SSL_clear_options().</p>
+<p>The difference between the <strong>SSL_OP_LEGACY_SERVER_CONNECT</strong> and
+<strong>SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION</strong> options is that
+<strong>SSL_OP_LEGACY_SERVER_CONNECT</strong> enables initial connections and secure
+renegotiation between OpenSSL clients and unpatched servers <strong>only</strong>, while
+<strong>SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION</strong> allows initial connections
+and renegotiation between OpenSSL and unpatched clients or servers.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>SSL_CTX_set_options()</code> and <code>SSL_set_options()</code> return the new options bitmask
+after adding <strong>options</strong>.</p>
+<p><code>SSL_CTX_clear_options()</code> and <code>SSL_clear_options()</code> return the new options bitmask
+after clearing <strong>options</strong>.</p>
+<p><code>SSL_CTX_get_options()</code> and <code>SSL_get_options()</code> return the current bitmask.</p>
+<p><code>SSL_get_secure_renegotiation_support()</code> returns 1 is the peer supports
+secure renegotiation and 0 if it does not.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a>, <a href="../ssl/SSL_new.html">SSL_new</a>, <a href="../ssl/SSL_clear.html">SSL_clear</a>,
+<a href="../ssl/SSL_CTX_set_tmp_dh_callback.html">SSL_CTX_set_tmp_dh_callback</a>,
+<a href="../ssl/SSL_CTX_set_tmp_rsa_callback.html">SSL_CTX_set_tmp_rsa_callback</a>,
+<a href="../apps/dhparam.html">dhparam</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p><strong>SSL_OP_CIPHER_SERVER_PREFERENCE</strong> and
+<strong>SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION</strong> have been added in
+OpenSSL 0.9.7.</p>
+<p><strong>SSL_OP_TLS_ROLLBACK_BUG</strong> has been added in OpenSSL 0.9.6 and was automatically
+enabled with <strong>SSL_OP_ALL</strong>. As of 0.9.7, it is no longer included in <strong>SSL_OP_ALL</strong>
+and must be explicitly set.</p>
+<p><strong>SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS</strong> has been added in OpenSSL 0.9.6e.
+Versions up to OpenSSL 0.9.6c do not include the countermeasure that
+can be disabled with this option (in OpenSSL 0.9.6d, it was always
+enabled).</p>
+<p><code>SSL_CTX_clear_options()</code> and <code>SSL_clear_options()</code> were first added in OpenSSL
+0.9.8m.</p>
+<p><strong>SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION</strong>, <strong>SSL_OP_LEGACY_SERVER_CONNECT</strong>
+and the function <code>SSL_get_secure_renegotiation_support()</code> were first added in
+OpenSSL 0.9.8m.</p>
+
+</body>
+
+</html>

@@ -1,0 +1,45 @@
+SSL_set_fd(3)                       OpenSSL                      SSL_set_fd(3)
+
+
+
+NNAAMMEE
+       SSL_set_fd - connect the SSL object with a file descriptor
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        int SSL_set_fd(SSL *ssl, int fd);
+        int SSL_set_rfd(SSL *ssl, int fd);
+        int SSL_set_wfd(SSL *ssl, int fd);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___s_e_t___f_d_(_) sets the file descriptor ffdd as the input/output facility
+       for the TLS/SSL (encrypted) side of ssssll. ffdd will typically be the
+       socket file descriptor of a network connection.
+
+       When performing the operation, a ssoocckkeett BBIIOO is automatically created to
+       interface between the ssssll and ffdd. The BIO and hence the SSL engine
+       inherit the behaviour of ffdd. If ffdd is non-blocking, the ssssll will also
+       have non-blocking behaviour.
+
+       If there was already a BIO connected to ssssll, _B_I_O___f_r_e_e_(_) will be called
+       (for both the reading and writing side, if different).
+
+       _S_S_L___s_e_t___r_f_d_(_) and _S_S_L___s_e_t___w_f_d_(_) perform the respective action, but only
+       for the read channel or the write channel, which can be set indepen-
+       dently.
+
+RREETTUURRNN VVAALLUUEESS
+       The following return values can occur:
+
+       0   The operation failed. Check the error stack to find out why.
+
+       1   The operation succeeded.
+
+SSEEEE AALLSSOO
+       _S_S_L___g_e_t___f_d(3), _S_S_L___s_e_t___b_i_o(3), _S_S_L___c_o_n_n_e_c_t(3), _S_S_L___a_c_c_e_p_t(3), _S_S_L___s_h_u_t_-
+       _d_o_w_n(3), _s_s_l(3) , _b_i_o(3)
+
+
+
+1.0.0g                            2000-09-16                     SSL_set_fd(3)

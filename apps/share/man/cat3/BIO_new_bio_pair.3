@@ -1,0 +1,188 @@
+BIO_s_bio(3)                        OpenSSL                       BIO_s_bio(3)
+
+
+
+NNAAMMEE
+       BIO_s_bio, BIO_make_bio_pair, BIO_destroy_bio_pair, BIO_shutdown_wr,
+       BIO_set_write_buf_size, BIO_get_write_buf_size, BIO_new_bio_pair,
+       BIO_get_write_guarantee, BIO_ctrl_get_write_guarantee,
+       BIO_get_read_request, BIO_ctrl_get_read_request,
+       BIO_ctrl_reset_read_request - BIO pair BIO
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bio.h>
+
+        BIO_METHOD *BIO_s_bio(void);
+
+        #define BIO_make_bio_pair(b1,b2)   (int)BIO_ctrl(b1,BIO_C_MAKE_BIO_PAIR,0,b2)
+        #define BIO_destroy_bio_pair(b)    (int)BIO_ctrl(b,BIO_C_DESTROY_BIO_PAIR,0,NULL)
+
+        #define BIO_shutdown_wr(b) (int)BIO_ctrl(b, BIO_C_SHUTDOWN_WR, 0, NULL)
+
+        #define BIO_set_write_buf_size(b,size) (int)BIO_ctrl(b,BIO_C_SET_WRITE_BUF_SIZE,size,NULL)
+        #define BIO_get_write_buf_size(b,size) (size_t)BIO_ctrl(b,BIO_C_GET_WRITE_BUF_SIZE,size,NULL)
+
+        int BIO_new_bio_pair(BIO **bio1, size_t writebuf1, BIO **bio2, size_t writebuf2);
+
+        #define BIO_get_write_guarantee(b) (int)BIO_ctrl(b,BIO_C_GET_WRITE_GUARANTEE,0,NULL)
+        size_t BIO_ctrl_get_write_guarantee(BIO *b);
+
+        #define BIO_get_read_request(b)    (int)BIO_ctrl(b,BIO_C_GET_READ_REQUEST,0,NULL)
+        size_t BIO_ctrl_get_read_request(BIO *b);
+
+        int BIO_ctrl_reset_read_request(BIO *b);
+
+DDEESSCCRRIIPPTTIIOONN
+       _B_I_O___s___b_i_o_(_) returns the method for a BIO pair. A BIO pair is a pair of
+       source/sink BIOs where data written to either half of the pair is
+       buffered and can be read from the other half. Both halves must usually
+       by handled by the same application thread since no locking is done on
+       the internal data structures.
+
+       Since BIO chains typically end in a source/sink BIO it is possible to
+       make this one half of a BIO pair and have all the data processed by the
+       chain under application control.
+
+       One typical use of BIO pairs is to place TLS/SSL I/O under application
+       control, this can be used when the application wishes to use a non
+       standard transport for TLS/SSL or the normal socket routines are inap-
+       propriate.
+
+       Calls to _B_I_O___r_e_a_d_(_) will read data from the buffer or request a retry
+       if no data is available.
+
+       Calls to _B_I_O___w_r_i_t_e_(_) will place data in the buffer or request a retry
+       if the buffer is full.
+
+       The standard calls _B_I_O___c_t_r_l___p_e_n_d_i_n_g_(_) and _B_I_O___c_t_r_l___w_p_e_n_d_i_n_g_(_) can be
+       used to determine the amount of pending data in the read or write buf-
+       fer.
+
+       _B_I_O___r_e_s_e_t_(_) clears any data in the write buffer.
+
+       _B_I_O___m_a_k_e___b_i_o___p_a_i_r_(_) joins two separate BIOs into a connected pair.
+
+       _B_I_O___d_e_s_t_r_o_y___p_a_i_r_(_) destroys the association between two connected BIOs.
+       Freeing up any half of the pair will automatically destroy the associa-
+       tion.
+
+       _B_I_O___s_h_u_t_d_o_w_n___w_r_(_) is used to close down a BIO bb. After this call no
+       further writes on BIO bb are allowed (they will return an error). Reads
+       on the other half of the pair will return any pending data or EOF when
+       all pending data has been read.
+
+       _B_I_O___s_e_t___w_r_i_t_e___b_u_f___s_i_z_e_(_) sets the write buffer size of BIO bb to ssiizzee.
+       If the size is not initialized a default value is used. This is cur-
+       rently 17K, sufficient for a maximum size TLS record.
+
+       _B_I_O___g_e_t___w_r_i_t_e___b_u_f___s_i_z_e_(_) returns the size of the write buffer.
+
+       _B_I_O___n_e_w___b_i_o___p_a_i_r_(_) combines the calls to _B_I_O___n_e_w_(_), _B_I_O___m_a_k_e___b_i_o___p_a_i_r_(_)
+       and _B_I_O___s_e_t___w_r_i_t_e___b_u_f___s_i_z_e_(_) to create a connected pair of BIOs bbiioo11,
+       bbiioo22 with write buffer sizes wwrriitteebbuuff11 and wwrriitteebbuuff22. If either size is
+       zero then the default size is used.  _B_I_O___n_e_w___b_i_o___p_a_i_r_(_) does not check
+       whether bbiioo11 or bbiioo22 do point to some other BIO, the values are over-
+       written, _B_I_O___f_r_e_e_(_) is not called.
+
+       _B_I_O___g_e_t___w_r_i_t_e___g_u_a_r_a_n_t_e_e_(_) and _B_I_O___c_t_r_l___g_e_t___w_r_i_t_e___g_u_a_r_a_n_t_e_e_(_) return the
+       maximum length of data that can be currently written to the BIO. Writes
+       larger than this value will return a value from _B_I_O___w_r_i_t_e_(_) less than
+       the amount requested or if the buffer is full request a retry.
+       _B_I_O___c_t_r_l___g_e_t___w_r_i_t_e___g_u_a_r_a_n_t_e_e_(_) is a function whereas
+       _B_I_O___g_e_t___w_r_i_t_e___g_u_a_r_a_n_t_e_e_(_) is a macro.
+
+       _B_I_O___g_e_t___r_e_a_d___r_e_q_u_e_s_t_(_) and _B_I_O___c_t_r_l___g_e_t___r_e_a_d___r_e_q_u_e_s_t_(_) return the
+       amount of data requested, or the buffer size if it is less, if the last
+       read attempt at the other half of the BIO pair failed due to an empty
+       buffer.  This can be used to determine how much data should be written
+       to the BIO so the next read will succeed: this is most useful in
+       TLS/SSL applications where the amount of data read is usually meaning-
+       ful rather than just a buffer size. After a successful read this call
+       will return zero.  It also will return zero once new data has been
+       written satisfying the read request or part of it.  Note that
+       _B_I_O___g_e_t___r_e_a_d___r_e_q_u_e_s_t_(_) never returns an amount larger than that
+       returned by _B_I_O___g_e_t___w_r_i_t_e___g_u_a_r_a_n_t_e_e_(_).
+
+       _B_I_O___c_t_r_l___r_e_s_e_t___r_e_a_d___r_e_q_u_e_s_t_(_) can also be used to reset the value
+       returned by _B_I_O___g_e_t___r_e_a_d___r_e_q_u_e_s_t_(_) to zero.
+
+NNOOTTEESS
+       Both halves of a BIO pair should be freed. That is even if one half is
+       implicit freed due to a _B_I_O___f_r_e_e___a_l_l_(_) or _S_S_L___f_r_e_e_(_) call the other
+       half needs to be freed.
+
+       When used in bidirectional applications (such as TLS/SSL) care should
+       be taken to flush any data in the write buffer. This can be done by
+       calling _B_I_O___p_e_n_d_i_n_g_(_) on the other half of the pair and, if any data is
+       pending, reading it and sending it to the underlying transport. This
+       must be done before any normal processing (such as calling _s_e_l_e_c_t_(_) )
+       due to a request and _B_I_O___s_h_o_u_l_d___r_e_a_d_(_) being true.
+
+       To see why this is important consider a case where a request is sent
+       using _B_I_O___w_r_i_t_e_(_) and a response read with _B_I_O___r_e_a_d_(_), this can occur
+       during an TLS/SSL handshake for example. _B_I_O___w_r_i_t_e_(_) will succeed and
+       place data in the write buffer. _B_I_O___r_e_a_d_(_) will initially fail and
+       _B_I_O___s_h_o_u_l_d___r_e_a_d_(_) will be true. If the application then waits for data
+       to be available on the underlying transport before flushing the write
+       buffer it will never succeed because the request was never sent!
+
+RREETTUURRNN VVAALLUUEESS
+       _B_I_O___n_e_w___b_i_o___p_a_i_r_(_) returns 1 on success, with the new BIOs available in
+       bbiioo11 and bbiioo22, or 0 on failure, with NULL pointers stored into the
+       locations for bbiioo11 and bbiioo22. Check the error stack for more informa-
+       tion.
+
+       [XXXXX: More return values need to be added here]
+
+EEXXAAMMPPLLEE
+       The BIO pair can be used to have full control over the network access
+       of an application. The application can call _s_e_l_e_c_t_(_) on the socket as
+       required without having to go through the SSL-interface.
+
+        BIO *internal_bio, *network_bio;
+        ...
+        BIO_new_bio_pair(internal_bio, 0, network_bio, 0);
+        SSL_set_bio(ssl, internal_bio, internal_bio);
+        SSL_operations();
+        ...
+
+        application |   TLS-engine
+           |        |
+           +----------> SSL_operations()
+                    |     /\    ||
+                    |     ||    \/
+                    |   BIO-pair (internal_bio)
+           +----------< BIO-pair (network_bio)
+           |        |
+         socket     |
+
+         ...
+         SSL_free(ssl);                /* implicitly frees internal_bio */
+         BIO_free(network_bio);
+         ...
+
+       As the BIO pair will only buffer the data and never directly access the
+       connection, it behaves non-blocking and will return as soon as the
+       write buffer is full or the read buffer is drained. Then the applica-
+       tion has to flush the write buffer and/or fill the read buffer.
+
+       Use the _B_I_O___c_t_r_l___p_e_n_d_i_n_g_(_), to find out whether data is buffered in the
+       BIO and must be transfered to the network. Use
+       _B_I_O___c_t_r_l___g_e_t___r_e_a_d___r_e_q_u_e_s_t_(_) to find out, how many bytes must be written
+       into the buffer before the _S_S_L___o_p_e_r_a_t_i_o_n_(_) can successfully be contin-
+       ued.
+
+WWAARRNNIINNGG
+       As the data is buffered, _S_S_L___o_p_e_r_a_t_i_o_n_(_) may return with a
+       ERROR_SSL_WANT_READ condition, but there is still data in the write
+       buffer. An application must not rely on the error value of _S_S_L___o_p_e_r_a_-
+       _t_i_o_n_(_) but must assure that the write buffer is always flushed first.
+       Otherwise a deadlock may occur as the peer might be waiting for the
+       data before being able to continue.
+
+SSEEEE AALLSSOO
+       _S_S_L___s_e_t___b_i_o(3), _s_s_l(3), _b_i_o(3), _B_I_O___s_h_o_u_l_d___r_e_t_r_y(3), _B_I_O___r_e_a_d(3)
+
+
+
+1.0.0g                            2003-05-23                      BIO_s_bio(3)

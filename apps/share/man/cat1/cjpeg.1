@@ -1,0 +1,309 @@
+CJPEG(1)                                                              CJPEG(1)
+
+
+
+NNAAMMEE
+       cjpeg - compress an image file to a JPEG file
+
+SSYYNNOOPPSSIISS
+       ccjjppeegg [ _o_p_t_i_o_n_s ] [ _f_i_l_e_n_a_m_e ]
+
+DDEESSCCRRIIPPTTIIOONN
+       ccjjppeegg compresses the named image file, or the standard input if no file
+       is named, and produces a JPEG/JFIF file on the  standard  output.   The
+       currently supported input file formats are: PPM (PBMPLUS color format),
+       PGM (PBMPLUS gray-scale format), BMP, Targa, and RLE (Utah Raster Tool-
+       kit format).  (RLE is supported only if the URT library is available.)
+
+OOPPTTIIOONNSS
+       All  switch  names  may  be abbreviated; for example, --ggrraayyssccaallee may be
+       written --ggrraayy or --ggrr.  Most of the "basic" switches can be  abbreviated
+       to  as little as one letter.  Upper and lower case are equivalent (thus
+       --BBMMPP is the same as --bbmmpp).  British spellings are also accepted  (e.g.,
+       --ggrreeyyssccaallee), though for brevity these are not mentioned below.
+
+       The basic switches are:
+
+       --qquuaalliittyy _N_[_,_._._._]
+              Scale quantization tables to adjust image quality.  Quality is 0
+              (worst) to 100 (best); default  is  75.   (See  below  for  more
+              info.)
+
+       --ggrraayyssccaallee
+              Create  monochrome  JPEG  file from color input.  Be sure to use
+              this switch when compressing a grayscale BMP file, because ccjjppeegg
+              isn't  bright  enough  to  notice  whether  a BMP file uses only
+              shades of gray.  By saying --ggrraayyssccaallee, you'll get a smaller JPEG
+              file that takes less time to process.
+
+       --rrggbb   Create  RGB JPEG file.  Using this switch suppresses the conver-
+              sion from RGB colorspace input to the default  YCbCr  JPEG  col-
+              orspace.  You can use this switch in combination with the --bblloocckk
+              _N switch (see below) for lossless JPEG  coding.   See  also  the
+              --rrggbb11 switch below.
+
+       --ooppttiimmiizzee
+              Perform  optimization  of  entropy encoding parameters.  Without
+              this, default encoding parameters are used.   --ooppttiimmiizzee  usually
+              makes  the  JPEG  file a little smaller, but ccjjppeegg runs somewhat
+              slower and needs much more memory.  Image quality and  speed  of
+              decompression are unaffected by --ooppttiimmiizzee.
+
+       --pprrooggrreessssiivvee
+              Create progressive JPEG file (see below).
+
+       --ssccaallee _M_/_N
+              Scale  the  output  image  by a factor M/N.  Currently supported
+              scale factors are M/N with all N from 1 to 16, where  M  is  the
+              destination DCT size, which is 8 by default (see --bblloocckk _N switch
+              below).
+
+       --ttaarrggaa Input file is Targa format.  Targa files that contain an  "iden-
+              tification" field will not be automatically recognized by ccjjppeegg;
+              for such files you must specify --ttaarrggaa to make ccjjppeegg  treat  the
+              input  as  Targa  format.   For most Targa files, you won't need
+              this switch.
+
+       The --qquuaalliittyy switch lets you trade off  compressed  file  size  against
+       quality of the reconstructed image: the higher the quality setting, the
+       larger the JPEG file, and the closer the output image will  be  to  the
+       original  input.   Normally  you want to use the lowest quality setting
+       (smallest file) that decompresses  into  something  visually  indistin-
+       guishable  from  the original image.  For this purpose the quality set-
+       ting should be between 50 and 95; the default  of  75  is  often  about
+       right.  If you see defects at --qquuaalliittyy 75, then go up 5 or 10 counts at
+       a time until you are happy with the output image.  (The optimal setting
+       will vary from one image to another.)
+
+       --qquuaalliittyy  100 will generate a quantization table of all 1's, minimizing
+       loss in the quantization step (but there is still information  loss  in
+       subsampling,  as  well  as  roundoff error).  This setting is mainly of
+       interest for experimental purposes.  Quality values above about 95  are
+       nnoott  recommended  for normal use; the compressed file size goes up dra-
+       matically for hardly any gain in output image quality.
+
+       In the other direction, quality values below 50 will produce very small
+       files of low image quality.  Settings around 5 to 10 might be useful in
+       preparing an index of a large image library, for example.  Try --qquuaalliittyy
+       2 (or so) for some amusing Cubist effects.  (Note: quality values below
+       about 25 generate 2-byte  quantization  tables,  which  are  considered
+       optional  in the JPEG standard.  ccjjppeegg emits a warning message when you
+       give such a quality value, because some  other  JPEG  programs  may  be
+       unable  to  decode  the  resulting  file.  Use --bbaasseelliinnee if you need to
+       ensure compatibility at low quality values.)
+
+       The --qquuaalliittyy option has been extended in IJG version 7 for  support  of
+       separate quality settings for luminance and chrominance (or in general,
+       for every provided quantization table slot).  This  feature  is  useful
+       for  high-quality  applications which cannot accept the damage of color
+       data by coarse subsampling settings.  You can  now  easily  reduce  the
+       color  data  amount  more  smoothly with finer control without separate
+       subsampling.  The resulting file is fully compliant with standard  JPEG
+       decoders.  Note that the --qquuaalliittyy ratings refer to the quantization ta-
+       ble slots, and that the last value is replicated if there are  more  q-
+       table slots than parameters.  The default q-table slots are 0 for lumi-
+       nance and 1 for chrominance with default tables as given  in  the  JPEG
+       standard.   This is compatible with the old behaviour in case that only
+       one parameter is given, which is  then  used  for  both  luminance  and
+       chrominance (slots 0 and 1).  More or custom quantization tables can be
+       set with --qqttaabblleess and assigned to  components  with  --qqsslloottss  parameter
+       (see  the  "wizard"  switches below).  CCaauuttiioonn:: You must explicitly add
+       --ssaammppllee _1_x_1 for efficient separate color quality selection,  since  the
+       default value used by library is 2x2!
+
+       The  --pprrooggrreessssiivvee  switch  creates  a "progressive JPEG" file.  In this
+       type of JPEG file, the data is stored in multiple scans  of  increasing
+       quality.   If  the file is being transmitted over a slow communications
+       link, the decoder can use the first scan to display a low-quality image
+       very  quickly,  and  can  then improve the display with each subsequent
+       scan.  The final image is exactly equivalent to a standard JPEG file of
+       the same quality setting, and the total file size is about the same ---
+       often a little smaller.
+
+       Switches for advanced users:
+
+       --aarriitthhmmeettiicc
+              Use arithmetic coding.  CCaauuttiioonn:: arithmetic coded  JPEG  is  not
+              yet  widely implemented, so many decoders will be unable to view
+              an arithmetic coded JPEG file at all.
+
+       --bblloocckk _N
+              Set DCT block size.  All N from 1 to 16 are  possible.   Default
+              is  8  (baseline format).  Larger values produce higher compres-
+              sion, smaller values produce higher  quality  (exact  DCT  stage
+              possible with 1 or 2; with the default quality of 75 and default
+              Luminance qtable the  DCT+Quantization  stage  is  lossless  for
+              N=1).   CCaauuttiioonn:: An implementation of the JPEG SmartScale exten-
+              sion is required for this feature.  SmartScale enabled  JPEG  is
+              not  yet  widely implemented, so many decoders will be unable to
+              view a SmartScale extended JPEG file at all.
+
+       --rrggbb11  Create RGB JPEG file with  reversible  color  transform.   Works
+              like the --rrggbb switch (see above) and inserts a simple reversible
+              color transform into the processing which significantly improves
+              the compression.  Use this switch in combination with the --bblloocckk
+              _N switch (see above)  for  lossless  JPEG  coding.   CCaauuttiioonn::  A
+              decoder  with  inverse  color  transform support is required for
+              this feature.  Reversible color transform  support  is  not  yet
+              widely  implemented,  so  many decoders will be unable to view a
+              reversible color transformed JPEG file at all.
+
+       --bbggyycccc Create big gamut YCC JPEG file.  In this type  of  encoding  the
+              color difference components are quantized further by a factor of
+              2 compared to the normal Cb/Cr values, thus  creating  space  to
+              allow larger color values with higher saturation than the normal
+              gamut limits to be encoded.  In order to compensate for the loss
+              of  color  fidelity  compared  to a normal YCC encoded file, the
+              color quantization tables  can  be  adjusted  accordingly.   For
+              example,  ccjjppeegg  --bbggyycccc --qquuaalliittyy 80,90 will give similar results
+              as ccjjppeegg --qquuaalliittyy 80.   CCaauuttiioonn::  For  correct  decompression  a
+              decoder with big gamut YCC support (JFIF version 2) is required.
+              An old decoder may or may not display a big  gamut  YCC  encoded
+              JPEG  file,  depending  on  JFIF version check and corresponding
+              warning/error configuration.  In case of a granted decompression
+              the  old decoder will display the image with half saturated col-
+              ors.
+
+       --ddcctt iinntt
+              Use integer DCT method (default).
+
+       --ddcctt ffaasstt
+              Use fast integer DCT (less accurate).
+
+       --ddcctt ffllooaatt
+              Use  floating-point  DCT  method.   The  float  method  is  very
+              slightly  more  accurate than the int method, but is much slower
+              unless your machine has very fast floating-point hardware.  Also
+              note that results of the floating-point method may vary slightly
+              across machines, while the integer methods should give the  same
+              results  everywhere.  The fast integer method is much less accu-
+              rate than the other two.
+
+       --nnoossmmooootthh
+              Don't use high-quality downsampling.
+
+       --rreessttaarrtt _N
+              Emit a JPEG restart marker every N MCU  rows,  or  every  N  MCU
+              blocks  if  "B"  is  attached  to  the  number.  --rreessttaarrtt 00 (the
+              default) means no restart markers.
+
+       --ssmmooootthh _N
+              Smooth the input image to eliminate dithering noise.  N, ranging
+              from  1  to  100,  indicates  the strength of smoothing.  0 (the
+              default) means no smoothing.
+
+       --mmaaxxmmeemmoorryy _N
+              Set limit for amount  of  memory  to  use  in  processing  large
+              images.  Value is in thousands of bytes, or millions of bytes if
+              "M" is attached to the number.  For  example,  --mmaaxx  44mm  selects
+              4000000 bytes.  If more space is needed, temporary files will be
+              used.
+
+       --oouuttffiillee _n_a_m_e
+              Send output image to the named file, not to standard output.
+
+       --vveerrbboossee
+              Enable debug printout.  More --vv's give more output.  Also,  ver-
+              sion information is printed at startup.
+
+       --ddeebbuugg Same as --vveerrbboossee.
+
+       The  --rreessttaarrtt option inserts extra markers that allow a JPEG decoder to
+       resynchronize after a transmission error.  Without restart markers, any
+       damage  to a compressed file will usually ruin the image from the point
+       of the error to the end of the image; with restart markers, the  damage
+       is  usually confined to the portion of the image up to the next restart
+       marker.  Of course, the restart markers occupy extra space.  We  recom-
+       mend  --rreessttaarrtt  11 for images that will be transmitted across unreliable
+       networks such as Usenet.
+
+       The --ssmmooootthh option filters the input  to  eliminate  fine-scale  noise.
+       This  is often useful when converting dithered images to JPEG: a moder-
+       ate smoothing factor of 10 to 50 gets rid of dithering patterns in  the
+       input  file,  resulting  in  a  smaller  JPEG file and a better-looking
+       image.  Too large a smoothing factor will visibly blur the image,  how-
+       ever.
+
+       Switches for wizards:
+
+       --bbaasseelliinnee
+              Force  baseline-compatible  quantization tables to be generated.
+              This clamps quantization values to 8 bits even  at  low  quality
+              settings.   (This  switch  is  poorly  named,  since it does not
+              ensure that the output is actually baseline JPEG.  For  example,
+              you can use --bbaasseelliinnee and --pprrooggrreessssiivvee together.)
+
+       --qqttaabblleess _f_i_l_e
+              Use the quantization tables given in the specified text file.
+
+       --qqsslloottss _N_[_,_._._._]
+              Select which quantization table to use for each color component.
+
+       --ssaammppllee _H_x_V_[_,_._._._]
+              Set JPEG sampling factors for each color component.
+
+       --ssccaannss _f_i_l_e
+              Use the scan script given in the specified text file.
+
+       The  "wizard"  switches are intended for experimentation with JPEG.  If
+       you don't know what you are doing, ddoonn''tt uussee tthheemm.  These switches  are
+       documented further in the file wizard.txt.
+
+EEXXAAMMPPLLEESS
+       This  example  compresses the PPM file foo.ppm with a quality factor of
+       60 and saves the output as foo.jpg:
+
+              ccjjppeegg --qquuaalliittyy _6_0 _f_o_o_._p_p_m >> _f_o_o_._j_p_g
+
+HHIINNTTSS
+       Color GIF files are not the  ideal  input  for  JPEG;  JPEG  is  really
+       intended  for  compressing  full-color (24-bit) images.  In particular,
+       don't try to convert cartoons, line drawings,  and  other  images  that
+       have  only  a few distinct colors.  GIF works great on these, JPEG does
+       not.  If you want to convert a GIF to JPEG, you should experiment  with
+       ccjjppeegg's  --qquuaalliittyy and --ssmmooootthh options to get a satisfactory conversion.
+       --ssmmooootthh 1100 or so is often helpful.
+
+       Avoid running an image through a series of JPEG  compression/decompres-
+       sion  cycles.   Image  quality  loss  will  accumulate; after ten or so
+       cycles the image may be noticeably worse than it was after  one  cycle.
+       It's  best  to  use a lossless format while manipulating an image, then
+       convert to JPEG format when you are ready to file the image away.
+
+       The --ooppttiimmiizzee option to ccjjppeegg is worth using  when  you  are  making  a
+       "final" version for posting or archiving.  It's also a win when you are
+       using low quality settings to make very small JPEG files; the  percent-
+       age  improvement  is  often a lot more than it is on larger files.  (At
+       present, --ooppttiimmiizzee mode is always selected when generating  progressive
+       JPEG files.)
+
+EENNVVIIRROONNMMEENNTT
+       JJPPEEGGMMEEMM
+              If  this  environment  variable is set, its value is the default
+              memory limit.  The value  is  specified  as  described  for  the
+              --mmaaxxmmeemmoorryy  switch.   JJPPEEGGMMEEMM overrides the default value speci-
+              fied when the program was compiled, and itself is overridden  by
+              an explicit --mmaaxxmmeemmoorryy.
+
+SSEEEE AALLSSOO
+       ddjjppeegg(1), jjppeeggttrraann(1), rrddjjppggccoomm(1), wwrrjjppggccoomm(1)
+       ppppmm(5), ppggmm(5)
+       Wallace,  Gregory  K.   "The  JPEG Still Picture Compression Standard",
+       Communications of the ACM, April 1991 (vol. 34, no. 4), pp. 30-44.
+
+AAUUTTHHOORR
+       Independent JPEG Group
+
+BBUUGGSS
+       GIF input files are no longer supported, to avoid the Unisys LZW patent
+       (now  expired).  (Conversion of GIF files to JPEG is usually a bad idea
+       anyway.)
+
+       Not all variants of BMP and Targa file formats are supported.
+
+       The --ttaarrggaa switch is not a bug, it's a feature.  (It would be a bug  if
+       the Targa format designers had not been clueless.)
+
+
+
+                               23 November 2013                       CJPEG(1)

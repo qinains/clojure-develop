@@ -1,0 +1,166 @@
+SSL_CTX_use_certificate(3)          OpenSSL         SSL_CTX_use_certificate(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_use_certificate, SSL_CTX_use_certificate_ASN1, SSL_CTX_use_cer-
+       tificate_file, SSL_use_certificate, SSL_use_certificate_ASN1,
+       SSL_use_certificate_file, SSL_CTX_use_certificate_chain_file,
+       SSL_CTX_use_PrivateKey, SSL_CTX_use_PrivateKey_ASN1, SSL_CTX_use_Pri-
+       vateKey_file, SSL_CTX_use_RSAPrivateKey, SSL_CTX_use_RSAPri-
+       vateKey_ASN1, SSL_CTX_use_RSAPrivateKey_file, SSL_use_PrivateKey_file,
+       SSL_use_PrivateKey_ASN1, SSL_use_PrivateKey, SSL_use_RSAPrivateKey,
+       SSL_use_RSAPrivateKey_ASN1, SSL_use_RSAPrivateKey_file,
+       SSL_CTX_check_private_key, SSL_check_private_key - load certificate and
+       key data
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        int SSL_CTX_use_certificate(SSL_CTX *ctx, X509 *x);
+        int SSL_CTX_use_certificate_ASN1(SSL_CTX *ctx, int len, unsigned char *d);
+        int SSL_CTX_use_certificate_file(SSL_CTX *ctx, const char *file, int type);
+        int SSL_use_certificate(SSL *ssl, X509 *x);
+        int SSL_use_certificate_ASN1(SSL *ssl, unsigned char *d, int len);
+        int SSL_use_certificate_file(SSL *ssl, const char *file, int type);
+
+        int SSL_CTX_use_certificate_chain_file(SSL_CTX *ctx, const char *file);
+
+        int SSL_CTX_use_PrivateKey(SSL_CTX *ctx, EVP_PKEY *pkey);
+        int SSL_CTX_use_PrivateKey_ASN1(int pk, SSL_CTX *ctx, unsigned char *d,
+                                        long len);
+        int SSL_CTX_use_PrivateKey_file(SSL_CTX *ctx, const char *file, int type);
+        int SSL_CTX_use_RSAPrivateKey(SSL_CTX *ctx, RSA *rsa);
+        int SSL_CTX_use_RSAPrivateKey_ASN1(SSL_CTX *ctx, unsigned char *d, long len);
+        int SSL_CTX_use_RSAPrivateKey_file(SSL_CTX *ctx, const char *file, int type);
+        int SSL_use_PrivateKey(SSL *ssl, EVP_PKEY *pkey);
+        int SSL_use_PrivateKey_ASN1(int pk,SSL *ssl, unsigned char *d, long len);
+        int SSL_use_PrivateKey_file(SSL *ssl, const char *file, int type);
+        int SSL_use_RSAPrivateKey(SSL *ssl, RSA *rsa);
+        int SSL_use_RSAPrivateKey_ASN1(SSL *ssl, unsigned char *d, long len);
+        int SSL_use_RSAPrivateKey_file(SSL *ssl, const char *file, int type);
+
+        int SSL_CTX_check_private_key(const SSL_CTX *ctx);
+        int SSL_check_private_key(const SSL *ssl);
+
+DDEESSCCRRIIPPTTIIOONN
+       These functions load the certificates and private keys into the SSL_CTX
+       or SSL object, respectively.
+
+       The SSL_CTX_* class of functions loads the certificates and keys into
+       the SSL_CTX object ccttxx. The information is passed to SSL objects ssssll
+       created from ccttxx with _S_S_L___n_e_w(3) by copying, so that changes applied to
+       ccttxx do not propagate to already existing SSL objects.
+
+       The SSL_* class of functions only loads certificates and keys into a
+       specific SSL object. The specific information is kept, when
+       _S_S_L___c_l_e_a_r(3) is called for this SSL object.
+
+       _S_S_L___C_T_X___u_s_e___c_e_r_t_i_f_i_c_a_t_e_(_) loads the certificate xx into ccttxx,
+       _S_S_L___u_s_e___c_e_r_t_i_f_i_c_a_t_e_(_) loads xx into ssssll. The rest of the certificates
+       needed to form the complete certificate chain can be specified using
+       the _S_S_L___C_T_X___a_d_d___e_x_t_r_a___c_h_a_i_n___c_e_r_t(3) function.
+
+       _S_S_L___C_T_X___u_s_e___c_e_r_t_i_f_i_c_a_t_e___A_S_N_1_(_) loads the ASN1 encoded certificate from
+       the memory location dd (with length lleenn) into ccttxx, _S_S_L___u_s_e___c_e_r_t_i_f_i_-
+       _c_a_t_e___A_S_N_1_(_) loads the ASN1 encoded certificate into ssssll.
+
+       _S_S_L___C_T_X___u_s_e___c_e_r_t_i_f_i_c_a_t_e___f_i_l_e_(_) loads the first certificate stored in
+       ffiillee into ccttxx. The formatting ttyyppee of the certificate must be specified
+       from the known types SSL_FILETYPE_PEM, SSL_FILETYPE_ASN1.  _S_S_L___u_s_e___c_e_r_-
+       _t_i_f_i_c_a_t_e___f_i_l_e_(_) loads the certificate from ffiillee into ssssll.  See the
+       NOTES section on why _S_S_L___C_T_X___u_s_e___c_e_r_t_i_f_i_c_a_t_e___c_h_a_i_n___f_i_l_e_(_) should be
+       preferred.
+
+       _S_S_L___C_T_X___u_s_e___c_e_r_t_i_f_i_c_a_t_e___c_h_a_i_n___f_i_l_e_(_) loads a certificate chain from
+       ffiillee into ccttxx. The certificates must be in PEM format and must be
+       sorted starting with the subject's certificate (actual client or server
+       certificate), followed by intermediate CA certificates if applicable,
+       and ending at the highest level (root) CA.  There is no corresponding
+       function working on a single SSL object.
+
+       _S_S_L___C_T_X___u_s_e___P_r_i_v_a_t_e_K_e_y_(_) adds ppkkeeyy as private key to ccttxx.
+       _S_S_L___C_T_X___u_s_e___R_S_A_P_r_i_v_a_t_e_K_e_y_(_) adds the private key rrssaa of type RSA to
+       ccttxx. _S_S_L___u_s_e___P_r_i_v_a_t_e_K_e_y_(_) adds ppkkeeyy as private key to ssssll;
+       _S_S_L___u_s_e___R_S_A_P_r_i_v_a_t_e_K_e_y_(_) adds rrssaa as private key of type RSA to ssssll.  If
+       a certificate has already been set and the private does not belong to
+       the certificate an error is returned. To change a certificate, private
+       key pair the new certificate needs to be set with _S_S_L___u_s_e___c_e_r_t_i_f_i_c_a_t_e_(_)
+       or _S_S_L___C_T_X___u_s_e___c_e_r_t_i_f_i_c_a_t_e_(_) before setting the private key with
+       _S_S_L___C_T_X___u_s_e___P_r_i_v_a_t_e_K_e_y_(_) or _S_S_L___u_s_e___P_r_i_v_a_t_e_K_e_y_(_).
+
+       _S_S_L___C_T_X___u_s_e___P_r_i_v_a_t_e_K_e_y___A_S_N_1_(_) adds the private key of type ppkk stored at
+       memory location dd (length lleenn) to ccttxx.  _S_S_L___C_T_X___u_s_e___R_S_A_P_r_i_-
+       _v_a_t_e_K_e_y___A_S_N_1_(_) adds the private key of type RSA stored at memory loca-
+       tion dd (length lleenn) to ccttxx.  _S_S_L___u_s_e___P_r_i_v_a_t_e_K_e_y___A_S_N_1_(_) and
+       _S_S_L___u_s_e___R_S_A_P_r_i_v_a_t_e_K_e_y___A_S_N_1_(_) add the private key to ssssll.
+
+       _S_S_L___C_T_X___u_s_e___P_r_i_v_a_t_e_K_e_y___f_i_l_e_(_) adds the first private key found in ffiillee
+       to ccttxx. The formatting ttyyppee of the certificate must be specified from
+       the known types SSL_FILETYPE_PEM, SSL_FILETYPE_ASN1.
+       _S_S_L___C_T_X___u_s_e___R_S_A_P_r_i_v_a_t_e_K_e_y___f_i_l_e_(_) adds the first private RSA key found
+       in ffiillee to ccttxx. _S_S_L___u_s_e___P_r_i_v_a_t_e_K_e_y___f_i_l_e_(_) adds the first private key
+       found in ffiillee to ssssll; _S_S_L___u_s_e___R_S_A_P_r_i_v_a_t_e_K_e_y___f_i_l_e_(_) adds the first pri-
+       vate RSA key found to ssssll.
+
+       _S_S_L___C_T_X___c_h_e_c_k___p_r_i_v_a_t_e___k_e_y_(_) checks the consistency of a private key
+       with the corresponding certificate loaded into ccttxx. If more than one
+       key/certificate pair (RSA/DSA) is installed, the last item installed
+       will be checked. If e.g. the last item was a RSA certificate or key,
+       the RSA key/certificate pair will be checked. _S_S_L___c_h_e_c_k___p_r_i_v_a_t_e___k_e_y_(_)
+       performs the same check for ssssll. If no key/certificate was explicitly
+       added for this ssssll, the last item added into ccttxx will be checked.
+
+NNOOTTEESS
+       The internal certificate store of OpenSSL can hold two private key/cer-
+       tificate pairs at a time: one key/certificate of type RSA and one
+       key/certificate of type DSA. The certificate used depends on the cipher
+       select, see also _S_S_L___C_T_X___s_e_t___c_i_p_h_e_r___l_i_s_t(3).
+
+       When reading certificates and private keys from file, files of type
+       SSL_FILETYPE_ASN1 (also known as DDEERR, binary encoding) can only contain
+       one certificate or private key, consequently _S_S_L___C_T_X___u_s_e___c_e_r_t_i_f_i_-
+       _c_a_t_e___c_h_a_i_n___f_i_l_e_(_) is only applicable to PEM formatting.  Files of type
+       SSL_FILETYPE_PEM can contain more than one item.
+
+       _S_S_L___C_T_X___u_s_e___c_e_r_t_i_f_i_c_a_t_e___c_h_a_i_n___f_i_l_e_(_) adds the first certificate found
+       in the file to the certificate store. The other certificates are added
+       to the store of chain certificates using
+       _S_S_L___C_T_X___a_d_d___e_x_t_r_a___c_h_a_i_n___c_e_r_t(3).  There exists only one extra chain
+       store, so that the same chain is appended to both types of certifi-
+       cates, RSA and DSA! If it is not intended to use both type of certifi-
+       cate at the same time, it is recommended to use the _S_S_L___C_T_X___u_s_e___c_e_r_-
+       _t_i_f_i_c_a_t_e___c_h_a_i_n___f_i_l_e_(_) instead of the _S_S_L___C_T_X___u_s_e___c_e_r_t_i_f_i_c_a_t_e___f_i_l_e_(_)
+       function in order to allow the use of complete certificate chains even
+       when no trusted CA storage is used or when the CA issuing the certifi-
+       cate shall not be added to the trusted CA storage.
+
+       If additional certificates are needed to complete the chain during the
+       TLS negotiation, CA certificates are additionally looked up in the
+       locations of trusted CA certificates, see _S_S_L___C_T_X___l_o_a_d___v_e_r_i_f_y___l_o_c_a_-
+       _t_i_o_n_s(3).
+
+       The private keys loaded from file can be encrypted. In order to suc-
+       cessfully load encrypted keys, a function returning the passphrase must
+       have been supplied, see _S_S_L___C_T_X___s_e_t___d_e_f_a_u_l_t___p_a_s_s_w_d___c_b(3).  (Certificate
+       files might be encrypted as well from the technical point of view, it
+       however does not make sense as the data in the certificate is consid-
+       ered public anyway.)
+
+RREETTUURRNN VVAALLUUEESS
+       On success, the functions return 1.  Otherwise check out the error
+       stack to find out the reason.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___n_e_w(3), _S_S_L___c_l_e_a_r(3), _S_S_L___C_T_X___l_o_a_d___v_e_r_i_f_y___l_o_c_a_t_i_o_n_s(3),
+       _S_S_L___C_T_X___s_e_t___d_e_f_a_u_l_t___p_a_s_s_w_d___c_b(3), _S_S_L___C_T_X___s_e_t___c_i_p_h_e_r___l_i_s_t(3),
+       _S_S_L___C_T_X___s_e_t___c_l_i_e_n_t___c_e_r_t___c_b(3), _S_S_L___C_T_X___a_d_d___e_x_t_r_a___c_h_a_i_n___c_e_r_t(3)
+
+HHIISSTTOORRYY
+       Support for DER encoded private keys (SSL_FILETYPE_ASN1) in
+       _S_S_L___C_T_X___u_s_e___P_r_i_v_a_t_e_K_e_y___f_i_l_e_(_) and _S_S_L___u_s_e___P_r_i_v_a_t_e_K_e_y___f_i_l_e_(_) was added
+       in 0.9.8 .
+
+
+
+1.0.0g                            2005-04-09        SSL_CTX_use_certificate(3)

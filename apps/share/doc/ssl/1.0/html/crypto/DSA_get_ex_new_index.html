@@ -1,0 +1,68 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>DSA_get_ex_data - add application specific data to DSA structures</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>DSA_get_ex_new_index, DSA_set_ex_data, DSA_get_ex_data - add application specific data to DSA structures</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/dsa.h&gt;</pre>
+<pre>
+ int DSA_get_ex_new_index(long argl, void *argp,
+                CRYPTO_EX_new *new_func,
+                CRYPTO_EX_dup *dup_func,
+                CRYPTO_EX_free *free_func);</pre>
+<pre>
+ int DSA_set_ex_data(DSA *d, int idx, void *arg);</pre>
+<pre>
+ char *DSA_get_ex_data(DSA *d, int idx);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>These functions handle application specific data in DSA
+structures. Their usage is identical to that of
+RSA_get_ex_new_index(), <code>RSA_set_ex_data()</code> and <code>RSA_get_ex_data()</code>
+as described in <em>RSA_get_ex_new_index(3)</em>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../crypto/RSA_get_ex_new_index.html">RSA_get_ex_new_index</a>, <a href="../apps/dsa.html">dsa</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>DSA_get_ex_new_index(), <code>DSA_set_ex_data()</code> and <code>DSA_get_ex_data()</code> are
+available since OpenSSL 0.9.5.</p>
+
+</body>
+
+</html>

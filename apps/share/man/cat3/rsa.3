@@ -1,0 +1,113 @@
+rsa(3)                              OpenSSL                             rsa(3)
+
+
+
+NNAAMMEE
+       rsa - RSA public key cryptosystem
+
+SSYYNNOOPPSSIISS
+        #include <openssl/rsa.h>
+        #include <openssl/engine.h>
+
+        RSA * RSA_new(void);
+        void RSA_free(RSA *rsa);
+
+        int RSA_public_encrypt(int flen, unsigned char *from,
+           unsigned char *to, RSA *rsa, int padding);
+        int RSA_private_decrypt(int flen, unsigned char *from,
+           unsigned char *to, RSA *rsa, int padding);
+        int RSA_private_encrypt(int flen, unsigned char *from,
+           unsigned char *to, RSA *rsa,int padding);
+        int RSA_public_decrypt(int flen, unsigned char *from,
+           unsigned char *to, RSA *rsa,int padding);
+
+        int RSA_sign(int type, unsigned char *m, unsigned int m_len,
+           unsigned char *sigret, unsigned int *siglen, RSA *rsa);
+        int RSA_verify(int type, unsigned char *m, unsigned int m_len,
+           unsigned char *sigbuf, unsigned int siglen, RSA *rsa);
+
+        int RSA_size(const RSA *rsa);
+
+        RSA *RSA_generate_key(int num, unsigned long e,
+           void (*callback)(int,int,void *), void *cb_arg);
+
+        int RSA_check_key(RSA *rsa);
+
+        int RSA_blinding_on(RSA *rsa, BN_CTX *ctx);
+        void RSA_blinding_off(RSA *rsa);
+
+        void RSA_set_default_method(const RSA_METHOD *meth);
+        const RSA_METHOD *RSA_get_default_method(void);
+        int RSA_set_method(RSA *rsa, const RSA_METHOD *meth);
+        const RSA_METHOD *RSA_get_method(const RSA *rsa);
+        RSA_METHOD *RSA_PKCS1_SSLeay(void);
+        RSA_METHOD *RSA_null_method(void);
+        int RSA_flags(const RSA *rsa);
+        RSA *RSA_new_method(ENGINE *engine);
+
+        int RSA_print(BIO *bp, RSA *x, int offset);
+        int RSA_print_fp(FILE *fp, RSA *x, int offset);
+
+        int RSA_get_ex_new_index(long argl, char *argp, int (*new_func)(),
+           int (*dup_func)(), void (*free_func)());
+        int RSA_set_ex_data(RSA *r,int idx,char *arg);
+        char *RSA_get_ex_data(RSA *r, int idx);
+
+        int RSA_sign_ASN1_OCTET_STRING(int dummy, unsigned char *m,
+           unsigned int m_len, unsigned char *sigret, unsigned int *siglen,
+           RSA *rsa);
+        int RSA_verify_ASN1_OCTET_STRING(int dummy, unsigned char *m,
+           unsigned int m_len, unsigned char *sigbuf, unsigned int siglen,
+           RSA *rsa);
+
+DDEESSCCRRIIPPTTIIOONN
+       These functions implement RSA public key encryption and signatures as
+       defined in PKCS #1 v2.0 [RFC 2437].
+
+       The RRSSAA structure consists of several BIGNUM components. It can contain
+       public as well as private RSA keys:
+
+        struct
+               {
+               BIGNUM *n;              // public modulus
+               BIGNUM *e;              // public exponent
+               BIGNUM *d;              // private exponent
+               BIGNUM *p;              // secret prime factor
+               BIGNUM *q;              // secret prime factor
+               BIGNUM *dmp1;           // d mod (p-1)
+               BIGNUM *dmq1;           // d mod (q-1)
+               BIGNUM *iqmp;           // q^-1 mod p
+               // ...
+               };
+        RSA
+
+       In public keys, the private exponent and the related secret values are
+       NNUULLLL.
+
+       pp, qq, ddmmpp11, ddmmqq11 and iiqqmmpp may be NNUULLLL in private keys, but the RSA
+       operations are much faster when these values are available.
+
+       Note that RSA keys may use non-standard RRSSAA__MMEETTHHOODD implementations,
+       either directly or by the use of EENNGGIINNEE modules. In some cases (eg. an
+       ENGINE providing support for hardware-embedded keys), these BIGNUM val-
+       ues will not be used by the implementation or may be used for alterna-
+       tive data storage. For this reason, applications should generally avoid
+       using RSA structure elements directly and instead use API functions to
+       query or modify keys.
+
+CCOONNFFOORRMMIINNGG TTOO
+       SSL, PKCS #1 v2.0
+
+PPAATTEENNTTSS
+       RSA was covered by a US patent which expired in September 2000.
+
+SSEEEE AALLSSOO
+       _r_s_a(1), _b_n(3), _d_s_a(3), _d_h(3), _r_a_n_d(3), _e_n_g_i_n_e(3), _R_S_A___n_e_w(3), _R_S_A___p_u_b_-
+       _l_i_c___e_n_c_r_y_p_t(3), _R_S_A___s_i_g_n(3), _R_S_A___s_i_z_e(3), _R_S_A___g_e_n_e_r_a_t_e___k_e_y(3),
+       _R_S_A___c_h_e_c_k___k_e_y(3), _R_S_A___b_l_i_n_d_i_n_g___o_n(3), _R_S_A___s_e_t___m_e_t_h_o_d(3), _R_S_A___p_r_i_n_t(3),
+       _R_S_A___g_e_t___e_x___n_e_w___i_n_d_e_x(3), _R_S_A___p_r_i_v_a_t_e___e_n_c_r_y_p_t(3),
+       _R_S_A___s_i_g_n___A_S_N_1___O_C_T_E_T___S_T_R_I_N_G(3), _R_S_A___p_a_d_d_i_n_g___a_d_d___P_K_C_S_1___t_y_p_e___1(3)
+
+
+
+1.0.0g                            2002-08-05                            rsa(3)

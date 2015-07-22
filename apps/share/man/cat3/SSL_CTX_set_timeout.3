@@ -1,0 +1,53 @@
+SSL_CTX_set_timeout(3)              OpenSSL             SSL_CTX_set_timeout(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_set_timeout, SSL_CTX_get_timeout - manipulate timeout values
+       for session caching
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        long SSL_CTX_set_timeout(SSL_CTX *ctx, long t);
+        long SSL_CTX_get_timeout(SSL_CTX *ctx);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___C_T_X___s_e_t___t_i_m_e_o_u_t_(_) sets the timeout for newly created sessions for
+       ccttxx to tt. The timeout value tt must be given in seconds.
+
+       _S_S_L___C_T_X___g_e_t___t_i_m_e_o_u_t_(_) returns the currently set timeout value for ccttxx.
+
+NNOOTTEESS
+       Whenever a new session is created, it is assigned a maximum lifetime.
+       This lifetime is specified by storing the creation time of the session
+       and the timeout value valid at this time. If the actual time is later
+       than creation time plus timeout, the session is not reused.
+
+       Due to this realization, all sessions behave according to the timeout
+       value valid at the time of the session negotiation. Changes of the
+       timeout value do not affect already established sessions.
+
+       The expiration time of a single session can be modified using the
+       _S_S_L___S_E_S_S_I_O_N___g_e_t___t_i_m_e(3) family of functions.
+
+       Expired sessions are removed from the internal session cache, whenever
+       _S_S_L___C_T_X___f_l_u_s_h___s_e_s_s_i_o_n_s(3) is called, either directly by the application
+       or automatically (see _S_S_L___C_T_X___s_e_t___s_e_s_s_i_o_n___c_a_c_h_e___m_o_d_e(3))
+
+       The default value for session timeout is decided on a per protocol
+       basis, see _S_S_L___g_e_t___d_e_f_a_u_l_t___t_i_m_e_o_u_t(3).  All currently supported proto-
+       cols have the same default timeout value of 300 seconds.
+
+RREETTUURRNN VVAALLUUEESS
+       _S_S_L___C_T_X___s_e_t___t_i_m_e_o_u_t_(_) returns the previously set timeout value.
+
+       _S_S_L___C_T_X___g_e_t___t_i_m_e_o_u_t_(_) returns the currently set timeout value.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___C_T_X___s_e_t___s_e_s_s_i_o_n___c_a_c_h_e___m_o_d_e(3), _S_S_L___S_E_S_S_I_O_N___g_e_t___t_i_m_e(3),
+       _S_S_L___C_T_X___f_l_u_s_h___s_e_s_s_i_o_n_s(3), _S_S_L___g_e_t___d_e_f_a_u_l_t___t_i_m_e_o_u_t(3)
+
+
+
+1.0.0g                            2001-08-17            SSL_CTX_set_timeout(3)

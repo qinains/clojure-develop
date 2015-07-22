@@ -1,0 +1,142 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>genrsa - generate an RSA private key</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#options">OPTIONS</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>genrsa - generate an RSA private key</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>openssl</strong> <strong>genrsa</strong>
+[<strong>-out filename</strong>]
+[<strong>-passout arg</strong>]
+[<strong>-des</strong>]
+[<strong>-des3</strong>]
+[<strong>-idea</strong>]
+[<strong>-f4</strong>]
+[<strong>-3</strong>]
+[<strong>-rand file(s)</strong>]
+[<strong>-engine id</strong>]
+[<strong>numbits</strong>]</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>genrsa</strong> command generates an RSA private key.</p>
+<p>
+</p>
+<hr />
+<h1><a name="options">OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item__2dout_filename"><strong>-out filename</strong></a></strong>
+
+<dd>
+<p>the output filename. If this argument is not specified then standard output is
+used.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpassout_arg"><strong>-passout arg</strong></a></strong>
+
+<dd>
+<p>the output file password source. For more information about the format of <strong>arg</strong>
+see the <strong>PASS PHRASE ARGUMENTS</strong> section in <a href="../apps/openssl.html">openssl</a>.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2ddes_7c_2ddes3_7c_2didea"><strong>-des|-des3|-idea</strong></a></strong>
+
+<dd>
+<p>These options encrypt the private key with the DES, triple DES, or the 
+IDEA ciphers respectively before outputting it. If none of these options is
+specified no encryption is used. If encryption is used a pass phrase is prompted
+for if it is not supplied via the <strong>-passout</strong> argument.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2df4_7c_2d3"><strong>-F4|-3</strong></a></strong>
+
+<dd>
+<p>the public exponent to use, either 65537 or 3. The default is 65537.</p>
+</dd>
+</li>
+<dt><strong><a name="item_file"><strong>-rand file(s)</strong></a></strong>
+
+<dd>
+<p>a file or files containing random data used to seed the random number
+generator, or an EGD socket (see <a href="../crypto/RAND_egd.html">RAND_egd</a>).
+Multiple files can be specified separated by a OS-dependent character.
+The separator is <strong>;</strong> for MS-Windows, <strong>,</strong> for OpenVMS, and <strong>:</strong> for
+all others.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dengine_id"><strong>-engine id</strong></a></strong>
+
+<dd>
+<p>specifying an engine (by its unique <strong>id</strong> string) will cause <strong>genrsa</strong>
+to attempt to obtain a functional reference to the specified engine,
+thus initialising it if needed. The engine will then be set as the default
+for all available algorithms.</p>
+</dd>
+</li>
+<dt><strong><a name="item_numbits"><strong>numbits</strong></a></strong>
+
+<dd>
+<p>the size of the private key to generate in bits. This must be the last option
+specified. The default is 512.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>RSA private key generation essentially involves the generation of two prime
+numbers. When generating a private key various symbols will be output to
+indicate the progress of the generation. A <strong>.</strong> represents each number which
+has passed an initial sieve test, <strong>+</strong> means a number has passed a single
+round of the Miller-Rabin primality test. A newline means that the number has
+passed all the prime tests (the actual number depends on the key size).</p>
+<p>Because key generation is a random process the time taken to generate a key
+may vary somewhat.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>A quirk of the prime generation algorithm is that it cannot generate small
+primes. Therefore the number of bits should not be less that 64. For typical
+private keys this will not matter because for security reasons they will
+be much larger (typically 1024 bits).</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../apps/gendsa.html">gendsa</a></p>
+
+</body>
+
+</html>

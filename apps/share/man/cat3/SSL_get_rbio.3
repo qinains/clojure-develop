@@ -1,0 +1,33 @@
+SSL_get_rbio(3)                     OpenSSL                    SSL_get_rbio(3)
+
+
+
+NNAAMMEE
+       SSL_get_rbio - get BIO linked to an SSL object
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        BIO *SSL_get_rbio(SSL *ssl);
+        BIO *SSL_get_wbio(SSL *ssl);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___g_e_t___r_b_i_o_(_) and _S_S_L___g_e_t___w_b_i_o_(_) return pointers to the BIOs for the
+       read or the write channel, which can be different. The reference count
+       of the BIO is not incremented.
+
+RREETTUURRNN VVAALLUUEESS
+       The following return values can occur:
+
+       NULL
+           No BIO was connected to the SSL object
+
+       Any other pointer
+           The BIO linked to ssssll.
+
+SSEEEE AALLSSOO
+       _S_S_L___s_e_t___b_i_o(3), _s_s_l(3) , _b_i_o(3)
+
+
+
+1.0.0g                            2000-09-16                   SSL_get_rbio(3)

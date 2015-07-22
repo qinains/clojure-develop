@@ -1,0 +1,85 @@
+EVP_PKEY_verify(3)                  OpenSSL                 EVP_PKEY_verify(3)
+
+
+
+NNAAMMEE
+       EVP_PKEY_verify_init, EVP_PKEY_verify - signature verification using a
+       public key algorithm
+
+SSYYNNOOPPSSIISS
+        #include <openssl/evp.h>
+
+        int EVP_PKEY_verify_init(EVP_PKEY_CTX *ctx);
+        int EVP_PKEY_verify(EVP_PKEY_CTX *ctx,
+                               const unsigned char *sig, size_t siglen,
+                               const unsigned char *tbs, size_t tbslen);
+
+DDEESSCCRRIIPPTTIIOONN
+       The _E_V_P___P_K_E_Y___v_e_r_i_f_y___i_n_i_t_(_) function initializes a public key algorithm
+       context using key ppkkeeyy for a signature verification operation.
+
+       The _E_V_P___P_K_E_Y___v_e_r_i_f_y_(_) function performs a public key verification oper-
+       ation using ccttxx. The signature is specified using the ssiigg and ssiigglleenn
+       parameters. The verified data (i.e. the data believed originally
+       signed) is specified using the ttbbss and ttbbsslleenn parameters.
+
+NNOOTTEESS
+       After the call to _E_V_P___P_K_E_Y___v_e_r_i_f_y___i_n_i_t_(_) algorithm specific control
+       operations can be performed to set any appropriate parameters for the
+       operation.
+
+       The function _E_V_P___P_K_E_Y___v_e_r_i_f_y_(_) can be called more than once on the same
+       context if several operations are performed using the same parameters.
+
+RREETTUURRNN VVAALLUUEESS
+       _E_V_P___P_K_E_Y___v_e_r_i_f_y___i_n_i_t_(_) and _E_V_P___P_K_E_Y___v_e_r_i_f_y_(_) return 1 if the verifica-
+       tion was successful and 0 if it failed. Unlike other functions the
+       return value 0 from _E_V_P___P_K_E_Y___v_e_r_i_f_y_(_) only indicates that the signature
+       did not not verify successfully (that is tbs did not match the original
+       data or the signature was of invalid form) it is not an indication of a
+       more serious error.
+
+       A negative value indicates an error other that signature verification
+       failure.  In particular a return value of -2 indicates the operation is
+       not supported by the public key algorithm.
+
+EEXXAAMMPPLLEE
+       Verify signature using PKCS#1 and SHA256 digest:
+
+        #include <openssl/evp.h>
+        #include <openssl/rsa.h>
+
+        EVP_PKEY_CTX *ctx;
+        unsigned char *md, *sig;
+        size_t mdlen, siglen;
+        EVP_PKEY *verify_key;
+        /* NB: assumes verify_key, sig, siglen md and mdlen are already set up
+         * and that verify_key is an RSA public key
+         */
+        ctx = EVP_PKEY_CTX_new(verify_key);
+        if (!ctx)
+               /* Error occurred */
+        if (EVP_PKEY_verify_init(ctx) <= 0)
+               /* Error */
+        if (EVP_PKEY_CTX_set_rsa_padding(ctx, RSA_PKCS1_PADDING) <= 0)
+               /* Error */
+        if (EVP_PKEY_CTX_set_signature_md(ctx, EVP_sha256()) <= 0)
+               /* Error */
+
+        /* Perform operation */
+        ret = EVP_PKEY_verify(ctx, sig, siglen, md, mdlen);
+
+        /* ret == 1 indicates success, 0 verify failure and < 0 for some
+         * other error.
+         */
+
+SSEEEE AALLSSOO
+       _E_V_P___P_K_E_Y___C_T_X___n_e_w(3), _E_V_P___P_K_E_Y___e_n_c_r_y_p_t(3), _E_V_P___P_K_E_Y___d_e_c_r_y_p_t(3),
+       _E_V_P___P_K_E_Y___s_i_g_n(3), _E_V_P___P_K_E_Y___v_e_r_i_f_y_r_e_c_o_v_e_r(3), _E_V_P___P_K_E_Y___d_e_r_i_v_e(3)
+
+HHIISSTTOORRYY
+       These functions were first added to OpenSSL 1.0.0.
+
+
+
+1.0.0g                            2010-12-02                EVP_PKEY_verify(3)

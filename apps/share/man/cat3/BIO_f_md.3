@@ -1,0 +1,143 @@
+BIO_f_md(3)                         OpenSSL                        BIO_f_md(3)
+
+
+
+NNAAMMEE
+       BIO_f_md, BIO_set_md, BIO_get_md, BIO_get_md_ctx - message digest BIO
+       filter
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bio.h>
+        #include <openssl/evp.h>
+
+        BIO_METHOD *   BIO_f_md(void);
+        int BIO_set_md(BIO *b,EVP_MD *md);
+        int BIO_get_md(BIO *b,EVP_MD **mdp);
+        int BIO_get_md_ctx(BIO *b,EVP_MD_CTX **mdcp);
+
+DDEESSCCRRIIPPTTIIOONN
+       _B_I_O___f___m_d_(_) returns the message digest BIO method. This is a filter BIO
+       that digests any data passed through it, it is a BIO wrapper for the
+       digest routines _E_V_P___D_i_g_e_s_t_I_n_i_t_(_), _E_V_P___D_i_g_e_s_t_U_p_d_a_t_e_(_) and _E_V_P___D_i_g_e_s_t_F_i_-
+       _n_a_l_(_).
+
+       Any data written or read through a digest BIO using _B_I_O___r_e_a_d_(_) and
+       _B_I_O___w_r_i_t_e_(_) is digested.
+
+       _B_I_O___g_e_t_s_(_), if its ssiizzee parameter is large enough finishes the digest
+       calculation and returns the digest value. _B_I_O___p_u_t_s_(_) is not supported.
+
+       _B_I_O___r_e_s_e_t_(_) reinitialises a digest BIO.
+
+       _B_I_O___s_e_t___m_d_(_) sets the message digest of BIO bb to mmdd: this must be
+       called to initialize a digest BIO before any data is passed through it.
+       It is a _B_I_O___c_t_r_l_(_) macro.
+
+       _B_I_O___g_e_t___m_d_(_) places the a pointer to the digest BIOs digest method in
+       mmddpp, it is a _B_I_O___c_t_r_l_(_) macro.
+
+       _B_I_O___g_e_t___m_d___c_t_x_(_) returns the digest BIOs context into mmddccpp.
+
+NNOOTTEESS
+       The context returned by _B_I_O___g_e_t___m_d___c_t_x_(_) can be used in calls to
+       _E_V_P___D_i_g_e_s_t_F_i_n_a_l_(_) and also the signature routines _E_V_P___S_i_g_n_F_i_n_a_l_(_) and
+       _E_V_P___V_e_r_i_f_y_F_i_n_a_l_(_).
+
+       The context returned by _B_I_O___g_e_t___m_d___c_t_x_(_) is an internal context struc-
+       ture. Changes made to this context will affect the digest BIO itself
+       and the context pointer will become invalid when the digest BIO is
+       freed.
+
+       After the digest has been retrieved from a digest BIO it must be reini-
+       tialized by calling _B_I_O___r_e_s_e_t_(_), or _B_I_O___s_e_t___m_d_(_) before any more data
+       is passed through it.
+
+       If an application needs to call _B_I_O___g_e_t_s_(_) or _B_I_O___p_u_t_s_(_) through a
+       chain containing digest BIOs then this can be done by prepending a
+       buffering BIO.
+
+       Before OpenSSL 1.0.0 the call to _B_I_O___g_e_t___m_d___c_t_x_(_) would only work if
+       the BIO had been initialized for example by calling _B_I_O___s_e_t___m_d_(_) ). In
+       OpenSSL 1.0.0 and later the context is always returned and the BIO is
+       state is set to initialized. This allows applications to initialize the
+       context externally if the standard calls such as _B_I_O___s_e_t___m_d_(_) are not
+       sufficiently flexible.
+
+RREETTUURRNN VVAALLUUEESS
+       _B_I_O___f___m_d_(_) returns the digest BIO method.
+
+       _B_I_O___s_e_t___m_d_(_), _B_I_O___g_e_t___m_d_(_) and _B_I_O___m_d___c_t_x_(_) return 1 for success and 0
+       for failure.
+
+EEXXAAMMPPLLEESS
+       The following example creates a BIO chain containing an SHA1 and MD5
+       digest BIO and passes the string "Hello World" through it. Error check-
+       ing has been omitted for clarity.
+
+        BIO *bio, *mdtmp;
+        char message[] = "Hello World";
+        bio = BIO_new(BIO_s_null());
+        mdtmp = BIO_new(BIO_f_md());
+        BIO_set_md(mdtmp, EVP_sha1());
+        /* For BIO_push() we want to append the sink BIO and keep a note of
+         * the start of the chain.
+         */
+        bio = BIO_push(mdtmp, bio);
+        mdtmp = BIO_new(BIO_f_md());
+        BIO_set_md(mdtmp, EVP_md5());
+        bio = BIO_push(mdtmp, bio);
+        /* Note: mdtmp can now be discarded */
+        BIO_write(bio, message, strlen(message));
+
+       The next example digests data by reading through a chain instead:
+
+        BIO *bio, *mdtmp;
+        char buf[1024];
+        int rdlen;
+        bio = BIO_new_file(file, "rb");
+        mdtmp = BIO_new(BIO_f_md());
+        BIO_set_md(mdtmp, EVP_sha1());
+        bio = BIO_push(mdtmp, bio);
+        mdtmp = BIO_new(BIO_f_md());
+        BIO_set_md(mdtmp, EVP_md5());
+        bio = BIO_push(mdtmp, bio);
+        do {
+               rdlen = BIO_read(bio, buf, sizeof(buf));
+               /* Might want to do something with the data here */
+        } while(rdlen > 0);
+
+       This next example retrieves the message digests from a BIO chain and
+       outputs them. This could be used with the examples above.
+
+        BIO *mdtmp;
+        unsigned char mdbuf[EVP_MAX_MD_SIZE];
+        int mdlen;
+        int i;
+        mdtmp = bio;   /* Assume bio has previously been set up */
+        do {
+               EVP_MD *md;
+               mdtmp = BIO_find_type(mdtmp, BIO_TYPE_MD);
+               if(!mdtmp) break;
+               BIO_get_md(mdtmp, &md);
+               printf("%s digest", OBJ_nid2sn(EVP_MD_type(md)));
+               mdlen = BIO_gets(mdtmp, mdbuf, EVP_MAX_MD_SIZE);
+               for(i = 0; i < mdlen; i++) printf(":%02X", mdbuf[i]);
+               printf("\n");
+               mdtmp = BIO_next(mdtmp);
+        } while(mdtmp);
+
+        BIO_free_all(bio);
+
+BBUUGGSS
+       The lack of support for _B_I_O___p_u_t_s_(_) and the non standard behaviour of
+       _B_I_O___g_e_t_s_(_) could be regarded as anomalous. It could be argued that
+       _B_I_O___g_e_t_s_(_) and _B_I_O___p_u_t_s_(_) should be passed to the next BIO in the chain
+       and digest the data passed through and that digests should be retrieved
+       using a separate _B_I_O___c_t_r_l_(_) call.
+
+SSEEEE AALLSSOO
+       TBA
+
+
+
+1.0.0g                            2009-10-01                       BIO_f_md(3)

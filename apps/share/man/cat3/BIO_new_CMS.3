@@ -1,0 +1,62 @@
+BIO_new_CMS(3)                      OpenSSL                     BIO_new_CMS(3)
+
+
+
+NNAAMMEE
+        BIO_new_CMS - CMS streaming filter BIO
+
+SSYYNNOOPPSSIISS
+        #include <openssl/cms.h>
+
+        BIO *BIO_new_CMS(BIO *out, CMS_ContentInfo *cms);
+
+DDEESSCCRRIIPPTTIIOONN
+       _B_I_O___n_e_w___C_M_S_(_) returns a streaming filter BIO chain based on ccmmss. The
+       output of the filter is written to oouutt. Any data written to the chain
+       is automatically translated to a BER format CMS structure of the appro-
+       priate type.
+
+NNOOTTEESS
+       The chain returned by this function behaves like a standard filter BIO.
+       It supports non blocking I/O. Content is processed and streamed on the
+       fly and not all held in memory at once: so it is possible to encode
+       very large structures.  After all content has been written through the
+       chain _B_I_O___f_l_u_s_h_(_) must be called to finalise the structure.
+
+       The CCMMSS__SSTTRREEAAMM flag must be included in the corresponding ffllaaggss parame-
+       ter of the ccmmss creation function.
+
+       If an application wishes to write additional data to oouutt BIOs should be
+       removed from the chain using _B_I_O___p_o_p_(_) and freed with _B_I_O___f_r_e_e_(_) until
+       oouutt is reached. If no additional data needs to be written
+       _B_I_O___f_r_e_e___a_l_l_(_) can be called to free up the whole chain.
+
+       Any content written through the filter is used verbatim: no canonical
+       translation is performed.
+
+       It is possible to chain multiple BIOs to, for example, create a triple
+       wrapped signed, enveloped, signed structure. In this case it is the
+       applications responsibility to set the inner content type of any outer
+       CMS_ContentInfo structures.
+
+       Large numbers of small writes through the chain should be avoided as
+       this will produce an output consisting of lots of OCTET STRING struc-
+       tures. Prepending a _B_I_O___f___b_u_f_f_e_r_(_) buffering BIO will prevent this.
+
+BBUUGGSS
+       There is currently no corresponding inverse BIO: i.e. one which can
+       decode a CMS structure on the fly.
+
+RREETTUURRNN VVAALLUUEESS
+       _B_I_O___n_e_w___C_M_S_(_) returns a BIO chain when successful or NULL if an error
+       occurred. The error can be obtained from _E_R_R___g_e_t___e_r_r_o_r(3).
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _C_M_S___s_i_g_n(3), _C_M_S___e_n_c_r_y_p_t(3)
+
+HHIISSTTOORRYY
+       _B_I_O___n_e_w___C_M_S_(_) was added to OpenSSL 1.0.0
+
+
+
+1.0.0g                            2009-10-01                    BIO_new_CMS(3)

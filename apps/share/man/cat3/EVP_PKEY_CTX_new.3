@@ -1,0 +1,52 @@
+EVP_PKEY_CTX_new(3)                 OpenSSL                EVP_PKEY_CTX_new(3)
+
+
+
+NNAAMMEE
+       EVP_PKEY_CTX_new, EVP_PKEY_CTX_new_id, EVP_PKEY_CTX_dup,
+       EVP_PKEY_CTX_free - public key algorithm context functions.
+
+SSYYNNOOPPSSIISS
+        #include <openssl/evp.h>
+
+        EVP_PKEY_CTX *EVP_PKEY_CTX_new(EVP_PKEY *pkey, ENGINE *e);
+        EVP_PKEY_CTX *EVP_PKEY_CTX_new_id(int id, ENGINE *e);
+        EVP_PKEY_CTX *EVP_PKEY_CTX_dup(EVP_PKEY_CTX *ctx);
+        void EVP_PKEY_CTX_free(EVP_PKEY_CTX *ctx);
+
+DDEESSCCRRIIPPTTIIOONN
+       The _E_V_P___P_K_E_Y___C_T_X___n_e_w_(_) function allocates public key algorithm context
+       using the algorithm specified in ppkkeeyy and ENGINE ee.
+
+       The _E_V_P___P_K_E_Y___C_T_X___n_e_w___i_d_(_) function allocates public key algorithm con-
+       text using the algorithm specified by iidd and ENGINE ee. It is normally
+       used when no EEVVPP__PPKKEEYY structure is associated with the operations, for
+       example during parameter generation of key genration for some algo-
+       rithms.
+
+       _E_V_P___P_K_E_Y___C_T_X___d_u_p_(_) duplicates the context ccttxx.
+
+       _E_V_P___P_K_E_Y___C_T_X___f_r_e_e_(_) frees up the context ccttxx.
+
+NNOOTTEESS
+       The EEVVPP__PPKKEEYY__CCTTXX structure is an opaque public key algorithm context
+       used by the OpenSSL high level public key API. Contexts MMUUSSTT NNOOTT be
+       shared between threads: that is it is not permissible to use the same
+       context simultaneously in two threads.
+
+RREETTUURRNN VVAALLUUEESS
+       _E_V_P___P_K_E_Y___C_T_X___n_e_w_(_), _E_V_P___P_K_E_Y___C_T_X___n_e_w___i_d_(_), _E_V_P___P_K_E_Y___C_T_X___d_u_p_(_) returns
+       either the newly allocated EEVVPP__PPKKEEYY__CCTTXX structure of NNUULLLL if an error
+       occurred.
+
+       _E_V_P___P_K_E_Y___C_T_X___f_r_e_e_(_) does not return a value.
+
+SSEEEE AALLSSOO
+       _E_V_P___P_K_E_Y___n_e_w(3)
+
+HHIISSTTOORRYY
+       These functions were first added to OpenSSL 1.0.0.
+
+
+
+1.0.0g                            2009-10-01               EVP_PKEY_CTX_new(3)

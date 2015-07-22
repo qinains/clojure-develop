@@ -1,0 +1,226 @@
+ASN1_generate_nconf(3)              OpenSSL             ASN1_generate_nconf(3)
+
+
+
+NNAAMMEE
+       ASN1_generate_nconf, ASN1_generate_v3 - ASN1 generation functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/asn1.h>
+
+        ASN1_TYPE *ASN1_generate_nconf(char *str, CONF *nconf);
+        ASN1_TYPE *ASN1_generate_v3(char *str, X509V3_CTX *cnf);
+
+DDEESSCCRRIIPPTTIIOONN
+       These functions generate the ASN1 encoding of a string in an AASSNN11__TTYYPPEE
+       structure.
+
+       ssttrr contains the string to encode nnccoonnff or ccnnff contains the optional
+       configuration information where additional strings will be read from.
+       nnccoonnff will typically come from a config file wherease ccnnff is obtained
+       from an XX550099VV33__CCTTXX structure which will typically be used by X509 v3
+       certificate extension functions. ccnnff or nnccoonnff can be set to NNUULLLL if no
+       additional configuration will be used.
+
+GGEENNEERRAATTIIOONN SSTTRRIINNGG FFOORRMMAATT
+       The actual data encoded is determined by the string ssttrr and the config-
+       uration information. The general format of the string is:
+
+       [[mmooddiiffiieerr,,]]ttyyppee[[::vvaalluuee]]
+
+       That is zero or more comma separated modifiers followed by a type fol-
+       lowed by an optional colon and a value. The formats of ttyyppee, vvaalluuee and
+       mmooddiiffiieerr are explained below.
+
+       SSUUPPPPOORRTTEEDD TTYYPPEESS
+
+       The supported types are listed below. Unless otherwise specified only
+       the AASSCCIIII format is permissible.
+
+       BBOOOOLLEEAANN, BBOOOOLL
+         This encodes a boolean type. The vvaalluuee string is mandatory and should
+         be TTRRUUEE or FFAALLSSEE. Additionally TTRRUUEE, ttrruuee, YY, yy, YYEESS, yyeess, FFAALLSSEE,
+         ffaallssee, NN, nn, NNOO and nnoo are acceptable.
+
+       NNUULLLL
+         Encode the NNUULLLL type, the vvaalluuee string must not be present.
+
+       IINNTTEEGGEERR, IINNTT
+         Encodes an ASN1 IINNTTEEGGEERR type. The vvaalluuee string represents the value
+         of the integer, it can be preceeded by a minus sign and is normally
+         interpreted as a decimal value unless the prefix 00xx is included.
+
+       EENNUUMMEERRAATTEEDD, EENNUUMM
+         Encodes the ASN1 EENNUUMMEERRAATTEEDD type, it is otherwise identical to IINNTTEE--
+         GGEERR.
+
+       OOBBJJEECCTT, OOIIDD
+         Encodes an ASN1 OOBBJJEECCTT IIDDEENNTTIIFFIIEERR, the vvaalluuee string can be a short
+         name, a long name or numerical format.
+
+       UUTTCCTTIIMMEE, UUTTCC
+         Encodes an ASN1 UUTTCCTTiimmee structure, the value should be in the format
+         YYYYMMMMDDDDHHHHMMMMSSSSZZ.
+
+       GGEENNEERRAALLIIZZEEDDTTIIMMEE, GGEENNTTIIMMEE
+         Encodes an ASN1 GGeenneerraalliizzeeddTTiimmee structure, the value should be in the
+         format YYYYYYYYMMMMDDDDHHHHMMMMSSSSZZ.
+
+       OOCCTTEETTSSTTRRIINNGG, OOCCTT
+         Encodes an ASN1 OOCCTTEETT SSTTRRIINNGG. vvaalluuee represents the contents of this
+         structure, the format strings AASSCCIIII and HHEEXX can be used to specify
+         the format of vvaalluuee.
+
+       BBIITTSSTTRRIINNGG, BBIITTSSTTRR
+         Encodes an ASN1 BBIITT SSTTRRIINNGG. vvaalluuee represents the contents of this
+         structure, the format strings AASSCCIIII, HHEEXX and BBIITTLLIISSTT can be used to
+         specify the format of vvaalluuee.
+
+         If the format is anything other than BBIITTLLIISSTT the number of unused
+         bits is set to zero.
+
+       UUNNIIVVEERRSSAALLSSTTRRIINNGG, UUNNIIVV, IIAA55, IIAA55SSTTRRIINNGG, UUTTFF88, UUTTFF88SSttrriinngg, BBMMPP, BBMMPP--
+       SSTTRRIINNGG, VVIISSIIBBLLEESSTTRRIINNGG, VVIISSIIBBLLEE, PPRRIINNTTAABBLLEESSTTRRIINNGG, PPRRIINNTTAABBLLEE, TT6611,
+       TT6611SSTTRRIINNGG, TTEELLEETTEEXXSSTTRRIINNGG, GGeenneerraallSSttrriinngg, NNUUMMEERRIICCSSTTRRIINNGG, NNUUMMEERRIICC
+         These encode the corresponding string types. vvaalluuee represents the
+         contents of this structure. The format can be AASSCCIIII or UUTTFF88.
+
+       SSEEQQUUEENNCCEE, SSEEQQ, SSEETT
+         Formats the result as an ASN1 SSEEQQUUEENNCCEE or SSEETT type. vvaalluuee should be a
+         section name which will contain the contents. The field names in the
+         section are ignored and the values are in the generated string for-
+         mat. If vvaalluuee is absent then an empty SEQUENCE will be encoded.
+
+       MMOODDIIFFIIEERRSS
+
+       Modifiers affect the following structure, they can be used to add
+       EXPLICIT or IMPLICIT tagging, add wrappers or to change the string for-
+       mat of the final type and value. The supported formats are documented
+       below.
+
+       EEXXPPLLIICCIITT, EEXXPP
+         Add an explicit tag to the following structure. This string should be
+         followed by a colon and the tag value to use as a decimal value.
+
+         By following the number with UU, AA, PP or CC UNIVERSAL, APPLICATION,
+         PRIVATE or CONTEXT SPECIFIC tagging can be used, the default is CON-
+         TEXT SPECIFIC.
+
+       IIMMPPLLIICCIITT, IIMMPP
+         This is the same as EEXXPPLLIICCIITT except IMPLICIT tagging is used instead.
+
+       OOCCTTWWRRAAPP, SSEEQQWWRRAAPP, SSEETTWWRRAAPP, BBIITTWWRRAAPP
+         The following structure is surrounded by an OCTET STRING, a SEQUENCE,
+         a SET or a BIT STRING respectively. For a BIT STRING the number of
+         unused bits is set to zero.
+
+       FFOORRMMAATT
+         This specifies the format of the ultimate value. It should be fol-
+         lowed by a colon and one of the strings AASSCCIIII, UUTTFF88, HHEEXX or BBIITTLLIISSTT.
+
+         If no format specifier is included then AASSCCIIII is used. If UUTTFF88 is
+         specified then the value string must be a valid UUTTFF88 string. For HHEEXX
+         the output must be a set of hex digits. BBIITTLLIISSTT (which is only valid
+         for a BIT STRING) is a comma separated list of the indices of the set
+         bits, all other bits are zero.
+
+EEXXAAMMPPLLEESS
+       A simple IA5String:
+
+        IA5STRING:Hello World
+
+       An IA5String explicitly tagged:
+
+        EXPLICIT:0,IA5STRING:Hello World
+
+       An IA5String explicitly tagged using APPLICATION tagging:
+
+        EXPLICIT:0A,IA5STRING:Hello World
+
+       A BITSTRING with bits 1 and 5 set and all others zero:
+
+        FORMAT:BITLIST,BITSTRING:1,5
+
+       A more complex example using a config file to produce a SEQUENCE con-
+       siting of a BOOL an OID and a UTF8String:
+
+        asn1 = SEQUENCE:seq_section
+
+        [seq_section]
+
+        field1 = BOOLEAN:TRUE
+        field2 = OID:commonName
+        field3 = UTF8:Third field
+
+       This example produces an RSAPrivateKey structure, this is the key con-
+       tained in the file client.pem in all OpenSSL distributions (note: the
+       field names such as 'coeff' are ignored and are present just for clar-
+       ity):
+
+        asn1=SEQUENCE:private_key
+        [private_key]
+        version=INTEGER:0
+
+        n=INTEGER:0xBB6FE79432CC6EA2D8F970675A5A87BFBE1AFF0BE63E879F2AFFB93644\
+        D4D2C6D000430DEC66ABF47829E74B8C5108623A1C0EE8BE217B3AD8D36D5EB4FCA1D9
+
+        e=INTEGER:0x010001
+
+        d=INTEGER:0x6F05EAD2F27FFAEC84BEC360C4B928FD5F3A9865D0FCAAD291E2A52F4A\
+        F810DC6373278C006A0ABBA27DC8C63BF97F7E666E27C5284D7D3B1FFFE16B7A87B51D
+
+        p=INTEGER:0xF3929B9435608F8A22C208D86795271D54EBDFB09DDEF539AB083DA912\
+        D4BD57
+
+        q=INTEGER:0xC50016F89DFF2561347ED1186A46E150E28BF2D0F539A1594BBD7FE467\
+        46EC4F
+
+        exp1=INTEGER:0x9E7D4326C924AFC1DEA40B45650134966D6F9DFA3A7F9D698CD4ABEA\
+        9C0A39B9
+
+        exp2=INTEGER:0xBA84003BB95355AFB7C50DF140C60513D0BA51D637272E355E397779\
+        E7B2458F
+
+        coeff=INTEGER:0x30B9E4F2AFA5AC679F920FC83F1F2DF1BAF1779CF989447FABC2F5\
+        628657053A
+
+       This example is the corresponding public key in a SubjectPublicKeyInfo
+       structure:
+
+        # Start with a SEQUENCE
+        asn1=SEQUENCE:pubkeyinfo
+
+        # pubkeyinfo contains an algorithm identifier and the public key wrapped
+        # in a BIT STRING
+        [pubkeyinfo]
+        algorithm=SEQUENCE:rsa_alg
+        pubkey=BITWRAP,SEQUENCE:rsapubkey
+
+        # algorithm ID for RSA is just an OID and a NULL
+        [rsa_alg]
+        algorithm=OID:rsaEncryption
+        parameter=NULL
+
+        # Actual public key: modulus and exponent
+        [rsapubkey]
+        n=INTEGER:0xBB6FE79432CC6EA2D8F970675A5A87BFBE1AFF0BE63E879F2AFFB93644\
+        D4D2C6D000430DEC66ABF47829E74B8C5108623A1C0EE8BE217B3AD8D36D5EB4FCA1D9
+
+        e=INTEGER:0x010001
+
+RREETTUURRNN VVAALLUUEESS
+       _A_S_N_1___g_e_n_e_r_a_t_e___n_c_o_n_f_(_) and _A_S_N_1___g_e_n_e_r_a_t_e___v_3_(_) return the encoded data as
+       an AASSNN11__TTYYPPEE structure or NNUULLLL if an error occurred.
+
+       The error codes that can be obtained by _E_R_R___g_e_t___e_r_r_o_r(3).
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3)
+
+HHIISSTTOORRYY
+       _A_S_N_1___g_e_n_e_r_a_t_e___n_c_o_n_f_(_) and _A_S_N_1___g_e_n_e_r_a_t_e___v_3_(_) were added to OpenSSL
+       0.9.8
+
+
+
+1.0.0g                            2009-11-29            ASN1_generate_nconf(3)

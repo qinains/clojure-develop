@@ -1,0 +1,469 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>s_server - SSL/TLS server program</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#options">OPTIONS</a></li>
+	<li><a href="#connected_commands">CONNECTED COMMANDS</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>s_server - SSL/TLS server program</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>openssl</strong> <strong>s_server</strong>
+[<strong>-accept port</strong>]
+[<strong>-context id</strong>]
+[<strong>-verify depth</strong>]
+[<strong>-Verify depth</strong>]
+[<strong>-crl_check</strong>]
+[<strong>-crl_check_all</strong>]
+[<strong>-cert filename</strong>]
+[<strong>-certform DER|PEM</strong>]
+[<strong>-key keyfile</strong>]
+[<strong>-keyform DER|PEM</strong>]
+[<strong>-pass arg</strong>]
+[<strong>-dcert filename</strong>]
+[<strong>-dcertform DER|PEM</strong>]
+[<strong>-dkey keyfile</strong>]
+[<strong>-dkeyform DER|PEM</strong>]
+[<strong>-dpass arg</strong>]
+[<strong>-dhparam filename</strong>]
+[<strong>-nbio</strong>]
+[<strong>-nbio_test</strong>]
+[<strong>-crlf</strong>]
+[<strong>-debug</strong>]
+[<strong>-msg</strong>]
+[<strong>-state</strong>]
+[<strong>-CApath directory</strong>]
+[<strong>-CAfile filename</strong>]
+[<strong>-nocert</strong>]
+[<strong>-cipher cipherlist</strong>]
+[<strong>-quiet</strong>]
+[<strong>-no_tmp_rsa</strong>]
+[<strong>-ssl2</strong>]
+[<strong>-ssl3</strong>]
+[<strong>-tls1</strong>]
+[<strong>-no_ssl2</strong>]
+[<strong>-no_ssl3</strong>]
+[<strong>-no_tls1</strong>]
+[<strong>-no_dhe</strong>]
+[<strong>-bugs</strong>]
+[<strong>-hack</strong>]
+[<strong>-www</strong>]
+[<strong>-WWW</strong>]
+[<strong>-HTTP</strong>]
+[<strong>-engine id</strong>]
+[<strong>-tlsextdebug</strong>]
+[<strong>-no_ticket</strong>]
+[<strong>-id_prefix arg</strong>]
+[<strong>-rand file(s)</strong>]</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>s_server</strong> command implements a generic SSL/TLS server which listens
+for connections on a given port using SSL/TLS.</p>
+<p>
+</p>
+<hr />
+<h1><a name="options">OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item__2daccept_port"><strong>-accept port</strong></a></strong>
+
+<dd>
+<p>the TCP port to listen on for connections. If not specified 4433 is used.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dcontext_id"><strong>-context id</strong></a></strong>
+
+<dd>
+<p>sets the SSL context id. It can be given any string value. If this option
+is not present a default value will be used.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dcert_certname"><strong>-cert certname</strong></a></strong>
+
+<dd>
+<p>The certificate to use, most servers cipher suites require the use of a
+certificate and some require a certificate with a certain public key type:
+for example the DSS cipher suites require a certificate containing a DSS
+(DSA) key. If not specified then the filename ``server.pem'' will be used.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dcertform_format"><strong>-certform format</strong></a></strong>
+
+<dd>
+<p>The certificate format to use: DER or PEM. PEM is the default.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dkey_keyfile"><strong>-key keyfile</strong></a></strong>
+
+<dd>
+<p>The private key to use. If not specified then the certificate file will
+be used.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dkeyform_format"><strong>-keyform format</strong></a></strong>
+
+<dd>
+<p>The private format to use: DER or PEM. PEM is the default.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpass_arg"><strong>-pass arg</strong></a></strong>
+
+<dd>
+<p>the private key password source. For more information about the format of <strong>arg</strong>
+see the <strong>PASS PHRASE ARGUMENTS</strong> section in <a href="../apps/openssl.html">openssl</a>.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2ddcert_filename_2c__2ddkey_keyname"><strong>-dcert filename</strong>, <strong>-dkey keyname</strong></a></strong>
+
+<dd>
+<p>specify an additional certificate and private key, these behave in the
+same manner as the <strong>-cert</strong> and <strong>-key</strong> options except there is no default
+if they are not specified (no additional certificate and key is used). As
+noted above some cipher suites require a certificate containing a key of
+a certain type. Some cipher suites need a certificate carrying an RSA key
+and some a DSS (DSA) key. By using RSA and DSS certificates and keys
+a server can support clients which only support RSA or DSS cipher suites
+by using an appropriate certificate.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2ddcertform_format_2c__2ddkeyform_format_2c__2ddp"><strong>-dcertform format</strong>, <strong>-dkeyform format</strong>, <strong>-dpass arg</strong></a></strong>
+
+<dd>
+<p>addtional certificate and private key format and passphrase respectively.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dnocert"><strong>-nocert</strong></a></strong>
+
+<dd>
+<p>if this option is set then no certificate is used. This restricts the
+cipher suites available to the anonymous ones (currently just anonymous
+DH).</p>
+</dd>
+</li>
+<dt><strong><a name="item__2ddhparam_filename"><strong>-dhparam filename</strong></a></strong>
+
+<dd>
+<p>the DH parameter file to use. The ephemeral DH cipher suites generate keys
+using a set of DH parameters. If not specified then an attempt is made to
+load the parameters from the server certificate file. If this fails then
+a static set of parameters hard coded into the s_server program will be used.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dno_dhe"><strong>-no_dhe</strong></a></strong>
+
+<dd>
+<p>if this option is set then no DH parameters will be loaded effectively
+disabling the ephemeral DH cipher suites.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dno_tmp_rsa"><strong>-no_tmp_rsa</strong></a></strong>
+
+<dd>
+<p>certain export cipher suites sometimes use a temporary RSA key, this option
+disables temporary RSA key generation.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dverify_depth_2c__2dverify_depth"><strong>-verify depth</strong>, <strong>-Verify depth</strong></a></strong>
+
+<dd>
+<p>The verify depth to use. This specifies the maximum length of the
+client certificate chain and makes the server request a certificate from
+the client. With the <strong>-verify</strong> option a certificate is requested but the
+client does not have to send one, with the <strong>-Verify</strong> option the client
+must supply a certificate or an error occurs.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dcrl_check_2c__2dcrl_check_all"><strong>-crl_check</strong>, <strong>-crl_check_all</strong></a></strong>
+
+<dd>
+<p>Check the peer certificate has not been revoked by its CA.
+The <code>CRL(s)</code> are appended to the certificate file. With the <strong>-crl_check_all</strong>
+option all CRLs of all CAs in the chain are checked.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dcapath_directory"><strong>-CApath directory</strong></a></strong>
+
+<dd>
+<p>The directory to use for client certificate verification. This directory
+must be in ``hash format'', see <strong>verify</strong> for more information. These are
+also used when building the server certificate chain.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dcafile_file"><strong>-CAfile file</strong></a></strong>
+
+<dd>
+<p>A file containing trusted certificates to use during client authentication
+and to use when attempting to build the server certificate chain. The list
+is also used in the list of acceptable client CAs passed to the client when
+a certificate is requested.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dstate"><strong>-state</strong></a></strong>
+
+<dd>
+<p>prints out the SSL session states.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2ddebug"><strong>-debug</strong></a></strong>
+
+<dd>
+<p>print extensive debugging information including a hex dump of all traffic.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dmsg"><strong>-msg</strong></a></strong>
+
+<dd>
+<p>show all protocol messages with hex dump.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dnbio_test"><strong>-nbio_test</strong></a></strong>
+
+<dd>
+<p>tests non blocking I/O</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dnbio"><strong>-nbio</strong></a></strong>
+
+<dd>
+<p>turns on non blocking I/O</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dcrlf"><strong>-crlf</strong></a></strong>
+
+<dd>
+<p>this option translated a line feed from the terminal into CR+LF.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dquiet"><strong>-quiet</strong></a></strong>
+
+<dd>
+<p>inhibit printing of session and certificate information.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpsk_hint_hint"><strong>-psk_hint hint</strong></a></strong>
+
+<dd>
+<p>Use the PSK identity hint <strong>hint</strong> when using a PSK cipher suite.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpsk_key"><strong>-psk key</strong></a></strong>
+
+<dd>
+<p>Use the PSK key <strong>key</strong> when using a PSK cipher suite. The key is
+given as a hexadecimal number without leading 0x, for example -psk
+1a2b3c4d.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dssl2_2c__2dssl3_2c__2dtls1_2c__2dno_ssl2_2c__2d"><strong>-ssl2</strong>, <strong>-ssl3</strong>, <strong>-tls1</strong>, <strong>-no_ssl2</strong>, <strong>-no_ssl3</strong>, <strong>-no_tls1</strong></a></strong>
+
+<dd>
+<p>these options disable the use of certain SSL or TLS protocols. By default
+the initial handshake uses a method which should be compatible with all
+servers and permit them to use SSL v3, SSL v2 or TLS as appropriate.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dbugs"><strong>-bugs</strong></a></strong>
+
+<dd>
+<p>there are several known bug in SSL and TLS implementations. Adding this
+option enables various workarounds.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dhack"><strong>-hack</strong></a></strong>
+
+<dd>
+<p>this option enables a further workaround for some some early Netscape
+SSL code (?).</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dcipher_cipherlist"><strong>-cipher cipherlist</strong></a></strong>
+
+<dd>
+<p>this allows the cipher list used by the server to be modified.  When
+the client sends a list of supported ciphers the first client cipher
+also included in the server list is used. Because the client specifies
+the preference order, the order of the server cipherlist irrelevant. See
+the <strong>ciphers</strong> command for more information.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dtlsextdebug"><strong>-tlsextdebug</strong></a></strong>
+
+<dd>
+<p>print out a hex dump of any TLS extensions received from the server.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dno_ticket"><strong>-no_ticket</strong></a></strong>
+
+<dd>
+<p>disable RFC4507bis session ticket support.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dwww"><strong>-www</strong></a></strong>
+
+<dd>
+<p>sends a status message back to the client when it connects. This includes
+lots of information about the ciphers used and various session parameters.
+The output is in HTML format so this option will normally be used with a
+web browser.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dwww"><strong>-WWW</strong></a></strong>
+
+<dd>
+<p>emulates a simple web server. Pages will be resolved relative to the
+current directory, for example if the URL <a href="https://myhost/page.html">https://myhost/page.html</a> is
+requested the file ./page.html will be loaded.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dhttp"><strong>-HTTP</strong></a></strong>
+
+<dd>
+<p>emulates a simple web server. Pages will be resolved relative to the
+current directory, for example if the URL <a href="https://myhost/page.html">https://myhost/page.html</a> is
+requested the file ./page.html will be loaded. The files loaded are
+assumed to contain a complete and correct HTTP response (lines that
+are part of the HTTP response line and headers must end with CRLF).</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dengine_id"><strong>-engine id</strong></a></strong>
+
+<dd>
+<p>specifying an engine (by its unique <strong>id</strong> string) will cause <strong>s_server</strong>
+to attempt to obtain a functional reference to the specified engine,
+thus initialising it if needed. The engine will then be set as the default
+for all available algorithms.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2did_prefix_arg"><strong>-id_prefix arg</strong></a></strong>
+
+<dd>
+<p>generate SSL/TLS session IDs prefixed by <strong>arg</strong>. This is mostly useful
+for testing any SSL/TLS code (eg. proxies) that wish to deal with multiple
+servers, when each of which might be generating a unique range of session
+IDs (eg. with a certain prefix).</p>
+</dd>
+</li>
+<dt><strong><a name="item_file"><strong>-rand file(s)</strong></a></strong>
+
+<dd>
+<p>a file or files containing random data used to seed the random number
+generator, or an EGD socket (see <a href="../crypto/RAND_egd.html">RAND_egd</a>).
+Multiple files can be specified separated by a OS-dependent character.
+The separator is <strong>;</strong> for MS-Windows, <strong>,</strong> for OpenVMS, and <strong>:</strong> for
+all others.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="connected_commands">CONNECTED COMMANDS</a></h1>
+<p>If a connection request is established with an SSL client and neither the
+<strong>-www</strong> nor the <strong>-WWW</strong> option has been used then normally any data received
+from the client is displayed and any key presses will be sent to the client.</p>
+<p>Certain single letter commands are also recognized which perform special
+operations: these are listed below.</p>
+<dl>
+<dt><strong><a name="item_q"><strong>q</strong></a></strong>
+
+<dd>
+<p>end the current SSL connection but still accept new connections.</p>
+</dd>
+</li>
+<dt><strong><a name="item_q"><strong>Q</strong></a></strong>
+
+<dd>
+<p>end the current SSL connection and exit.</p>
+</dd>
+</li>
+<dt><strong><a name="item_r"><strong>r</strong></a></strong>
+
+<dd>
+<p>renegotiate the SSL session.</p>
+</dd>
+</li>
+<dt><strong><a name="item_r"><strong>R</strong></a></strong>
+
+<dd>
+<p>renegotiate the SSL session and request a client certificate.</p>
+</dd>
+</li>
+<dt><strong><a name="item_p"><strong>P</strong></a></strong>
+
+<dd>
+<p>send some plain text down the underlying TCP connection: this should
+cause the client to disconnect due to a protocol violation.</p>
+</dd>
+</li>
+<dt><strong><a name="item_s"><strong>S</strong></a></strong>
+
+<dd>
+<p>print out some session cache status information.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p><strong>s_server</strong> can be used to debug SSL clients. To accept connections from
+a web browser the command:</p>
+<pre>
+ openssl s_server -accept 443 -www</pre>
+<p>can be used for example.</p>
+<p>Most web browsers (in particular Netscape and MSIE) only support RSA cipher
+suites, so they cannot connect to servers which don't use a certificate
+carrying an RSA key or a version of OpenSSL with RSA disabled.</p>
+<p>Although specifying an empty list of CAs when requesting a client certificate
+is strictly speaking a protocol violation, some SSL clients interpret this to
+mean any CA is acceptable. This is useful for debugging purposes.</p>
+<p>The session parameters can printed out using the <strong>sess_id</strong> program.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>Because this program has a lot of options and also because some of
+the techniques used are rather old, the C source of s_server is rather
+hard to read and not a model of how things should be done. A typical
+SSL server program would be much simpler.</p>
+<p>The output of common ciphers is wrong: it just gives the list of ciphers that
+OpenSSL recognizes and the client supports.</p>
+<p>There should be a way for the <strong>s_server</strong> program to print out details of any
+unknown cipher suites a client says it supports.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../apps/sess_id.html">sess_id</a>, <a href="../apps/s_client.html">s_client</a>, <a href="../apps/ciphers.html">ciphers</a></p>
+
+</body>
+
+</html>

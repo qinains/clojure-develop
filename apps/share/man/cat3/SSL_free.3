@@ -1,0 +1,39 @@
+SSL_free(3)                         OpenSSL                        SSL_free(3)
+
+
+
+NNAAMMEE
+       SSL_free - free an allocated SSL structure
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        void SSL_free(SSL *ssl);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___f_r_e_e_(_) decrements the reference count of ssssll, and removes the SSL
+       structure pointed to by ssssll and frees up the allocated memory if the
+       reference count has reached 0.
+
+NNOOTTEESS
+       _S_S_L___f_r_e_e_(_) also calls the _f_r_e_e_(_)ing procedures for indirectly affected
+       items, if applicable: the buffering BIO, the read and write BIOs,
+       cipher lists specially created for this ssssll, the SSSSLL__SSEESSSSIIOONN.  Do not
+       explicitly free these indirectly freed up items before or after calling
+       _S_S_L___f_r_e_e_(_), as trying to free things twice may lead to program failure.
+
+       The ssl session has reference counts from two users: the SSL object,
+       for which the reference count is removed by _S_S_L___f_r_e_e_(_) and the internal
+       session cache. If the session is considered bad, because _S_S_L___s_h_u_t_-
+       _d_o_w_n(3) was not called for the connection and _S_S_L___s_e_t___s_h_u_t_d_o_w_n(3) was
+       not used to set the SSL_SENT_SHUTDOWN state, the session will also be
+       removed from the session cache as required by RFC2246.
+
+RREETTUURRNN VVAALLUUEESS
+       _S_S_L___f_r_e_e_(_) does not provide diagnostic information.
+
+       _S_S_L___n_e_w(3), _S_S_L___c_l_e_a_r(3), _S_S_L___s_h_u_t_d_o_w_n(3), _S_S_L___s_e_t___s_h_u_t_d_o_w_n(3), _s_s_l(3)
+
+
+
+1.0.0g                            2009-02-14                       SSL_free(3)

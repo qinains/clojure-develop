@@ -1,0 +1,246 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>rsa - RSA key processing tool</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#command_options">COMMAND OPTIONS</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>rsa - RSA key processing tool</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>openssl</strong> <strong>rsa</strong>
+[<strong>-inform PEM|NET|DER</strong>]
+[<strong>-outform PEM|NET|DER</strong>]
+[<strong>-in filename</strong>]
+[<strong>-passin arg</strong>]
+[<strong>-out filename</strong>]
+[<strong>-passout arg</strong>]
+[<strong>-sgckey</strong>]
+[<strong>-des</strong>]
+[<strong>-des3</strong>]
+[<strong>-idea</strong>]
+[<strong>-text</strong>]
+[<strong>-noout</strong>]
+[<strong>-modulus</strong>]
+[<strong>-check</strong>]
+[<strong>-pubin</strong>]
+[<strong>-pubout</strong>]
+[<strong>-engine id</strong>]</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>rsa</strong> command processes RSA keys. They can be converted between various
+forms and their components printed out. <strong>Note</strong> this command uses the
+traditional SSLeay compatible format for private key encryption: newer
+applications should use the more secure PKCS#8 format using the <strong>pkcs8</strong>
+utility.</p>
+<p>
+</p>
+<hr />
+<h1><a name="command_options">COMMAND OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item__2dinform_der_7cnet_7cpem"><strong>-inform DER|NET|PEM</strong></a></strong>
+
+<dd>
+<p>This specifies the input format. The <strong>DER</strong> option uses an ASN1 DER encoded
+form compatible with the PKCS#1 RSAPrivateKey or SubjectPublicKeyInfo format.
+The <strong>PEM</strong> form is the default format: it consists of the <strong>DER</strong> format base64
+encoded with additional header and footer lines. On input PKCS#8 format private
+keys are also accepted. The <strong>NET</strong> form is a format is described in the <strong>NOTES</strong>
+section.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2doutform_der_7cnet_7cpem"><strong>-outform DER|NET|PEM</strong></a></strong>
+
+<dd>
+<p>This specifies the output format, the options have the same meaning as the 
+<strong>-inform</strong> option.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2din_filename"><strong>-in filename</strong></a></strong>
+
+<dd>
+<p>This specifies the input filename to read a key from or standard input if this
+option is not specified. If the key is encrypted a pass phrase will be
+prompted for.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpassin_arg"><strong>-passin arg</strong></a></strong>
+
+<dd>
+<p>the input file password source. For more information about the format of <strong>arg</strong>
+see the <strong>PASS PHRASE ARGUMENTS</strong> section in <a href="../apps/openssl.html">openssl</a>.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dout_filename"><strong>-out filename</strong></a></strong>
+
+<dd>
+<p>This specifies the output filename to write a key to or standard output if this
+option is not specified. If any encryption options are set then a pass phrase
+will be prompted for. The output filename should <strong>not</strong> be the same as the input
+filename.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpassout_password"><strong>-passout password</strong></a></strong>
+
+<dd>
+<p>the output file password source. For more information about the format of <strong>arg</strong>
+see the <strong>PASS PHRASE ARGUMENTS</strong> section in <a href="../apps/openssl.html">openssl</a>.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dsgckey"><strong>-sgckey</strong></a></strong>
+
+<dd>
+<p>use the modified NET algorithm used with some versions of Microsoft IIS and SGC
+keys.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2ddes_7c_2ddes3_7c_2didea"><strong>-des|-des3|-idea</strong></a></strong>
+
+<dd>
+<p>These options encrypt the private key with the DES, triple DES, or the 
+IDEA ciphers respectively before outputting it. A pass phrase is prompted for.
+If none of these options is specified the key is written in plain text. This
+means that using the <strong>rsa</strong> utility to read in an encrypted key with no
+encryption option can be used to remove the pass phrase from a key, or by
+setting the encryption options it can be use to add or change the pass phrase.
+These options can only be used with PEM format output files.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dtext"><strong>-text</strong></a></strong>
+
+<dd>
+<p>prints out the various public or private key components in
+plain text in addition to the encoded version.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dnoout"><strong>-noout</strong></a></strong>
+
+<dd>
+<p>this option prevents output of the encoded version of the key.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dmodulus"><strong>-modulus</strong></a></strong>
+
+<dd>
+<p>this option prints out the value of the modulus of the key.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dcheck"><strong>-check</strong></a></strong>
+
+<dd>
+<p>this option checks the consistency of an RSA private key.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpubin"><strong>-pubin</strong></a></strong>
+
+<dd>
+<p>by default a private key is read from the input file: with this
+option a public key is read instead.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpubout"><strong>-pubout</strong></a></strong>
+
+<dd>
+<p>by default a private key is output: with this option a public
+key will be output instead. This option is automatically set if
+the input is a public key.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dengine_id"><strong>-engine id</strong></a></strong>
+
+<dd>
+<p>specifying an engine (by its unique <strong>id</strong> string) will cause <strong>rsa</strong>
+to attempt to obtain a functional reference to the specified engine,
+thus initialising it if needed. The engine will then be set as the default
+for all available algorithms.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>The PEM private key format uses the header and footer lines:</p>
+<pre>
+ -----BEGIN RSA PRIVATE KEY-----
+ -----END RSA PRIVATE KEY-----</pre>
+<p>The PEM public key format uses the header and footer lines:</p>
+<pre>
+ -----BEGIN PUBLIC KEY-----
+ -----END PUBLIC KEY-----</pre>
+<p>The <strong>NET</strong> form is a format compatible with older Netscape servers
+and Microsoft IIS .key files, this uses unsalted RC4 for its encryption.
+It is not very secure and so should only be used when necessary.</p>
+<p>Some newer version of IIS have additional data in the exported .key
+files. To use these with the utility, view the file with a binary editor
+and look for the string ``private-key'', then trace back to the byte
+sequence 0x30, 0x82 (this is an ASN1 SEQUENCE). Copy all the data
+from this point onwards to another file and use that as the input
+to the <strong>rsa</strong> utility with the <strong>-inform NET</strong> option. If you get
+an error after entering the password try the <strong>-sgckey</strong> option.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>To remove the pass phrase on an RSA private key:</p>
+<pre>
+ openssl rsa -in key.pem -out keyout.pem</pre>
+<p>To encrypt a private key using triple DES:</p>
+<pre>
+ openssl rsa -in key.pem -des3 -out keyout.pem</pre>
+<p>To convert a private key from PEM to DER format:</p>
+<pre>
+ openssl rsa -in key.pem -outform DER -out keyout.der</pre>
+<p>To print out the components of a private key to standard output:</p>
+<pre>
+ openssl rsa -in key.pem -text -noout</pre>
+<p>To just output the public part of a private key:</p>
+<pre>
+ openssl rsa -in key.pem -pubout -out pubkey.pem</pre>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>The command line password arguments don't currently work with
+<strong>NET</strong> format.</p>
+<p>There should be an option that automatically handles .key files,
+without having to manually edit them.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../apps/pkcs8.html">pkcs8</a>, <a href="../apps/dsa.html">dsa</a>, <a href="../apps/genrsa.html">genrsa</a>,
+<a href="../apps/gendsa.html">gendsa</a></p>
+
+</body>
+
+</html>

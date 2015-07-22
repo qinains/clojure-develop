@@ -1,0 +1,39 @@
+SSL_get_ciphers(3)                  OpenSSL                 SSL_get_ciphers(3)
+
+
+
+NNAAMMEE
+       SSL_get_ciphers, SSL_get_cipher_list - get list of available
+       SSL_CIPHERs
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        STACK_OF(SSL_CIPHER) *SSL_get_ciphers(const SSL *ssl);
+        const char *SSL_get_cipher_list(const SSL *ssl, int priority);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___g_e_t___c_i_p_h_e_r_s_(_) returns the stack of available SSL_CIPHERs for ssssll,
+       sorted by preference. If ssssll is NULL or no ciphers are available, NULL
+       is returned.
+
+       _S_S_L___g_e_t___c_i_p_h_e_r___l_i_s_t_(_) returns a pointer to the name of the SSL_CIPHER
+       listed for ssssll with pprriioorriittyy. If ssssll is NULL, no ciphers are available,
+       or there are less ciphers than pprriioorriittyy available, NULL is returned.
+
+NNOOTTEESS
+       The details of the ciphers obtained by _S_S_L___g_e_t___c_i_p_h_e_r_s_(_) can be
+       obtained using the _S_S_L___C_I_P_H_E_R___g_e_t___n_a_m_e(3) family of functions.
+
+       Call _S_S_L___g_e_t___c_i_p_h_e_r___l_i_s_t_(_) with pprriioorriittyy starting from 0 to obtain the
+       sorted list of available ciphers, until NULL is returned.
+
+RREETTUURRNN VVAALLUUEESS
+       See DESCRIPTION
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___C_T_X___s_e_t___c_i_p_h_e_r___l_i_s_t(3), _S_S_L___C_I_P_H_E_R___g_e_t___n_a_m_e(3)
+
+
+
+1.0.0g                            2005-03-30                SSL_get_ciphers(3)

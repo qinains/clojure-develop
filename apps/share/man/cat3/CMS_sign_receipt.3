@@ -1,0 +1,42 @@
+CMS_sign_receipt(3)                 OpenSSL                CMS_sign_receipt(3)
+
+
+
+NNAAMMEE
+        CMS_sign_receipt - create a CMS signed receipt
+
+SSYYNNOOPPSSIISS
+        #include <openssl/cms.h>
+
+        CMS_ContentInfo *CMS_sign_receipt(CMS_SignerInfo *si, X509 *signcert, EVP_PKEY *pkey, STACK_OF(X509) *certs, unsigned int flags);
+
+DDEESSCCRRIIPPTTIIOONN
+       _C_M_S___s_i_g_n___r_e_c_e_i_p_t_(_) creates and returns a CMS signed receipt structure.
+       ssii is the CCMMSS__SSiiggnneerrIInnffoo structure containing the signed receipt
+       request.  ssiiggnncceerrtt is the certificate to sign with, ppkkeeyy is the corre-
+       sponding private key.  cceerrttss is an optional additional set of certifi-
+       cates to include in the CMS structure (for example any intermediate CAs
+       in the chain).
+
+       ffllaaggss is an optional set of flags.
+
+NNOOTTEESS
+       This functions behaves in a similar way to _C_M_S___s_i_g_n_(_) except the flag
+       values CCMMSS__DDEETTAACCHHEEDD, CCMMSS__BBIINNAARRYY, CCMMSS__NNOOAATTTTRR, CCMMSS__TTEEXXTT and CCMMSS__SSTTRREEAAMM
+       are not supported since they do not make sense in the context of signed
+       receipts.
+
+RREETTUURRNN VVAALLUUEESS
+       _C_M_S___s_i_g_n___r_e_c_e_i_p_t_(_) returns either a valid CMS_ContentInfo structure or
+       NULL if an error occurred.  The error can be obtained from
+       _E_R_R___g_e_t___e_r_r_o_r(3).
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _C_M_S___v_e_r_i_f_y___r_e_c_e_i_p_t(3), _C_M_S___s_i_g_n(3)
+
+HHIISSTTOORRYY
+       _C_M_S___s_i_g_n___r_e_c_e_i_p_t_(_) was added to OpenSSL 0.9.8
+
+
+
+1.0.0g                            2008-04-11               CMS_sign_receipt(3)

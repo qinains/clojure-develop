@@ -1,0 +1,94 @@
+CMS_encrypt(3)                      OpenSSL                     CMS_encrypt(3)
+
+
+
+NNAAMMEE
+        CMS_encrypt - create a CMS envelopedData structure
+
+SSYYNNOOPPSSIISS
+        #include <openssl/cms.h>
+
+        CMS_ContentInfo *CMS_encrypt(STACK_OF(X509) *certs, BIO *in, const EVP_CIPHER *cipher, unsigned int flags);
+
+DDEESSCCRRIIPPTTIIOONN
+       _C_M_S___e_n_c_r_y_p_t_(_) creates and returns a CMS EnvelopedData structure. cceerrttss
+       is a list of recipient certificates. iinn is the content to be encrypted.
+       cciipphheerr is the symmetric cipher to use. ffllaaggss is an optional set of
+       flags.
+
+NNOOTTEESS
+       Only certificates carrying RSA keys are supported so the recipient cer-
+       tificates supplied to this function must all contain RSA public keys,
+       though they do not have to be signed using the RSA algorithm.
+
+       _E_V_P___d_e_s___e_d_e_3___c_b_c_(_) (triple DES) is the algorithm of choice for S/MIME
+       use because most clients will support it.
+
+       The algorithm passed in the cciipphheerr parameter must support ASN1 encoding
+       of its parameters.
+
+       Many browsers implement a "sign and encrypt" option which is simply an
+       S/MIME envelopedData containing an S/MIME signed message. This can be
+       readily produced by storing the S/MIME signed message in a memory BIO
+       and passing it to _C_M_S___e_n_c_r_y_p_t_(_).
+
+       The following flags can be passed in the ffllaaggss parameter.
+
+       If the CCMMSS__TTEEXXTT flag is set MIME headers for type tteexxtt//ppllaaiinn are
+       prepended to the data.
+
+       Normally the supplied content is translated into MIME canonical format
+       (as required by the S/MIME specifications) if CCMMSS__BBIINNAARRYY is set no
+       translation occurs. This option should be used if the supplied data is
+       in binary format otherwise the translation will corrupt it. If
+       CCMMSS__BBIINNAARRYY is set then CCMMSS__TTEEXXTT is ignored.
+
+       OpenSSL will by default identify recipient certificates using issuer
+       name and serial number. If CCMMSS__UUSSEE__KKEEYYIIDD is set it will use the subject
+       key identifier value instead. An error occurs if all recipient certifi-
+       cates do not have a subject key identifier extension.
+
+       If the CCMMSS__SSTTRREEAAMM flag is set a partial CCMMSS__CCoonntteennttIInnffoo structure is
+       returned suitable for streaming I/O: no data is read from the BIO iinn.
+
+       If the CCMMSS__PPAARRTTIIAALL flag is set a partial CCMMSS__CCoonntteennttIInnffoo structure is
+       returned to which additional recipients and attributes can be added
+       before finalization.
+
+       The data being encrypted is included in the CMS_ContentInfo structure,
+       unless CCMMSS__DDEETTAACCHHEEDD is set in which case it is omitted. This is rarely
+       used in practice and is not supported by _S_M_I_M_E___w_r_i_t_e___C_M_S_(_).
+
+NNOOTTEESS
+       If the flag CCMMSS__SSTTRREEAAMM is set the returned CCMMSS__CCoonntteennttIInnffoo structure is
+       nnoott complete and outputting its contents via a function that does not
+       properly finalize the CCMMSS__CCoonntteennttIInnffoo structure will give unpredictable
+       results.
+
+       Several functions including _S_M_I_M_E___w_r_i_t_e___C_M_S_(_), _i_2_d___C_M_S___b_i_o___s_t_r_e_a_m_(_),
+       _P_E_M___w_r_i_t_e___b_i_o___C_M_S___s_t_r_e_a_m_(_) finalize the structure. Alternatively final-
+       ization can be performed by obtaining the streaming ASN1 BBIIOO directly
+       using _B_I_O___n_e_w___C_M_S_(_).
+
+       The recipients specified in cceerrttss use a CMS KeyTransRecipientInfo info
+       structure. KEKRecipientInfo is also supported using the flag CCMMSS__PPAARR--
+       TTIIAALL and _C_M_S___a_d_d_0___r_e_c_i_p_i_e_n_t___k_e_y_(_).
+
+       The parameter cceerrttss may be NULL if CCMMSS__PPAARRTTIIAALL is set and recipients
+       added later using _C_M_S___a_d_d_1___r_e_c_i_p_i_e_n_t___c_e_r_t_(_) or _C_M_S___a_d_d_0___r_e_c_i_p_i_-
+       _e_n_t___k_e_y_(_).
+
+RREETTUURRNN VVAALLUUEESS
+       _C_M_S___e_n_c_r_y_p_t_(_) returns either a CMS_ContentInfo structure or NULL if an
+       error occurred. The error can be obtained from _E_R_R___g_e_t___e_r_r_o_r(3).
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _C_M_S___d_e_c_r_y_p_t(3)
+
+HHIISSTTOORRYY
+       _C_M_S___d_e_c_r_y_p_t_(_) was added to OpenSSL 0.9.8 The CCMMSS__SSTTRREEAAMM flag was first
+       supported in OpenSSL 1.0.0.
+
+
+
+1.0.0g                            2009-10-01                    CMS_encrypt(3)

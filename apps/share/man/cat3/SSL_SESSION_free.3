@@ -1,0 +1,51 @@
+SSL_SESSION_free(3)                 OpenSSL                SSL_SESSION_free(3)
+
+
+
+NNAAMMEE
+       SSL_SESSION_free - free an allocated SSL_SESSION structure
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        void SSL_SESSION_free(SSL_SESSION *session);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___S_E_S_S_I_O_N___f_r_e_e_(_) decrements the reference count of sseessssiioonn and
+       removes the SSSSLL__SSEESSSSIIOONN structure pointed to by sseessssiioonn and frees up
+       the allocated memory, if the reference count has reached 0.
+
+NNOOTTEESS
+       SSL_SESSION objects are allocated, when a TLS/SSL handshake operation
+       is successfully completed. Depending on the settings, see
+       _S_S_L___C_T_X___s_e_t___s_e_s_s_i_o_n___c_a_c_h_e___m_o_d_e(3), the SSL_SESSION objects are inter-
+       nally referenced by the SSL_CTX and linked into its session cache. SSL
+       objects may be using the SSL_SESSION object; as a session may be
+       reused, several SSL objects may be using one SSL_SESSION object at the
+       same time. It is therefore crucial to keep the reference count (usage
+       information) correct and not delete a SSL_SESSION object that is still
+       used, as this may lead to program failures due to dangling pointers.
+       These failures may also appear delayed, e.g.  when an SSL_SESSION
+       object was completely freed as the reference count incorrectly became
+       0, but it is still referenced in the internal session cache and the
+       cache list is processed during a _S_S_L___C_T_X___f_l_u_s_h___s_e_s_s_i_o_n_s(3) operation.
+
+       _S_S_L___S_E_S_S_I_O_N___f_r_e_e_(_) must only be called for SSL_SESSION objects, for
+       which the reference count was explicitly incremented (e.g.  by calling
+       _S_S_L___g_e_t_1___s_e_s_s_i_o_n_(_), see _S_S_L___g_e_t___s_e_s_s_i_o_n(3)) or when the SSL_SESSION
+       object was generated outside a TLS handshake operation, e.g. by using
+       _d_2_i___S_S_L___S_E_S_S_I_O_N(3).  It must not be called on other SSL_SESSION
+       objects, as this would cause incorrect reference counts and therefore
+       program failures.
+
+RREETTUURRNN VVAALLUUEESS
+       _S_S_L___S_E_S_S_I_O_N___f_r_e_e_(_) does not provide diagnostic information.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___g_e_t___s_e_s_s_i_o_n(3), _S_S_L___C_T_X___s_e_t___s_e_s_s_i_o_n___c_a_c_h_e___m_o_d_e(3),
+       _S_S_L___C_T_X___f_l_u_s_h___s_e_s_s_i_o_n_s(3),
+        _d_2_i___S_S_L___S_E_S_S_I_O_N(3)
+
+
+
+1.0.0g                            2009-02-14               SSL_SESSION_free(3)

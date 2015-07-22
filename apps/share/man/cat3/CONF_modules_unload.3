@@ -1,0 +1,44 @@
+CONF_modules_free(3)                OpenSSL               CONF_modules_free(3)
+
+
+
+NNAAMMEE
+        CONF_modules_free, CONF_modules_finish, CONF_modules_unload -
+        OpenSSL configuration cleanup functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/conf.h>
+
+        void CONF_modules_free(void);
+        void CONF_modules_finish(void);
+        void CONF_modules_unload(int all);
+
+DDEESSCCRRIIPPTTIIOONN
+       _C_O_N_F___m_o_d_u_l_e_s___f_r_e_e_(_) closes down and frees up all memory allocated by
+       all configuration modules.
+
+       _C_O_N_F___m_o_d_u_l_e_s___f_i_n_i_s_h_(_) calls each configuration modules ffiinniisshh handler
+       to free up any configuration that module may have performed.
+
+       _C_O_N_F___m_o_d_u_l_e_s___u_n_l_o_a_d_(_) finishes and unloads configuration modules. If
+       aallll is set to 00 only modules loaded from DSOs will be unloads. If aallll
+       is 11 all modules, including builtin modules will be unloaded.
+
+NNOOTTEESS
+       Normally applications will only call _C_O_N_F___m_o_d_u_l_e_s___f_r_e_e_(_) at application
+       to tidy up any configuration performed.
+
+RREETTUURRNN VVAALLUUEE
+       None of the functions return a value.
+
+SSEEEE AALLSSOO
+       _c_o_n_f(5), _O_P_E_N_S_S_L___c_o_n_f_i_g(3), "_C_O_N_F___m_o_d_u_l_e_s___l_o_a_d___f_i_l_e(3), _C_O_N_F___m_o_d_-
+       _u_l_e_s___l_o_a_d___f_i_l_e(3)"
+
+HHIISSTTOORRYY
+       _C_O_N_F___m_o_d_u_l_e_s___f_r_e_e_(_), _C_O_N_F___m_o_d_u_l_e_s___u_n_l_o_a_d_(_), and _C_O_N_F___m_o_d_u_l_e_s___f_i_n_i_s_h_(_)
+       first appeared in OpenSSL 0.9.7.
+
+
+
+1.0.0g                            2006-12-21              CONF_modules_free(3)

@@ -1,0 +1,197 @@
+DJPEG(1)                                                              DJPEG(1)
+
+
+
+NNAAMMEE
+       djpeg - decompress a JPEG file to an image file
+
+SSYYNNOOPPSSIISS
+       ddjjppeegg [ _o_p_t_i_o_n_s ] [ _f_i_l_e_n_a_m_e ]
+
+DDEESSCCRRIIPPTTIIOONN
+       ddjjppeegg  decompresses  the  named  JPEG file, or the standard input if no
+       file is named, and produces an image file on the standard output.  PBM-
+       PLUS  (PPM/PGM),  BMP,  GIF, Targa, or RLE (Utah Raster Toolkit) output
+       format can be selected.  (RLE is supported only if the URT  library  is
+       available.)
+
+OOPPTTIIOONNSS
+       All  switch  names  may  be abbreviated; for example, --ggrraayyssccaallee may be
+       written --ggrraayy or --ggrr.  Most of the "basic" switches can be  abbreviated
+       to  as little as one letter.  Upper and lower case are equivalent (thus
+       --BBMMPP is the same as --bbmmpp).  British spellings are also accepted  (e.g.,
+       --ggrreeyyssccaallee), though for brevity these are not mentioned below.
+
+       The basic switches are:
+
+       --ccoolloorrss _N
+              Reduce  image  to  at most N colors.  This reduces the number of
+              colors used in the output image, so that it can be displayed  on
+              a  colormapped  display  or stored in a colormapped file format.
+              For example, if you have an 8-bit display, you'd need to  reduce
+              to 256 or fewer colors.
+
+       --qquuaannttiizzee _N
+              Same  as --ccoolloorrss.  --ccoolloorrss is the recommended name, --qquuaannttiizzee is
+              provided only for backwards compatibility.
+
+       --ffaasstt  Select recommended processing options for fast, low quality out-
+              put.   (The  default options are chosen for highest quality out-
+              put.)  Currently, this is  equivalent  to  --ddcctt  ffaasstt  --nnoossmmooootthh
+              --oonneeppaassss --ddiitthheerr oorrddeerreedd.
+
+       --ggrraayyssccaallee
+              Force  gray-scale output even if JPEG file is color.  Useful for
+              viewing on monochrome  displays;  also,  ddjjppeegg  runs  noticeably
+              faster in this mode.
+
+       --ssccaallee _M_/_N
+              Scale  the  output  image  by a factor M/N.  Currently supported
+              scale factors are M/N with all M from 1 to 16, where  N  is  the
+              source  DCT  size, which is 8 for baseline JPEG.  If the /N part
+              is omitted, then M specifies the DCT scaled size to  be  applied
+              on the given input.  For baseline JPEG this is equivalent to M/8
+              scaling, since the source DCT  size  for  baseline  JPEG  is  8.
+              Scaling  is handy if the image is larger than your screen; also,
+              ddjjppeegg runs much faster when scaling down the output.
+
+       --bbmmpp   Select BMP output format (Windows  flavor).   8-bit  colormapped
+              format  is  emitted if --ccoolloorrss or --ggrraayyssccaallee is specified, or if
+              the JPEG file is gray-scale; otherwise, 24-bit full-color format
+              is emitted.
+
+       --ggiiff   Select  GIF output format.  Since GIF does not support more than
+              256 colors, --ccoolloorrss 225566 is assumed (unless you specify a smaller
+              number of colors).
+
+       --ooss22   Select  BMP  output format (OS/2 1.x flavor).  8-bit colormapped
+              format is emitted if --ccoolloorrss or --ggrraayyssccaallee is specified,  or  if
+              the JPEG file is gray-scale; otherwise, 24-bit full-color format
+              is emitted.
+
+       --ppnnmm   Select PBMPLUS (PPM/PGM) output format (this is the default for-
+              mat).   PGM  is  emitted  if  the  JPEG file is gray-scale or if
+              --ggrraayyssccaallee is specified; otherwise PPM is emitted.
+
+       --rrllee   Select RLE output format.  (Requires URT library.)
+
+       --ttaarrggaa Select Targa output format.  Gray-scale format is emitted if the
+              JPEG  file  is  gray-scale or if --ggrraayyssccaallee is specified; other-
+              wise, colormapped format is emitted  if  --ccoolloorrss  is  specified;
+              otherwise, 24-bit full-color format is emitted.
+
+       Switches for advanced users:
+
+       --ddcctt iinntt
+              Use integer DCT method (default).
+
+       --ddcctt ffaasstt
+              Use fast integer DCT (less accurate).
+
+       --ddcctt ffllooaatt
+              Use  floating-point  DCT  method.   The  float  method  is  very
+              slightly more accurate than the int method, but is  much  slower
+              unless your machine has very fast floating-point hardware.  Also
+              note that results of the floating-point method may vary slightly
+              across  machines, while the integer methods should give the same
+              results everywhere.  The fast integer method is much less  accu-
+              rate than the other two.
+
+       --ddiitthheerr ffss
+              Use Floyd-Steinberg dithering in color quantization.
+
+       --ddiitthheerr oorrddeerreedd
+              Use ordered dithering in color quantization.
+
+       --ddiitthheerr nnoonnee
+              Do  not use dithering in color quantization.  By default, Floyd-
+              Steinberg dithering is applied when quantizing colors;  this  is
+              slow but usually produces the best results.  Ordered dither is a
+              compromise between speed and quality; no dithering is  fast  but
+              usually  looks  awful.   Note that these switches have no effect
+              unless color quantization is being done.  Ordered dither is only
+              available in --oonneeppaassss mode.
+
+       --mmaapp _f_i_l_e
+              Quantize  to  the colors used in the specified image file.  This
+              is useful for producing  multiple  files  with  identical  color
+              maps, or for forcing a predefined set of colors to be used.  The
+              _f_i_l_e must be a GIF or PPM file. This  option  overrides  --ccoolloorrss
+              and --oonneeppaassss.
+
+       --nnoossmmooootthh
+              Don't use high-quality upsampling.
+
+       --oonneeppaassss
+              Use  one-pass  instead of two-pass color quantization.  The one-
+              pass method is faster and needs less memory, but it  produces  a
+              lower-quality  image.   --oonneeppaassss  is ignored unless you also say
+              --ccoolloorrss _N.  Also, the one-pass method is always used  for  gray-
+              scale output (the two-pass method is no improvement then).
+
+       --mmaaxxmmeemmoorryy _N
+              Set  limit  for  amount  of  memory  to  use in processing large
+              images.  Value is in thousands of bytes, or millions of bytes if
+              "M"  is  attached  to  the number.  For example, --mmaaxx 44mm selects
+              4000000 bytes.  If more space is needed, temporary files will be
+              used.
+
+       --oouuttffiillee _n_a_m_e
+              Send output image to the named file, not to standard output.
+
+       --vveerrbboossee
+              Enable  debug printout.  More --vv's give more output.  Also, ver-
+              sion information is printed at startup.
+
+       --ddeebbuugg Same as --vveerrbboossee.
+
+EEXXAAMMPPLLEESS
+       This example decompresses the JPEG file foo.jpg, quantizes  it  to  256
+       colors, and saves the output in 8-bit BMP format in foo.bmp:
+
+              ddjjppeegg --ccoolloorrss 225566 --bbmmpp _f_o_o_._j_p_g >> _f_o_o_._b_m_p
+
+HHIINNTTSS
+       To  get  a  quick preview of an image, use the --ggrraayyssccaallee and/or --ssccaallee
+       switches.  --ggrraayyssccaallee --ssccaallee 11//88 is the fastest case.
+
+       Several options are available that trade  off  image  quality  to  gain
+       speed.  --ffaasstt turns on the recommended settings.
+
+       --ddcctt  ffaasstt and/or --nnoossmmooootthh gain speed at a small sacrifice in quality.
+       When producing a color-quantized image,  --oonneeppaassss  --ddiitthheerr  oorrddeerreedd  is
+       fast  but  much  lower quality than the default behavior.  --ddiitthheerr nnoonnee
+       may give acceptable results in two-pass mode, but is  seldom  tolerable
+       in one-pass mode.
+
+       If  you are fortunate enough to have very fast floating point hardware,
+       --ddcctt ffllooaatt may be even faster than --ddcctt ffaasstt.   But  on  most  machines
+       --ddcctt ffllooaatt is slower than --ddcctt iinntt; in this case it is not worth using,
+       because its theoretical accuracy advantage is too small to be  signifi-
+       cant in practice.
+
+EENNVVIIRROONNMMEENNTT
+       JJPPEEGGMMEEMM
+              If  this  environment  variable is set, its value is the default
+              memory limit.  The value  is  specified  as  described  for  the
+              --mmaaxxmmeemmoorryy  switch.   JJPPEEGGMMEEMM overrides the default value speci-
+              fied when the program was compiled, and itself is overridden  by
+              an explicit --mmaaxxmmeemmoorryy.
+
+SSEEEE AALLSSOO
+       ccjjppeegg(1), jjppeeggttrraann(1), rrddjjppggccoomm(1), wwrrjjppggccoomm(1)
+       ppppmm(5), ppggmm(5)
+       Wallace,  Gregory  K.   "The  JPEG Still Picture Compression Standard",
+       Communications of the ACM, April 1991 (vol. 34, no. 4), pp. 30-44.
+
+AAUUTTHHOORR
+       Independent JPEG Group
+
+BBUUGGSS
+       To avoid the Unisys LZW patent (now  expired),  ddjjppeegg  produces  uncom-
+       pressed GIF files.  These are larger than they should be, but are read-
+       able by standard GIF decoders.
+
+
+
+                               23 November 2013                       DJPEG(1)

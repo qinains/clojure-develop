@@ -1,0 +1,83 @@
+DSA_generate_parameters(3)          OpenSSL         DSA_generate_parameters(3)
+
+
+
+NNAAMMEE
+       DSA_generate_parameters - generate DSA parameters
+
+SSYYNNOOPPSSIISS
+        #include <openssl/dsa.h>
+
+        DSA *DSA_generate_parameters(int bits, unsigned char *seed,
+                       int seed_len, int *counter_ret, unsigned long *h_ret,
+                       void (*callback)(int, int, void *), void *cb_arg);
+
+DDEESSCCRRIIPPTTIIOONN
+       _D_S_A___g_e_n_e_r_a_t_e___p_a_r_a_m_e_t_e_r_s_(_) generates primes p and q and a generator g
+       for use in the DSA.
+
+       bbiittss is the length of the prime to be generated; the DSS allows a maxi-
+       mum of 1024 bits.
+
+       If sseeeedd is NNUULLLL or sseeeedd__lleenn < 20, the primes will be generated at ran-
+       dom. Otherwise, the seed is used to generate them. If the given seed
+       does not yield a prime q, a new random seed is chosen and placed at
+       sseeeedd.
+
+       _D_S_A___g_e_n_e_r_a_t_e___p_a_r_a_m_e_t_e_r_s_(_) places the iteration count in *ccoouunntteerr__rreett
+       and a counter used for finding a generator in *hh__rreett, unless these are
+       NNUULLLL.
+
+       A callback function may be used to provide feedback about the progress
+       of the key generation. If ccaallllbbaacckk is not NNUULLLL, it will be called as
+       follows:
+
+       +o   When a candidate for q is generated, ccaallllbbaacckk((00,, mm++++,, ccbb__aarrgg)) is
+           called (m is 0 for the first candidate).
+
+       +o   When a candidate for q has passed a test by trial division, ccaallll--
+           bbaacckk((11,, --11,, ccbb__aarrgg)) is called.  While a candidate for q is tested
+           by Miller-Rabin primality tests, ccaallllbbaacckk((11,, ii,, ccbb__aarrgg)) is called
+           in the outer loop (once for each witness that confirms that the
+           candidate may be prime); i is the loop counter (starting at 0).
+
+       +o   When a prime q has been found, ccaallllbbaacckk((22,, 00,, ccbb__aarrgg)) and ccaallll--
+           bbaacckk((33,, 00,, ccbb__aarrgg)) are called.
+
+       +o   Before a candidate for p (other than the first) is generated and
+           tested, ccaallllbbaacckk((00,, ccoouunntteerr,, ccbb__aarrgg)) is called.
+
+       +o   When a candidate for p has passed the test by trial division, ccaallll--
+           bbaacckk((11,, --11,, ccbb__aarrgg)) is called.  While it is tested by the Miller-
+           Rabin primality test, ccaallllbbaacckk((11,, ii,, ccbb__aarrgg)) is called in the outer
+           loop (once for each witness that confirms that the candidate may be
+           prime).  i is the loop counter (starting at 0).
+
+       +o   When p has been found, ccaallllbbaacckk((22,, 11,, ccbb__aarrgg)) is called.
+
+       +o   When the generator has been found, ccaallllbbaacckk((33,, 11,, ccbb__aarrgg)) is
+           called.
+
+RREETTUURRNN VVAALLUUEE
+       _D_S_A___g_e_n_e_r_a_t_e___p_a_r_a_m_e_t_e_r_s_(_) returns a pointer to the DSA structure, or
+       NNUULLLL if the parameter generation fails. The error codes can be obtained
+       by _E_R_R___g_e_t___e_r_r_o_r(3).
+
+BBUUGGSS
+       Seed lengths > 20 are not supported.
+
+SSEEEE AALLSSOO
+       _d_s_a(3), _E_R_R___g_e_t___e_r_r_o_r(3), _r_a_n_d(3), _D_S_A___f_r_e_e(3)
+
+HHIISSTTOORRYY
+       _D_S_A___g_e_n_e_r_a_t_e___p_a_r_a_m_e_t_e_r_s_(_) appeared in SSLeay 0.8. The ccbb__aarrgg argument
+       was added in SSLeay 0.9.0.  In versions up to OpenSSL 0.9.4, ccaallll--
+       bbaacckk((11,, ......)) was called in the inner loop of the Miller-Rabin test
+       whenever it reached the squaring step (the parameters to ccaallllbbaacckk did
+       not reveal how many witnesses had been tested); since OpenSSL 0.9.5,
+       ccaallllbbaacckk((11,, ......))  is called as in _B_N___i_s___p_r_i_m_e(3), i.e. once for each
+       witness.  =cut
+
+
+
+1.0.0g                            2002-09-25        DSA_generate_parameters(3)

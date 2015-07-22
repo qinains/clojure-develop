@@ -1,0 +1,53 @@
+PKCS7_decrypt(3)                    OpenSSL                   PKCS7_decrypt(3)
+
+
+
+NNAAMMEE
+       PKCS7_decrypt - decrypt content from a PKCS#7 envelopedData structure
+
+SSYYNNOOPPSSIISS
+        #include <openssl/pkcs7.h>
+
+        int PKCS7_decrypt(PKCS7 *p7, EVP_PKEY *pkey, X509 *cert, BIO *data, int flags);
+
+DDEESSCCRRIIPPTTIIOONN
+       _P_K_C_S_7___d_e_c_r_y_p_t_(_) extracts and decrypts the content from a PKCS#7
+       envelopedData structure. ppkkeeyy is the private key of the recipient, cceerrtt
+       is the recipients certificate, ddaattaa is a BIO to write the content to
+       and ffllaaggss is an optional set of flags.
+
+NNOOTTEESS
+       _O_p_e_n_S_S_L___a_d_d___a_l_l___a_l_g_o_r_i_t_h_m_s_(_) (or equivalent) should be called before
+       using this function or errors about unknown algorithms will occur.
+
+       Although the recipients certificate is not needed to decrypt the data
+       it is needed to locate the appropriate (of possible several) recipients
+       in the PKCS#7 structure.
+
+       The following flags can be passed in the ffllaaggss parameter.
+
+       If the PPKKCCSS77__TTEEXXTT flag is set MIME headers for type tteexxtt//ppllaaiinn are
+       deleted from the content. If the content is not of type tteexxtt//ppllaaiinn then
+       an error is returned.
+
+RREETTUURRNN VVAALLUUEESS
+       _P_K_C_S_7___d_e_c_r_y_p_t_(_) returns either 1 for success or 0 for failure.  The
+       error can be obtained from _E_R_R___g_e_t___e_r_r_o_r(3)
+
+BBUUGGSS
+       _P_K_C_S_7___d_e_c_r_y_p_t_(_) must be passed the correct recipient key and certifi-
+       cate. It would be better if it could look up the correct key and cer-
+       tificate from a database.
+
+       The lack of single pass processing and need to hold all data in memory
+       as mentioned in _P_K_C_S_7___s_i_g_n_(_) also applies to _P_K_C_S_7___v_e_r_i_f_y_(_).
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _P_K_C_S_7___e_n_c_r_y_p_t(3)
+
+HHIISSTTOORRYY
+       _P_K_C_S_7___d_e_c_r_y_p_t_(_) was added to OpenSSL 0.9.5
+
+
+
+1.0.0g                            2006-05-14                  PKCS7_decrypt(3)

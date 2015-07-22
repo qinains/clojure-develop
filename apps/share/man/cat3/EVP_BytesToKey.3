@@ -1,0 +1,60 @@
+EVP_BytesToKey(3)                   OpenSSL                  EVP_BytesToKey(3)
+
+
+
+NNAAMMEE
+       EVP_BytesToKey - password based encryption routine
+
+SSYYNNOOPPSSIISS
+        #include <openssl/evp.h>
+
+        int EVP_BytesToKey(const EVP_CIPHER *type,const EVP_MD *md,
+                              const unsigned char *salt,
+                              const unsigned char *data, int datal, int count,
+                              unsigned char *key,unsigned char *iv);
+
+DDEESSCCRRIIPPTTIIOONN
+       _E_V_P___B_y_t_e_s_T_o_K_e_y_(_) derives a key and IV from various parameters. ttyyppee is
+       the cipher to derive the key and IV for. mmdd is the message digest to
+       use.  The ssaalltt paramter is used as a salt in the derivation: it should
+       point to an 8 byte buffer or NULL if no salt is used. ddaattaa is a buffer
+       containing ddaattaall bytes which is used to derive the keying data. ccoouunntt
+       is the iteration count to use. The derived key and IV will be written
+       to kkeeyy and iivv respectively.
+
+NNOOTTEESS
+       A typical application of this function is to derive keying material for
+       an encryption algorithm from a password in the ddaattaa parameter.
+
+       Increasing the ccoouunntt parameter slows down the algorithm which makes it
+       harder for an attacker to peform a brute force attack using a large
+       number of candidate passwords.
+
+       If the total key and IV length is less than the digest length and MMDD55
+       is used then the derivation algorithm is compatible with PKCS#5 v1.5
+       otherwise a non standard extension is used to derive the extra data.
+
+       Newer applications should use more standard algorithms such as PKCS#5
+       v2.0 for key derivation.
+
+KKEEYY DDEERRIIVVAATTIIOONN AALLGGOORRIITTHHMM
+       The key and IV is derived by concatenating D_1, D_2, etc until enough
+       data is available for the key and IV. D_i is defined as:
+
+               D_i = HASH^count(D_(i-1) || data || salt)
+
+       where || denotes concatentaion, D_0 is empty, HASH is the digest algo-
+       rithm in use, HASH^1(data) is simply HASH(data), HASH^2(data) is
+       HASH(HASH(data)) and so on.
+
+       The initial bytes are used for the key and the subsequent bytes for the
+       IV.
+
+RREETTUURRNN VVAALLUUEESS
+       _E_V_P___B_y_t_e_s_T_o_K_e_y_(_) returns the size of the derived key in bytes.
+
+SSEEEE AALLSSOO
+       _e_v_p(3), _r_a_n_d(3), _E_V_P___E_n_c_r_y_p_t_I_n_i_t(3)
+
+HHIISSTTOORRYY
+1.0.0g                            2004-11-25                 EVP_BytesToKey(3)

@@ -1,0 +1,38 @@
+RSA_new(3)                          OpenSSL                         RSA_new(3)
+
+
+
+NNAAMMEE
+       RSA_new, RSA_free - allocate and free RSA objects
+
+SSYYNNOOPPSSIISS
+        #include <openssl/rsa.h>
+
+        RSA * RSA_new(void);
+
+        void RSA_free(RSA *rsa);
+
+DDEESSCCRRIIPPTTIIOONN
+       _R_S_A___n_e_w_(_) allocates and initializes an RRSSAA structure. It is equivalent
+       to calling RSA_new_method(NULL).
+
+       _R_S_A___f_r_e_e_(_) frees the RRSSAA structure and its components. The key is
+       erased before the memory is returned to the system.
+
+RREETTUURRNN VVAALLUUEESS
+       If the allocation fails, _R_S_A___n_e_w_(_) returns NNUULLLL and sets an error code
+       that can be obtained by _E_R_R___g_e_t___e_r_r_o_r(3). Otherwise it returns a
+       pointer to the newly allocated structure.
+
+       _R_S_A___f_r_e_e_(_) returns no value.
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _r_s_a(3), _R_S_A___g_e_n_e_r_a_t_e___k_e_y(3), _R_S_A___n_e_w___m_e_t_h_o_d(3)
+
+HHIISSTTOORRYY
+       _R_S_A___n_e_w_(_) and _R_S_A___f_r_e_e_(_) are available in all versions of SSLeay and
+       OpenSSL.
+
+
+
+1.0.0g                            2002-09-25                        RSA_new(3)

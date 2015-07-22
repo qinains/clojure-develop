@@ -1,0 +1,63 @@
+SSL_set_shutdown(3)                 OpenSSL                SSL_set_shutdown(3)
+
+
+
+NNAAMMEE
+       SSL_set_shutdown, SSL_get_shutdown - manipulate shutdown state of an
+       SSL connection
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        void SSL_set_shutdown(SSL *ssl, int mode);
+
+        int SSL_get_shutdown(const SSL *ssl);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___s_e_t___s_h_u_t_d_o_w_n_(_) sets the shutdown state of ssssll to mmooddee.
+
+       _S_S_L___g_e_t___s_h_u_t_d_o_w_n_(_) returns the shutdown mode of ssssll.
+
+NNOOTTEESS
+       The shutdown state of an ssl connection is a bitmask of:
+
+       0   No shutdown setting, yet.
+
+       SSL_SENT_SHUTDOWN
+           A "close notify" shutdown alert was sent to the peer, the connec-
+           tion is being considered closed and the session is closed and cor-
+           rect.
+
+       SSL_RECEIVED_SHUTDOWN
+           A shutdown alert was received form the peer, either a normal "close
+           notify" or a fatal error.
+
+       SSL_SENT_SHUTDOWN and SSL_RECEIVED_SHUTDOWN can be set at the same
+       time.
+
+       The shutdown state of the connection is used to determine the state of
+       the ssl session. If the session is still open, when _S_S_L___c_l_e_a_r(3) or
+       _S_S_L___f_r_e_e(3) is called, it is considered bad and removed according to
+       RFC2246.  The actual condition for a correctly closed session is
+       SSL_SENT_SHUTDOWN (according to the TLS RFC, it is acceptable to only
+       send the "close notify" alert but to not wait for the peer's answer,
+       when the underlying connection is closed).  _S_S_L___s_e_t___s_h_u_t_d_o_w_n_(_) can be
+       used to set this state without sending a close alert to the peer (see
+       _S_S_L___s_h_u_t_d_o_w_n(3)).
+
+       If a "close notify" was received, SSL_RECEIVED_SHUTDOWN will be set,
+       for setting SSL_SENT_SHUTDOWN the application must however still call
+       _S_S_L___s_h_u_t_d_o_w_n(3) or _S_S_L___s_e_t___s_h_u_t_d_o_w_n_(_) itself.
+
+RREETTUURRNN VVAALLUUEESS
+       _S_S_L___s_e_t___s_h_u_t_d_o_w_n_(_) does not return diagnostic information.
+
+       _S_S_L___g_e_t___s_h_u_t_d_o_w_n_(_) returns the current setting.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___s_h_u_t_d_o_w_n(3), _S_S_L___C_T_X___s_e_t___q_u_i_e_t___s_h_u_t_d_o_w_n(3), _S_S_L___c_l_e_a_r(3),
+       _S_S_L___f_r_e_e(3)
+
+
+
+1.0.0g                            2005-03-30               SSL_set_shutdown(3)

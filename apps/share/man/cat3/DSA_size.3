@@ -1,0 +1,31 @@
+DSA_size(3)                         OpenSSL                        DSA_size(3)
+
+
+
+NNAAMMEE
+       DSA_size - get DSA signature size
+
+SSYYNNOOPPSSIISS
+        #include <openssl/dsa.h>
+
+        int DSA_size(const DSA *dsa);
+
+DDEESSCCRRIIPPTTIIOONN
+       This function returns the size of an ASN.1 encoded DSA signature in
+       bytes. It can be used to determine how much memory must be allocated
+       for a DSA signature.
+
+       ddssaa-->>qq must not be NNUULLLL.
+
+RREETTUURRNN VVAALLUUEE
+       The size in bytes.
+
+SSEEEE AALLSSOO
+       _d_s_a(3), _D_S_A___s_i_g_n(3)
+
+HHIISSTTOORRYY
+       _D_S_A___s_i_z_e_(_) is available in all versions of SSLeay and OpenSSL.
+
+
+
+1.0.0g                            2002-08-05                       DSA_size(3)

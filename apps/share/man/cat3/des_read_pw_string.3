@@ -1,0 +1,55 @@
+ui_compat(3)                        OpenSSL                       ui_compat(3)
+
+
+
+NNAAMMEE
+       des_read_password, des_read_2passwords, des_read_pw_string, des_read_pw
+       - Compatibility user interface functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/des_old.h>
+
+        int des_read_password(DES_cblock *key,const char *prompt,int verify);
+        int des_read_2passwords(DES_cblock *key1,DES_cblock *key2,
+               const char *prompt,int verify);
+
+        int des_read_pw_string(char *buf,int length,const char *prompt,int verify);
+        int des_read_pw(char *buf,char *buff,int size,const char *prompt,int verify);
+
+DDEESSCCRRIIPPTTIIOONN
+       The DES library contained a few routines to prompt for passwords.
+       These aren't necessarely dependent on DES, and have therefore become
+       part of the UI compatibility library.
+
+       _d_e_s___r_e_a_d___p_w_(_) writes the string specified by _p_r_o_m_p_t to standard output
+       turns echo off and reads an input string from the terminal.  The string
+       is returned in _b_u_f, which must have spac for at least _s_i_z_e bytes.  If
+       _v_e_r_i_f_y is set, the user is asked for the password twice and unless the
+       two copies match, an error is returned.  The second password is stored
+       in _b_u_f_f, which must therefore also be at least _s_i_z_e bytes.  A return
+       code of -1 indicates a system error, 1 failure due to use interaction,
+       and 0 is success.  All other functions described here use _d_e_s___r_e_a_d___p_w_(_)
+       to do the work.
+
+       _d_e_s___r_e_a_d___p_w___s_t_r_i_n_g_(_) is a variant of _d_e_s___r_e_a_d___p_w_(_) that provides a buf-
+       fer for you if _v_e_r_i_f_y is set.
+
+       _d_e_s___r_e_a_d___p_a_s_s_w_o_r_d_(_) calls _d_e_s___r_e_a_d___p_w_(_) and converts the password to a
+       DES key by calling _D_E_S___s_t_r_i_n_g___t_o___k_e_y_(_); _d_e_s___r_e_a_d___2_p_a_s_s_w_o_r_d_(_) operates
+       in the same way as _d_e_s___r_e_a_d___p_a_s_s_w_o_r_d_(_) except that it generates two
+       keys by using the _D_E_S___s_t_r_i_n_g___t_o___2_k_e_y_(_) function.
+
+NNOOTTEESS
+       _d_e_s___r_e_a_d___p_w___s_t_r_i_n_g_(_) is available in the MIT Kerberos library as well,
+       and is also available under the name _E_V_P___r_e_a_d___p_w___s_t_r_i_n_g_(_).
+
+SSEEEE AALLSSOO
+       _u_i(3), _u_i___c_r_e_a_t_e(3)
+
+AAUUTTHHOORR
+       Richard Levitte (richard@levitte.org) for the OpenSSL project
+       (http://www.openssl.org).
+
+
+
+1.0.0g                            2006-05-14                      ui_compat(3)

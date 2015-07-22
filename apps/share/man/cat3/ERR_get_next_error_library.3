@@ -1,0 +1,52 @@
+ERR_load_strings(3)                 OpenSSL                ERR_load_strings(3)
+
+
+
+NNAAMMEE
+       ERR_load_strings, ERR_PACK, ERR_get_next_error_library - load arbitrary
+       error strings
+
+SSYYNNOOPPSSIISS
+        #include <openssl/err.h>
+
+        void ERR_load_strings(int lib, ERR_STRING_DATA str[]);
+
+        int ERR_get_next_error_library(void);
+
+        unsigned long ERR_PACK(int lib, int func, int reason);
+
+DDEESSCCRRIIPPTTIIOONN
+       _E_R_R___l_o_a_d___s_t_r_i_n_g_s_(_) registers error strings for library number lliibb.
+
+       ssttrr is an array of error string data:
+
+        typedef struct ERR_string_data_st
+        {
+               unsigned long error;
+               char *string;
+        } ERR_STRING_DATA;
+
+       The error code is generated from the library number and a function and
+       reason code: eerrrroorr = ERR_PACK(lliibb, ffuunncc, rreeaassoonn).  _E_R_R___P_A_C_K_(_) is a
+       macro.
+
+       The last entry in the array is {0,0}.
+
+       _E_R_R___g_e_t___n_e_x_t___e_r_r_o_r___l_i_b_r_a_r_y_(_) can be used to assign library numbers to
+       user libraries at runtime.
+
+RREETTUURRNN VVAALLUUEE
+       _E_R_R___l_o_a_d___s_t_r_i_n_g_s_(_) returns no value. _E_R_R___P_A_C_K_(_) return the error code.
+       _E_R_R___g_e_t___n_e_x_t___e_r_r_o_r___l_i_b_r_a_r_y_(_) returns a new library number.
+
+SSEEEE AALLSSOO
+       _e_r_r(3), _E_R_R___l_o_a_d___s_t_r_i_n_g_s(3)
+
+HHIISSTTOORRYY
+       _E_R_R___l_o_a_d___e_r_r_o_r___s_t_r_i_n_g_s_(_) and _E_R_R___P_A_C_K_(_) are available in all versions
+       of SSLeay and OpenSSL. _E_R_R___g_e_t___n_e_x_t___e_r_r_o_r___l_i_b_r_a_r_y_(_) was added in SSLeay
+       0.9.0.
+
+
+
+1.0.0g                            2000-02-24               ERR_load_strings(3)

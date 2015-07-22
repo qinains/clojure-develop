@@ -1,0 +1,37 @@
+CMS_final(3)                        OpenSSL                       CMS_final(3)
+
+
+
+NNAAMMEE
+        CMS_final - finalise a CMS_ContentInfo structure
+
+SSYYNNOOPPSSIISS
+        #include <openssl/cms.h>
+
+        int CMS_final(CMS_ContentInfo *cms, BIO *data, BIO *dcont, unsigned int flags);
+
+DDEESSCCRRIIPPTTIIOONN
+       _C_M_S___f_i_n_a_l_(_) finalises the structure ccmmss. It's purpose is to perform any
+       operations necessary on ccmmss (digest computation for example) and set
+       the appropriate fields. The parameter ddaattaa contains the content to be
+       processed. The ddccoonntt parameter contains a BIO to write content to after
+       processing: this is only used with detached data and will usually be
+       set to NULL.
+
+NNOOTTEESS
+       This function will normally be called when the CCMMSS__PPAARRTTIIAALL flag is
+       used. It should only be used when streaming is not performed because
+       the streaming I/O functions perform finalisation operations internally.
+
+RREETTUURRNN VVAALLUUEESS
+       _C_M_S___f_i_n_a_l_(_) returns 1 for success or 0 for failure.
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _C_M_S___s_i_g_n(3), _C_M_S___e_n_c_r_y_p_t(3)
+
+HHIISSTTOORRYY
+       _C_M_S___f_i_n_a_l_(_) was added to OpenSSL 0.9.8
+
+
+
+1.0.0g                            2008-04-11                      CMS_final(3)

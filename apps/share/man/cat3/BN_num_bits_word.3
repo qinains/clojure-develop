@@ -1,0 +1,53 @@
+BN_num_bytes(3)                     OpenSSL                    BN_num_bytes(3)
+
+
+
+NNAAMMEE
+       BN_num_bits, BN_num_bytes, BN_num_bits_word - get BIGNUM size
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bn.h>
+
+        int BN_num_bytes(const BIGNUM *a);
+
+        int BN_num_bits(const BIGNUM *a);
+
+        int BN_num_bits_word(BN_ULONG w);
+
+DDEESSCCRRIIPPTTIIOONN
+       _B_N___n_u_m___b_y_t_e_s_(_) returns the size of a BBIIGGNNUUMM in bytes.
+
+       _B_N___n_u_m___b_i_t_s___w_o_r_d_(_) returns the number of significant bits in a word.
+       If we take 0x00000432 as an example, it returns 11, not 16, not 32.
+       Basically, except for a zero, it returns _f_l_o_o_r_(_l_o_g_2_(_w_)_)_+_1.
+
+       _B_N___n_u_m___b_i_t_s_(_) returns the number of significant bits in a BBIIGGNNUUMM, fol-
+       lowing the same principle as _B_N___n_u_m___b_i_t_s___w_o_r_d_(_).
+
+       _B_N___n_u_m___b_y_t_e_s_(_) is a macro.
+
+RREETTUURRNN VVAALLUUEESS
+       The size.
+
+NNOOTTEESS
+       Some have tried using _B_N___n_u_m___b_i_t_s_(_) on individual numbers in RSA keys,
+       DH keys and DSA keys, and found that they don't always come up with the
+       number of bits they expected (something like 512, 1024, 2048, ...).
+       This is because generating a number with some specific number of bits
+       doesn't always set the highest bits, thereby making the number of _s_i_g_-
+       _n_i_f_i_c_a_n_t bits a little lower.  If you want to know the "key size" of
+       such a key, either use functions like _R_S_A___s_i_z_e_(_), _D_H___s_i_z_e_(_) and
+       _D_S_A___s_i_z_e_(_), or use _B_N___n_u_m___b_y_t_e_s_(_) and multiply with 8 (although there's
+       no real guarantee that will match the "key size", just a lot more prob-
+       ability).
+
+SSEEEE AALLSSOO
+       _b_n(3), _D_H___s_i_z_e(3), _D_S_A___s_i_z_e(3), _R_S_A___s_i_z_e(3)
+
+HHIISSTTOORRYY
+       _B_N___n_u_m___b_y_t_e_s_(_), _B_N___n_u_m___b_i_t_s_(_) and _B_N___n_u_m___b_i_t_s___w_o_r_d_(_) are available in
+       all versions of SSLeay and OpenSSL.
+
+
+
+1.0.0g                            2004-07-01                   BN_num_bytes(3)

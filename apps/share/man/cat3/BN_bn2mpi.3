@@ -1,0 +1,89 @@
+BN_bn2bin(3)                        OpenSSL                       BN_bn2bin(3)
+
+
+
+NNAAMMEE
+       BN_bn2bin, BN_bin2bn, BN_bn2hex, BN_bn2dec, BN_hex2bn, BN_dec2bn,
+       BN_print, BN_print_fp, BN_bn2mpi, BN_mpi2bn - format conversions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bn.h>
+
+        int BN_bn2bin(const BIGNUM *a, unsigned char *to);
+        BIGNUM *BN_bin2bn(const unsigned char *s, int len, BIGNUM *ret);
+
+        char *BN_bn2hex(const BIGNUM *a);
+        char *BN_bn2dec(const BIGNUM *a);
+        int BN_hex2bn(BIGNUM **a, const char *str);
+        int BN_dec2bn(BIGNUM **a, const char *str);
+
+        int BN_print(BIO *fp, const BIGNUM *a);
+        int BN_print_fp(FILE *fp, const BIGNUM *a);
+
+        int BN_bn2mpi(const BIGNUM *a, unsigned char *to);
+        BIGNUM *BN_mpi2bn(unsigned char *s, int len, BIGNUM *ret);
+
+DDEESSCCRRIIPPTTIIOONN
+       _B_N___b_n_2_b_i_n_(_) converts the absolute value of aa into big-endian form and
+       stores it at ttoo. ttoo must point to BN_num_bytes(aa) bytes of memory.
+
+       _B_N___b_i_n_2_b_n_(_) converts the positive integer in big-endian form of length
+       lleenn at ss into a BBIIGGNNUUMM and places it in rreett. If rreett is NULL, a new
+       BBIIGGNNUUMM is created.
+
+       _B_N___b_n_2_h_e_x_(_) and _B_N___b_n_2_d_e_c_(_) return printable strings containing the
+       hexadecimal and decimal encoding of aa respectively. For negative num-
+       bers, the string is prefaced with a leading '-'. The string must be
+       freed later using _O_P_E_N_S_S_L___f_r_e_e_(_).
+
+       _B_N___h_e_x_2_b_n_(_) converts the string ssttrr containing a hexadecimal number to
+       a BBIIGGNNUUMM and stores it in **bbnn. If *bbnn is NULL, a new BBIIGGNNUUMM is cre-
+       ated. If bbnn is NULL, it only computes the number's length in hexadeci-
+       mal digits. If the string starts with '-', the number is negative.
+       _B_N___d_e_c_2_b_n_(_) is the same using the decimal system.
+
+       _B_N___p_r_i_n_t_(_) and _B_N___p_r_i_n_t___f_p_(_) write the hexadecimal encoding of aa, with
+       a leading '-' for negative numbers, to the BBIIOO or FFIILLEE ffpp.
+
+       _B_N___b_n_2_m_p_i_(_) and _B_N___m_p_i_2_b_n_(_) convert BBIIGGNNUUMMs from and to a format that
+       consists of the number's length in bytes represented as a 4-byte big-
+       endian number, and the number itself in big-endian format, where the
+       most significant bit signals a negative number (the representation of
+       numbers with the MSB set is prefixed with null byte).
+
+       _B_N___b_n_2_m_p_i_(_) stores the representation of aa at ttoo, where ttoo must be
+       large enough to hold the result. The size can be determined by calling
+       BN_bn2mpi(aa, NULL).
+
+       _B_N___m_p_i_2_b_n_(_) converts the lleenn bytes long representation at ss to a BBIIGGNNUUMM
+       and stores it at rreett, or in a newly allocated BBIIGGNNUUMM if rreett is NULL.
+
+RREETTUURRNN VVAALLUUEESS
+       _B_N___b_n_2_b_i_n_(_) returns the length of the big-endian number placed at ttoo.
+       _B_N___b_i_n_2_b_n_(_) returns the BBIIGGNNUUMM, NULL on error.
+
+       _B_N___b_n_2_h_e_x_(_) and _B_N___b_n_2_d_e_c_(_) return a null-terminated string, or NULL on
+       error. _B_N___h_e_x_2_b_n_(_) and _B_N___d_e_c_2_b_n_(_) return the number's length in hexa-
+       decimal or decimal digits, and 0 on error.
+
+       _B_N___p_r_i_n_t___f_p_(_) and _B_N___p_r_i_n_t_(_) return 1 on success, 0 on write errors.
+
+       _B_N___b_n_2_m_p_i_(_) returns the length of the representation. _B_N___m_p_i_2_b_n_(_)
+       returns the BBIIGGNNUUMM, and NULL on error.
+
+       The error codes can be obtained by _E_R_R___g_e_t___e_r_r_o_r(3).
+
+SSEEEE AALLSSOO
+       _b_n(3), _E_R_R___g_e_t___e_r_r_o_r(3), _B_N___z_e_r_o(3), _A_S_N_1___I_N_T_E_G_E_R___t_o___B_N(3),
+       _B_N___n_u_m___b_y_t_e_s(3)
+
+HHIISSTTOORRYY
+       _B_N___b_n_2_b_i_n_(_), _B_N___b_i_n_2_b_n_(_), _B_N___p_r_i_n_t___f_p_(_) and _B_N___p_r_i_n_t_(_) are available in
+       all versions of SSLeay and OpenSSL.
+
+       _B_N___b_n_2_h_e_x_(_), _B_N___b_n_2_d_e_c_(_), _B_N___h_e_x_2_b_n_(_), _B_N___d_e_c_2_b_n_(_), _B_N___b_n_2_m_p_i_(_) and
+       _B_N___m_p_i_2_b_n_(_) were added in SSLeay 0.9.0.
+
+
+
+1.0.0g                            2002-09-25                      BN_bn2bin(3)

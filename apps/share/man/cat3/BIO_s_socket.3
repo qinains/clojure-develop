@@ -1,0 +1,63 @@
+BIO_s_socket(3)                     OpenSSL                    BIO_s_socket(3)
+
+
+
+NNAAMMEE
+       BIO_s_socket, BIO_new_socket - socket BIO
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bio.h>
+
+        BIO_METHOD *BIO_s_socket(void);
+
+        long BIO_set_fd(BIO *b, int fd, long close_flag);
+        long BIO_get_fd(BIO *b, int *c);
+
+        BIO *BIO_new_socket(int sock, int close_flag);
+
+DDEESSCCRRIIPPTTIIOONN
+       _B_I_O___s___s_o_c_k_e_t_(_) returns the socket BIO method. This is a wrapper round
+       the platform's socket routines.
+
+       _B_I_O___r_e_a_d_(_) and _B_I_O___w_r_i_t_e_(_) read or write the underlying socket.
+       _B_I_O___p_u_t_s_(_) is supported but _B_I_O___g_e_t_s_(_) is not.
+
+       If the close flag is set then the socket is shut down and closed when
+       the BIO is freed.
+
+       _B_I_O___s_e_t___f_d_(_) sets the socket of BIO bb to ffdd and the close flag to
+       cclloossee__ffllaagg.
+
+       _B_I_O___g_e_t___f_d_(_) places the socket in cc if it is not NULL, it also returns
+       the socket. If cc is not NULL it should be of type (int *).
+
+       _B_I_O___n_e_w___s_o_c_k_e_t_(_) returns a socket BIO using ssoocckk and cclloossee__ffllaagg.
+
+NNOOTTEESS
+       Socket BIOs also support any relevant functionality of file descriptor
+       BIOs.
+
+       The reason for having separate file descriptor and socket BIOs is that
+       on some platforms sockets are not file descriptors and use distinct I/O
+       routines, Windows is one such platform. Any code mixing the two will
+       not work on all platforms.
+
+       _B_I_O___s_e_t___f_d_(_) and _B_I_O___g_e_t___f_d_(_) are macros.
+
+RREETTUURRNN VVAALLUUEESS
+       _B_I_O___s___s_o_c_k_e_t_(_) returns the socket BIO method.
+
+       _B_I_O___s_e_t___f_d_(_) always returns 1.
+
+       _B_I_O___g_e_t___f_d_(_) returns the socket or -1 if the BIO has not been initial-
+       ized.
+
+       _B_I_O___n_e_w___s_o_c_k_e_t_(_) returns the newly allocated BIO or NULL is an error
+       occurred.
+
+SSEEEE AALLSSOO
+       TBA
+
+
+
+1.0.0g                            2000-10-20                   BIO_s_socket(3)

@@ -1,0 +1,217 @@
+d2i_X509(3)                         OpenSSL                        d2i_X509(3)
+
+
+
+NNAAMMEE
+       d2i_X509, i2d_X509, d2i_X509_bio, d2i_X509_fp, i2d_X509_bio,
+       i2d_X509_fp - X509 encode and decode functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/x509.h>
+
+        X509 *d2i_X509(X509 **px, const unsigned char **in, int len);
+        int i2d_X509(X509 *x, unsigned char **out);
+
+        X509 *d2i_X509_bio(BIO *bp, X509 **x);
+        X509 *d2i_X509_fp(FILE *fp, X509 **x);
+
+        int i2d_X509_bio(BIO *bp, X509 *x);
+        int i2d_X509_fp(FILE *fp, X509 *x);
+
+DDEESSCCRRIIPPTTIIOONN
+       The X509 encode and decode routines encode and parse an XX550099 structure,
+       which represents an X509 certificate.
+
+       _d_2_i___X_5_0_9_(_) attempts to decode lleenn bytes at **iinn. If successful a pointer
+       to the XX550099 structure is returned. If an error occurred then NNUULLLL is
+       returned. If ppxx is not NNUULLLL then the returned structure is written to
+       **ppxx. If **ppxx is not NNUULLLL then it is assumed that **ppxx contains a valid
+       XX550099 structure and an attempt is made to reuse it. If the call is suc-
+       cessful **iinn is incremented to the byte following the parsed data.
+
+       _i_2_d___X_5_0_9_(_) encodes the structure pointed to by xx into DER format.  If
+       oouutt is not NNUULLLL is writes the DER encoded data to the buffer at **oouutt,
+       and increments it to point after the data just written.  If the return
+       value is negative an error occurred, otherwise it returns the length of
+       the encoded data.
+
+       For OpenSSL 0.9.7 and later if **oouutt is NNUULLLL memory will be allocated
+       for a buffer and the encoded data written to it. In this case **oouutt is
+       not incremented and it points to the start of the data just written.
+
+       _d_2_i___X_5_0_9___b_i_o_(_) is similar to _d_2_i___X_5_0_9_(_) except it attempts to parse
+       data from BIO bbpp.
+
+       _d_2_i___X_5_0_9___f_p_(_) is similar to _d_2_i___X_5_0_9_(_) except it attempts to parse data
+       from FILE pointer ffpp.
+
+       _i_2_d___X_5_0_9___b_i_o_(_) is similar to _i_2_d___X_5_0_9_(_) except it writes the encoding
+       of the structure xx to BIO bbpp and it returns 1 for success and 0 for
+       failure.
+
+       _i_2_d___X_5_0_9___f_p_(_) is similar to _i_2_d___X_5_0_9_(_) except it writes the encoding of
+       the structure xx to BIO bbpp and it returns 1 for success and 0 for fail-
+       ure.
+
+NNOOTTEESS
+       The letters ii and dd in for example ii22dd__XX550099 stand for "internal" (that
+       is an internal C structure) and "DER". So that ii22dd__XX550099 converts from
+       internal to DER.
+
+       The functions can also understand BBEERR forms.
+
+       The actual X509 structure passed to _i_2_d___X_5_0_9_(_) must be a valid popu-
+       lated XX550099 structure it can nnoott simply be fed with an empty structure
+       such as that returned by _X_5_0_9___n_e_w_(_).
+
+       The encoded data is in binary form and may contain embedded zeroes.
+       Therefore any FILE pointers or BIOs should be opened in binary mode.
+       Functions such as _ss_tt_rr_ll_ee_nn_((_)) will nnoott return the correct length of the
+       encoded structure.
+
+       The ways that **iinn and **oouutt are incremented after the operation can trap
+       the unwary. See the WWAARRNNIINNGGSS section for some common errors.
+
+       The reason for the auto increment behaviour is to reflect a typical
+       usage of ASN1 functions: after one structure is encoded or decoded
+       another will processed after it.
+
+EEXXAAMMPPLLEESS
+       Allocate and encode the DER encoding of an X509 structure:
+
+        int len;
+        unsigned char *buf, *p;
+
+        len = i2d_X509(x, NULL);
+
+        buf = OPENSSL_malloc(len);
+
+        if (buf == NULL)
+               /* error */
+
+        p = buf;
+
+        i2d_X509(x, &p);
+
+       If you are using OpenSSL 0.9.7 or later then this can be simplified to:
+
+        int len;
+        unsigned char *buf;
+
+        buf = NULL;
+
+        len = i2d_X509(x, &buf);
+
+        if (len < 0)
+               /* error */
+
+       Attempt to decode a buffer:
+
+        X509 *x;
+
+        unsigned char *buf, *p;
+
+        int len;
+
+        /* Something to setup buf and len */
+
+        p = buf;
+
+        x = d2i_X509(NULL, &p, len);
+
+        if (x == NULL)
+           /* Some error */
+
+       Alternative technique:
+
+        X509 *x;
+
+        unsigned char *buf, *p;
+
+        int len;
+
+        /* Something to setup buf and len */
+
+        p = buf;
+
+        x = NULL;
+
+        if(!d2i_X509(&x, &p, len))
+           /* Some error */
+
+WWAARRNNIINNGGSS
+       The use of temporary variable is mandatory. A common mistake is to
+       attempt to use a buffer directly as follows:
+
+        int len;
+        unsigned char *buf;
+
+        len = i2d_X509(x, NULL);
+
+        buf = OPENSSL_malloc(len);
+
+        if (buf == NULL)
+               /* error */
+
+        i2d_X509(x, &buf);
+
+        /* Other stuff ... */
+
+        OPENSSL_free(buf);
+
+       This code will result in bbuuff apparently containing garbage because it
+       was incremented after the call to point after the data just written.
+       Also bbuuff will no longer contain the pointer allocated by _OO_PP_EE_NN_SS_SS_LL____mm_aa_ll_--
+       _ll_oo_cc_((_)) and the subsequent call to _OO_PP_EE_NN_SS_SS_LL____ff_rr_ee_ee_((_)) may well crash.
+
+       The auto allocation feature (setting buf to NULL) only works on OpenSSL
+       0.9.7 and later. Attempts to use it on earlier versions will typically
+       cause a segmentation violation.
+
+       Another trap to avoid is misuse of the xxpp argument to _dd_22_ii____XX_55_00_99_((_)):
+
+        X509 *x;
+
+        if (!d2i_X509(&x, &p, len))
+               /* Some error */
+
+       This will probably crash somewhere in _dd_22_ii____XX_55_00_99_((_)). The reason for this
+       is that the variable xx is uninitialized and an attempt will be made to
+       interpret its (invalid) value as an XX550099 structure, typically causing a
+       segmentation violation. If xx is set to NULL first then this will not
+       happen.
+
+BBUUGGSS
+       In some versions of OpenSSL the "reuse" behaviour of _d_2_i___X_5_0_9_(_) when
+       **ppxx is valid is broken and some parts of the reused structure may per-
+       sist if they are not present in the new one. As a result the use of
+       this "reuse" behaviour is strongly discouraged.
+
+       _i_2_d___X_5_0_9_(_) will not return an error in many versions of OpenSSL, if
+       mandatory fields are not initialized due to a programming error then
+       the encoded structure may contain invalid data or omit the fields
+       entirely and will not be parsed by _d_2_i___X_5_0_9_(_). This may be fixed in
+       future so code should not assume that _i_2_d___X_5_0_9_(_) will always succeed.
+
+RREETTUURRNN VVAALLUUEESS
+       _d_2_i___X_5_0_9_(_), _d_2_i___X_5_0_9___b_i_o_(_) and _d_2_i___X_5_0_9___f_p_(_) return a valid XX550099 struc-
+       ture or NNUULLLL if an error occurs. The error code that can be obtained by
+       _E_R_R___g_e_t___e_r_r_o_r(3).
+
+       _i_2_d___X_5_0_9_(_) returns the number of bytes successfully encoded or a nega-
+       tive value if an error occurs. The error code can be obtained by
+       _E_R_R___g_e_t___e_r_r_o_r(3).
+
+       _i_2_d___X_5_0_9___b_i_o_(_) and _i_2_d___X_5_0_9___f_p_(_) return 1 for success and 0 if an error
+       occurs The error code can be obtained by _E_R_R___g_e_t___e_r_r_o_r(3).
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3)
+
+HHIISSTTOORRYY
+       d2i_X509, i2d_X509, d2i_X509_bio, d2i_X509_fp, i2d_X509_bio and
+       i2d_X509_fp are available in all versions of SSLeay and OpenSSL.
+
+
+
+1.0.0g                            2009-09-13                       d2i_X509(3)

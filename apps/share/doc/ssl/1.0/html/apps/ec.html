@@ -1,0 +1,252 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ec - EC key processing</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#command_options">COMMAND OPTIONS</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>ec - EC key processing</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>openssl</strong> <strong>ec</strong>
+[<strong>-inform PEM|DER</strong>]
+[<strong>-outform PEM|DER</strong>]
+[<strong>-in filename</strong>]
+[<strong>-passin arg</strong>]
+[<strong>-out filename</strong>]
+[<strong>-passout arg</strong>]
+[<strong>-des</strong>]
+[<strong>-des3</strong>]
+[<strong>-idea</strong>]
+[<strong>-text</strong>]
+[<strong>-noout</strong>]
+[<strong>-param_out</strong>]
+[<strong>-pubin</strong>]
+[<strong>-pubout</strong>]
+[<strong>-conv_form arg</strong>]
+[<strong>-param_enc arg</strong>]
+[<strong>-engine id</strong>]</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>ec</strong> command processes EC keys. They can be converted between various
+forms and their components printed out. <strong>Note</strong> OpenSSL uses the 
+private key format specified in 'SEC 1: Elliptic Curve Cryptography'
+(http://www.secg.org/). To convert a OpenSSL EC private key into the
+PKCS#8 private key format use the <strong>pkcs8</strong> command.</p>
+<p>
+</p>
+<hr />
+<h1><a name="command_options">COMMAND OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item__2dinform_der_7cpem"><strong>-inform DER|PEM</strong></a></strong>
+
+<dd>
+<p>This specifies the input format. The <strong>DER</strong> option with a private key uses
+an ASN.1 DER encoded SEC1 private key. When used with a public key it
+uses the SubjectPublicKeyInfo structur as specified in RFC 3280.
+The <strong>PEM</strong> form is the default format: it consists of the <strong>DER</strong> format base64
+encoded with additional header and footer lines. In the case of a private key
+PKCS#8 format is also accepted.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2doutform_der_7cpem"><strong>-outform DER|PEM</strong></a></strong>
+
+<dd>
+<p>This specifies the output format, the options have the same meaning as the 
+<strong>-inform</strong> option.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2din_filename"><strong>-in filename</strong></a></strong>
+
+<dd>
+<p>This specifies the input filename to read a key from or standard input if this
+option is not specified. If the key is encrypted a pass phrase will be
+prompted for.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpassin_arg"><strong>-passin arg</strong></a></strong>
+
+<dd>
+<p>the input file password source. For more information about the format of <strong>arg</strong>
+see the <strong>PASS PHRASE ARGUMENTS</strong> section in <a href="../apps/openssl.html">openssl</a>.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dout_filename"><strong>-out filename</strong></a></strong>
+
+<dd>
+<p>This specifies the output filename to write a key to or standard output by
+is not specified. If any encryption options are set then a pass phrase will be
+prompted for. The output filename should <strong>not</strong> be the same as the input
+filename.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpassout_arg"><strong>-passout arg</strong></a></strong>
+
+<dd>
+<p>the output file password source. For more information about the format of <strong>arg</strong>
+see the <strong>PASS PHRASE ARGUMENTS</strong> section in <a href="../apps/openssl.html">openssl</a>.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2ddes_7c_2ddes3_7c_2didea"><strong>-des|-des3|-idea</strong></a></strong>
+
+<dd>
+<p>These options encrypt the private key with the DES, triple DES, IDEA or 
+any other cipher supported by OpenSSL before outputting it. A pass phrase is
+prompted for.
+If none of these options is specified the key is written in plain text. This
+means that using the <strong>ec</strong> utility to read in an encrypted key with no
+encryption option can be used to remove the pass phrase from a key, or by
+setting the encryption options it can be use to add or change the pass phrase.
+These options can only be used with PEM format output files.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dtext"><strong>-text</strong></a></strong>
+
+<dd>
+<p>prints out the public, private key components and parameters.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dnoout"><strong>-noout</strong></a></strong>
+
+<dd>
+<p>this option prevents output of the encoded version of the key.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dmodulus"><strong>-modulus</strong></a></strong>
+
+<dd>
+<p>this option prints out the value of the public key component of the key.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpubin"><strong>-pubin</strong></a></strong>
+
+<dd>
+<p>by default a private key is read from the input file: with this option a
+public key is read instead.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpubout"><strong>-pubout</strong></a></strong>
+
+<dd>
+<p>by default a private key is output. With this option a public
+key will be output instead. This option is automatically set if the input is
+a public key.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dconv_form"><strong>-conv_form</strong></a></strong>
+
+<dd>
+<p>This specifies how the points on the elliptic curve are converted
+into octet strings. Possible values are: <strong>compressed</strong> (the default
+value), <strong>uncompressed</strong> and <strong>hybrid</strong>. For more information regarding
+the point conversion forms please read the X9.62 standard.
+<strong>Note</strong> Due to patent issues the <strong>compressed</strong> option is disabled
+by default for binary curves and can be enabled by defining
+the preprocessor macro <strong>OPENSSL_EC_BIN_PT_COMP</strong> at compile time.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dparam_enc_arg"><strong>-param_enc arg</strong></a></strong>
+
+<dd>
+<p>This specifies how the elliptic curve parameters are encoded.
+Possible value are: <strong>named_curve</strong>, i.e. the ec parameters are
+specified by a OID, or <strong>explicit</strong> where the ec parameters are
+explicitly given (see RFC 3279 for the definition of the 
+EC parameters structures). The default value is <strong>named_curve</strong>.
+<strong>Note</strong> the <strong>implicitlyCA</strong> alternative ,as specified in RFC 3279,
+is currently not implemented in OpenSSL.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dengine_id"><strong>-engine id</strong></a></strong>
+
+<dd>
+<p>specifying an engine (by its unique <strong>id</strong> string) will cause <strong>ec</strong>
+to attempt to obtain a functional reference to the specified engine,
+thus initialising it if needed. The engine will then be set as the default
+for all available algorithms.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>The PEM private key format uses the header and footer lines:</p>
+<pre>
+ -----BEGIN EC PRIVATE KEY-----
+ -----END EC PRIVATE KEY-----</pre>
+<p>The PEM public key format uses the header and footer lines:</p>
+<pre>
+ -----BEGIN PUBLIC KEY-----
+ -----END PUBLIC KEY-----</pre>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>To encrypt a private key using triple DES:</p>
+<pre>
+ openssl ec -in key.pem -des3 -out keyout.pem</pre>
+<p>To convert a private key from PEM to DER format:</p>
+<pre>
+ openssl ec -in key.pem -outform DER -out keyout.der</pre>
+<p>To print out the components of a private key to standard output:</p>
+<pre>
+ openssl ec -in key.pem -text -noout</pre>
+<p>To just output the public part of a private key:</p>
+<pre>
+ openssl ec -in key.pem -pubout -out pubkey.pem</pre>
+<p>To change the parameters encoding to <strong>explicit</strong>:</p>
+<pre>
+ openssl ec -in key.pem -param_enc explicit -out keyout.pem</pre>
+<p>To change the point conversion form to <strong>compressed</strong>:</p>
+<pre>
+ openssl ec -in key.pem -conv_form compressed -out keyout.pem</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../apps/ecparam.html">ecparam</a>, <a href="../apps/dsa.html">dsa</a>, <a href="../apps/rsa.html">rsa</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>The ec command was first introduced in OpenSSL 0.9.8.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Nils Larsch for the OpenSSL project (http://www.openssl.org).</p>
+
+</body>
+
+</html>

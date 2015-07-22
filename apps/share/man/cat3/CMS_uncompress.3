@@ -1,0 +1,51 @@
+CMS_uncompress(3)                   OpenSSL                  CMS_uncompress(3)
+
+
+
+NNAAMMEE
+        CMS_uncompress - uncompress a CMS CompressedData structure
+
+SSYYNNOOPPSSIISS
+        #include <openssl/cms.h>
+
+        int CMS_uncompress(CMS_ContentInfo *cms, BIO *dcont, BIO *out, unsigned int flags);
+
+DDEESSCCRRIIPPTTIIOONN
+       _C_M_S___u_n_c_o_m_p_r_e_s_s_(_) extracts and uncompresses the content from a CMS Com-
+       pressedData structure ccmmss. ddaattaa is a BIO to write the content to and
+       ffllaaggss is an optional set of flags.
+
+       The ddccoonntt parameter is used in the rare case where the compressed con-
+       tent is detached. It will normally be set to NULL.
+
+NNOOTTEESS
+       The only currently supported compression algorithm is zlib: if the
+       structure indicates the use of any other algorithm an error is
+       returned.
+
+       If zlib support is not compiled into OpenSSL then _C_M_S___u_n_c_o_m_p_r_e_s_s_(_) will
+       always return an error.
+
+       The following flags can be passed in the ffllaaggss parameter.
+
+       If the CCMMSS__TTEEXXTT flag is set MIME headers for type tteexxtt//ppllaaiinn are
+       deleted from the content. If the content is not of type tteexxtt//ppllaaiinn then
+       an error is returned.
+
+RREETTUURRNN VVAALLUUEESS
+       _C_M_S___u_n_c_o_m_p_r_e_s_s_(_) returns either 1 for success or 0 for failure. The
+       error can be obtained from _E_R_R___g_e_t___e_r_r_o_r(3)
+
+BBUUGGSS
+       The lack of single pass processing and the need to hold all data in
+       memory as mentioned in _C_M_S___v_e_r_i_f_y_(_) also applies to _C_M_S___d_e_c_o_m_p_r_e_s_s_(_).
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _C_M_S___c_o_m_p_r_e_s_s(3)
+
+HHIISSTTOORRYY
+       _C_M_S___u_n_c_o_m_p_r_e_s_s_(_) was added to OpenSSL 0.9.8
+
+
+
+1.0.0g                            2008-04-12                 CMS_uncompress(3)

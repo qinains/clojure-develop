@@ -1,0 +1,149 @@
+rand(3)                             OpenSSL                            rand(3)
+
+
+
+NNAAMMEE
+       rand - pseudo-random number generator
+
+SSYYNNOOPPSSIISS
+        #include <openssl/rand.h>
+
+        int  RAND_set_rand_engine(ENGINE *engine);
+
+        int  RAND_bytes(unsigned char *buf, int num);
+        int  RAND_pseudo_bytes(unsigned char *buf, int num);
+
+        void RAND_seed(const void *buf, int num);
+        void RAND_add(const void *buf, int num, int entropy);
+        int  RAND_status(void);
+
+        int  RAND_load_file(const char *file, long max_bytes);
+        int  RAND_write_file(const char *file);
+        const char *RAND_file_name(char *file, size_t num);
+
+        int  RAND_egd(const char *path);
+
+        void RAND_set_rand_method(const RAND_METHOD *meth);
+        const RAND_METHOD *RAND_get_rand_method(void);
+        RAND_METHOD *RAND_SSLeay(void);
+
+        void RAND_cleanup(void);
+
+        /* For Win32 only */
+        void RAND_screen(void);
+        int RAND_event(UINT, WPARAM, LPARAM);
+
+DDEESSCCRRIIPPTTIIOONN
+       Since the introduction of the ENGINE API, the recommended way of con-
+       trolling default implementations is by using the ENGINE API functions.
+       The default RRAANNDD__MMEETTHHOODD, as set by _R_A_N_D___s_e_t___r_a_n_d___m_e_t_h_o_d_(_) and returned
+       by _R_A_N_D___g_e_t___r_a_n_d___m_e_t_h_o_d_(_), is only used if no ENGINE has been set as
+       the default "rand" implementation. Hence, these two functions are no
+       longer the recommened way to control defaults.
+
+       If an alternative RRAANNDD__MMEETTHHOODD implementation is being used (either set
+       directly or as provided by an ENGINE module), then it is entirely
+       responsible for the generation and management of a cryptographically
+       secure PRNG stream. The mechanisms described below relate solely to the
+       software PRNG implementation built in to OpenSSL and used by default.
+
+       These functions implement a cryptographically secure pseudo-random num-
+       ber generator (PRNG). It is used by other library functions for example
+       to generate random keys, and applications can use it when they need
+       randomness.
+
+       A cryptographic PRNG must be seeded with unpredictable data such as
+       mouse movements or keys pressed at random by the user. This is
+       described in _R_A_N_D___a_d_d(3). Its state can be saved in a seed file (see
+       _R_A_N_D___l_o_a_d___f_i_l_e(3)) to avoid having to go through the seeding process
+       whenever the application is started.
+
+       _R_A_N_D___b_y_t_e_s(3) describes how to obtain random data from the PRNG.
+
+IINNTTEERRNNAALLSS
+       The _R_A_N_D___S_S_L_e_a_y_(_) method implements a PRNG based on a cryptographic
+       hash function.
+
+       The following description of its design is based on the SSLeay documen-
+       tation:
+
+       First up I will state the things I believe I need for a good RNG.
+
+       1   A good hashing algorithm to mix things up and to convert the RNG
+           'state' to random numbers.
+
+       2   An initial source of random 'state'.
+
+       3   The state should be very large.  If the RNG is being used to gener-
+           ate 4096 bit RSA keys, 2 2048 bit random strings are required (at a
+           minimum).  If your RNG state only has 128 bits, you are obviously
+           limiting the search space to 128 bits, not 2048.  I'm probably get-
+           ting a little carried away on this last point but it does indicate
+           that it may not be a bad idea to keep quite a lot of RNG state.  It
+           should be easier to break a cipher than guess the RNG seed data.
+
+       4   Any RNG seed data should influence all subsequent random numbers
+           generated.  This implies that any random seed data entered will
+           have an influence on all subsequent random numbers generated.
+
+       5   When using data to seed the RNG state, the data used should not be
+           extractable from the RNG state.  I believe this should be a
+           requirement because one possible source of 'secret' semi random
+           data would be a private key or a password.  This data must not be
+           disclosed by either subsequent random numbers or a 'core' dump left
+           by a program crash.
+
+       6   Given the same initial 'state', 2 systems should deviate in their
+           RNG state (and hence the random numbers generated) over time if at
+           all possible.
+
+       7   Given the random number output stream, it should not be possible to
+           determine the RNG state or the next random number.
+
+       The algorithm is as follows.
+
+       There is global state made up of a 1023 byte buffer (the 'state'), a
+       working hash value ('md'), and a counter ('count').
+
+       Whenever seed data is added, it is inserted into the 'state' as fol-
+       lows.
+
+       The input is chopped up into units of 20 bytes (or less for the last
+       block).  Each of these blocks is run through the hash function as fol-
+       lows:  The data passed to the hash function is the current 'md', the
+       same number of bytes from the 'state' (the location determined by in
+       incremented looping index) as the current 'block', the new key data
+       'block', and 'count' (which is incremented after each use).  The result
+       of this is kept in 'md' and also xored into the 'state' at the same
+       locations that were used as input into the hash function. I believe
+       this system addresses points 1 (hash function; currently SHA-1), 3 (the
+       'state'), 4 (via the 'md'), 5 (by the use of a hash function and xor).
+
+       When bytes are extracted from the RNG, the following process is used.
+       For each group of 10 bytes (or less), we do the following:
+
+       Input into the hash function the local 'md' (which is initialized from
+       the global 'md' before any bytes are generated), the bytes that are to
+       be overwritten by the random bytes, and bytes from the 'state' (incre-
+       menting looping index). From this digest output (which is kept in
+       'md'), the top (up to) 10 bytes are returned to the caller and the bot-
+       tom 10 bytes are xored into the 'state'.
+
+       Finally, after we have finished 'num' random bytes for the caller,
+       'count' (which is incremented) and the local and global 'md' are fed
+       into the hash function and the results are kept in the global 'md'.
+
+       I believe the above addressed points 1 (use of SHA-1), 6 (by hashing
+       into the 'state' the 'old' data from the caller that is about to be
+       overwritten) and 7 (by not using the 10 bytes given to the caller to
+       update the 'state', but they are used to update 'md').
+
+       So of the points raised, only 2 is not addressed (but see _R_A_N_D___a_d_d(3)).
+
+SSEEEE AALLSSOO
+       _B_N___r_a_n_d(3), _R_A_N_D___a_d_d(3), _R_A_N_D___l_o_a_d___f_i_l_e(3), _R_A_N_D___e_g_d(3), _R_A_N_D___b_y_t_e_s(3),
+       _R_A_N_D___s_e_t___r_a_n_d___m_e_t_h_o_d(3), _R_A_N_D___c_l_e_a_n_u_p(3)
+
+
+
+1.0.0g                            2002-08-05                           rand(3)

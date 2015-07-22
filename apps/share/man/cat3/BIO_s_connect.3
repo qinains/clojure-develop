@@ -1,0 +1,189 @@
+BIO_s_connect(3)                    OpenSSL                   BIO_s_connect(3)
+
+
+
+NNAAMMEE
+       BIO_s_connect, BIO_set_conn_hostname, BIO_set_conn_port,
+       BIO_set_conn_ip, BIO_set_conn_int_port, BIO_get_conn_hostname,
+       BIO_get_conn_port, BIO_get_conn_ip, BIO_get_conn_int_port,
+       BIO_set_nbio, BIO_do_connect - connect BIO
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bio.h>
+
+        BIO_METHOD * BIO_s_connect(void);
+
+        BIO *BIO_new_connect(char *name);
+
+        long BIO_set_conn_hostname(BIO *b, char *name);
+        long BIO_set_conn_port(BIO *b, char *port);
+        long BIO_set_conn_ip(BIO *b, char *ip);
+        long BIO_set_conn_int_port(BIO *b, char *port);
+        char *BIO_get_conn_hostname(BIO *b);
+        char *BIO_get_conn_port(BIO *b);
+        char *BIO_get_conn_ip(BIO *b, dummy);
+        long BIO_get_conn_int_port(BIO *b, int port);
+
+        long BIO_set_nbio(BIO *b, long n);
+
+        int BIO_do_connect(BIO *b);
+
+DDEESSCCRRIIPPTTIIOONN
+       _B_I_O___s___c_o_n_n_e_c_t_(_) returns the connect BIO method. This is a wrapper round
+       the platform's TCP/IP socket connection routines.
+
+       Using connect BIOs, TCP/IP connections can be made and data transferred
+       using only BIO routines. In this way any platform specific operations
+       are hidden by the BIO abstraction.
+
+       Read and write operations on a connect BIO will perform I/O on the
+       underlying connection. If no connection is established and the port and
+       hostname (see below) is set up properly then a connection is estab-
+       lished first.
+
+       Connect BIOs support _B_I_O___p_u_t_s_(_) but not _B_I_O___g_e_t_s_(_).
+
+       If the close flag is set on a connect BIO then any active connection is
+       shutdown and the socket closed when the BIO is freed.
+
+       Calling _B_I_O___r_e_s_e_t_(_) on a connect BIO will close any active connection
+       and reset the BIO into a state where it can connect to the same host
+       again.
+
+       _B_I_O___g_e_t___f_d_(_) places the underlying socket in cc if it is not NULL, it
+       also returns the socket . If cc is not NULL it should be of type (int
+       *).
+
+       _B_I_O___s_e_t___c_o_n_n___h_o_s_t_n_a_m_e_(_) uses the string nnaammee to set the hostname.  The
+       hostname can be an IP address. The hostname can also include the port
+       in the form hostname:port . It is also acceptable to use the form
+       "hostname/any/other/path" or "hostname:port/any/other/path".
+
+       _B_I_O___s_e_t___c_o_n_n___p_o_r_t_(_) sets the port to ppoorrtt. ppoorrtt can be the numerical
+       form or a string such as "http". A string will be looked up first using
+       _g_e_t_s_e_r_v_b_y_n_a_m_e_(_) on the host platform but if that fails a standard table
+       of port names will be used. Currently the list is http, telnet, socks,
+       https, ssl, ftp, gopher and wais.
+
+       _B_I_O___s_e_t___c_o_n_n___i_p_(_) sets the IP address to iipp using binary form, that is
+       four bytes specifying the IP address in big-endian form.
+
+       _B_I_O___s_e_t___c_o_n_n___i_n_t___p_o_r_t_(_) sets the port using ppoorrtt. ppoorrtt should be of
+       type (int *).
+
+       _B_I_O___g_e_t___c_o_n_n___h_o_s_t_n_a_m_e_(_) returns the hostname of the connect BIO or NULL
+       if the BIO is initialized but no hostname is set.  This return value is
+       an internal pointer which should not be modified.
+
+       _B_I_O___g_e_t___c_o_n_n___p_o_r_t_(_) returns the port as a string.
+
+       _B_I_O___g_e_t___c_o_n_n___i_p_(_) returns the IP address in binary form.
+
+       _B_I_O___g_e_t___c_o_n_n___i_n_t___p_o_r_t_(_) returns the port as an int.
+
+       _B_I_O___s_e_t___n_b_i_o_(_) sets the non blocking I/O flag to nn. If nn is zero then
+       blocking I/O is set. If nn is 1 then non blocking I/O is set. Blocking
+       I/O is the default. The call to _B_I_O___s_e_t___n_b_i_o_(_) should be made before
+       the connection is established because non blocking I/O is set during
+       the connect process.
+
+       _B_I_O___n_e_w___c_o_n_n_e_c_t_(_) combines _B_I_O___n_e_w_(_) and _B_I_O___s_e_t___c_o_n_n___h_o_s_t_n_a_m_e_(_) into a
+       single call: that is it creates a new connect BIO with nnaammee.
+
+       _B_I_O___d_o___c_o_n_n_e_c_t_(_) attempts to connect the supplied BIO. It returns 1 if
+       the connection was established successfully. A zero or negative value
+       is returned if the connection could not be established, the call
+       _B_I_O___s_h_o_u_l_d___r_e_t_r_y_(_) should be used for non blocking connect BIOs to
+       determine if the call should be retried.
+
+NNOOTTEESS
+       If blocking I/O is set then a non positive return value from any I/O
+       call is caused by an error condition, although a zero return will nor-
+       mally mean that the connection was closed.
+
+       If the port name is supplied as part of the host name then this will
+       override any value set with _B_I_O___s_e_t___c_o_n_n___p_o_r_t_(_). This may be undesir-
+       able if the application does not wish to allow connection to arbitrary
+       ports. This can be avoided by checking for the presence of the ':'
+       character in the passed hostname and either indicating an error or
+       truncating the string at that point.
+
+       The values returned by _B_I_O___g_e_t___c_o_n_n___h_o_s_t_n_a_m_e_(_), _B_I_O___g_e_t___c_o_n_n___p_o_r_t_(_),
+       _B_I_O___g_e_t___c_o_n_n___i_p_(_) and _B_I_O___g_e_t___c_o_n_n___i_n_t___p_o_r_t_(_) are updated when a con-
+       nection attempt is made. Before any connection attempt the values
+       returned are those set by the application itself.
+
+       Applications do not have to call _B_I_O___d_o___c_o_n_n_e_c_t_(_) but may wish to do so
+       to separate the connection process from other I/O processing.
+
+       If non blocking I/O is set then retries will be requested as appropri-
+       ate.
+
+       It addition to _B_I_O___s_h_o_u_l_d___r_e_a_d_(_) and _B_I_O___s_h_o_u_l_d___w_r_i_t_e_(_) it is also pos-
+       sible for _B_I_O___s_h_o_u_l_d___i_o___s_p_e_c_i_a_l_(_) to be true during the initial connec-
+       tion process with the reason BIO_RR_CONNECT. If this is returned then
+       this is an indication that a connection attempt would block, the appli-
+       cation should then take appropriate action to wait until the underlying
+       socket has connected and retry the call.
+
+       _B_I_O___s_e_t___c_o_n_n___h_o_s_t_n_a_m_e_(_), _B_I_O___s_e_t___c_o_n_n___p_o_r_t_(_), _B_I_O___s_e_t___c_o_n_n___i_p_(_),
+       _B_I_O___s_e_t___c_o_n_n___i_n_t___p_o_r_t_(_), _B_I_O___g_e_t___c_o_n_n___h_o_s_t_n_a_m_e_(_), _B_I_O___g_e_t___c_o_n_n___p_o_r_t_(_),
+       _B_I_O___g_e_t___c_o_n_n___i_p_(_), _B_I_O___g_e_t___c_o_n_n___i_n_t___p_o_r_t_(_), _B_I_O___s_e_t___n_b_i_o_(_) and
+       _B_I_O___d_o___c_o_n_n_e_c_t_(_) are macros.
+
+RREETTUURRNN VVAALLUUEESS
+       _B_I_O___s___c_o_n_n_e_c_t_(_) returns the connect BIO method.
+
+       _B_I_O___g_e_t___f_d_(_) returns the socket or -1 if the BIO has not been initial-
+       ized.
+
+       _B_I_O___s_e_t___c_o_n_n___h_o_s_t_n_a_m_e_(_), _B_I_O___s_e_t___c_o_n_n___p_o_r_t_(_), _B_I_O___s_e_t___c_o_n_n___i_p_(_) and
+       _B_I_O___s_e_t___c_o_n_n___i_n_t___p_o_r_t_(_) always return 1.
+
+       _B_I_O___g_e_t___c_o_n_n___h_o_s_t_n_a_m_e_(_) returns the connected hostname or NULL is none
+       was set.
+
+       _B_I_O___g_e_t___c_o_n_n___p_o_r_t_(_) returns a string representing the connected port or
+       NULL if not set.
+
+       _B_I_O___g_e_t___c_o_n_n___i_p_(_) returns a pointer to the connected IP address in
+       binary form or all zeros if not set.
+
+       _B_I_O___g_e_t___c_o_n_n___i_n_t___p_o_r_t_(_) returns the connected port or 0 if none was
+       set.
+
+       _B_I_O___s_e_t___n_b_i_o_(_) always returns 1.
+
+       _B_I_O___d_o___c_o_n_n_e_c_t_(_) returns 1 if the connection was successfully estab-
+       lished and 0 or -1 if the connection failed.
+
+EEXXAAMMPPLLEE
+       This is example connects to a webserver on the local host and attempts
+       to retrieve a page and copy the result to standard output.
+
+        BIO *cbio, *out;
+        int len;
+        char tmpbuf[1024];
+        ERR_load_crypto_strings();
+        cbio = BIO_new_connect("localhost:http");
+        out = BIO_new_fp(stdout, BIO_NOCLOSE);
+        if(BIO_do_connect(cbio) <= 0) {
+               fprintf(stderr, "Error connecting to server\n");
+               ERR_print_errors_fp(stderr);
+               /* whatever ... */
+               }
+        BIO_puts(cbio, "GET / HTTP/1.0\n\n");
+        for(;;) {
+               len = BIO_read(cbio, tmpbuf, 1024);
+               if(len <= 0) break;
+               BIO_write(out, tmpbuf, len);
+        }
+        BIO_free(cbio);
+        BIO_free(out);
+
+SSEEEE AALLSSOO
+       TBA
+
+
+
+1.0.0g                            2000-10-20                  BIO_s_connect(3)

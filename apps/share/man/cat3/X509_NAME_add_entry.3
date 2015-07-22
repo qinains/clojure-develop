@@ -1,0 +1,107 @@
+X509_NAME_add_entry_by_txt(3)       OpenSSL      X509_NAME_add_entry_by_txt(3)
+
+
+
+NNAAMMEE
+       X509_NAME_add_entry_by_txt, X509_NAME_add_entry_by_OBJ,
+       X509_NAME_add_entry_by_NID, X509_NAME_add_entry, X509_NAME_delete_entry
+       - X509_NAME modification functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/x509.h>
+
+        int X509_NAME_add_entry_by_txt(X509_NAME *name, const char *field, int type, const unsigned char *bytes, int len, int loc, int set);
+
+        int X509_NAME_add_entry_by_OBJ(X509_NAME *name, ASN1_OBJECT *obj, int type, unsigned char *bytes, int len, int loc, int set);
+
+        int X509_NAME_add_entry_by_NID(X509_NAME *name, int nid, int type, unsigned char *bytes, int len, int loc, int set);
+
+        int X509_NAME_add_entry(X509_NAME *name,X509_NAME_ENTRY *ne, int loc, int set);
+
+        X509_NAME_ENTRY *X509_NAME_delete_entry(X509_NAME *name, int loc);
+
+DDEESSCCRRIIPPTTIIOONN
+       _X_5_0_9___N_A_M_E___a_d_d___e_n_t_r_y___b_y___t_x_t_(_), _X_5_0_9___N_A_M_E___a_d_d___e_n_t_r_y___b_y___O_B_J_(_) and
+       _X_5_0_9___N_A_M_E___a_d_d___e_n_t_r_y___b_y___N_I_D_(_) add a field whose name is defined by a
+       string ffiieelldd, an object oobbjj or a NID nniidd respectively.  The field value
+       to be added is in bbyytteess of length lleenn. If lleenn is -1 then the field
+       length is calculated internally using strlen(bytes).
+
+       The type of field is determined by ttyyppee which can either be a defini-
+       tion of the type of bbyytteess (such as MMBBSSTTRRIINNGG__AASSCC) or a standard ASN1
+       type (such as VV__AASSNN11__IIAA55SSTTRRIINNGG). The new entry is added to a position
+       determined by lloocc and sseett.
+
+       _X_5_0_9___N_A_M_E___a_d_d___e_n_t_r_y_(_) adds a copy of XX550099__NNAAMMEE__EENNTTRRYY structure nnee to
+       nnaammee. The new entry is added to a position determined by lloocc and sseett.
+       Since a copy of nnee is added nnee must be freed up after the call.
+
+       _X_5_0_9___N_A_M_E___d_e_l_e_t_e___e_n_t_r_y_(_) deletes an entry from nnaammee at position lloocc.
+       The deleted entry is returned and must be freed up.
+
+NNOOTTEESS
+       The use of string types such as MMBBSSTTRRIINNGG__AASSCC or MMBBSSTTRRIINNGG__UUTTFF88 is
+       strongly recommened for the ttyyppee parameter. This allows the internal
+       code to correctly determine the type of the field and to apply length
+       checks according to the relevant standards. This is done using
+       _A_S_N_1___S_T_R_I_N_G___s_e_t___b_y___N_I_D_(_).
+
+       If instead an ASN1 type is used no checks are performed and the sup-
+       plied data in bbyytteess is used directly.
+
+       In _X_5_0_9___N_A_M_E___a_d_d___e_n_t_r_y___b_y___t_x_t_(_) the ffiieelldd string represents the field
+       name using OBJ_txt2obj(field, 0).
+
+       The lloocc and sseett parameters determine where a new entry should be added.
+       For almost all applications lloocc can be set to -1 and sseett to 0. This
+       adds a new entry to the end of nnaammee as a single valued RelativeDistin-
+       guishedName (RDN).
+
+       lloocc actually determines the index where the new entry is inserted: if
+       it is -1 it is appended.
+
+       sseett determines how the new type is added. If it is zero a new RDN is
+       created.
+
+       If sseett is -1 or 1 it is added to the previous or next RDN structure
+       respectively. This will then be a multivalued RDN: since multivalues
+       RDNs are very seldom used sseett is almost always set to zero.
+
+EEXXAAMMPPLLEESS
+       Create an XX550099__NNAAMMEE structure:
+
+       "C=UK, O=Disorganized Organization, CN=Joe Bloggs"
+
+        X509_NAME *nm;
+        nm = X509_NAME_new();
+        if (nm == NULL)
+               /* Some error */
+        if (!X509_NAME_add_entry_by_txt(nm, MBSTRING_ASC,
+                               "C", "UK", -1, -1, 0))
+               /* Error */
+        if (!X509_NAME_add_entry_by_txt(nm, MBSTRING_ASC,
+                               "O", "Disorganized Organization", -1, -1, 0))
+               /* Error */
+        if (!X509_NAME_add_entry_by_txt(nm, MBSTRING_ASC,
+                               "CN", "Joe Bloggs", -1, -1, 0))
+               /* Error */
+
+RREETTUURRNN VVAALLUUEESS
+       _X_5_0_9___N_A_M_E___a_d_d___e_n_t_r_y___b_y___t_x_t_(_), _X_5_0_9___N_A_M_E___a_d_d___e_n_t_r_y___b_y___O_B_J_(_),
+       _X_5_0_9___N_A_M_E___a_d_d___e_n_t_r_y___b_y___N_I_D_(_) and _X_5_0_9___N_A_M_E___a_d_d___e_n_t_r_y_(_) return 1 for
+       success of 0 if an error occurred.
+
+       _X_5_0_9___N_A_M_E___d_e_l_e_t_e___e_n_t_r_y_(_) returns either the deleted XX550099__NNAAMMEE__EENNTTRRYY
+       structure of NNUULLLL if an error occurred.
+
+BBUUGGSS
+       ttyyppee can still be set to VV__AASSNN11__AAPPPP__CCHHOOOOSSEE to use a different algorithm
+       to determine field types. Since this form does not understand multi-
+       character types, performs no length checks and can result in invalid
+       field types its use is strongly discouraged.
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _d_2_i___X_5_0_9___N_A_M_E(3)
+
+HHIISSTTOORRYY
+1.0.0g                            2006-05-14     X509_NAME_add_entry_by_txt(3)

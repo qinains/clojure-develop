@@ -1,0 +1,52 @@
+BN_new(3)                           OpenSSL                          BN_new(3)
+
+
+
+NNAAMMEE
+       BN_new, BN_init, BN_clear, BN_free, BN_clear_free - allocate and free
+       BIGNUMs
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bn.h>
+
+        BIGNUM *BN_new(void);
+
+        void BN_init(BIGNUM *);
+
+        void BN_clear(BIGNUM *a);
+
+        void BN_free(BIGNUM *a);
+
+        void BN_clear_free(BIGNUM *a);
+
+DDEESSCCRRIIPPTTIIOONN
+       _B_N___n_e_w_(_) allocates and initializes a BBIIGGNNUUMM structure. _B_N___i_n_i_t_(_) ini-
+       tializes an existing uninitialized BBIIGGNNUUMM.
+
+       _B_N___c_l_e_a_r_(_) is used to destroy sensitive data such as keys when they are
+       no longer needed. It erases the memory used by aa and sets it to the
+       value 0.
+
+       _B_N___f_r_e_e_(_) frees the components of the BBIIGGNNUUMM, and if it was created by
+       _B_N___n_e_w_(_), also the structure itself. _B_N___c_l_e_a_r___f_r_e_e_(_) additionally over-
+       writes the data before the memory is returned to the system.
+
+RREETTUURRNN VVAALLUUEESS
+       _B_N___n_e_w_(_) returns a pointer to the BBIIGGNNUUMM. If the allocation fails, it
+       returns NNUULLLL and sets an error code that can be obtained by
+       _E_R_R___g_e_t___e_r_r_o_r(3).
+
+       _B_N___i_n_i_t_(_), _B_N___c_l_e_a_r_(_), _B_N___f_r_e_e_(_) and _B_N___c_l_e_a_r___f_r_e_e_(_) have no return
+       values.
+
+SSEEEE AALLSSOO
+       _b_n(3), _E_R_R___g_e_t___e_r_r_o_r(3)
+
+HHIISSTTOORRYY
+       _B_N___n_e_w_(_), _B_N___c_l_e_a_r_(_), _B_N___f_r_e_e_(_) and _B_N___c_l_e_a_r___f_r_e_e_(_) are available in
+       all versions on SSLeay and OpenSSL.  _B_N___i_n_i_t_(_) was added in SSLeay
+       0.9.1b.
+
+
+
+1.0.0g                            2004-03-06                         BN_new(3)

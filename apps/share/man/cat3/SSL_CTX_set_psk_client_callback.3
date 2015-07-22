@@ -1,0 +1,50 @@
+SSL_CTX_set_psk_client_callback(3)  OpenSSL SSL_CTX_set_psk_client_callback(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_set_psk_client_callback, SSL_set_psk_client_callback - set PSK
+       client callback
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        void SSL_CTX_set_psk_client_callback(SSL_CTX *ctx,
+               unsigned int (*callback)(SSL *ssl, const char *hint,
+               char *identity, unsigned int max_identity_len,
+               unsigned char *psk, unsigned int max_psk_len));
+        void SSL_set_psk_client_callback(SSL *ssl,
+               unsigned int (*callback)(SSL *ssl, const char *hint,
+               char *identity, unsigned int max_identity_len,
+               unsigned char *psk, unsigned int max_psk_len));
+
+DDEESSCCRRIIPPTTIIOONN
+       A client application must provide a callback function which is called
+       when the client is sending the ClientKeyExchange message to the server.
+
+       The purpose of the callback function is to select the PSK identity and
+       the pre-shared key to use during the connection setup phase.
+
+       The callback is set using functions _S_S_L___C_T_X___s_e_t___p_s_k___c_l_i_e_n_t___c_a_l_l_b_a_c_k_(_)
+       or _S_S_L___s_e_t___p_s_k___c_l_i_e_n_t___c_a_l_l_b_a_c_k_(_). The callback function is given the
+       connection in parameter ssssll, a NNUULLLL-terminated PSK identity hint sent
+       by the server in parameter hhiinntt, a buffer iiddeennttiittyy of length mmaaxx__iiddeenn--
+       ttiittyy__lleenn bytes where the the resulting NNUULLLL-terminated identity is to
+       be stored, and a buffer ppsskk of length mmaaxx__ppsskk__lleenn bytes where the
+       resulting pre-shared key is to be stored.
+
+NNOOTTEESS
+       Note that parameter hhiinntt given to the callback may be NNUULLLL.
+
+RREETTUURRNN VVAALLUUEESS
+       Return values from the client callback are interpreted as follows:
+
+       On success (callback found a PSK identity and a pre-shared key to use)
+       the length (> 0) of ppsskk in bytes is returned.
+
+       Otherwise or on errors callback should return 0. In this case the con-
+       nection setup fails.
+
+
+
+1.0.0g                            2006-03-11SSL_CTX_set_psk_client_callback(3)

@@ -1,0 +1,84 @@
+RAND_egd(3)                         OpenSSL                        RAND_egd(3)
+
+
+
+NNAAMMEE
+       RAND_egd - query entropy gathering daemon
+
+SSYYNNOOPPSSIISS
+        #include <openssl/rand.h>
+
+        int RAND_egd(const char *path);
+        int RAND_egd_bytes(const char *path, int bytes);
+
+        int RAND_query_egd_bytes(const char *path, unsigned char *buf, int bytes);
+
+DDEESSCCRRIIPPTTIIOONN
+       _R_A_N_D___e_g_d_(_) queries the entropy gathering daemon EGD on socket ppaatthh.  It
+       queries 255 bytes and uses _R_A_N_D___a_d_d(3) to seed the OpenSSL built-in
+       PRNG. RAND_egd(path) is a wrapper for RAND_egd_bytes(path, 255);
+
+       _R_A_N_D___e_g_d___b_y_t_e_s_(_) queries the entropy gathering daemon EGD on socket
+       ppaatthh.  It queries bbyytteess bytes and uses _R_A_N_D___a_d_d(3) to seed the OpenSSL
+       built-in PRNG.  This function is more flexible than _R_A_N_D___e_g_d_(_).  When
+       only one secret key must be generated, it is not necessary to request
+       the full amount 255 bytes from the EGD socket. This can be advanta-
+       geous, since the amount of entropy that can be retrieved from EGD over
+       time is limited.
+
+       _R_A_N_D___q_u_e_r_y___e_g_d___b_y_t_e_s_(_) performs the actual query of the EGD daemon on
+       socket ppaatthh. If bbuuff is given, bbyytteess bytes are queried and written into
+       bbuuff. If bbuuff is NULL, bbyytteess bytes are queried and used to seed the
+       OpenSSL built-in PRNG using _R_A_N_D___a_d_d(3).
+
+NNOOTTEESS
+       On systems without /dev/*random devices providing entropy from the ker-
+       nel, the EGD entropy gathering daemon can be used to collect entropy.
+       It provides a socket interface through which entropy can be gathered in
+       chunks up to 255 bytes. Several chunks can be queried during one con-
+       nection.
+
+       EGD is available from http://www.lothar.com/tech/crypto/ ("perl Make-
+       file.PL; make; make install" to install). It is run as eeggdd _p_a_t_h, where
+       _p_a_t_h is an absolute path designating a socket. When _R_A_N_D___e_g_d_(_) is
+       called with that path as an argument, it tries to read random bytes
+       that EGD has collected. _R_A_N_D___e_g_d_(_) retrieves entropy from the daemon
+       using the daemon's "non-blocking read" command which shall be answered
+       immediately by the daemon without waiting for additional entropy to be
+       collected. The write and read socket operations in the communication
+       are blocking.
+
+       Alternatively, the EGD-interface compatible daemon PRNGD can be used.
+       It is available from http://prngd.sourceforge.net/ .  PRNGD does employ
+       an internal PRNG itself and can therefore never run out of entropy.
+
+       OpenSSL automatically queries EGD when entropy is requested via
+       _R_A_N_D___b_y_t_e_s_(_) or the status is checked via _R_A_N_D___s_t_a_t_u_s_(_) for the first
+       time, if the socket is located at /var/run/egd-pool, /dev/egd-pool or
+       /etc/egd-pool.
+
+RREETTUURRNN VVAALLUUEE
+       _R_A_N_D___e_g_d_(_) and _R_A_N_D___e_g_d___b_y_t_e_s_(_) return the number of bytes read from
+       the daemon on success, and -1 if the connection failed or the daemon
+       did not return enough data to fully seed the PRNG.
+
+       _R_A_N_D___q_u_e_r_y___e_g_d___b_y_t_e_s_(_) returns the number of bytes read from the daemon
+       on success, and -1 if the connection failed. The PRNG state is not con-
+       sidered.
+
+SSEEEE AALLSSOO
+       _r_a_n_d(3), _R_A_N_D___a_d_d(3), _R_A_N_D___c_l_e_a_n_u_p(3)
+
+HHIISSTTOORRYY
+       _R_A_N_D___e_g_d_(_) is available since OpenSSL 0.9.5.
+
+       _R_A_N_D___e_g_d___b_y_t_e_s_(_) is available since OpenSSL 0.9.6.
+
+       _R_A_N_D___q_u_e_r_y___e_g_d___b_y_t_e_s_(_) is available since OpenSSL 0.9.7.
+
+       The automatic query of /var/run/egd-pool et al was added in OpenSSL
+       0.9.7.
+
+
+
+1.0.0g                            2008-11-10                       RAND_egd(3)

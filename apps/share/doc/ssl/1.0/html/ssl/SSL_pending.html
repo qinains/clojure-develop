@@ -1,0 +1,78 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_pending - obtain number of readable bytes buffered in an SSL object</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_pending - obtain number of readable bytes buffered in an SSL object</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ int SSL_pending(const SSL *ssl);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_pending()</code> returns the number of bytes which are available inside
+<strong>ssl</strong> for immediate read.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>Data are received in blocks from the peer. Therefore data can be buffered
+inside <strong>ssl</strong> and are ready for immediate retrieval with
+<a href="../ssl/SSL_read.html">SSL_read</a>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>The number of bytes pending is returned.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p><code>SSL_pending()</code> takes into account only bytes from the TLS/SSL record
+that is currently being processed (if any).  If the <strong>SSL</strong> object's
+<em>read_ahead</em> flag is set, additional protocol bytes may have been
+read containing more TLS/SSL records; these are ignored by
+SSL_pending().</p>
+<p>Up to OpenSSL 0.9.6, <code>SSL_pending()</code> does not check if the record type
+of pending data is application data.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/SSL_read.html">SSL_read</a>, <a href="../ssl/ssl.html">ssl</a></p>
+
+</body>
+
+</html>

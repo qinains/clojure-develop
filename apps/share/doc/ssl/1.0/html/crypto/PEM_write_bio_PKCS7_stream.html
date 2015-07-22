@@ -1,0 +1,76 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>PEM_write_bio_PKCS7_stream - output PKCS7 structure in PEM format.</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>PEM_write_bio_PKCS7_stream - output PKCS7 structure in PEM format.</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/pkcs7.h&gt;
+ #include &lt;openssl/pem.h&gt;</pre>
+<pre>
+ int PEM_write_bio_PKCS7_stream(BIO *out, PKCS7 *p7, BIO *data, int flags);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>PEM_write_bio_PKCS7_stream()</code> outputs a PKCS7 structure in PEM format.</p>
+<p>It is otherwise identical to the function SMIME_write_PKCS7().</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>This function is effectively a version of the <code>PEM_write_bio_PKCS7()</code> supporting
+streaming.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>PEM_write_bio_PKCS7_stream()</code> returns 1 for success or 0 for failure.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../crypto/ERR_get_error.html">ERR_get_error</a>, <a href="../crypto/PKCS7_sign.html">PKCS7_sign</a>,
+<a href="../crypto/PKCS7_verify.html">PKCS7_verify</a>, <a href="../crypto/PKCS7_encrypt.html">PKCS7_encrypt</a>
+<a href="../crypto/PKCS7_decrypt.html">PKCS7_decrypt</a>,
+<a href="../crypto/SMIME_write_PKCS7.html">SMIME_write_PKCS7</a>,
+<a href="../crypto/i2d_PKCS7_bio_stream.html">i2d_PKCS7_bio_stream</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p><code>PEM_write_bio_PKCS7_stream()</code> was added to OpenSSL 1.0.0</p>
+
+</body>
+
+</html>

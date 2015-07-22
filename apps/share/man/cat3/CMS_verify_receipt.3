@@ -1,0 +1,42 @@
+CMS_verify_receipt(3)               OpenSSL              CMS_verify_receipt(3)
+
+
+
+NNAAMMEE
+        CMS_verify_receipt - verify a CMS signed receipt
+
+SSYYNNOOPPSSIISS
+        #include <openssl/cms.h>
+
+        int CMS_verify_receipt(CMS_ContentInfo *rcms, CMS_ContentInfo *ocms, STACK_OF(X509) *certs, X509_STORE *store, unsigned int flags);
+
+DDEESSCCRRIIPPTTIIOONN
+       _C_M_S___v_e_r_i_f_y___r_e_c_e_i_p_t_(_) verifies a CMS signed receipt. rrccmmss is the signed
+       receipt to verify. ooccmmss is the original SignedData structure containing
+       the receipt request. cceerrttss is a set of certificates in which to search
+       for the signing certificate. ssttoorree is a trusted certificate store (used
+       for chain verification).
+
+       ffllaaggss is an optional set of flags, which can be used to modify the ver-
+       ify operation.
+
+NNOOTTEESS
+       This functions behaves in a similar way to _C_M_S___v_e_r_i_f_y_(_) except the flag
+       values CCMMSS__DDEETTAACCHHEEDD, CCMMSS__BBIINNAARRYY, CCMMSS__TTEEXXTT and CCMMSS__SSTTRREEAAMM are not sup-
+       ported since they do not make sense in the context of signed receipts.
+
+RREETTUURRNN VVAALLUUEESS
+       _C_M_S___v_e_r_i_f_y___r_e_c_e_i_p_t_(_) returns 1 for a successful verification and zero
+       if an error occurred.
+
+       The error can be obtained from _E_R_R___g_e_t___e_r_r_o_r(3)
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _C_M_S___s_i_g_n___r_e_c_e_i_p_t(3), _C_M_S___v_e_r_i_f_y(3),
+
+HHIISSTTOORRYY
+       _C_M_S___v_e_r_i_f_y___r_e_c_e_i_p_t_(_) was added to OpenSSL 0.9.8
+
+
+
+1.0.0g                            2008-04-11             CMS_verify_receipt(3)

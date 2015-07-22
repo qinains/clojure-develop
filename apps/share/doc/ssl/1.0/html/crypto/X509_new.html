@@ -1,0 +1,70 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>X509_free - X509 certificate ASN1 allocation functions</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>X509_new, X509_free - X509 certificate ASN1 allocation functions</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/x509.h&gt;</pre>
+<pre>
+ X509 *X509_new(void);
+ void X509_free(X509 *a);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The X509 ASN1 allocation routines, allocate and free an
+X509 structure, which represents an X509 certificate.</p>
+<p><code>X509_new()</code> allocates and initializes a X509 structure.</p>
+<p><code>X509_free()</code> frees up the <strong>X509</strong> structure <strong>a</strong>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>If the allocation fails, <code>X509_new()</code> returns <strong>NULL</strong> and sets an error
+code that can be obtained by <a href="../crypto/ERR_get_error.html">ERR_get_error</a>.
+Otherwise it returns a pointer to the newly allocated structure.</p>
+<p><code>X509_free()</code> returns no value.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../crypto/ERR_get_error.html">ERR_get_error</a>, <a href="../crypto/d2i_X509.html">d2i_X509</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p><code>X509_new()</code> and <code>X509_free()</code> are available in all versions of SSLeay and OpenSSL.</p>
+
+</body>
+
+</html>

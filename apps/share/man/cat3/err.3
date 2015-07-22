@@ -1,0 +1,173 @@
+err(3)                              OpenSSL                             err(3)
+
+
+
+NNAAMMEE
+       err - error codes
+
+SSYYNNOOPPSSIISS
+        #include <openssl/err.h>
+
+        unsigned long ERR_get_error(void);
+        unsigned long ERR_peek_error(void);
+        unsigned long ERR_get_error_line(const char **file, int *line);
+        unsigned long ERR_peek_error_line(const char **file, int *line);
+        unsigned long ERR_get_error_line_data(const char **file, int *line,
+                const char **data, int *flags);
+        unsigned long ERR_peek_error_line_data(const char **file, int *line,
+                const char **data, int *flags);
+
+        int ERR_GET_LIB(unsigned long e);
+        int ERR_GET_FUNC(unsigned long e);
+        int ERR_GET_REASON(unsigned long e);
+
+        void ERR_clear_error(void);
+
+        char *ERR_error_string(unsigned long e, char *buf);
+        const char *ERR_lib_error_string(unsigned long e);
+        const char *ERR_func_error_string(unsigned long e);
+        const char *ERR_reason_error_string(unsigned long e);
+
+        void ERR_print_errors(BIO *bp);
+        void ERR_print_errors_fp(FILE *fp);
+
+        void ERR_load_crypto_strings(void);
+        void ERR_free_strings(void);
+
+        void ERR_remove_state(unsigned long pid);
+
+        void ERR_put_error(int lib, int func, int reason, const char *file,
+                int line);
+        void ERR_add_error_data(int num, ...);
+
+        void ERR_load_strings(int lib,ERR_STRING_DATA str[]);
+        unsigned long ERR_PACK(int lib, int func, int reason);
+        int ERR_get_next_error_library(void);
+
+DDEESSCCRRIIPPTTIIOONN
+       When a call to the OpenSSL library fails, this is usually signalled by
+       the return value, and an error code is stored in an error queue associ-
+       ated with the current thread. The eerrrr library provides functions to
+       obtain these error codes and textual error messages.
+
+       The _E_R_R___g_e_t___e_r_r_o_r(3) manpage describes how to access error codes.
+
+       Error codes contain information about where the error occurred, and
+       what went wrong. _E_R_R___G_E_T___L_I_B(3) describes how to extract this informa-
+       tion. A method to obtain human-readable error messages is described in
+       _E_R_R___e_r_r_o_r___s_t_r_i_n_g(3).
+
+       _E_R_R___c_l_e_a_r___e_r_r_o_r(3) can be used to clear the error queue.
+
+       Note that _E_R_R___r_e_m_o_v_e___s_t_a_t_e(3) should be used to avoid memory leaks when
+       threads are terminated.
+
+AADDDDIINNGG NNEEWW EERRRROORR CCOODDEESS TTOO OOPPEENNSSSSLL
+       See _E_R_R___p_u_t___e_r_r_o_r(3) if you want to record error codes in the OpenSSL
+       error system from within your application.
+
+       The remainder of this section is of interest only if you want to add
+       new error codes to OpenSSL or add error codes from external libraries.
+
+       RReeppoorrttiinngg eerrrroorrss
+
+       Each sub-library has a specific macro _X_X_X_e_r_r_(_) that is used to report
+       errors. Its first argument is a function code XXXXXX__FF__......, the second
+       argument is a reason code XXXXXX__RR__....... Function codes are derived from
+       the function names; reason codes consist of textual error descriptions.
+       For example, the function _s_s_l_2_3___r_e_a_d_(_) reports a "handshake failure" as
+       follows:
+
+        SSLerr(SSL_F_SSL23_READ, SSL_R_SSL_HANDSHAKE_FAILURE);
+
+       Function and reason codes should consist of upper case characters, num-
+       bers and underscores only. The error file generation script translates
+       function codes into function names by looking in the header files for
+       an appropriate function name, if none is found it just uses the capi-
+       talized form such as "SSL23_READ" in the above example.
+
+       The trailing section of a reason code (after the "_R_") is translated
+       into lower case and underscores changed to spaces.
+
+       When you are using new function or reason codes, run mmaakkee eerrrroorrss.  The
+       necessary ##ddeeffiinnees will then automatically be added to the
+       sub-library's header file.
+
+       Although a library will normally report errors using its own specific
+       XXXerr macro, another library's macro can be used. This is normally
+       only done when a library wants to include ASN1 code which must use the
+       _A_S_N_1_e_r_r_(_) macro.
+
+       AAddddiinngg nneeww lliibbrraarriieess
+
+       When adding a new sub-library to OpenSSL, assign it a library number
+       EERRRR__LLIIBB__XXXXXX, define a macro _X_X_X_e_r_r_(_) (both in eerrrr..hh), add its name to
+       EERRRR__ssttrr__lliibbrraarriieess[[]] (in ccrryyppttoo//eerrrr//eerrrr..cc), and add
+       "ERR_load_XXX_strings()" to the _E_R_R___l_o_a_d___c_r_y_p_t_o___s_t_r_i_n_g_s_(_) function (in
+       ccrryyppttoo//eerrrr//eerrrr__aallll..cc). Finally, add an entry
+
+        L      XXX     xxx.h   xxx_err.c
+
+       to ccrryyppttoo//eerrrr//ooppeennssssll..eecc, and add xxxxxx__eerrrr..cc to the Makefile.  Running
+       mmaakkee eerrrroorrss will then generate a file xxxxxx__eerrrr..cc, and add all error
+       codes used in the library to xxxxxx..hh.
+
+       Additionally the library include file must have a certain form.  Typi-
+       cally it will initially look like this:
+
+        #ifndef HEADER_XXX_H
+        #define HEADER_XXX_H
+
+        #ifdef __cplusplus
+        extern "C" {
+        #endif
+
+        /* Include files */
+
+        #include <openssl/bio.h>
+        #include <openssl/x509.h>
+
+        /* Macros, structures and function prototypes */
+
+        /* BEGIN ERROR CODES */
+
+       The BBEEGGIINN EERRRROORR CCOODDEESS sequence is used by the error code generation
+       script as the point to place new error codes, any text after this point
+       will be overwritten when mmaakkee eerrrroorrss is run.  The closing #endif etc
+       will be automatically added by the script.
+
+       The generated C error code file xxxxxx__eerrrr..cc will load the header files
+       ssttddiioo..hh, ooppeennssssll//eerrrr..hh and ooppeennssssll//xxxxxx..hh so the header file must load
+       any additional header files containing any definitions it uses.
+
+UUSSIINNGG EERRRROORR CCOODDEESS IINN EEXXTTEERRNNAALL LLIIBBRRAARRIIEESS
+       It is also possible to use OpenSSL's error code scheme in external
+       libraries. The library needs to load its own codes and call the OpenSSL
+       error code insertion script mmkkeerrrr..ppll explicitly to add codes to the
+       header file and generate the C error code file. This will normally be
+       done if the external library needs to generate new ASN1 structures but
+       it can also be used to add more general purpose error code handling.
+
+       TBA more details
+
+IINNTTEERRNNAALLSS
+       The error queues are stored in a hash table with one EERRRR__SSTTAATTEE entry
+       for each pid. _E_R_R___g_e_t___s_t_a_t_e_(_) returns the current thread's EERRRR__SSTTAATTEE.
+       An EERRRR__SSTTAATTEE can hold up to EERRRR__NNUUMM__EERRRROORRSS error codes. When more error
+       codes are added, the old ones are overwritten, on the assumption that
+       the most recent errors are most important.
+
+       Error strings are also stored in hash table. The hash tables can be
+       obtained by calling ERR_get_err_state_table(void) and
+       ERR_get_string_table(void) respectively.
+
+SSEEEE AALLSSOO
+       _C_R_Y_P_T_O___s_e_t___i_d___c_a_l_l_b_a_c_k(3), _C_R_Y_P_T_O___s_e_t___l_o_c_k_i_n_g___c_a_l_l_b_a_c_k(3),
+       _E_R_R___g_e_t___e_r_r_o_r(3), _E_R_R___G_E_T___L_I_B(3), _E_R_R___c_l_e_a_r___e_r_r_o_r(3),
+       _E_R_R___e_r_r_o_r___s_t_r_i_n_g(3), _E_R_R___p_r_i_n_t___e_r_r_o_r_s(3), _E_R_R___l_o_a_d___c_r_y_p_t_o___s_t_r_i_n_g_s(3),
+       _E_R_R___r_e_m_o_v_e___s_t_a_t_e(3), _E_R_R___p_u_t___e_r_r_o_r(3), _E_R_R___l_o_a_d___s_t_r_i_n_g_s(3),
+       _S_S_L___g_e_t___e_r_r_o_r(3)
+
+
+
+1.0.0g                            2002-07-10                            err(3)

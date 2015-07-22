@@ -1,0 +1,36 @@
+DSA_SIG_new(3)                      OpenSSL                     DSA_SIG_new(3)
+
+
+
+NNAAMMEE
+       DSA_SIG_new, DSA_SIG_free - allocate and free DSA signature objects
+
+SSYYNNOOPPSSIISS
+        #include <openssl/dsa.h>
+
+        DSA_SIG *DSA_SIG_new(void);
+
+        void   DSA_SIG_free(DSA_SIG *a);
+
+DDEESSCCRRIIPPTTIIOONN
+       _D_S_A___S_I_G___n_e_w_(_) allocates and initializes a DDSSAA__SSIIGG structure.
+
+       _D_S_A___S_I_G___f_r_e_e_(_) frees the DDSSAA__SSIIGG structure and its components. The val-
+       ues are erased before the memory is returned to the system.
+
+RREETTUURRNN VVAALLUUEESS
+       If the allocation fails, _D_S_A___S_I_G___n_e_w_(_) returns NNUULLLL and sets an error
+       code that can be obtained by _E_R_R___g_e_t___e_r_r_o_r(3). Otherwise it returns a
+       pointer to the newly allocated structure.
+
+       _D_S_A___S_I_G___f_r_e_e_(_) returns no value.
+
+SSEEEE AALLSSOO
+       _d_s_a(3), _E_R_R___g_e_t___e_r_r_o_r(3), _D_S_A___d_o___s_i_g_n(3)
+
+HHIISSTTOORRYY
+       _D_S_A___S_I_G___n_e_w_(_) and _D_S_A___S_I_G___f_r_e_e_(_) were added in OpenSSL 0.9.3.
+
+
+
+1.0.0g                            2002-09-25                    DSA_SIG_new(3)

@@ -1,0 +1,34 @@
+SSL_CTX_ctrl(3)                     OpenSSL                    SSL_CTX_ctrl(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_ctrl, SSL_CTX_callback_ctrl, SSL_ctrl, SSL_callback_ctrl -
+       internal handling functions for SSL_CTX and SSL objects
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        long SSL_CTX_ctrl(SSL_CTX *ctx, int cmd, long larg, void *parg);
+        long SSL_CTX_callback_ctrl(SSL_CTX *, int cmd, void (*fp)());
+
+        long SSL_ctrl(SSL *ssl, int cmd, long larg, void *parg);
+        long SSL_callback_ctrl(SSL *, int cmd, void (*fp)());
+
+DDEESSCCRRIIPPTTIIOONN
+       The SSL_*___c_t_r_l_(_) family of functions is used to manipulate settings of
+       the SSL_CTX and SSL objects. Depending on the command ccmmdd the arguments
+       llaarrgg, ppaarrgg, or ffpp are evaluated. These functions should never be called
+       directly. All functionalities needed are made available via other func-
+       tions or macros.
+
+RREETTUURRNN VVAALLUUEESS
+       The return values of the SSL*___c_t_r_l_(_) functions depend on the command
+       supplied via the ccmmdd parameter.
+
+SSEEEE AALLSSOO
+       _s_s_l(3)
+
+
+
+1.0.0g                            2001-10-20                   SSL_CTX_ctrl(3)

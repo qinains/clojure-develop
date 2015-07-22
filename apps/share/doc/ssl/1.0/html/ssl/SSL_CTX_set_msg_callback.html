@@ -1,0 +1,139 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_get_msg_callback_arg - install callback for observing protocol messages</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_CTX_set_msg_callback, SSL_CTX_set_msg_callback_arg, SSL_set_msg_callback, SSL_get_msg_callback_arg - install callback for observing protocol messages</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ void SSL_CTX_set_msg_callback(SSL_CTX *ctx, void (*cb)(int write_p, int version, int content_type, const void *buf, size_t len, SSL *ssl, void *arg));
+ void SSL_CTX_set_msg_callback_arg(SSL_CTX *ctx, void *arg);</pre>
+<pre>
+ void SSL_set_msg_callback(SSL_CTX *ctx, void (*cb)(int write_p, int version, int content_type, const void *buf, size_t len, SSL *ssl, void *arg));
+ void SSL_set_msg_callback_arg(SSL_CTX *ctx, void *arg);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_CTX_set_msg_callback()</code> or <code>SSL_set_msg_callback()</code> can be used to
+define a message callback function <em>cb</em> for observing all SSL/TLS
+protocol messages (such as handshake messages) that are received or
+sent.  <code>SSL_CTX_set_msg_callback_arg()</code> and <code>SSL_set_msg_callback_arg()</code>
+can be used to set argument <em>arg</em> to the callback function, which is
+available for arbitrary application use.</p>
+<p><code>SSL_CTX_set_msg_callback()</code> and <code>SSL_CTX_set_msg_callback_arg()</code> specify
+default settings that will be copied to new <strong>SSL</strong> objects by
+<a href="../ssl/SSL_new.html">SSL_new</a>. <code>SSL_set_msg_callback()</code> and
+<code>SSL_set_msg_callback_arg()</code> modify the actual settings of an <strong>SSL</strong>
+object. Using a <strong>0</strong> pointer for <em>cb</em> disables the message callback.</p>
+<p>When <em>cb</em> is called by the SSL/TLS library for a protocol message,
+the function arguments have the following meaning:</p>
+<dl>
+<dt><strong><a name="item_write_p"><em>write_p</em></a></strong>
+
+<dd>
+<p>This flag is <strong>0</strong> when a protocol message has been received and <strong>1</strong>
+when a protocol message has been sent.</p>
+</dd>
+</li>
+<dt><strong><a name="item_version"><em>version</em></a></strong>
+
+<dd>
+<p>The protocol version according to which the protocol message is
+interpreted by the library. Currently, this is one of
+<strong>SSL2_VERSION</strong>, <strong>SSL3_VERSION</strong> and <strong>TLS1_VERSION</strong> (for SSL 2.0, SSL
+3.0 and TLS 1.0, respectively).</p>
+</dd>
+</li>
+<dt><strong><a name="item_content_type"><em>content_type</em></a></strong>
+
+<dd>
+<p>In the case of SSL 2.0, this is always <strong>0</strong>.  In the case of SSL 3.0
+or TLS 1.0, this is one of the <strong>ContentType</strong> values defined in the
+protocol specification (<strong>change_cipher_spec(20)</strong>, <strong>alert(21)</strong>,
+<strong>handshake(22)</strong>; but never <strong>application_data(23)</strong> because the
+callback will only be called for protocol messages).</p>
+</dd>
+</li>
+<dt><strong><a name="item_buf_2c_len"><em>buf</em>, <em>len</em></a></strong>
+
+<dd>
+<p><em>buf</em> points to a buffer containing the protocol message, which
+consists of <em>len</em> bytes. The buffer is no longer valid after the
+callback function has returned.</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl"><em>ssl</em></a></strong>
+
+<dd>
+<p>The <strong>SSL</strong> object that received or sent the message.</p>
+</dd>
+</li>
+<dt><strong><a name="item_arg"><em>arg</em></a></strong>
+
+<dd>
+<p>The user-defined argument optionally defined by
+<code>SSL_CTX_set_msg_callback_arg()</code> or SSL_set_msg_callback_arg().</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>Protocol messages are passed to the callback function after decryption
+and fragment collection where applicable. (Thus record boundaries are
+not visible.)</p>
+<p>If processing a received protocol message results in an error,
+the callback function may not be called.  For example, the callback
+function will never see messages that are considered too large to be
+processed.</p>
+<p>Due to automatic protocol version negotiation, <em>version</em> is not
+necessarily the protocol version used by the sender of the message: If
+a TLS 1.0 ClientHello message is received by an SSL 3.0-only server,
+<em>version</em> will be <strong>SSL3_VERSION</strong>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a>, <a href="../ssl/SSL_new.html">SSL_new</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>SSL_CTX_set_msg_callback(), SSL_CTX_set_msg_callback_arg(),
+<code>SSL_set_msg_callback()</code> and <code>SSL_get_msg_callback_arg()</code> were added in OpenSSL 0.9.7.</p>
+
+</body>
+
+</html>

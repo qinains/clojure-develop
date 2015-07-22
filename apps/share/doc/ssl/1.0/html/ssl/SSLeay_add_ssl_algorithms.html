@@ -1,0 +1,97 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSLeay_add_ssl_algorithms
+- initialize SSL library by registering algorithms</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#warning">WARNING</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_library_init, OpenSSL_add_ssl_algorithms, SSLeay_add_ssl_algorithms
+- initialize SSL library by registering algorithms</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ int SSL_library_init(void);
+ #define OpenSSL_add_ssl_algorithms()    SSL_library_init()
+ #define SSLeay_add_ssl_algorithms()     SSL_library_init()</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_library_init()</code> registers the available SSL/TLS ciphers and digests.</p>
+<p><code>OpenSSL_add_ssl_algorithms()</code> and <code>SSLeay_add_ssl_algorithms()</code> are synonyms
+for SSL_library_init().</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p><code>SSL_library_init()</code> must be called before any other action takes place.
+<code>SSL_library_init()</code> is not reentrant.</p>
+<p>
+</p>
+<hr />
+<h1><a name="warning">WARNING</a></h1>
+<p><code>SSL_library_init()</code> adds ciphers and digests used directly and indirectly by
+SSL/TLS.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>A typical TLS/SSL application will start with the library initialization,
+and provide readable error messages.</p>
+<pre>
+ SSL_load_error_strings();                /* readable error messages */
+ SSL_library_init();                      /* initialize library */</pre>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>SSL_library_init()</code> always returns ``1'', so it is safe to discard the return
+value.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>OpenSSL 0.9.8o and 1.0.0a and later added SHA2 algorithms to SSL_library_init().
+Applications which need to use SHA2 in earlier versions of OpenSSL should call
+<code>OpenSSL_add_all_algorithms()</code> as well.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a>, <em>SSL_load_error_strings</em>,
+<a href="../crypto/RAND_add.html">RAND_add</a></p>
+
+</body>
+
+</html>

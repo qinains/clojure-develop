@@ -1,0 +1,55 @@
+RSA_sign_ASN1_OCTET_STRING(3)       OpenSSL      RSA_sign_ASN1_OCTET_STRING(3)
+
+
+
+NNAAMMEE
+       RSA_sign_ASN1_OCTET_STRING, RSA_verify_ASN1_OCTET_STRING - RSA signa-
+       tures
+
+SSYYNNOOPPSSIISS
+        #include <openssl/rsa.h>
+
+        int RSA_sign_ASN1_OCTET_STRING(int dummy, unsigned char *m,
+           unsigned int m_len, unsigned char *sigret, unsigned int *siglen,
+           RSA *rsa);
+
+        int RSA_verify_ASN1_OCTET_STRING(int dummy, unsigned char *m,
+           unsigned int m_len, unsigned char *sigbuf, unsigned int siglen,
+           RSA *rsa);
+
+DDEESSCCRRIIPPTTIIOONN
+       _R_S_A___s_i_g_n___A_S_N_1___O_C_T_E_T___S_T_R_I_N_G_(_) signs the octet string mm of size mm__lleenn
+       using the private key rrssaa represented in DER using PKCS #1 padding. It
+       stores the signature in ssiiggrreett and the signature size in ssiigglleenn. ssiiggrreett
+       must point to RRSSAA__ssiizzee((rrssaa)) bytes of memory.
+
+       dduummmmyy is ignored.
+
+       The random number generator must be seeded prior to calling
+       _R_S_A___s_i_g_n___A_S_N_1___O_C_T_E_T___S_T_R_I_N_G_(_).
+
+       _R_S_A___v_e_r_i_f_y___A_S_N_1___O_C_T_E_T___S_T_R_I_N_G_(_) verifies that the signature ssiiggbbuuff of
+       size ssiigglleenn is the DER representation of a given octet string mm of size
+       mm__lleenn. dduummmmyy is ignored. rrssaa is the signer's public key.
+
+RREETTUURRNN VVAALLUUEESS
+       _R_S_A___s_i_g_n___A_S_N_1___O_C_T_E_T___S_T_R_I_N_G_(_) returns 1 on success, 0 otherwise.
+       _R_S_A___v_e_r_i_f_y___A_S_N_1___O_C_T_E_T___S_T_R_I_N_G_(_) returns 1 on successful verification, 0
+       otherwise.
+
+       The error codes can be obtained by _E_R_R___g_e_t___e_r_r_o_r(3).
+
+BBUUGGSS
+       These functions serve no recognizable purpose.
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _o_b_j_e_c_t_s(3), _r_a_n_d(3), _r_s_a(3), _R_S_A___s_i_g_n(3), _R_S_A___v_e_r_-
+       _i_f_y(3)
+
+HHIISSTTOORRYY
+       _R_S_A___s_i_g_n___A_S_N_1___O_C_T_E_T___S_T_R_I_N_G_(_) and _R_S_A___v_e_r_i_f_y___A_S_N_1___O_C_T_E_T___S_T_R_I_N_G_(_) were
+       added in SSLeay 0.8.
+
+
+
+1.0.0g                            2002-09-25     RSA_sign_ASN1_OCTET_STRING(3)

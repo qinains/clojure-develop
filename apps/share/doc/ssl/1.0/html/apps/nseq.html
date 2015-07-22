@@ -1,0 +1,108 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>nseq - create or examine a netscape certificate sequence</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#command_options">COMMAND OPTIONS</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>nseq - create or examine a netscape certificate sequence</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>openssl</strong> <strong>nseq</strong>
+[<strong>-in filename</strong>]
+[<strong>-out filename</strong>]
+[<strong>-toseq</strong>]</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>nseq</strong> command takes a file containing a Netscape certificate
+sequence and prints out the certificates contained in it or takes a
+file of certificates and converts it into a Netscape certificate
+sequence.</p>
+<p>
+</p>
+<hr />
+<h1><a name="command_options">COMMAND OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item__2din_filename"><strong>-in filename</strong></a></strong>
+
+<dd>
+<p>This specifies the input filename to read or standard input if this
+option is not specified.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dout_filename"><strong>-out filename</strong></a></strong>
+
+<dd>
+<p>specifies the output filename or standard output by default.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dtoseq"><strong>-toseq</strong></a></strong>
+
+<dd>
+<p>normally a Netscape certificate sequence will be input and the output
+is the certificates contained in it. With the <strong>-toseq</strong> option the
+situation is reversed: a Netscape certificate sequence is created from
+a file of certificates.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>Output the certificates in a Netscape certificate sequence</p>
+<pre>
+ openssl nseq -in nseq.pem -out certs.pem</pre>
+<p>Create a Netscape certificate sequence</p>
+<pre>
+ openssl nseq -in certs.pem -toseq -out nseq.pem</pre>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>The <strong>PEM</strong> encoded form uses the same headers and footers as a certificate:</p>
+<pre>
+ -----BEGIN CERTIFICATE-----
+ -----END CERTIFICATE-----</pre>
+<p>A Netscape certificate sequence is a Netscape specific form that can be sent
+to browsers as an alternative to the standard PKCS#7 format when several
+certificates are sent to the browser: for example during certificate enrollment.
+It is used by Netscape certificate server for example.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>This program needs a few more options: like allowing DER or PEM input and
+output files and allowing multiple certificate files to be used.</p>
+
+</body>
+
+</html>

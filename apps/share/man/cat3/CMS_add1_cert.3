@@ -1,0 +1,60 @@
+CMS_add0_cert(3)                    OpenSSL                   CMS_add0_cert(3)
+
+
+
+NNAAMMEE
+        CMS_add0_cert, CMS_add1_cert, CMS_get1_certs, CMS_add0_crl, CMS_get1_crls, - CMS certificate and CRL utility functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/cms.h>
+
+        int CMS_add0_cert(CMS_ContentInfo *cms, X509 *cert);
+        int CMS_add1_cert(CMS_ContentInfo *cms, X509 *cert);
+        STACK_OF(X509) *CMS_get1_certs(CMS_ContentInfo *cms);
+
+        int CMS_add0_crl(CMS_ContentInfo *cms, X509_CRL *crl);
+        int CMS_add1_crl(CMS_ContentInfo *cms, X509_CRL *crl);
+        STACK_OF(X509_CRL) *CMS_get1_crls(CMS_ContentInfo *cms);
+
+DDEESSCCRRIIPPTTIIOONN
+       _C_M_S___a_d_d_0___c_e_r_t_(_) and _C_M_S___a_d_d_1___c_e_r_t_(_) add certificate cceerrtt to ccmmss.  must
+       be of type signed data or enveloped data.
+
+       _C_M_S___g_e_t_1___c_e_r_t_s_(_) returns all certificates in ccmmss.
+
+       _C_M_S___a_d_d_0___c_r_l_(_) and _C_M_S___a_d_d_1___c_r_l_(_) add CRL ccrrll to ccmmss. _C_M_S___g_e_t_1___c_r_l_s_(_)
+       returns any CRLs in ccmmss.
+
+NNOOTTEESS
+       The CMS_ContentInfo structure ccmmss must be of type signed data or
+       enveloped data or an error will be returned.
+
+       For signed data certificates and CRLs are added to the cceerrttiiffiiccaatteess and
+       ccrrllss fields of SignedData structure. For enveloped data they are added
+       to OOrriiggiinnaattoorrIInnffoo.
+
+       As the 00 implies _C_M_S___a_d_d_0___c_e_r_t_(_) adds cceerrtt internally to ccmmss and it
+       must not be freed up after the call as opposed to _C_M_S___a_d_d_1___c_e_r_t_(_) where
+       cceerrtt must be freed up.
+
+       The same certificate or CRL must not be added to the same cms structure
+       more than once.
+
+RREETTUURRNN VVAALLUUEESS
+       _C_M_S___a_d_d_0___c_e_r_t_(_), _C_M_S___a_d_d_1___c_e_r_t_(_) and _C_M_S___a_d_d_0___c_r_l_(_) and _C_M_S___a_d_d_1___c_r_l_(_)
+       return 1 for success and 0 for failure.
+
+       _C_M_S___g_e_t_1___c_e_r_t_s_(_) and _C_M_S___g_e_t_1___c_r_l_s_(_) return the STACK of certificates
+       or CRLs or NULL if there are none or an error occurs. The only error
+       which will occur in practice is if the ccmmss type is invalid.
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _C_M_S___s_i_g_n(3), _C_M_S___e_n_c_r_y_p_t(3)
+
+HHIISSTTOORRYY
+       _C_M_S___a_d_d_0___c_e_r_t_(_), _C_M_S___a_d_d_1___c_e_r_t_(_), _C_M_S___g_e_t_1___c_e_r_t_s_(_), _C_M_S___a_d_d_0___c_r_l_(_) and
+       _C_M_S___g_e_t_1___c_r_l_s_(_) were all first added to OpenSSL 0.9.8
+
+
+
+1.0.0g                            2008-05-02                  CMS_add0_cert(3)

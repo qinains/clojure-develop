@@ -1,0 +1,95 @@
+md5(3)                              OpenSSL                             md5(3)
+
+
+
+NNAAMMEE
+       MD2, MD4, MD5, MD2_Init, MD2_Update, MD2_Final, MD4_Init, MD4_Update,
+       MD4_Final, MD5_Init, MD5_Update, MD5_Final - MD2, MD4, and MD5 hash
+       functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/md2.h>
+
+        unsigned char *MD2(const unsigned char *d, unsigned long n,
+                         unsigned char *md);
+
+        int MD2_Init(MD2_CTX *c);
+        int MD2_Update(MD2_CTX *c, const unsigned char *data,
+                         unsigned long len);
+        int MD2_Final(unsigned char *md, MD2_CTX *c);
+
+        #include <openssl/md4.h>
+
+        unsigned char *MD4(const unsigned char *d, unsigned long n,
+                         unsigned char *md);
+
+        int MD4_Init(MD4_CTX *c);
+        int MD4_Update(MD4_CTX *c, const void *data,
+                         unsigned long len);
+        int MD4_Final(unsigned char *md, MD4_CTX *c);
+
+        #include <openssl/md5.h>
+
+        unsigned char *MD5(const unsigned char *d, unsigned long n,
+                         unsigned char *md);
+
+        int MD5_Init(MD5_CTX *c);
+        int MD5_Update(MD5_CTX *c, const void *data,
+                         unsigned long len);
+        int MD5_Final(unsigned char *md, MD5_CTX *c);
+
+DDEESSCCRRIIPPTTIIOONN
+       MD2, MD4, and MD5 are cryptographic hash functions with a 128 bit out-
+       put.
+
+       _M_D_2_(_), _M_D_4_(_), and _M_D_5_(_) compute the MD2, MD4, and MD5 message digest of
+       the nn bytes at dd and place it in mmdd (which must have space for
+       MD2_DIGEST_LENGTH == MD4_DIGEST_LENGTH == MD5_DIGEST_LENGTH == 16 bytes
+       of output). If mmdd is NULL, the digest is placed in a static array.
+
+       The following functions may be used if the message is not completely
+       stored in memory:
+
+       _M_D_2___I_n_i_t_(_) initializes a MMDD22__CCTTXX structure.
+
+       _M_D_2___U_p_d_a_t_e_(_) can be called repeatedly with chunks of the message to be
+       hashed (lleenn bytes at ddaattaa).
+
+       _M_D_2___F_i_n_a_l_(_) places the message digest in mmdd, which must have space for
+       MD2_DIGEST_LENGTH == 16 bytes of output, and erases the MMDD22__CCTTXX.
+
+       _M_D_4___I_n_i_t_(_), _M_D_4___U_p_d_a_t_e_(_), _M_D_4___F_i_n_a_l_(_), _M_D_5___I_n_i_t_(_), _M_D_5___U_p_d_a_t_e_(_), and
+       _M_D_5___F_i_n_a_l_(_) are analogous using an MMDD44__CCTTXX and MMDD55__CCTTXX structure.
+
+       Applications should use the higher level functions _E_V_P___D_i_g_e_s_t_I_n_i_t(3)
+       etc. instead of calling the hash functions directly.
+
+NNOOTTEE
+       MD2, MD4, and MD5 are recommended only for compatibility with existing
+       applications. In new applications, SHA-1 or RIPEMD-160 should be pre-
+       ferred.
+
+RREETTUURRNN VVAALLUUEESS
+       _M_D_2_(_), _M_D_4_(_), and _M_D_5_(_) return pointers to the hash value.
+
+       _M_D_2___I_n_i_t_(_), _M_D_2___U_p_d_a_t_e_(_), _M_D_2___F_i_n_a_l_(_), _M_D_4___I_n_i_t_(_), _M_D_4___U_p_d_a_t_e_(_),
+       _M_D_4___F_i_n_a_l_(_), _M_D_5___I_n_i_t_(_), _M_D_5___U_p_d_a_t_e_(_), and _M_D_5___F_i_n_a_l_(_) return 1 for
+       success, 0 otherwise.
+
+CCOONNFFOORRMMIINNGG TTOO
+       RFC 1319, RFC 1320, RFC 1321
+
+SSEEEE AALLSSOO
+       _s_h_a(3), _r_i_p_e_m_d(3), _E_V_P___D_i_g_e_s_t_I_n_i_t(3)
+
+HHIISSTTOORRYY
+       _M_D_2_(_), _M_D_2___I_n_i_t_(_), _M_D_2___U_p_d_a_t_e_(_) _M_D_2___F_i_n_a_l_(_), _M_D_5_(_), _M_D_5___I_n_i_t_(_),
+       _M_D_5___U_p_d_a_t_e_(_) and _M_D_5___F_i_n_a_l_(_) are available in all versions of SSLeay
+       and OpenSSL.
+
+       _M_D_4_(_), _M_D_4___I_n_i_t_(_), and _M_D_4___U_p_d_a_t_e_(_) are available in OpenSSL 0.9.6 and
+       above.
+
+
+
+1.0.0g                            2006-10-27                            md5(3)

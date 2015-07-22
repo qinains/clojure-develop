@@ -1,0 +1,71 @@
+SSL_CTX_set_cert_verify_callback(3) OpenSSLSSL_CTX_set_cert_verify_callback(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_set_cert_verify_callback - set peer certificate verification
+       procedure
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        void SSL_CTX_set_cert_verify_callback(SSL_CTX *ctx, int (*callback)(X509_STORE_CTX *,void *), void *arg);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___C_T_X___s_e_t___c_e_r_t___v_e_r_i_f_y___c_a_l_l_b_a_c_k_(_) sets the verification callback func-
+       tion for _c_t_x. SSL objects that are created from _c_t_x inherit the setting
+       valid at the time when _S_S_L___n_e_w(3) is called.
+
+NNOOTTEESS
+       Whenever a certificate is verified during a SSL/TLS handshake, a veri-
+       fication function is called. If the application does not explicitly
+       specify a verification callback function, the built-in verification
+       function is used.  If a verification callback _c_a_l_l_b_a_c_k is specified via
+       _S_S_L___C_T_X___s_e_t___c_e_r_t___v_e_r_i_f_y___c_a_l_l_b_a_c_k_(_), the supplied callback function is
+       called instead. By setting _c_a_l_l_b_a_c_k to NULL, the default behaviour is
+       restored.
+
+       When the verification must be performed, _c_a_l_l_b_a_c_k will be called with
+       the arguments callback(X509_STORE_CTX *x509_store_ctx, void *arg). The
+       argument _a_r_g is specified by the application when setting _c_a_l_l_b_a_c_k.
+
+       _c_a_l_l_b_a_c_k should return 1 to indicate verification success and 0 to
+       indicate verification failure. If SSL_VERIFY_PEER is set and _c_a_l_l_b_a_c_k
+       returns 0, the handshake will fail. As the verification procedure may
+       allow to continue the connection in case of failure (by always return-
+       ing 1) the verification result must be set in any case using the eerrrroorr
+       member of _x_5_0_9___s_t_o_r_e___c_t_x so that the calling application will be
+       informed about the detailed result of the verification procedure!
+
+       Within _x_5_0_9___s_t_o_r_e___c_t_x, _c_a_l_l_b_a_c_k has access to the _v_e_r_i_f_y___c_a_l_l_b_a_c_k func-
+       tion set using _S_S_L___C_T_X___s_e_t___v_e_r_i_f_y(3).
+
+WWAARRNNIINNGGSS
+       Do not mix the verification callback described in this function with
+       the vveerriiffyy__ccaallllbbaacckk function called during the verification process.
+       The latter is set using the _S_S_L___C_T_X___s_e_t___v_e_r_i_f_y(3) family of functions.
+
+       Providing a complete verification procedure including certificate pur-
+       pose settings etc is a complex task. The built-in procedure is quite
+       powerful and in most cases it should be sufficient to modify its behav-
+       iour using the vveerriiffyy__ccaallllbbaacckk function.
+
+BBUUGGSS
+RREETTUURRNN VVAALLUUEESS
+       _S_S_L___C_T_X___s_e_t___c_e_r_t___v_e_r_i_f_y___c_a_l_l_b_a_c_k_(_) does not provide diagnostic informa-
+       tion.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___C_T_X___s_e_t___v_e_r_i_f_y(3), _S_S_L___g_e_t___v_e_r_i_f_y___r_e_s_u_l_t(3),
+       _S_S_L___C_T_X___l_o_a_d___v_e_r_i_f_y___l_o_c_a_t_i_o_n_s(3)
+
+HHIISSTTOORRYY
+       Previous to OpenSSL 0.9.7, the _a_r_g argument to SSSSLL__CCTTXX__sseett__cceerrtt__vveerr--
+       iiffyy__ccaallllbbaacckk was ignored, and _c_a_l_l_b_a_c_k was called simply as
+        int (*callback)(X509_STORE_CTX *) To compile software written for pre-
+       vious versions of OpenSSL, a dummy argument will have to be added to
+       _c_a_l_l_b_a_c_k.
+
+
+
+1.0.0g                            2002-02-28SSL_CTX_set_cert_verify_callback(3)

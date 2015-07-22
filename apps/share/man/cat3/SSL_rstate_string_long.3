@@ -1,0 +1,51 @@
+SSL_rstate_string(3)                OpenSSL               SSL_rstate_string(3)
+
+
+
+NNAAMMEE
+       SSL_rstate_string, SSL_rstate_string_long - get textual description of
+       state of an SSL object during read operation
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        const char *SSL_rstate_string(SSL *ssl);
+        const char *SSL_rstate_string_long(SSL *ssl);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___r_s_t_a_t_e___s_t_r_i_n_g_(_) returns a 2 letter string indicating the current
+       read state of the SSL object ssssll.
+
+       _S_S_L___r_s_t_a_t_e___s_t_r_i_n_g___l_o_n_g_(_) returns a string indicating the current read
+       state of the SSL object ssssll.
+
+NNOOTTEESS
+       When performing a read operation, the SSL/TLS engine must parse the
+       record, consisting of header and body. When working in a blocking envi-
+       ronment, SSL_rstate_string[_long]() should always return "RD"/"read
+       done".
+
+       This function should only seldom be needed in applications.
+
+RREETTUURRNN VVAALLUUEESS
+       _S_S_L___r_s_t_a_t_e___s_t_r_i_n_g_(_) and _S_S_L___r_s_t_a_t_e___s_t_r_i_n_g___l_o_n_g_(_) can return the follow-
+       ing values:
+
+       "RH"/"read header"
+           The header of the record is being evaluated.
+
+       "RB"/"read body"
+           The body of the record is being evaluated.
+
+       "RD"/"read done"
+           The record has been completely processed.
+
+       "unknown"/"unknown"
+           The read state is unknown. This should never happen.
+
+SSEEEE AALLSSOO
+       _s_s_l(3)
+
+
+
+1.0.0g                            2001-08-23              SSL_rstate_string(3)

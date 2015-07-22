@@ -1,0 +1,76 @@
+SSL_CTX_set_max_cert_list(3)        OpenSSL       SSL_CTX_set_max_cert_list(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_set_max_cert_list, SSL_CTX_get_max_cert_list,
+       SSL_set_max_cert_list, SSL_get_max_cert_list, - manipulate allowed for
+       the peer's certificate chain
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        long SSL_CTX_set_max_cert_list(SSL_CTX *ctx, long size);
+        long SSL_CTX_get_max_cert_list(SSL_CTX *ctx);
+
+        long SSL_set_max_cert_list(SSL *ssl, long size);
+        long SSL_get_max_cert_list(SSL *ctx);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___C_T_X___s_e_t___m_a_x___c_e_r_t___l_i_s_t_(_) sets the maximum size allowed for the
+       peer's certificate chain for all SSL objects created from ccttxx to be
+       <size> bytes.  The SSL objects inherit the setting valid for ccttxx at the
+       time _S_S_L___n_e_w(3) is being called.
+
+       _S_S_L___C_T_X___g_e_t___m_a_x___c_e_r_t___l_i_s_t_(_) returns the currently set maximum size for
+       ccttxx.
+
+       _S_S_L___s_e_t___m_a_x___c_e_r_t___l_i_s_t_(_) sets the maximum size allowed for the peer's
+       certificate chain for ssssll to be <size> bytes. This setting stays valid
+       until a new value is set.
+
+       _S_S_L___g_e_t___m_a_x___c_e_r_t___l_i_s_t_(_) returns the currently set maximum size for ssssll.
+
+NNOOTTEESS
+       During the handshake process, the peer may send a certificate chain.
+       The TLS/SSL standard does not give any maximum size of the certificate
+       chain.  The OpenSSL library handles incoming data by a dynamically
+       allocated buffer.  In order to prevent this buffer from growing without
+       bounds due to data received from a faulty or malicious peer, a maximum
+       size for the certificate chain is set.
+
+       The default value for the maximum certificate chain size is 100kB (30kB
+       on the 16bit DOS platform). This should be sufficient for usual cer-
+       tificate chains (OpenSSL's default maximum chain length is 10, see
+       _S_S_L___C_T_X___s_e_t___v_e_r_i_f_y(3), and certificates without special extensions have
+       a typical size of 1-2kB).
+
+       For special applications it can be necessary to extend the maximum cer-
+       tificate chain size allowed to be sent by the peer, see e.g. the work
+       on "Internet X.509 Public Key Infrastructure Proxy Certificate Profile"
+       and "TLS Delegation Protocol" at http://www.ietf.org/ and
+       http://www.globus.org/ .
+
+       Under normal conditions it should never be necessary to set a value
+       smaller than the default, as the buffer is handled dynamically and only
+       uses the memory actually required by the data sent by the peer.
+
+       If the maximum certificate chain size allowed is exceeded, the hand-
+       shake will fail with a SSL_R_EXCESSIVE_MESSAGE_SIZE error.
+
+RREETTUURRNN VVAALLUUEESS
+       _S_S_L___C_T_X___s_e_t___m_a_x___c_e_r_t___l_i_s_t_(_) and _S_S_L___s_e_t___m_a_x___c_e_r_t___l_i_s_t_(_) return the pre-
+       viously set value.
+
+       _S_S_L___C_T_X___g_e_t___m_a_x___c_e_r_t___l_i_s_t_(_) and _S_S_L___g_e_t___m_a_x___c_e_r_t___l_i_s_t_(_) return the cur-
+       rently set value.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___n_e_w(3), _S_S_L___C_T_X___s_e_t___v_e_r_i_f_y(3)
+
+HHIISSTTOORRYY
+       SSL*_set/_g_e_t___m_a_x___c_e_r_t___l_i_s_t_(_) have been introduced in OpenSSL 0.9.7.
+
+
+
+1.0.0g                            2001-09-11      SSL_CTX_set_max_cert_list(3)

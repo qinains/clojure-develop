@@ -1,0 +1,119 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_add_client_CA - set list of CAs sent to the client when requesting a
+client certificate</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_CTX_set_client_CA_list, SSL_set_client_CA_list, SSL_CTX_add_client_CA,
+SSL_add_client_CA - set list of CAs sent to the client when requesting a
+client certificate</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;
+ 
+ void SSL_CTX_set_client_CA_list(SSL_CTX *ctx, STACK_OF(X509_NAME) *list);
+ void SSL_set_client_CA_list(SSL *s, STACK_OF(X509_NAME) *list);
+ int SSL_CTX_add_client_CA(SSL_CTX *ctx, X509 *cacert);
+ int SSL_add_client_CA(SSL *ssl, X509 *cacert);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_CTX_set_client_CA_list()</code> sets the <strong>list</strong> of CAs sent to the client when
+requesting a client certificate for <strong>ctx</strong>.</p>
+<p><code>SSL_set_client_CA_list()</code> sets the <strong>list</strong> of CAs sent to the client when
+requesting a client certificate for the chosen <strong>ssl</strong>, overriding the
+setting valid for <strong>ssl</strong>'s SSL_CTX object.</p>
+<p><code>SSL_CTX_add_client_CA()</code> adds the CA name extracted from <strong>cacert</strong> to the
+list of CAs sent to the client when requesting a client certificate for
+<strong>ctx</strong>.</p>
+<p><code>SSL_add_client_CA()</code> adds the CA name extracted from <strong>cacert</strong> to the
+list of CAs sent to the client when requesting a client certificate for
+the chosen <strong>ssl</strong>, overriding the setting valid for <strong>ssl</strong>'s SSL_CTX object.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>When a TLS/SSL server requests a client certificate (see
+<strong>SSL_CTX_set_verify_options()</strong>), it sends a list of CAs, for which
+it will accept certificates, to the client.</p>
+<p>This list must explicitly be set using <code>SSL_CTX_set_client_CA_list()</code> for
+<strong>ctx</strong> and <code>SSL_set_client_CA_list()</code> for the specific <strong>ssl</strong>. The list
+specified overrides the previous setting. The CAs listed do not become
+trusted (<strong>list</strong> only contains the names, not the complete certificates); use
+<a href="../ssl/SSL_CTX_load_verify_locations.html">SSL_CTX_load_verify_locations</a> 
+to additionally load them for verification.</p>
+<p>If the list of acceptable CAs is compiled in a file, the
+<a href="../ssl/SSL_load_client_CA_file.html">SSL_load_client_CA_file</a>
+function can be used to help importing the necessary data.</p>
+<p><code>SSL_CTX_add_client_CA()</code> and <code>SSL_add_client_CA()</code> can be used to add additional
+items the list of client CAs. If no list was specified before using
+<code>SSL_CTX_set_client_CA_list()</code> or SSL_set_client_CA_list(), a new client
+CA list for <strong>ctx</strong> or <strong>ssl</strong> (as appropriate) is opened.</p>
+<p>These functions are only useful for TLS/SSL servers.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>SSL_CTX_set_client_CA_list()</code> and <code>SSL_set_client_CA_list()</code> do not return
+diagnostic information.</p>
+<p><code>SSL_CTX_add_client_CA()</code> and <code>SSL_add_client_CA()</code> have the following return
+values:</p>
+<ol>
+<li>
+<p>The operation succeeded.</p>
+</li>
+<li>
+<p>A failure while manipulating the <code>STACK_OF(X509_NAME)</code> object occurred or
+the X509_NAME could not be extracted from <strong>cacert</strong>. Check the error stack
+to find out the reason.</p>
+</li>
+</ol>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>Scan all certificates in <strong>CAfile</strong> and list them as acceptable CAs:</p>
+<pre>
+  SSL_CTX_set_client_CA_list(ctx,SSL_load_client_CA_file(CAfile));</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a>,
+<a href="../ssl/SSL_get_client_CA_list.html">SSL_get_client_CA_list</a>,
+<a href="../ssl/SSL_load_client_CA_file.html">SSL_load_client_CA_file</a>,
+<a href="../ssl/SSL_CTX_load_verify_locations.html">SSL_CTX_load_verify_locations</a></p>
+
+</body>
+
+</html>

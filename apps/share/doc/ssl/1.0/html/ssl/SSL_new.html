@@ -1,0 +1,78 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_new - create a new SSL structure for a connection</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_new - create a new SSL structure for a connection</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ SSL *SSL_new(SSL_CTX *ctx);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_new()</code> creates a new <strong>SSL</strong> structure which is needed to hold the
+data for a TLS/SSL connection. The new structure inherits the settings
+of the underlying context <strong>ctx</strong>: connection method (SSLv2/v3/TLSv1),
+options, verification settings, timeout settings.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>The following return values can occur:</p>
+<dl>
+<dt><strong><a name="item_null">NULL</a></strong>
+
+<dd>
+<p>The creation of a new SSL structure failed. Check the error stack to
+find out the reason.</p>
+</dd>
+</li>
+<dt><strong><a name="item_pointer_to_an_ssl_structure">Pointer to an SSL structure</a></strong>
+
+<dd>
+<p>The return value points to an allocated SSL structure.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/SSL_free.html">SSL_free</a>, <a href="../ssl/SSL_clear.html">SSL_clear</a>,
+<a href="../ssl/SSL_CTX_set_options.html">SSL_CTX_set_options</a>,
+<a href="../ssl/SSL_get_SSL_CTX.html">SSL_get_SSL_CTX</a>,
+<a href="../ssl/ssl.html">ssl</a></p>
+
+</body>
+
+</html>

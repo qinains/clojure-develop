@@ -1,0 +1,88 @@
+SSL_CTX_set_msg_callback(3)         OpenSSL        SSL_CTX_set_msg_callback(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_set_msg_callback, SSL_CTX_set_msg_callback_arg,
+       SSL_set_msg_callback, SSL_get_msg_callback_arg - install callback for
+       observing protocol messages
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        void SSL_CTX_set_msg_callback(SSL_CTX *ctx, void (*cb)(int write_p, int version, int content_type, const void *buf, size_t len, SSL *ssl, void *arg));
+        void SSL_CTX_set_msg_callback_arg(SSL_CTX *ctx, void *arg);
+
+        void SSL_set_msg_callback(SSL_CTX *ctx, void (*cb)(int write_p, int version, int content_type, const void *buf, size_t len, SSL *ssl, void *arg));
+        void SSL_set_msg_callback_arg(SSL_CTX *ctx, void *arg);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___C_T_X___s_e_t___m_s_g___c_a_l_l_b_a_c_k_(_) or _S_S_L___s_e_t___m_s_g___c_a_l_l_b_a_c_k_(_) can be used to
+       define a message callback function _c_b for observing all SSL/TLS proto-
+       col messages (such as handshake messages) that are received or sent.
+       _S_S_L___C_T_X___s_e_t___m_s_g___c_a_l_l_b_a_c_k___a_r_g_(_) and _S_S_L___s_e_t___m_s_g___c_a_l_l_b_a_c_k___a_r_g_(_) can be
+       used to set argument _a_r_g to the callback function, which is available
+       for arbitrary application use.
+
+       _S_S_L___C_T_X___s_e_t___m_s_g___c_a_l_l_b_a_c_k_(_) and _S_S_L___C_T_X___s_e_t___m_s_g___c_a_l_l_b_a_c_k___a_r_g_(_) specify
+       default settings that will be copied to new SSSSLL objects by _S_S_L___n_e_w(3).
+       _S_S_L___s_e_t___m_s_g___c_a_l_l_b_a_c_k_(_) and _S_S_L___s_e_t___m_s_g___c_a_l_l_b_a_c_k___a_r_g_(_) modify the actual
+       settings of an SSSSLL object. Using a 00 pointer for _c_b disables the mes-
+       sage callback.
+
+       When _c_b is called by the SSL/TLS library for a protocol message, the
+       function arguments have the following meaning:
+
+       _w_r_i_t_e___p
+           This flag is 00 when a protocol message has been received and 11 when
+           a protocol message has been sent.
+
+       _v_e_r_s_i_o_n
+           The protocol version according to which the protocol message is
+           interpreted by the library. Currently, this is one of SSSSLL22__VVEERRSSIIOONN,
+           SSSSLL33__VVEERRSSIIOONN and TTLLSS11__VVEERRSSIIOONN (for SSL 2.0, SSL 3.0 and TLS 1.0,
+           respectively).
+
+       _c_o_n_t_e_n_t___t_y_p_e
+           In the case of SSL 2.0, this is always 00.  In the case of SSL 3.0
+           or TLS 1.0, this is one of the CCoonntteennttTTyyppee values defined in the
+           protocol specification (cchhaannggee__cciipphheerr__ssppeecc((2200)), aalleerrtt((2211)), hhaanndd--
+           sshhaakkee((2222)); but never aapppplliiccaattiioonn__ddaattaa((2233)) because the callback will
+           only be called for protocol messages).
+
+       _b_u_f, _l_e_n
+           _b_u_f points to a buffer containing the protocol message, which con-
+           sists of _l_e_n bytes. The buffer is no longer valid after the call-
+           back function has returned.
+
+       _s_s_l The SSSSLL object that received or sent the message.
+
+       _a_r_g The user-defined argument optionally defined by
+           _S_S_L___C_T_X___s_e_t___m_s_g___c_a_l_l_b_a_c_k___a_r_g_(_) or _S_S_L___s_e_t___m_s_g___c_a_l_l_b_a_c_k___a_r_g_(_).
+
+NNOOTTEESS
+       Protocol messages are passed to the callback function after decryption
+       and fragment collection where applicable. (Thus record boundaries are
+       not visible.)
+
+       If processing a received protocol message results in an error, the
+       callback function may not be called.  For example, the callback func-
+       tion will never see messages that are considered too large to be pro-
+       cessed.
+
+       Due to automatic protocol version negotiation, _v_e_r_s_i_o_n is not necessar-
+       ily the protocol version used by the sender of the message: If a TLS
+       1.0 ClientHello message is received by an SSL 3.0-only server, _v_e_r_s_i_o_n
+       will be SSSSLL33__VVEERRSSIIOONN.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___n_e_w(3)
+
+HHIISSTTOORRYY
+       _S_S_L___C_T_X___s_e_t___m_s_g___c_a_l_l_b_a_c_k_(_), _S_S_L___C_T_X___s_e_t___m_s_g___c_a_l_l_b_a_c_k___a_r_g_(_),
+       _S_S_L___s_e_t___m_s_g___c_a_l_l_b_a_c_k_(_) and _S_S_L___g_e_t___m_s_g___c_a_l_l_b_a_c_k___a_r_g_(_) were added in
+       OpenSSL 0.9.7.
+
+
+
+1.0.0g                            2002-08-15       SSL_CTX_set_msg_callback(3)

@@ -1,0 +1,65 @@
+d2i_RSAPublicKey(3)                 OpenSSL                d2i_RSAPublicKey(3)
+
+
+
+NNAAMMEE
+       d2i_RSAPublicKey, i2d_RSAPublicKey, d2i_RSAPrivateKey, i2d_RSAPri-
+       vateKey, d2i_RSA_PUBKEY, i2d_RSA_PUBKEY, i2d_Netscape_RSA, d2i_Net-
+       scape_RSA - RSA public and private key encoding functions.
+
+SSYYNNOOPPSSIISS
+        #include <openssl/rsa.h>
+        #include <openssl/x509.h>
+
+        RSA * d2i_RSAPublicKey(RSA **a, const unsigned char **pp, long length);
+
+        int i2d_RSAPublicKey(RSA *a, unsigned char **pp);
+
+        RSA * d2i_RSA_PUBKEY(RSA **a, const unsigned char **pp, long length);
+
+        int i2d_RSA_PUBKEY(RSA *a, unsigned char **pp);
+
+        RSA * d2i_RSAPrivateKey(RSA **a, const unsigned char **pp, long length);
+
+        int i2d_RSAPrivateKey(RSA *a, unsigned char **pp);
+
+        int i2d_Netscape_RSA(RSA *a, unsigned char **pp, int (*cb)());
+
+        RSA * d2i_Netscape_RSA(RSA **a, const unsigned char **pp, long length, int (*cb)());
+
+DDEESSCCRRIIPPTTIIOONN
+       _d_2_i___R_S_A_P_u_b_l_i_c_K_e_y_(_) and _i_2_d___R_S_A_P_u_b_l_i_c_K_e_y_(_) decode and encode a PKCS#1
+       RSAPublicKey structure.
+
+       _d_2_i___R_S_A___P_U_B_K_E_Y_(_) and _i_2_d___R_S_A___P_U_B_K_E_Y_(_) decode and encode an RSA public
+       key using a SubjectPublicKeyInfo (certificate public key) structure.
+
+       _d_2_i___R_S_A_P_r_i_v_a_t_e_K_e_y_(_), _i_2_d___R_S_A_P_r_i_v_a_t_e_K_e_y_(_) decode and encode a PKCS#1
+       RSAPrivateKey structure.
+
+       _d_2_i___N_e_t_s_c_a_p_e___R_S_A_(_), _i_2_d___N_e_t_s_c_a_p_e___R_S_A_(_) decode and encode an RSA private
+       key in NET format.
+
+       The usage of all of these functions is similar to the _d_2_i___X_5_0_9_(_) and
+       _i_2_d___X_5_0_9_(_) described in the _d_2_i___X_5_0_9(3) manual page.
+
+NNOOTTEESS
+       The RRSSAA structure passed to the private key encoding functions should
+       have all the PKCS#1 private key components present.
+
+       The data encoded by the private key functions is unencrypted and there-
+       fore offers no private key security.
+
+       The NET format functions are present to provide compatibility with cer-
+       tain very old software. This format has some severe security weaknesses
+       and should be avoided if possible.
+
+SSEEEE AALLSSOO
+       _d_2_i___X_5_0_9(3)
+
+HHIISSTTOORRYY
+       TBA
+
+
+
+1.0.0g                            2009-04-06               d2i_RSAPublicKey(3)

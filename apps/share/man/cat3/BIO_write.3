@@ -1,0 +1,66 @@
+BIO_read(3)                         OpenSSL                        BIO_read(3)
+
+
+
+NNAAMMEE
+       BIO_read, BIO_write, BIO_gets, BIO_puts - BIO I/O functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bio.h>
+
+        int    BIO_read(BIO *b, void *buf, int len);
+        int    BIO_gets(BIO *b,char *buf, int size);
+        int    BIO_write(BIO *b, const void *buf, int len);
+        int    BIO_puts(BIO *b,const char *buf);
+
+DDEESSCCRRIIPPTTIIOONN
+       _B_I_O___r_e_a_d_(_) attempts to read lleenn bytes from BIO bb and places the data in
+       bbuuff.
+
+       _B_I_O___g_e_t_s_(_) performs the BIOs "gets" operation and places the data in
+       bbuuff. Usually this operation will attempt to read a line of data from
+       the BIO of maximum length lleenn. There are exceptions to this however,
+       for example _B_I_O___g_e_t_s_(_) on a digest BIO will calculate and return the
+       digest and other BIOs may not support _B_I_O___g_e_t_s_(_) at all.
+
+       _B_I_O___w_r_i_t_e_(_) attempts to write lleenn bytes from bbuuff to BIO bb.
+
+       _B_I_O___p_u_t_s_(_) attempts to write a null terminated string bbuuff to BIO bb
+
+RREETTUURRNN VVAALLUUEESS
+       All these functions return either the amount of data successfully read
+       or written (if the return value is positive) or that no data was suc-
+       cessfully read or written if the result is 0 or -1. If the return value
+       is -2 then the operation is not implemented in the specific BIO type.
+
+NNOOTTEESS
+       A 0 or -1 return is not necessarily an indication of an error. In par-
+       ticular when the source/sink is non-blocking or of a certain type it
+       may merely be an indication that no data is currently available and
+       that the application should retry the operation later.
+
+       One technique sometimes used with blocking sockets is to use a system
+       call (such as _s_e_l_e_c_t_(_), _p_o_l_l_(_) or equivalent) to determine when data is
+       available and then call _r_e_a_d_(_) to read the data. The equivalent with
+       BIOs (that is call _s_e_l_e_c_t_(_) on the underlying I/O structure and then
+       call _B_I_O___r_e_a_d_(_) to read the data) should nnoott be used because a single
+       call to _B_I_O___r_e_a_d_(_) can cause several reads (and writes in the case of
+       SSL BIOs) on the underlying I/O structure and may block as a result.
+       Instead _s_e_l_e_c_t_(_) (or equivalent) should be combined with non blocking
+       I/O so successive reads will request a retry instead of blocking.
+
+       See _B_I_O___s_h_o_u_l_d___r_e_t_r_y(3) for details of how to determine the cause of a
+       retry and other I/O issues.
+
+       If the _B_I_O___g_e_t_s_(_) function is not supported by a BIO then it possible
+       to work around this by adding a buffering BIO _B_I_O___f___b_u_f_f_e_r(3) to the
+       chain.
+
+SSEEEE AALLSSOO
+       _B_I_O___s_h_o_u_l_d___r_e_t_r_y(3)
+
+       TBA
+
+
+
+1.0.0g                            2000-09-16                       BIO_read(3)

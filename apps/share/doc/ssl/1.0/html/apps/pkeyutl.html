@@ -1,0 +1,303 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>pkeyutl - public key algorithm utility</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#command_options">COMMAND OPTIONS</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#rsa_algorithm">RSA ALGORITHM</a></li>
+	<li><a href="#dsa_algorithm">DSA ALGORITHM</a></li>
+	<li><a href="#dh_algorithm">DH ALGORITHM</a></li>
+	<li><a href="#ec_algorithm">EC ALGORITHM</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>pkeyutl - public key algorithm utility</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>openssl</strong> <strong>pkeyutl</strong>
+[<strong>-in file</strong>]
+[<strong>-out file</strong>]
+[<strong>-sigfile file</strong>]
+[<strong>-inkey file</strong>]
+[<strong>-keyform PEM|DER</strong>]
+[<strong>-passin arg</strong>]
+[<strong>-peerkey file</strong>]
+[<strong>-peerform PEM|DER</strong>]
+[<strong>-pubin</strong>]
+[<strong>-certin</strong>]
+[<strong>-rev</strong>]
+[<strong>-sign</strong>]
+[<strong>-verify</strong>]
+[<strong>-verifyrecover</strong>]
+[<strong>-encrypt</strong>]
+[<strong>-decrypt</strong>]
+[<strong>-derive</strong>]
+[<strong>-pkeyopt opt:value</strong>]
+[<strong>-hexdump</strong>]
+[<strong>-asn1parse</strong>]
+[<strong>-engine id</strong>]</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>pkeyutl</strong> command can be used to perform public key operations using
+any supported algorithm.</p>
+<p>
+</p>
+<hr />
+<h1><a name="command_options">COMMAND OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item__2din_filename"><strong>-in filename</strong></a></strong>
+
+<dd>
+<p>This specifies the input filename to read data from or standard input
+if this option is not specified.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dout_filename"><strong>-out filename</strong></a></strong>
+
+<dd>
+<p>specifies the output filename to write to or standard output by
+default.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dinkey_file"><strong>-inkey file</strong></a></strong>
+
+<dd>
+<p>the input key file, by default it should be a private key.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dkeyform_pem_7cder"><strong>-keyform PEM|DER</strong></a></strong>
+
+<dd>
+<p>the key format PEM, DER or ENGINE.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpassin_arg"><strong>-passin arg</strong></a></strong>
+
+<dd>
+<p>the input key password source. For more information about the format of <strong>arg</strong>
+see the <strong>PASS PHRASE ARGUMENTS</strong> section in <a href="../apps/openssl.html">openssl</a>.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpeerkey_file"><strong>-peerkey file</strong></a></strong>
+
+<dd>
+<p>the peer key file, used by key derivation (agreement) operations.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpeerform_pem_7cder"><strong>-peerform PEM|DER</strong></a></strong>
+
+<dd>
+<p>the peer key format PEM, DER or ENGINE.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dengine_id"><strong>-engine id</strong></a></strong>
+
+<dd>
+<p>specifying an engine (by its unique <strong>id</strong> string) will cause <strong>pkeyutl</strong>
+to attempt to obtain a functional reference to the specified engine,
+thus initialising it if needed. The engine will then be set as the default
+for all available algorithms.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpubin"><strong>-pubin</strong></a></strong>
+
+<dd>
+<p>the input file is a public key.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dcertin"><strong>-certin</strong></a></strong>
+
+<dd>
+<p>the input is a certificate containing a public key.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2drev"><strong>-rev</strong></a></strong>
+
+<dd>
+<p>reverse the order of the input buffer. This is useful for some libraries
+(such as CryptoAPI) which represent the buffer in little endian format.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dsign"><strong>-sign</strong></a></strong>
+
+<dd>
+<p>sign the input data and output the signed result. This requires
+a private key.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dverify"><strong>-verify</strong></a></strong>
+
+<dd>
+<p>verify the input data against the signature file and indicate if the
+verification succeeded or failed.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dverifyrecover"><strong>-verifyrecover</strong></a></strong>
+
+<dd>
+<p>verify the input data and output the recovered data.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dencrypt"><strong>-encrypt</strong></a></strong>
+
+<dd>
+<p>encrypt the input data using a public key.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2ddecrypt"><strong>-decrypt</strong></a></strong>
+
+<dd>
+<p>decrypt the input data using a private key.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dderive"><strong>-derive</strong></a></strong>
+
+<dd>
+<p>derive a shared secret using the peer key.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dhexdump"><strong>-hexdump</strong></a></strong>
+
+<dd>
+<p>hex dump the output data.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dasn1parse"><strong>-asn1parse</strong></a></strong>
+
+<dd>
+<p>asn1parse the output data, this is useful when combined with the
+<strong>-verifyrecover</strong> option when an ASN1 structure is signed.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>The operations and options supported vary according to the key algorithm
+and its implementation. The OpenSSL operations and options are indicated below.</p>
+<p>Unless otherwise mentioned all algorithms support the <strong>digest:alg</strong> option
+which specifies the digest in use for sign, verify and verifyrecover operations.
+The value <strong>alg</strong> should represent a digest name as used in the
+<code>EVP_get_digestbyname()</code> function for example <strong>sha1</strong>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="rsa_algorithm">RSA ALGORITHM</a></h1>
+<p>The RSA algorithm supports encrypt, decrypt, sign, verify and verifyrecover
+operations in general. Some padding modes only support some of these 
+operations however.</p>
+<dl>
+<dt><strong><a name="item__2drsa_padding_mode_3amode">-<strong>rsa_padding_mode:mode</strong></a></strong>
+
+<dd>
+<p>This sets the RSA padding mode. Acceptable values for <strong>mode</strong> are <strong>pkcs1</strong> for
+PKCS#1 padding, <strong>sslv23</strong> for SSLv23 padding, <strong>none</strong> for no padding, <strong>oaep</strong>
+for <strong>OAEP</strong> mode, <strong>x931</strong> for X9.31 mode and <strong>pss</strong> for PSS.</p>
+</dd>
+<dd>
+<p>In PKCS#1 padding if the message digest is not set then the supplied data is 
+signed or verified directly instead of using a <strong>DigestInfo</strong> structure. If a
+digest is set then the a <strong>DigestInfo</strong> structure is used and its the length
+must correspond to the digest type.</p>
+</dd>
+<dd>
+<p>For <strong>oeap</strong> mode only encryption and decryption is supported.</p>
+</dd>
+<dd>
+<p>For <strong>x931</strong> if the digest type is set it is used to format the block data
+otherwise the first byte is used to specify the X9.31 digest ID. Sign,
+verify and verifyrecover are can be performed in this mode.</p>
+</dd>
+<dd>
+<p>For <strong>pss</strong> mode only sign and verify are supported and the digest type must be
+specified.</p>
+</dd>
+</li>
+<dt><strong><a name="item_rsa_pss_saltlen_3alen"><strong>rsa_pss_saltlen:len</strong></a></strong>
+
+<dd>
+<p>For <strong>pss</strong> mode only this option specifies the salt length. Two special values
+are supported: -1 sets the salt length to the digest length. When signing -2
+sets the salt length to the maximum permissible value. When verifying -2 causes
+the salt length to be automatically determined based on the <strong>PSS</strong> block
+structure.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="dsa_algorithm">DSA ALGORITHM</a></h1>
+<p>The DSA algorithm supports signing and verification operations only. Currently
+there are no additional options other than <strong>digest</strong>. Only the SHA1
+digest can be used and this digest is assumed by default.</p>
+<p>
+</p>
+<hr />
+<h1><a name="dh_algorithm">DH ALGORITHM</a></h1>
+<p>The DH algorithm only supports the derivation operation and no additional
+options.</p>
+<p>
+</p>
+<hr />
+<h1><a name="ec_algorithm">EC ALGORITHM</a></h1>
+<p>The EC algorithm supports sign, verify and derive operations. The sign and
+verify operations use ECDSA and derive uses ECDH. Currently there are no
+additional options other than <strong>digest</strong>. Only the SHA1 digest can be used and
+this digest is assumed by default.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>Sign some data using a private key:</p>
+<pre>
+ openssl pkeyutl -sign -in file -inkey key.pem -out sig</pre>
+<p>Recover the signed data (e.g. if an RSA key is used):</p>
+<pre>
+ openssl pkeyutl -verifyrecover -in sig -inkey key.pem</pre>
+<p>Verify the signature (e.g. a DSA key):</p>
+<pre>
+ openssl pkeyutl -verify -in file -sigfile sig -inkey key.pem</pre>
+<p>Sign data using a message digest value (this is currently only valid for RSA):</p>
+<pre>
+ openssl pkeyutl -sign -in file -inkey key.pem -out sig -pkeyopt digest:sha256</pre>
+<p>Derive a shared secret value:</p>
+<pre>
+ openssl pkeyutl -derive -inkey key.pem -peerkey pubkey.pem -out secret</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../apps/genpkey.html">genpkey</a>, <a href="../apps/pkey.html">pkey</a>, <a href="../apps/rsautl.html">rsautl</a>
+<a href="../apps/dgst.html">dgst</a>, <a href="../apps/rsa.html">rsa</a>, <a href="../apps/genrsa.html">genrsa</a></p>
+
+</body>
+
+</html>

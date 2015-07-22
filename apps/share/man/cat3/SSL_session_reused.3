@@ -1,0 +1,35 @@
+SSL_session_reused(3)               OpenSSL              SSL_session_reused(3)
+
+
+
+NNAAMMEE
+       SSL_session_reused - query whether a reused session was negotiated dur-
+       ing handshake
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        int SSL_session_reused(SSL *ssl);
+
+DDEESSCCRRIIPPTTIIOONN
+       Query, whether a reused session was negotiated during the handshake.
+
+NNOOTTEESS
+       During the negotiation, a client can propose to reuse a session. The
+       server then looks up the session in its cache. If both client and
+       server agree on the session, it will be reused and a flag is being set
+       that can be queried by the application.
+
+RREETTUURRNN VVAALLUUEESS
+       The following return values can occur:
+
+       0   A new session was negotiated.
+
+       1   A session was reused.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___s_e_t___s_e_s_s_i_o_n(3), _S_S_L___C_T_X___s_e_t___s_e_s_s_i_o_n___c_a_c_h_e___m_o_d_e(3)
+
+
+
+1.0.0g                            2001-07-20             SSL_session_reused(3)

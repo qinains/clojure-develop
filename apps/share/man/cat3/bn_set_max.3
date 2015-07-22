@@ -1,0 +1,227 @@
+bn_internal(3)                      OpenSSL                     bn_internal(3)
+
+
+
+NNAAMMEE
+       bn_mul_words, bn_mul_add_words, bn_sqr_words, bn_div_words,
+       bn_add_words, bn_sub_words, bn_mul_comba4, bn_mul_comba8,
+       bn_sqr_comba4, bn_sqr_comba8, bn_cmp_words, bn_mul_normal,
+       bn_mul_low_normal, bn_mul_recursive, bn_mul_part_recursive,
+       bn_mul_low_recursive, bn_mul_high, bn_sqr_normal, bn_sqr_recursive,
+       bn_expand, bn_wexpand, bn_expand2, bn_fix_top, bn_check_top, bn_print,
+       bn_dump, bn_set_max, bn_set_high, bn_set_low - BIGNUM library internal
+       functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bn.h>
+
+        BN_ULONG bn_mul_words(BN_ULONG *rp, BN_ULONG *ap, int num, BN_ULONG w);
+        BN_ULONG bn_mul_add_words(BN_ULONG *rp, BN_ULONG *ap, int num,
+          BN_ULONG w);
+        void     bn_sqr_words(BN_ULONG *rp, BN_ULONG *ap, int num);
+        BN_ULONG bn_div_words(BN_ULONG h, BN_ULONG l, BN_ULONG d);
+        BN_ULONG bn_add_words(BN_ULONG *rp, BN_ULONG *ap, BN_ULONG *bp,
+          int num);
+        BN_ULONG bn_sub_words(BN_ULONG *rp, BN_ULONG *ap, BN_ULONG *bp,
+          int num);
+
+        void bn_mul_comba4(BN_ULONG *r, BN_ULONG *a, BN_ULONG *b);
+        void bn_mul_comba8(BN_ULONG *r, BN_ULONG *a, BN_ULONG *b);
+        void bn_sqr_comba4(BN_ULONG *r, BN_ULONG *a);
+        void bn_sqr_comba8(BN_ULONG *r, BN_ULONG *a);
+
+        int bn_cmp_words(BN_ULONG *a, BN_ULONG *b, int n);
+
+        void bn_mul_normal(BN_ULONG *r, BN_ULONG *a, int na, BN_ULONG *b,
+          int nb);
+        void bn_mul_low_normal(BN_ULONG *r, BN_ULONG *a, BN_ULONG *b, int n);
+        void bn_mul_recursive(BN_ULONG *r, BN_ULONG *a, BN_ULONG *b, int n2,
+          int dna,int dnb,BN_ULONG *tmp);
+        void bn_mul_part_recursive(BN_ULONG *r, BN_ULONG *a, BN_ULONG *b,
+          int n, int tna,int tnb, BN_ULONG *tmp);
+        void bn_mul_low_recursive(BN_ULONG *r, BN_ULONG *a, BN_ULONG *b,
+          int n2, BN_ULONG *tmp);
+        void bn_mul_high(BN_ULONG *r, BN_ULONG *a, BN_ULONG *b, BN_ULONG *l,
+          int n2, BN_ULONG *tmp);
+
+        void bn_sqr_normal(BN_ULONG *r, BN_ULONG *a, int n, BN_ULONG *tmp);
+        void bn_sqr_recursive(BN_ULONG *r, BN_ULONG *a, int n2, BN_ULONG *tmp);
+
+        void mul(BN_ULONG r, BN_ULONG a, BN_ULONG w, BN_ULONG c);
+        void mul_add(BN_ULONG r, BN_ULONG a, BN_ULONG w, BN_ULONG c);
+        void sqr(BN_ULONG r0, BN_ULONG r1, BN_ULONG a);
+
+        BIGNUM *bn_expand(BIGNUM *a, int bits);
+        BIGNUM *bn_wexpand(BIGNUM *a, int n);
+        BIGNUM *bn_expand2(BIGNUM *a, int n);
+        void bn_fix_top(BIGNUM *a);
+
+        void bn_check_top(BIGNUM *a);
+        void bn_print(BIGNUM *a);
+        void bn_dump(BN_ULONG *d, int n);
+        void bn_set_max(BIGNUM *a);
+        void bn_set_high(BIGNUM *r, BIGNUM *a, int n);
+        void bn_set_low(BIGNUM *r, BIGNUM *a, int n);
+
+DDEESSCCRRIIPPTTIIOONN
+       This page documents the internal functions used by the OpenSSL BBIIGGNNUUMM
+       implementation. They are described here to facilitate debugging and
+       extending the library. They are _n_o_t to be used by applications.
+
+       TThhee BBIIGGNNUUMM ssttrruuccttuurree
+
+        typedef struct bignum_st BIGNUM;
+
+        struct bignum_st
+               {
+               BN_ULONG *d;    /* Pointer to an array of 'BN_BITS2' bit chunks. */
+               int top;        /* Index of last used d +1. */
+               /* The next are internal book keeping for bn_expand. */
+               int dmax;       /* Size of the d array. */
+               int neg;        /* one if the number is negative */
+               int flags;
+               };
+
+       The integer value is stored in dd, a _m_a_l_l_o_c_(_)ed array of words
+       (BBNN__UULLOONNGG), least significant word first. A BBNN__UULLOONNGG can be either 16,
+       32 or 64 bits in size, depending on the 'number of bits' (BBIITTSS22) speci-
+       fied in "openssl/bn.h".
+
+       ddmmaaxx is the size of the dd array that has been allocated.  ttoopp is the
+       number of words being used, so for a value of 4, bn.d[0]=4 and
+       bn.top=1.  nneegg is 1 if the number is negative.  When a BBIIGGNNUUMM is 00, the
+       dd field can be NNUULLLL and ttoopp == 00.
+
+       ffllaaggss is a bit field of flags which are defined in "openssl/bn.h". The
+       flags begin with BBNN__FFLLGG__. The macros BN_set_flags(b,n) and
+       BN_get_flags(b,n) exist to enable or fetch flag(s) nn from BBIIGGNNUUMM struc-
+       ture bb.
+
+       Various routines in this library require the use of temporary BBIIGGNNUUMM
+       variables during their execution.  Since dynamic memory allocation to
+       create BBIIGGNNUUMMs is rather expensive when used in conjunction with
+       repeated subroutine calls, the BBNN__CCTTXX structure is used.  This struc-
+       ture contains BBNN__CCTTXX__NNUUMM BBIIGGNNUUMMs, see _B_N___C_T_X___s_t_a_r_t(3).
+
+       LLooww--lleevveell aarriitthhmmeettiicc ooppeerraattiioonnss
+
+       These functions are implemented in C and for several platforms in
+       assembly language:
+
+       bn_mul_words(rrpp, aapp, nnuumm, ww) operates on the nnuumm word arrays rrpp and aapp.
+       It computes aapp * ww, places the result in rrpp, and returns the high word
+       (carry).
+
+       bn_mul_add_words(rrpp, aapp, nnuumm, ww) operates on the nnuumm word arrays rrpp and
+       aapp.  It computes aapp * ww + rrpp, places the result in rrpp, and returns the
+       high word (carry).
+
+       bn_sqr_words(rrpp, aapp, nn) operates on the nnuumm word array aapp and the 2*nnuumm
+       word array aapp.  It computes aapp * aapp word-wise, and places the low and
+       high bytes of the result in rrpp.
+
+       bn_div_words(hh, ll, dd) divides the two word number (hh,ll) by dd and
+       returns the result.
+
+       bn_add_words(rrpp, aapp, bbpp, nnuumm) operates on the nnuumm word arrays aapp, bbpp
+       and rrpp.  It computes aapp + bbpp, places the result in rrpp, and returns the
+       high word (carry).
+
+       bn_sub_words(rrpp, aapp, bbpp, nnuumm) operates on the nnuumm word arrays aapp, bbpp
+       and rrpp.  It computes aapp - bbpp, places the result in rrpp, and returns the
+       carry (1 if bbpp > aapp, 0 otherwise).
+
+       bn_mul_comba4(rr, aa, bb) operates on the 4 word arrays aa and bb and the 8
+       word array rr.  It computes aa*bb and places the result in rr.
+
+       bn_mul_comba8(rr, aa, bb) operates on the 8 word arrays aa and bb and the 16
+       word array rr.  It computes aa*bb and places the result in rr.
+
+       bn_sqr_comba4(rr, aa, bb) operates on the 4 word arrays aa and bb and the 8
+       word array rr.
+
+       bn_sqr_comba8(rr, aa, bb) operates on the 8 word arrays aa and bb and the 16
+       word array rr.
+
+       The following functions are implemented in C:
+
+       bn_cmp_words(aa, bb, nn) operates on the nn word arrays aa and bb.  It
+       returns 1, 0 and -1 if aa is greater than, equal and less than bb.
+
+       bn_mul_normal(rr, aa, nnaa, bb, nnbb) operates on the nnaa word array aa, the nnbb
+       word array bb and the nnaa+nnbb word array rr.  It computes aa*bb and places
+       the result in rr.
+
+       bn_mul_low_normal(rr, aa, bb, nn) operates on the nn word arrays rr, aa and bb.
+       It computes the nn low words of aa*bb and places the result in rr.
+
+       bn_mul_recursive(rr, aa, bb, nn22, ddnnaa, ddnnbb, tt) operates on the word arrays
+       aa and bb of length nn22+ddnnaa and nn22+ddnnbb (ddnnaa and ddnnbb are currently allowed
+       to be 0 or negative) and the 2*nn22 word arrays rr and tt.  nn22 must be a
+       power of 2.  It computes aa*bb and places the result in rr.
+
+       bn_mul_part_recursive(rr, aa, bb, nn, ttnnaa, ttnnbb, ttmmpp) operates on the word
+       arrays aa and bb of length nn+ttnnaa and nn+ttnnbb and the 4*nn word arrays rr and
+       ttmmpp.
+
+       bn_mul_low_recursive(rr, aa, bb, nn22, ttmmpp) operates on the nn22 word arrays rr
+       and ttmmpp and the nn22/2 word arrays aa and bb.
+
+       bn_mul_high(rr, aa, bb, ll, nn22, ttmmpp) operates on the nn22 word arrays rr, aa, bb
+       and ll (?) and the 3*nn22 word array ttmmpp.
+
+       _B_N___m_u_l_(_) calls _b_n___m_u_l___n_o_r_m_a_l_(_), or an optimized implementation if the
+       factors have the same size: _b_n___m_u_l___c_o_m_b_a_8_(_) is used if they are 8 words
+       long, _b_n___m_u_l___r_e_c_u_r_s_i_v_e_(_) if they are larger than BBNN__MMUULLLL__SSIIZZEE__NNOORRMMAALL
+       and the size is an exact multiple of the word size, and
+       _b_n___m_u_l___p_a_r_t___r_e_c_u_r_s_i_v_e_(_) for others that are larger than
+       BBNN__MMUULLLL__SSIIZZEE__NNOORRMMAALL.
+
+       bn_sqr_normal(rr, aa, nn, ttmmpp) operates on the nn word array aa and the 2*nn
+       word arrays ttmmpp and rr.
+
+       The implementations use the following macros which, depending on the
+       architecture, may use "long long" C operations or inline assembler.
+       They are defined in "bn_lcl.h".
+
+       mul(rr, aa, ww, cc) computes ww*aa+cc and places the low word of the result in
+       rr and the high word in cc.
+
+       mul_add(rr, aa, ww, cc) computes ww*aa+rr+cc and places the low word of the
+       result in rr and the high word in cc.
+
+       sqr(rr00, rr11, aa) computes aa*aa and places the low word of the result in rr00
+       and the high word in rr11.
+
+       SSiizzee cchhaannggeess
+
+       _b_n___e_x_p_a_n_d_(_) ensures that bb has enough space for a bbiittss bit number.
+       _b_n___w_e_x_p_a_n_d_(_) ensures that bb has enough space for an nn word number.  If
+       the number has to be expanded, both macros call _b_n___e_x_p_a_n_d_2_(_), which
+       allocates a new dd array and copies the data.  They return NNUULLLL on
+       error, bb otherwise.
+
+       The _b_n___f_i_x___t_o_p_(_) macro reduces aa-->>ttoopp to point to the most significant
+       non-zero word plus one when aa has shrunk.
+
+       DDeebbuuggggiinngg
+
+       _b_n___c_h_e_c_k___t_o_p_(_) verifies that "((a)->top >= 0 && (a)->top <=
+       (a)->dmax)".  A violation will cause the program to abort.
+
+       _b_n___p_r_i_n_t_(_) prints aa to stderr. _b_n___d_u_m_p_(_) prints nn words at dd (in
+       reverse order, i.e. most significant word first) to stderr.
+
+       _b_n___s_e_t___m_a_x_(_) makes aa a static number with a ddmmaaxx of its current size.
+       This is used by _b_n___s_e_t___l_o_w_(_) and _b_n___s_e_t___h_i_g_h_(_) to make rr a read-only
+       BBIIGGNNUUMM that contains the nn low or high words of aa.
+
+       If BBNN__DDEEBBUUGG is not defined, _b_n___c_h_e_c_k___t_o_p_(_), _b_n___p_r_i_n_t_(_), _b_n___d_u_m_p_(_) and
+       _b_n___s_e_t___m_a_x_(_) are defined as empty macros.
+
+SSEEEE AALLSSOO
+       _b_n(3)
+
+
+
+1.0.0g                            2009-10-28                    bn_internal(3)

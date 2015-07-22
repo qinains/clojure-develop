@@ -1,0 +1,304 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_alert_desc_string_long - get textual description of alert information</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_alert_type_string, SSL_alert_type_string_long, SSL_alert_desc_string, SSL_alert_desc_string_long - get textual description of alert information</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ const char *SSL_alert_type_string(int value);
+ const char *SSL_alert_type_string_long(int value);</pre>
+<pre>
+ const char *SSL_alert_desc_string(int value);
+ const char *SSL_alert_desc_string_long(int value);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_alert_type_string()</code> returns a one letter string indicating the
+type of the alert specified by <strong>value</strong>.</p>
+<p><code>SSL_alert_type_string_long()</code> returns a string indicating the type of the alert
+specified by <strong>value</strong>.</p>
+<p><code>SSL_alert_desc_string()</code> returns a two letter string as a short form
+describing the reason of the alert specified by <strong>value</strong>.</p>
+<p><code>SSL_alert_desc_string_long()</code> returns a string describing the reason
+of the alert specified by <strong>value</strong>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>When one side of an SSL/TLS communication wants to inform the peer about
+a special situation, it sends an alert. The alert is sent as a special message
+and does not influence the normal data stream (unless its contents results
+in the communication being canceled).</p>
+<p>A warning alert is sent, when a non-fatal error condition occurs. The
+``close notify'' alert is sent as a warning alert. Other examples for
+non-fatal errors are certificate errors (``certificate expired'',
+``unsupported certificate''), for which a warning alert may be sent.
+(The sending party may however decide to send a fatal error.) The
+receiving side may cancel the connection on reception of a warning
+alert on it discretion.</p>
+<p>Several alert messages must be sent as fatal alert messages as specified
+by the TLS RFC. A fatal alert always leads to a connection abort.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>The following strings can occur for <code>SSL_alert_type_string()</code> or
+SSL_alert_type_string_long():</p>
+<dl>
+<dt><strong><a name="item__22w_22_2f_22warning_22">``W''/``warning''</a></strong>
+
+<dt><strong><a name="item__22f_22_2f_22fatal_22">``F''/``fatal''</a></strong>
+
+<dt><strong><a name="item__22u_22_2f_22unknown_22">``U''/``unknown''</a></strong>
+
+<dd>
+<p>This indicates that no support is available for this alert type.
+Probably <strong>value</strong> does not contain a correct alert message.</p>
+</dd>
+</li>
+</dl>
+<p>The following strings can occur for <code>SSL_alert_desc_string()</code> or
+SSL_alert_desc_string_long():</p>
+<dl>
+<dt><strong><a name="item__22cn_22_2f_22close_notify_22">``CN''/``close notify''</a></strong>
+
+<dd>
+<p>The connection shall be closed. This is a warning alert.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22um_22_2f_22unexpected_message_22">``UM''/``unexpected message''</a></strong>
+
+<dd>
+<p>An inappropriate message was received. This alert is always fatal
+and should never be observed in communication between proper
+implementations.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22bm_22_2f_22bad_record_mac_22">``BM''/``bad record mac''</a></strong>
+
+<dd>
+<p>This alert is returned if a record is received with an incorrect
+MAC. This message is always fatal.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22df_22_2f_22decompression_failure_22">``DF''/``decompression failure''</a></strong>
+
+<dd>
+<p>The decompression function received improper input (e.g. data
+that would expand to excessive length). This message is always
+fatal.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22hf_22_2f_22handshake_failure_22">``HF''/``handshake failure''</a></strong>
+
+<dd>
+<p>Reception of a handshake_failure alert message indicates that the
+sender was unable to negotiate an acceptable set of security
+parameters given the options available. This is a fatal error.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22nc_22_2f_22no_certificate_22">``NC''/``no certificate''</a></strong>
+
+<dd>
+<p>A client, that was asked to send a certificate, does not send a certificate
+(SSLv3 only).</p>
+</dd>
+</li>
+<dt><strong><a name="item__22bc_22_2f_22bad_certificate_22">``BC''/``bad certificate''</a></strong>
+
+<dd>
+<p>A certificate was corrupt, contained signatures that did not
+verify correctly, etc</p>
+</dd>
+</li>
+<dt><strong><a name="item__22uc_22_2f_22unsupported_certificate_22">``UC''/``unsupported certificate''</a></strong>
+
+<dd>
+<p>A certificate was of an unsupported type.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22cr_22_2f_22certificate_revoked_22">``CR''/``certificate revoked''</a></strong>
+
+<dd>
+<p>A certificate was revoked by its signer.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22ce_22_2f_22certificate_expired_22">``CE''/``certificate expired''</a></strong>
+
+<dd>
+<p>A certificate has expired or is not currently valid.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22cu_22_2f_22certificate_unknown_22">``CU''/``certificate unknown''</a></strong>
+
+<dd>
+<p>Some other (unspecified) issue arose in processing the
+certificate, rendering it unacceptable.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22ip_22_2f_22illegal_parameter_22">``IP''/``illegal parameter''</a></strong>
+
+<dd>
+<p>A field in the handshake was out of range or inconsistent with
+other fields. This is always fatal.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22dc_22_2f_22decryption_failed_22">``DC''/``decryption failed''</a></strong>
+
+<dd>
+<p>A TLSCiphertext decrypted in an invalid way: either it wasn't an
+even multiple of the block length or its padding values, when
+checked, weren't correct. This message is always fatal.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22ro_22_2f_22record_overflow_22">``RO''/``record overflow''</a></strong>
+
+<dd>
+<p>A TLSCiphertext record was received which had a length more than
+2^14+2048 bytes, or a record decrypted to a TLSCompressed record
+with more than 2^14+1024 bytes. This message is always fatal.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22ca_22_2f_22unknown_ca_22">``CA''/``unknown CA''</a></strong>
+
+<dd>
+<p>A valid certificate chain or partial chain was received, but the
+certificate was not accepted because the CA certificate could not
+be located or couldn't be matched with a known, trusted CA.  This
+message is always fatal.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22ad_22_2f_22access_denied_22">``AD''/``access denied''</a></strong>
+
+<dd>
+<p>A valid certificate was received, but when access control was
+applied, the sender decided not to proceed with negotiation.
+This message is always fatal.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22de_22_2f_22decode_error_22">``DE''/``decode error''</a></strong>
+
+<dd>
+<p>A message could not be decoded because some field was out of the
+specified range or the length of the message was incorrect. This
+message is always fatal.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22cy_22_2f_22decrypt_error_22">``CY''/``decrypt error''</a></strong>
+
+<dd>
+<p>A handshake cryptographic operation failed, including being
+unable to correctly verify a signature, decrypt a key exchange,
+or validate a finished message.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22er_22_2f_22export_restriction_22">``ER''/``export restriction''</a></strong>
+
+<dd>
+<p>A negotiation not in compliance with export restrictions was
+detected; for example, attempting to transfer a 1024 bit
+ephemeral RSA key for the RSA_EXPORT handshake method. This
+message is always fatal.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22pv_22_2f_22protocol_version_22">``PV''/``protocol version''</a></strong>
+
+<dd>
+<p>The protocol version the client has attempted to negotiate is
+recognized, but not supported. (For example, old protocol
+versions might be avoided for security reasons). This message is
+always fatal.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22is_22_2f_22insufficient_security_22">``IS''/``insufficient security''</a></strong>
+
+<dd>
+<p>Returned instead of handshake_failure when a negotiation has
+failed specifically because the server requires ciphers more
+secure than those supported by the client. This message is always
+fatal.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22ie_22_2f_22internal_error_22">``IE''/``internal error''</a></strong>
+
+<dd>
+<p>An internal error unrelated to the peer or the correctness of the
+protocol makes it impossible to continue (such as a memory
+allocation failure). This message is always fatal.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22us_22_2f_22user_canceled_22">``US''/``user canceled''</a></strong>
+
+<dd>
+<p>This handshake is being canceled for some reason unrelated to a
+protocol failure. If the user cancels an operation after the
+handshake is complete, just closing the connection by sending a
+close_notify is more appropriate. This alert should be followed
+by a close_notify. This message is generally a warning.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22nr_22_2f_22no_renegotiation_22">``NR''/``no renegotiation''</a></strong>
+
+<dd>
+<p>Sent by the client in response to a hello request or by the
+server in response to a client hello after initial handshaking.
+Either of these would normally lead to renegotiation; when that
+is not appropriate, the recipient should respond with this alert;
+at that point, the original requester can decide whether to
+proceed with the connection. One case where this would be
+appropriate would be where a server has spawned a process to
+satisfy a request; the process might receive security parameters
+(key length, authentication, etc.) at startup and it might be
+difficult to communicate changes to these parameters after that
+point. This message is always a warning.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22uk_22_2f_22unknown_22">``UK''/``unknown''</a></strong>
+
+<dd>
+<p>This indicates that no description is available for this alert type.
+Probably <strong>value</strong> does not contain a correct alert message.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a>, <a href="../ssl/SSL_CTX_set_info_callback.html">SSL_CTX_set_info_callback</a></p>
+
+</body>
+
+</html>

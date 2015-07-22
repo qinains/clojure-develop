@@ -1,0 +1,129 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_get_mode - manipulate SSL engine mode</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_CTX_set_mode, SSL_set_mode, SSL_CTX_get_mode, SSL_get_mode - manipulate SSL engine mode</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ long SSL_CTX_set_mode(SSL_CTX *ctx, long mode);
+ long SSL_set_mode(SSL *ssl, long mode);</pre>
+<pre>
+ long SSL_CTX_get_mode(SSL_CTX *ctx);
+ long SSL_get_mode(SSL *ssl);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_CTX_set_mode()</code> adds the mode set via bitmask in <strong>mode</strong> to <strong>ctx</strong>.
+Options already set before are not cleared.</p>
+<p><code>SSL_set_mode()</code> adds the mode set via bitmask in <strong>mode</strong> to <strong>ssl</strong>.
+Options already set before are not cleared.</p>
+<p><code>SSL_CTX_get_mode()</code> returns the mode set for <strong>ctx</strong>.</p>
+<p><code>SSL_get_mode()</code> returns the mode set for <strong>ssl</strong>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>The following mode changes are available:</p>
+<dl>
+<dt><strong><a name="item_ssl_mode_enable_partial_write">SSL_MODE_ENABLE_PARTIAL_WRITE</a></strong>
+
+<dd>
+<p>Allow SSL_write(..., n) to return r with 0 &lt; r &lt; n (i.e. report success
+when just a single record has been written). When not set (the default),
+<code>SSL_write()</code> will only report success once the complete chunk was written.
+Once <code>SSL_write()</code> returns with r, r bytes have been successfully written
+and the next call to <code>SSL_write()</code> must only send the n-r bytes left,
+imitating the behaviour of write().</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_mode_accept_moving_write_buffer">SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER</a></strong>
+
+<dd>
+<p>Make it possible to retry <code>SSL_write()</code> with changed buffer location
+(the buffer contents must stay the same). This is not the default to avoid
+the misconception that non-blocking <code>SSL_write()</code> behaves like
+non-blocking write().</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_mode_auto_retry">SSL_MODE_AUTO_RETRY</a></strong>
+
+<dd>
+<p>Never bother the application with retries if the transport is blocking.
+If a renegotiation take place during normal operation, a
+<a href="../ssl/SSL_read.html">SSL_read</a> or <a href="../ssl/SSL_write.html">SSL_write</a> would return
+with -1 and indicate the need to retry with SSL_ERROR_WANT_READ.
+In a non-blocking environment applications must be prepared to handle
+incomplete read/write operations.
+In a blocking environment, applications are not always prepared to
+deal with read/write operations returning without success report. The
+flag SSL_MODE_AUTO_RETRY will cause read/write operations to only
+return after the handshake and successful completion.</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_mode_release_buffers">SSL_MODE_RELEASE_BUFFERS</a></strong>
+
+<dd>
+<p>When we no longer need a read buffer or a write buffer for a given SSL,
+then release the memory we were using to hold it.  Released memory is
+either appended to a list of unused RAM chunks on the SSL_CTX, or simply
+freed if the list of unused chunks would become longer than 
+SSL_CTX-&gt;freelist_max_len, which defaults to 32.  Using this flag can
+save around 34k per idle SSL connection.
+This flag has no effect on SSL v2 connections, or on DTLS connections.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>SSL_CTX_set_mode()</code> and <code>SSL_set_mode()</code> return the new mode bitmask
+after adding <strong>mode</strong>.</p>
+<p><code>SSL_CTX_get_mode()</code> and <code>SSL_get_mode()</code> return the current bitmask.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a>, <a href="../ssl/SSL_read.html">SSL_read</a>, <a href="../ssl/SSL_write.html">SSL_write</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>SSL_MODE_AUTO_RETRY as been added in OpenSSL 0.9.6.</p>
+
+</body>
+
+</html>

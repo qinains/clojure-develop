@@ -1,0 +1,77 @@
+WRJPGCOM(1)                                                        WRJPGCOM(1)
+
+
+
+NNAAMMEE
+       wrjpgcom - insert text comments into a JPEG file
+
+SSYYNNOOPPSSIISS
+       wwrrjjppggccoomm [ --rreeppllaaccee ] [ --ccoommmmeenntt _t_e_x_t ] [ --ccffiillee _n_a_m_e ] [ _f_i_l_e_n_a_m_e ]
+
+DDEESSCCRRIIPPTTIIOONN
+       wwrrjjppggccoomm  reads  the  named JPEG/JFIF file, or the standard input if no
+       file is named, and generates a new JPEG/JFIF file on  standard  output.
+       A comment block is added to the file.
+
+       The  JPEG standard allows "comment" (COM) blocks to occur within a JPEG
+       file.  Although the standard doesn't actually define  what  COM  blocks
+       are for, they are widely used to hold user-supplied text strings.  This
+       lets you add annotations, titles, index terms, etc to your JPEG  files,
+       and  later retrieve them as text.  COM blocks do not interfere with the
+       image stored in the JPEG file.  The maximum size of a COM block is 64K,
+       but you can have as many of them as you like in one JPEG file.
+
+       wwrrjjppggccoomm adds a COM block, containing text you provide, to a JPEG file.
+       Ordinarily, the COM block is added after any existing COM  blocks;  but
+       you can delete the old COM blocks if you wish.
+
+OOPPTTIIOONNSS
+       Switch names may be abbreviated, and are not case sensitive.
+
+       --rreeppllaaccee
+              Delete any existing COM blocks from the file.
+
+       --ccoommmmeenntt _t_e_x_t
+              Supply text for new COM block on command line.
+
+       --ccffiillee _n_a_m_e
+              Read text for new COM block from named file.
+
+       If you have only one line of comment text to add, you can provide it on
+       the command line with --ccoommmmeenntt.  The comment text  must  be  surrounded
+       with  quotes  so  that it is treated as a single argument.  Longer com-
+       ments can be read from a text file.
+
+       If you give neither --ccoommmmeenntt nor --ccffiillee, then wwrrjjppggccoomm  will  read  the
+       comment  text  from  standard input.  (In this case an input image file
+       name MUST be supplied, so that the source JPEG file  comes  from  some-
+       where  else.)  You can enter multiple lines, up to 64KB worth.  Type an
+       end-of-file indicator (usually control-D) to terminate the comment text
+       entry.
+
+       wwrrjjppggccoomm  will  not  add  a COM block if the provided comment string is
+       empty.  Therefore --rreeppllaaccee --ccoommmmeenntt """" can be used to  delete  all  COM
+       blocks from a file.
+
+EEXXAAMMPPLLEESS
+       Add a short comment to in.jpg, producing out.jpg:
+
+              wwrrjjppggccoomm --cc _"_V_i_e_w _o_f _m_y _b_a_c_k _y_a_r_d_" _i_n_._j_p_g >> _o_u_t_._j_p_g
+
+       Attach a long comment previously stored in comment.txt:
+
+              wwrrjjppggccoomm _i_n_._j_p_g << _c_o_m_m_e_n_t_._t_x_t >> _o_u_t_._j_p_g
+
+       or equivalently
+
+              wwrrjjppggccoomm --ccffiillee _c_o_m_m_e_n_t_._t_x_t << _i_n_._j_p_g >> _o_u_t_._j_p_g
+
+SSEEEE AALLSSOO
+       ccjjppeegg(1), ddjjppeegg(1), jjppeeggttrraann(1), rrddjjppggccoomm(1)
+
+AAUUTTHHOORR
+       Independent JPEG Group
+
+
+
+                                 15 June 1995                      WRJPGCOM(1)

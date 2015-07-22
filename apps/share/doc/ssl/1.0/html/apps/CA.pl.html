@@ -1,0 +1,226 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>CA.pl - friendlier interface for OpenSSL certificate programs</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#command_options">COMMAND OPTIONS</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#dsa_certificates">DSA CERTIFICATES</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#environment_variables">ENVIRONMENT VARIABLES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>CA.pl - friendlier interface for OpenSSL certificate programs</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>CA.pl</strong>
+[<strong>-?</strong>]
+[<strong>-h</strong>]
+[<strong>-help</strong>]
+[<strong>-newcert</strong>]
+[<strong>-newreq</strong>]
+[<strong>-newreq-nodes</strong>]
+[<strong>-newca</strong>]
+[<strong>-xsign</strong>]
+[<strong>-sign</strong>]
+[<strong>-signreq</strong>]
+[<strong>-signcert</strong>]
+[<strong>-verify</strong>]
+[<strong>files</strong>]</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>CA.pl</strong> script is a perl script that supplies the relevant command line
+arguments to the <strong>openssl</strong> command for some common certificate operations.
+It is intended to simplify the process of certificate creation and management
+by the use of some simple options.</p>
+<p>
+</p>
+<hr />
+<h1><a name="command_options">COMMAND OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item__3f_2c__2dh_2c__2dhelp"><strong>?</strong>, <strong>-h</strong>, <strong>-help</strong></a></strong>
+
+<dd>
+<p>prints a usage message.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dnewcert"><strong>-newcert</strong></a></strong>
+
+<dd>
+<p>creates a new self signed certificate. The private key and certificate are
+written to the file ``newreq.pem''.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dnewreq"><strong>-newreq</strong></a></strong>
+
+<dd>
+<p>creates a new certificate request. The private key and request are
+written to the file ``newreq.pem''.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dnewreq_2dnodes"><strong>-newreq-nodes</strong></a></strong>
+
+<dd>
+<p>is like <strong>-newreq</strong> except that the private key will not be encrypted.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dnewca"><strong>-newca</strong></a></strong>
+
+<dd>
+<p>creates a new CA hierarchy for use with the <strong>ca</strong> program (or the <strong>-signcert</strong>
+and <strong>-xsign</strong> options). The user is prompted to enter the filename of the CA
+certificates (which should also contain the private key) or by hitting ENTER
+details of the CA will be prompted for. The relevant files and directories
+are created in a directory called ``demoCA'' in the current directory.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpkcs12"><strong>-pkcs12</strong></a></strong>
+
+<dd>
+<p>create a PKCS#12 file containing the user certificate, private key and CA
+certificate. It expects the user certificate and private key to be in the
+file ``newcert.pem'' and the CA certificate to be in the file demoCA/cacert.pem,
+it creates a file ``newcert.p12''. This command can thus be called after the
+<strong>-sign</strong> option. The PKCS#12 file can be imported directly into a browser.
+If there is an additional argument on the command line it will be used as the
+``friendly name'' for the certificate (which is typically displayed in the browser
+list box), otherwise the name ``My Certificate'' is used.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dsign_2c__2dsignreq_2c__2dxsign"><strong>-sign</strong>, <strong>-signreq</strong>, <strong>-xsign</strong></a></strong>
+
+<dd>
+<p>calls the <strong>ca</strong> program to sign a certificate request. It expects the request
+to be in the file ``newreq.pem''. The new certificate is written to the file
+``newcert.pem'' except in the case of the <strong>-xsign</strong> option when it is written
+to standard output.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dsignca"><strong>-signCA</strong></a></strong>
+
+<dd>
+<p>this option is the same as the <strong>-signreq</strong> option except it uses the configuration
+file section <strong>v3_ca</strong> and so makes the signed request a valid CA certificate. This
+is useful when creating intermediate CA from a root CA.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dsigncert"><strong>-signcert</strong></a></strong>
+
+<dd>
+<p>this option is the same as <strong>-sign</strong> except it expects a self signed certificate
+to be present in the file ``newreq.pem''.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dverify"><strong>-verify</strong></a></strong>
+
+<dd>
+<p>verifies certificates against the CA certificate for ``demoCA''. If no certificates
+are specified on the command line it tries to verify the file ``newcert.pem''.</p>
+</dd>
+</li>
+<dt><strong><a name="item_files"><strong>files</strong></a></strong>
+
+<dd>
+<p>one or more optional certificate file names for use with the <strong>-verify</strong> command.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>Create a CA hierarchy:</p>
+<pre>
+ CA.pl -newca</pre>
+<p>Complete certificate creation example: create a CA, create a request, sign
+the request and finally create a PKCS#12 file containing it.</p>
+<pre>
+ CA.pl -newca
+ CA.pl -newreq
+ CA.pl -signreq
+ CA.pl -pkcs12 &quot;My Test Certificate&quot;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="dsa_certificates">DSA CERTIFICATES</a></h1>
+<p>Although the <strong>CA.pl</strong> creates RSA CAs and requests it is still possible to
+use it with DSA certificates and requests using the <a href="../apps/req.html">req</a> command
+directly. The following example shows the steps that would typically be taken.</p>
+<p>Create some DSA parameters:</p>
+<pre>
+ openssl dsaparam -out dsap.pem 1024</pre>
+<p>Create a DSA CA certificate and private key:</p>
+<pre>
+ openssl req -x509 -newkey dsa:dsap.pem -keyout cacert.pem -out cacert.pem</pre>
+<p>Create the CA directories and files:</p>
+<pre>
+ CA.pl -newca</pre>
+<p>enter cacert.pem when prompted for the CA file name.</p>
+<p>Create a DSA certificate request and private key (a different set of parameters
+can optionally be created first):</p>
+<pre>
+ openssl req -out newreq.pem -newkey dsa:dsap.pem</pre>
+<p>Sign the request:</p>
+<pre>
+ CA.pl -signreq</pre>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>Most of the filenames mentioned can be modified by editing the <strong>CA.pl</strong> script.</p>
+<p>If the demoCA directory already exists then the <strong>-newca</strong> command will not
+overwrite it and will do nothing. This can happen if a previous call using
+the <strong>-newca</strong> option terminated abnormally. To get the correct behaviour
+delete the demoCA directory if it already exists.</p>
+<p>Under some environments it may not be possible to run the <strong>CA.pl</strong> script
+directly (for example Win32) and the default configuration file location may
+be wrong. In this case the command:</p>
+<pre>
+ perl -S CA.pl</pre>
+<p>can be used and the <strong>OPENSSL_CONF</strong> environment variable changed to point to 
+the correct path of the configuration file ``openssl.cnf''.</p>
+<p>The script is intended as a simple front end for the <strong>openssl</strong> program for use
+by a beginner. Its behaviour isn't always what is wanted. For more control over the
+behaviour of the certificate commands call the <strong>openssl</strong> command directly.</p>
+<p>
+</p>
+<hr />
+<h1><a name="environment_variables">ENVIRONMENT VARIABLES</a></h1>
+<p>The variable <strong>OPENSSL_CONF</strong> if defined allows an alternative configuration
+file location to be specified, it should contain the full path to the
+configuration file, not just its directory.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../apps/x509.html">x509</a>, <a href="../apps/ca.html">ca</a>, <a href="../apps/req.html">req</a>, <a href="../apps/pkcs12.html">pkcs12</a>,
+<a href="../apps/config.html">config</a></p>
+
+</body>
+
+</html>

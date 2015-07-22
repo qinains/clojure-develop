@@ -1,0 +1,66 @@
+CMS_get1_ReceiptRequest(3)          OpenSSL         CMS_get1_ReceiptRequest(3)
+
+
+
+NNAAMMEE
+        CMS_ReceiptRequest_create0, CMS_add1_ReceiptRequest, CMS_get1_ReceiptRequest, CMS_ReceiptRequest_get0_values - CMS signed receipt request functions.
+
+SSYYNNOOPPSSIISS
+        #include <openssl/cms.h>
+
+        CMS_ReceiptRequest *CMS_ReceiptRequest_create0(unsigned char *id, int idlen, int allorfirst, STACK_OF(GENERAL_NAMES) *receiptList, STACK_OF(GENERAL_NAMES) *receiptsTo);
+        int CMS_add1_ReceiptRequest(CMS_SignerInfo *si, CMS_ReceiptRequest *rr);
+        int CMS_get1_ReceiptRequest(CMS_SignerInfo *si, CMS_ReceiptRequest **prr);
+        void CMS_ReceiptRequest_get0_values(CMS_ReceiptRequest *rr, ASN1_STRING **pcid, int *pallorfirst, STACK_OF(GENERAL_NAMES) **plist, STACK_OF(GENERAL_NAMES) **prto);
+
+DDEESSCCRRIIPPTTIIOONN
+       _C_M_S___R_e_c_e_i_p_t_R_e_q_u_e_s_t___c_r_e_a_t_e_0_(_) creates a signed receipt request struc-
+       ture. The ssiiggnneeddCCoonntteennttIIddeennttiiffiieerr field is set using iidd and iiddlleenn, or
+       it is set to 32 bytes of pseudo random data if iidd is NULL. If
+       rreecceeiippttLLiisstt is NULL the allOrFirstTier option in rreecceeiippttssFFrroomm is used
+       and set to the value of the aalllloorrffiirrsstt parameter. If rreecceeiippttLLiisstt is not
+       NULL the rreecceeiippttLLiisstt option in rreecceeiippttssFFrroomm is used. The rreecceeiippttssTToo
+       parameter specifies the rreecceeiippttssTToo field value.
+
+       The _C_M_S___a_d_d_1___R_e_c_e_i_p_t_R_e_q_u_e_s_t_(_) function adds a signed receipt request rrrr
+       to SignerInfo structure ssii.
+
+       int _C_M_S___g_e_t_1___R_e_c_e_i_p_t_R_e_q_u_e_s_t_(_) looks for a signed receipt request in ssii,
+       if any is found it is decoded and written to pprrrr.
+
+       _C_M_S___R_e_c_e_i_p_t_R_e_q_u_e_s_t___g_e_t_0___v_a_l_u_e_s_(_) retrieves the values of a receipt
+       request.  The signedContentIdentifier is copied to ppcciidd. If the aallllOOrr--
+       FFiirrssttTTiieerr option of rreecceeiippttssFFrroomm is used its value is copied to ppaalllloorr--
+       ffiirrsstt otherwise the rreecceeiippttLLiisstt field is copied to pplliisstt. The rreecceeiipptt--
+       ssTToo parameter is copied to pprrttoo.
+
+NNOOTTEESS
+       For more details of the meaning of the fields see RFC2634.
+
+       The contents of a signed receipt should only be considered meaningful
+       if the corresponding CMS_ContentInfo structure can be successfully ver-
+       ified using _C_M_S___v_e_r_i_f_y_(_).
+
+RREETTUURRNN VVAALLUUEESS
+       _C_M_S___R_e_c_e_i_p_t_R_e_q_u_e_s_t___c_r_e_a_t_e_0_(_) returns a signed receipt request structure
+       or NULL if an error occurred.
+
+       _C_M_S___a_d_d_1___R_e_c_e_i_p_t_R_e_q_u_e_s_t_(_) returns 1 for success or 0 is an error
+       occurred.
+
+       _C_M_S___g_e_t_1___R_e_c_e_i_p_t_R_e_q_u_e_s_t_(_) returns 1 is a signed receipt request is
+       found and decoded. It returns 0 if a signed receipt request is not
+       present and -1 if it is present but malformed.
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _C_M_S___s_i_g_n(3), _C_M_S___s_i_g_n___r_e_c_e_i_p_t(3), _C_M_S___v_e_r_i_f_y(3)
+       _C_M_S___v_e_r_i_f_y___r_e_c_e_i_p_t(3)
+
+HHIISSTTOORRYY
+       _C_M_S___R_e_c_e_i_p_t_R_e_q_u_e_s_t___c_r_e_a_t_e_0_(_), _C_M_S___a_d_d_1___R_e_c_e_i_p_t_R_e_q_u_e_s_t_(_),
+       _C_M_S___g_e_t_1___R_e_c_e_i_p_t_R_e_q_u_e_s_t_(_) and _C_M_S___R_e_c_e_i_p_t_R_e_q_u_e_s_t___g_e_t_0___v_a_l_u_e_s_(_) were
+       added to OpenSSL 0.9.8
+
+
+
+1.0.0g                            2008-04-11        CMS_get1_ReceiptRequest(3)

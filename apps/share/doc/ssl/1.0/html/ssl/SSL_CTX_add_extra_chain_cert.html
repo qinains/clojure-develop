@@ -1,0 +1,73 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_CTX_add_extra_chain_cert - add certificate to chain</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_CTX_add_extra_chain_cert - add certificate to chain</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ long SSL_CTX_add_extra_chain_cert(SSL_CTX ctx, X509 *x509)</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_CTX_add_extra_chain_cert()</code> adds the certificate <strong>x509</strong> to the certificate
+chain presented together with the certificate. Several certificates
+can be added one after the other.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>When constructing the certificate chain, the chain will be formed from
+these certificates explicitly specified. If no chain is specified,
+the library will try to complete the chain from the available CA
+certificates in the trusted CA storage, see
+<a href="../ssl/SSL_CTX_load_verify_locations.html">SSL_CTX_load_verify_locations</a>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>SSL_CTX_add_extra_chain_cert()</code> returns 1 on success. Check out the
+error stack to find out the reason for failure otherwise.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a>,
+<a href="../ssl/SSL_CTX_use_certificate.html">SSL_CTX_use_certificate</a>,
+<a href="../ssl/SSL_CTX_set_client_cert_cb.html">SSL_CTX_set_client_cert_cb</a>,
+<a href="../ssl/SSL_CTX_load_verify_locations.html">SSL_CTX_load_verify_locations</a></p>
+
+</body>
+
+</html>

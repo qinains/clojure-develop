@@ -1,0 +1,48 @@
+SSL_get_peer_certificate(3)         OpenSSL        SSL_get_peer_certificate(3)
+
+
+
+NNAAMMEE
+       SSL_get_peer_certificate - get the X509 certificate of the peer
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        X509 *SSL_get_peer_certificate(const SSL *ssl);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___g_e_t___p_e_e_r___c_e_r_t_i_f_i_c_a_t_e_(_) returns a pointer to the X509 certificate
+       the peer presented. If the peer did not present a certificate, NULL is
+       returned.
+
+NNOOTTEESS
+       Due to the protocol definition, a TLS/SSL server will always send a
+       certificate, if present. A client will only send a certificate when
+       explicitly requested to do so by the server (see _S_S_L___C_T_X___s_e_t___v_e_r_-
+       _i_f_y(3)). If an anonymous cipher is used, no certificates are sent.
+
+       That a certificate is returned does not indicate information about the
+       verification state, use _S_S_L___g_e_t___v_e_r_i_f_y___r_e_s_u_l_t(3) to check the verifica-
+       tion state.
+
+       The reference count of the X509 object is incremented by one, so that
+       it will not be destroyed when the session containing the peer certifi-
+       cate is freed. The X509 object must be explicitly freed using
+       _X_5_0_9___f_r_e_e_(_).
+
+RREETTUURRNN VVAALLUUEESS
+       The following return values can occur:
+
+       NULL
+           No certificate was presented by the peer or no connection was
+           established.
+
+       Pointer to an X509 certificate
+           The return value points to the certificate presented by the peer.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___g_e_t___v_e_r_i_f_y___r_e_s_u_l_t(3), _S_S_L___C_T_X___s_e_t___v_e_r_i_f_y(3)
+
+
+
+1.0.0g                            2005-03-30       SSL_get_peer_certificate(3)

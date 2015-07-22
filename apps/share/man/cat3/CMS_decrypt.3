@@ -1,0 +1,62 @@
+CMS_decrypt(3)                      OpenSSL                     CMS_decrypt(3)
+
+
+
+NNAAMMEE
+        CMS_decrypt - decrypt content from a CMS envelopedData structure
+
+SSYYNNOOPPSSIISS
+        #include <openssl/cms.h>
+
+        int CMS_decrypt(CMS_ContentInfo *cms, EVP_PKEY *pkey, X509 *cert, BIO *dcont, BIO *out, unsigned int flags);
+
+DDEESSCCRRIIPPTTIIOONN
+       _C_M_S___d_e_c_r_y_p_t_(_) extracts and decrypts the content from a CMS Enveloped-
+       Data structure. ppkkeeyy is the private key of the recipient, cceerrtt is the
+       recipient's certificate, oouutt is a BIO to write the content to and ffllaaggss
+       is an optional set of flags.
+
+       The ddccoonntt parameter is used in the rare case where the encrypted con-
+       tent is detached. It will normally be set to NULL.
+
+NNOOTTEESS
+       _O_p_e_n_S_S_L___a_d_d___a_l_l___a_l_g_o_r_i_t_h_m_s_(_) (or equivalent) should be called before
+       using this function or errors about unknown algorithms will occur.
+
+       Although the recipients certificate is not needed to decrypt the data
+       it is needed to locate the appropriate (of possible several) recipients
+       in the CMS structure. If cceerrtt is set to NULL all possible recipients
+       are tried.
+
+       It is possible to determine the correct recipient key by other means
+       (for example looking them up in a database) and setting them in the CMS
+       structure in advance using the CMS utility functions such as
+       _C_M_S___s_e_t_1___p_k_e_y_(_). In this case both cceerrtt and ppkkeeyy should be set to NULL.
+
+       To process KEKRecipientInfo types _C_M_S___s_e_t_1___k_e_y_(_) or _C_M_S___R_e_c_i_p_i_-
+       _e_n_t_I_n_f_o___s_e_t_0___k_e_y_(_) and _C_M_S___R_e_c_e_i_p_i_e_n_t_I_n_f_o___d_e_c_r_y_p_t_(_) should be called
+       before _C_M_S___d_e_c_r_y_p_t_(_) and cceerrtt and ppkkeeyy set to NULL.
+
+       The following flags can be passed in the ffllaaggss parameter.
+
+       If the CCMMSS__TTEEXXTT flag is set MIME headers for type tteexxtt//ppllaaiinn are
+       deleted from the content. If the content is not of type tteexxtt//ppllaaiinn then
+       an error is returned.
+
+RREETTUURRNN VVAALLUUEESS
+       _C_M_S___d_e_c_r_y_p_t_(_) returns either 1 for success or 0 for failure.  The error
+       can be obtained from _E_R_R___g_e_t___e_r_r_o_r(3)
+
+BBUUGGSS
+       The lack of single pass processing and the need to hold all data in
+       memory as mentioned in _C_M_S___v_e_r_i_f_y_(_) also applies to _C_M_S___d_e_c_r_y_p_t_(_).
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _C_M_S___e_n_c_r_y_p_t(3)
+
+HHIISSTTOORRYY
+       _C_M_S___d_e_c_r_y_p_t_(_) was added to OpenSSL 0.9.8
+
+
+
+1.0.0g                            2008-04-12                    CMS_decrypt(3)

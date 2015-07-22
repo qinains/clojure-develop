@@ -1,0 +1,106 @@
+dsa(3)                              OpenSSL                             dsa(3)
+
+
+
+NNAAMMEE
+       dsa - Digital Signature Algorithm
+
+SSYYNNOOPPSSIISS
+        #include <openssl/dsa.h>
+        #include <openssl/engine.h>
+
+        DSA *  DSA_new(void);
+        void   DSA_free(DSA *dsa);
+
+        int    DSA_size(const DSA *dsa);
+
+        DSA *  DSA_generate_parameters(int bits, unsigned char *seed,
+                       int seed_len, int *counter_ret, unsigned long *h_ret,
+                       void (*callback)(int, int, void *), void *cb_arg);
+
+        DH *   DSA_dup_DH(const DSA *r);
+
+        int    DSA_generate_key(DSA *dsa);
+
+        int    DSA_sign(int dummy, const unsigned char *dgst, int len,
+                       unsigned char *sigret, unsigned int *siglen, DSA *dsa);
+        int    DSA_sign_setup(DSA *dsa, BN_CTX *ctx, BIGNUM **kinvp,
+                       BIGNUM **rp);
+        int    DSA_verify(int dummy, const unsigned char *dgst, int len,
+                       const unsigned char *sigbuf, int siglen, DSA *dsa);
+
+        void DSA_set_default_method(const DSA_METHOD *meth);
+        const DSA_METHOD *DSA_get_default_method(void);
+        int DSA_set_method(DSA *dsa, const DSA_METHOD *meth);
+        DSA *DSA_new_method(ENGINE *engine);
+        const DSA_METHOD *DSA_OpenSSL(void);
+
+        int DSA_get_ex_new_index(long argl, char *argp, int (*new_func)(),
+                    int (*dup_func)(), void (*free_func)());
+        int DSA_set_ex_data(DSA *d, int idx, char *arg);
+        char *DSA_get_ex_data(DSA *d, int idx);
+
+        DSA_SIG *DSA_SIG_new(void);
+        void   DSA_SIG_free(DSA_SIG *a);
+        int    i2d_DSA_SIG(const DSA_SIG *a, unsigned char **pp);
+        DSA_SIG *d2i_DSA_SIG(DSA_SIG **v, unsigned char **pp, long length);
+
+        DSA_SIG *DSA_do_sign(const unsigned char *dgst, int dlen, DSA *dsa);
+        int    DSA_do_verify(const unsigned char *dgst, int dgst_len,
+                    DSA_SIG *sig, DSA *dsa);
+
+        DSA *  d2i_DSAPublicKey(DSA **a, unsigned char **pp, long length);
+        DSA *  d2i_DSAPrivateKey(DSA **a, unsigned char **pp, long length);
+        DSA *  d2i_DSAparams(DSA **a, unsigned char **pp, long length);
+        int    i2d_DSAPublicKey(const DSA *a, unsigned char **pp);
+        int    i2d_DSAPrivateKey(const DSA *a, unsigned char **pp);
+        int    i2d_DSAparams(const DSA *a,unsigned char **pp);
+
+        int    DSAparams_print(BIO *bp, const DSA *x);
+        int    DSAparams_print_fp(FILE *fp, const DSA *x);
+        int    DSA_print(BIO *bp, const DSA *x, int off);
+        int    DSA_print_fp(FILE *bp, const DSA *x, int off);
+
+DDEESSCCRRIIPPTTIIOONN
+       These functions implement the Digital Signature Algorithm (DSA).  The
+       generation of shared DSA parameters is described in _D_S_A___g_e_n_e_r_a_t_e___p_a_r_a_m_-
+       _e_t_e_r_s(3); _D_S_A___g_e_n_e_r_a_t_e___k_e_y(3) describes how to generate a signature
+       key. Signature generation and verification are described in
+       _D_S_A___s_i_g_n(3).
+
+       The DDSSAA structure consists of several BIGNUM components.
+
+        struct
+               {
+               BIGNUM *p;              // prime number (public)
+               BIGNUM *q;              // 160-bit subprime, q | p-1 (public)
+               BIGNUM *g;              // generator of subgroup (public)
+               BIGNUM *priv_key;       // private key x
+               BIGNUM *pub_key;        // public key y = g^x
+               // ...
+               }
+        DSA;
+
+       In public keys, pprriivv__kkeeyy is NULL.
+
+       Note that DSA keys may use non-standard DDSSAA__MMEETTHHOODD implementations,
+       either directly or by the use of EENNGGIINNEE modules. In some cases (eg. an
+       ENGINE providing support for hardware-embedded keys), these BIGNUM val-
+       ues will not be used by the implementation or may be used for alterna-
+       tive data storage. For this reason, applications should generally avoid
+       using DSA structure elements directly and instead use API functions to
+       query or modify keys.
+
+CCOONNFFOORRMMIINNGG TTOO
+       US Federal Information Processing Standard FIPS 186 (Digital Signature
+       Standard, DSS), ANSI X9.30
+
+SSEEEE AALLSSOO
+       _b_n(3), _d_h(3), _e_r_r(3), _r_a_n_d(3), _r_s_a(3), _s_h_a(3), _e_n_g_i_n_e(3), _D_S_A___n_e_w(3),
+       _D_S_A___s_i_z_e(3), _D_S_A___g_e_n_e_r_a_t_e___p_a_r_a_m_e_t_e_r_s(3), _D_S_A___d_u_p___D_H(3), _D_S_A___g_e_n_e_r_-
+       _a_t_e___k_e_y(3), _D_S_A___s_i_g_n(3), _D_S_A___s_e_t___m_e_t_h_o_d(3), _D_S_A___g_e_t___e_x___n_e_w___i_n_d_e_x(3),
+       _R_S_A___p_r_i_n_t(3)
+
+
+
+1.0.0g                            2002-08-05                            dsa(3)

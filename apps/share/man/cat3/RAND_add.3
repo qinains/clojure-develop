@@ -1,0 +1,72 @@
+RAND_add(3)                         OpenSSL                        RAND_add(3)
+
+
+
+NNAAMMEE
+       RAND_add, RAND_seed, RAND_status, RAND_event, RAND_screen - add entropy
+       to the PRNG
+
+SSYYNNOOPPSSIISS
+        #include <openssl/rand.h>
+
+        void RAND_seed(const void *buf, int num);
+
+        void RAND_add(const void *buf, int num, double entropy);
+
+        int  RAND_status(void);
+
+        int  RAND_event(UINT iMsg, WPARAM wParam, LPARAM lParam);
+        void RAND_screen(void);
+
+DDEESSCCRRIIPPTTIIOONN
+       _R_A_N_D___a_d_d_(_) mixes the nnuumm bytes at bbuuff into the PRNG state. Thus, if the
+       data at bbuuff are unpredictable to an adversary, this increases the
+       uncertainty about the state and makes the PRNG output less predictable.
+       Suitable input comes from user interaction (random key presses, mouse
+       movements) and certain hardware events. The eennttrrooppyy argument is (the
+       lower bound of) an estimate of how much randomness is contained in bbuuff,
+       measured in bytes. Details about sources of randomness and how to esti-
+       mate their entropy can be found in the literature, e.g. RFC 1750.
+
+       _R_A_N_D___a_d_d_(_) may be called with sensitive data such as user entered pass-
+       words. The seed values cannot be recovered from the PRNG output.
+
+       OpenSSL makes sure that the PRNG state is unique for each thread. On
+       systems that provide "/dev/urandom", the randomness device is used to
+       seed the PRNG transparently. However, on all other systems, the appli-
+       cation is responsible for seeding the PRNG by calling _R_A_N_D___a_d_d_(_),
+       _R_A_N_D___e_g_d(3) or _R_A_N_D___l_o_a_d___f_i_l_e(3).
+
+       _R_A_N_D___s_e_e_d_(_) is equivalent to _R_A_N_D___a_d_d_(_) when nnuumm ==== eennttrrooppyy.
+
+       _R_A_N_D___e_v_e_n_t_(_) collects the entropy from Windows events such as mouse
+       movements and other user interaction. It should be called with the
+       iiMMssgg, wwPPaarraamm and llPPaarraamm arguments of _a_l_l messages sent to the window
+       procedure. It will estimate the entropy contained in the event message
+       (if any), and add it to the PRNG. The program can then process the mes-
+       sages as usual.
+
+       The _R_A_N_D___s_c_r_e_e_n_(_) function is available for the convenience of Windows
+       programmers. It adds the current contents of the screen to the PRNG.
+       For applications that can catch Windows events, seeding the PRNG by
+       calling _R_A_N_D___e_v_e_n_t_(_) is a significantly better source of randomness. It
+       should be noted that both methods cannot be used on servers that run
+       without user interaction.
+
+RREETTUURRNN VVAALLUUEESS
+       _R_A_N_D___s_t_a_t_u_s_(_) and _R_A_N_D___e_v_e_n_t_(_) return 1 if the PRNG has been seeded
+       with enough data, 0 otherwise.
+
+       The other functions do not return values.
+
+SSEEEE AALLSSOO
+       _r_a_n_d(3), _R_A_N_D___e_g_d(3), _R_A_N_D___l_o_a_d___f_i_l_e(3), _R_A_N_D___c_l_e_a_n_u_p(3)
+
+HHIISSTTOORRYY
+       _R_A_N_D___s_e_e_d_(_) and _R_A_N_D___s_c_r_e_e_n_(_) are available in all versions of SSLeay
+       and OpenSSL. _R_A_N_D___a_d_d_(_) and _R_A_N_D___s_t_a_t_u_s_(_) have been added in OpenSSL
+       0.9.5, _R_A_N_D___e_v_e_n_t_(_) in OpenSSL 0.9.5a.
+
+
+
+1.0.0g                            2000-03-22                       RAND_add(3)

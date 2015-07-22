@@ -1,0 +1,89 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_get_peer_certificate - get the X509 certificate of the peer</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_get_peer_certificate - get the X509 certificate of the peer</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ X509 *SSL_get_peer_certificate(const SSL *ssl);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_get_peer_certificate()</code> returns a pointer to the X509 certificate the
+peer presented. If the peer did not present a certificate, NULL is returned.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>Due to the protocol definition, a TLS/SSL server will always send a
+certificate, if present. A client will only send a certificate when
+explicitly requested to do so by the server (see
+<a href="../ssl/SSL_CTX_set_verify.html">SSL_CTX_set_verify</a>). If an anonymous cipher
+is used, no certificates are sent.</p>
+<p>That a certificate is returned does not indicate information about the
+verification state, use <a href="../ssl/SSL_get_verify_result.html">SSL_get_verify_result</a>
+to check the verification state.</p>
+<p>The reference count of the X509 object is incremented by one, so that it
+will not be destroyed when the session containing the peer certificate is
+freed. The X509 object must be explicitly freed using X509_free().</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>The following return values can occur:</p>
+<dl>
+<dt><strong><a name="item_null">NULL</a></strong>
+
+<dd>
+<p>No certificate was presented by the peer or no connection was established.</p>
+</dd>
+</li>
+<dt><strong><a name="item_pointer_to_an_x509_certificate">Pointer to an X509 certificate</a></strong>
+
+<dd>
+<p>The return value points to the certificate presented by the peer.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a>, <a href="../ssl/SSL_get_verify_result.html">SSL_get_verify_result</a>,
+<a href="../ssl/SSL_CTX_set_verify.html">SSL_CTX_set_verify</a></p>
+
+</body>
+
+</html>

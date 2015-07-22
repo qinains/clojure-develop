@@ -1,0 +1,82 @@
+SSL_CTX_set_mode(3)                 OpenSSL                SSL_CTX_set_mode(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_set_mode, SSL_set_mode, SSL_CTX_get_mode, SSL_get_mode - manip-
+       ulate SSL engine mode
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        long SSL_CTX_set_mode(SSL_CTX *ctx, long mode);
+        long SSL_set_mode(SSL *ssl, long mode);
+
+        long SSL_CTX_get_mode(SSL_CTX *ctx);
+        long SSL_get_mode(SSL *ssl);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___C_T_X___s_e_t___m_o_d_e_(_) adds the mode set via bitmask in mmooddee to ccttxx.
+       Options already set before are not cleared.
+
+       _S_S_L___s_e_t___m_o_d_e_(_) adds the mode set via bitmask in mmooddee to ssssll.  Options
+       already set before are not cleared.
+
+       _S_S_L___C_T_X___g_e_t___m_o_d_e_(_) returns the mode set for ccttxx.
+
+       _S_S_L___g_e_t___m_o_d_e_(_) returns the mode set for ssssll.
+
+NNOOTTEESS
+       The following mode changes are available:
+
+       SSL_MODE_ENABLE_PARTIAL_WRITE
+           Allow SSL_write(..., n) to return r with 0 < r < n (i.e. report
+           success when just a single record has been written). When not set
+           (the default), _S_S_L___w_r_i_t_e_(_) will only report success once the com-
+           plete chunk was written.  Once _S_S_L___w_r_i_t_e_(_) returns with r, r bytes
+           have been successfully written and the next call to _S_S_L___w_r_i_t_e_(_)
+           must only send the n-r bytes left, imitating the behaviour of
+           _w_r_i_t_e_(_).
+
+       SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER
+           Make it possible to retry _S_S_L___w_r_i_t_e_(_) with changed buffer location
+           (the buffer contents must stay the same). This is not the default
+           to avoid the misconception that non-blocking _S_S_L___w_r_i_t_e_(_) behaves
+           like non-blocking _w_r_i_t_e_(_).
+
+       SSL_MODE_AUTO_RETRY
+           Never bother the application with retries if the transport is
+           blocking.  If a renegotiation take place during normal operation, a
+           _S_S_L___r_e_a_d(3) or _S_S_L___w_r_i_t_e(3) would return with -1 and indicate the
+           need to retry with SSL_ERROR_WANT_READ.  In a non-blocking environ-
+           ment applications must be prepared to handle incomplete read/write
+           operations.  In a blocking environment, applications are not always
+           prepared to deal with read/write operations returning without suc-
+           cess report. The flag SSL_MODE_AUTO_RETRY will cause read/write
+           operations to only return after the handshake and successful com-
+           pletion.
+
+       SSL_MODE_RELEASE_BUFFERS
+           When we no longer need a read buffer or a write buffer for a given
+           SSL, then release the memory we were using to hold it.  Released
+           memory is either appended to a list of unused RAM chunks on the
+           SSL_CTX, or simply freed if the list of unused chunks would become
+           longer than SSL_CTX->freelist_max_len, which defaults to 32.  Using
+           this flag can save around 34k per idle SSL connection.  This flag
+           has no effect on SSL v2 connections, or on DTLS connections.
+
+RREETTUURRNN VVAALLUUEESS
+       _S_S_L___C_T_X___s_e_t___m_o_d_e_(_) and _S_S_L___s_e_t___m_o_d_e_(_) return the new mode bitmask after
+       adding mmooddee.
+
+       _S_S_L___C_T_X___g_e_t___m_o_d_e_(_) and _S_S_L___g_e_t___m_o_d_e_(_) return the current bitmask.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___r_e_a_d(3), _S_S_L___w_r_i_t_e(3)
+
+HHIISSTTOORRYY
+       SSL_MODE_AUTO_RETRY as been added in OpenSSL 0.9.6.
+
+
+
+1.0.0g                            2008-06-03               SSL_CTX_set_mode(3)

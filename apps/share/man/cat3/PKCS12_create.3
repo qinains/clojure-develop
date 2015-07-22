@@ -1,0 +1,72 @@
+PKCS12_create(3)                    OpenSSL                   PKCS12_create(3)
+
+
+
+NNAAMMEE
+       PKCS12_create - create a PKCS#12 structure
+
+SSYYNNOOPPSSIISS
+        #include <openssl/pkcs12.h>
+
+        PKCS12 *PKCS12_create(char *pass, char *name, EVP_PKEY *pkey, X509 *cert, STACK_OF(X509) *ca,
+                                       int nid_key, int nid_cert, int iter, int mac_iter, int keytype);
+
+DDEESSCCRRIIPPTTIIOONN
+       _P_K_C_S_1_2___c_r_e_a_t_e_(_) creates a PKCS#12 structure.
+
+       ppaassss is the passphrase to use. nnaammee is the ffrriieennddllyyNNaammee to use for the
+       supplied certifictate and key. ppkkeeyy is the private key to include in
+       the structure and cceerrtt its corresponding certificates. ccaa, if not NNUULLLL
+       is an optional set of certificates to also include in the structure.
+
+       nniidd__kkeeyy and nniidd__cceerrtt are the encryption algorithms that should be used
+       for the key and certificate respectively. iitteerr is the encryption algo-
+       rithm iteration count to use and mmaacc__iitteerr is the MAC iteration count to
+       use.  kkeeyyttyyppee is the type of key.
+
+NNOOTTEESS
+       The parameters nniidd__kkeeyy, nniidd__cceerrtt, iitteerr, mmaacc__iitteerr and kkeeyyttyyppee can all be
+       set to zero and sensible defaults will be used.
+
+       These defaults are: 40 bit RC2 encryption for certificates, triple DES
+       encryption for private keys, a key iteration count of
+       PKCS12_DEFAULT_ITER (currently 2048) and a MAC iteration count of 1.
+
+       The default MAC iteration count is 1 in order to retain compatibility
+       with old software which did not interpret MAC iteration counts. If such
+       compatibility is not required then mmaacc__iitteerr should be set to
+       PKCS12_DEFAULT_ITER.
+
+       kkeeyyttyyppee adds a flag to the store private key. This is a non standard
+       extension that is only currently interpreted by MSIE. If set to zero
+       the flag is omitted, if set to KKEEYY__SSIIGG the key can be used for signing
+       only, if set to KKEEYY__EEXX it can be used for signing and encryption. This
+       option was useful for old export grade software which could use signing
+       only keys of arbitrary size but had restrictions on the permissible
+       sizes of keys which could be used for encryption.
+
+NNEEWW FFUUNNCCTTIIOONNAALLIITTYY IINN OOPPEENNSSSSLL 00..99..88
+       Some additional functionality was added to _P_K_C_S_1_2___c_r_e_a_t_e_(_) in OpenSSL
+       0.9.8. These extensions are detailed below.
+
+       If a certificate contains an aalliiaass or kkeeyyiidd then this will be used for
+       the corresponding ffrriieennddllyyNNaammee or llooccaallKKeeyyIIDD in the PKCS12 structure.
+
+       Either ppkkeeyy, cceerrtt or both can be NNUULLLL to indicate that no key or
+       certficate is required. In previous versions both had to be present or
+       a fatal error is returned.
+
+       nniidd__kkeeyy or nniidd__cceerrtt can be set to -1 indicating that no encryption
+       should be used.
+
+       mmaacc__iitteerr can be set to -1 and the MAC will then be omitted entirely.
+
+SSEEEE AALLSSOO
+       _d_2_i___P_K_C_S_1_2(3)
+
+HHIISSTTOORRYY
+       PKCS12_create was added in OpenSSL 0.9.3
+
+
+
+1.0.0g                            2002-10-09                  PKCS12_create(3)

@@ -1,0 +1,64 @@
+d2i_SSL_SESSION(3)                  OpenSSL                 d2i_SSL_SESSION(3)
+
+
+
+NNAAMMEE
+       d2i_SSL_SESSION, i2d_SSL_SESSION - convert SSL_SESSION object from/to
+       ASN1 representation
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        SSL_SESSION *d2i_SSL_SESSION(SSL_SESSION **a, const unsigned char **pp, long length);
+        int i2d_SSL_SESSION(SSL_SESSION *in, unsigned char **pp);
+
+DDEESSCCRRIIPPTTIIOONN
+       _d_2_i___S_S_L___S_E_S_S_I_O_N_(_) transforms the external ASN1 representation of an
+       SSL/TLS session, stored as binary data at location pppp with length
+       lleennggtthh, into an SSL_SESSION object.
+
+       _i_2_d___S_S_L___S_E_S_S_I_O_N_(_) transforms the SSL_SESSION object iinn into the ASN1
+       representation and stores it into the memory location pointed to by pppp.
+       The length of the resulting ASN1 representation is returned. If pppp is
+       the NULL pointer, only the length is calculated and returned.
+
+NNOOTTEESS
+       The SSL_SESSION object is built from several _m_a_l_l_o_c_(_)ed parts, it can
+       therefore not be moved, copied or stored directly. In order to store
+       session data on disk or into a database, it must be transformed into a
+       binary ASN1 representation.
+
+       When using _d_2_i___S_S_L___S_E_S_S_I_O_N_(_), the SSL_SESSION object is automatically
+       allocated. The reference count is 1, so that the session must be
+       explicitly removed using _S_S_L___S_E_S_S_I_O_N___f_r_e_e(3), unless the SSL_SESSION
+       object is completely taken over, when being called inside the _g_e_t___s_e_s_-
+       _s_i_o_n___c_b_(_) (see _S_S_L___C_T_X___s_e_s_s___s_e_t___g_e_t___c_b(3)).
+
+       SSL_SESSION objects keep internal link information about the session
+       cache list, when being inserted into one SSL_CTX object's session
+       cache.  One SSL_SESSION object, regardless of its reference count, must
+       therefore only be used with one SSL_CTX object (and the SSL objects
+       created from this SSL_CTX object).
+
+       When using _i_2_d___S_S_L___S_E_S_S_I_O_N_(_), the memory location pointed to by pppp must
+       be large enough to hold the binary representation of the session. There
+       is no known limit on the size of the created ASN1 representation, so
+       the necessary amount of space should be obtained by first calling
+       _i_2_d___S_S_L___S_E_S_S_I_O_N_(_) with pppp==NNUULLLL, and obtain the size needed, then allo-
+       cate the memory and call _i_2_d___S_S_L___S_E_S_S_I_O_N_(_) again.
+
+RREETTUURRNN VVAALLUUEESS
+       _d_2_i___S_S_L___S_E_S_S_I_O_N_(_) returns a pointer to the newly allocated SSL_SESSION
+       object. In case of failure the NULL-pointer is returned and the error
+       message can be retrieved from the error stack.
+
+       _i_2_d___S_S_L___S_E_S_S_I_O_N_(_) returns the size of the ASN1 representation in bytes.
+       When the session is not valid, 00 is returned and no operation is per-
+       formed.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___S_E_S_S_I_O_N___f_r_e_e(3), _S_S_L___C_T_X___s_e_s_s___s_e_t___g_e_t___c_b(3)
+
+
+
+1.0.0g                            2005-03-30                d2i_SSL_SESSION(3)

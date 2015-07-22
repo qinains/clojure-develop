@@ -1,0 +1,135 @@
+SSL_CTX_set_info_callback(3)        OpenSSL       SSL_CTX_set_info_callback(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_set_info_callback, SSL_CTX_get_info_callback,
+       SSL_set_info_callback, SSL_get_info_callback - handle information call-
+       back for SSL connections
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        void SSL_CTX_set_info_callback(SSL_CTX *ctx, void (*callback)());
+        void (*SSL_CTX_get_info_callback(const SSL_CTX *ctx))();
+
+        void SSL_set_info_callback(SSL *ssl, void (*callback)());
+        void (*SSL_get_info_callback(const SSL *ssl))();
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___C_T_X___s_e_t___i_n_f_o___c_a_l_l_b_a_c_k_(_) sets the ccaallllbbaacckk function, that can be
+       used to obtain state information for SSL objects created from ccttxx dur-
+       ing connection setup and use. The setting for ccttxx is overridden from
+       the setting for a specific SSL object, if specified.  When ccaallllbbaacckk is
+       NULL, not callback function is used.
+
+       _S_S_L___s_e_t___i_n_f_o___c_a_l_l_b_a_c_k_(_) sets the ccaallllbbaacckk function, that can be used to
+       obtain state information for ssssll during connection setup and use.  When
+       ccaallllbbaacckk is NULL, the callback setting currently valid for ccttxx is used.
+
+       _S_S_L___C_T_X___g_e_t___i_n_f_o___c_a_l_l_b_a_c_k_(_) returns a pointer to the currently set
+       information callback function for ccttxx.
+
+       _S_S_L___g_e_t___i_n_f_o___c_a_l_l_b_a_c_k_(_) returns a pointer to the currently set informa-
+       tion callback function for ssssll.
+
+NNOOTTEESS
+       When setting up a connection and during use, it is possible to obtain
+       state information from the SSL/TLS engine. When set, an information
+       callback function is called whenever the state changes, an alert
+       appears, or an error occurs.
+
+       The callback function is called as ccaallllbbaacckk((SSSSLL **ssssll,, iinntt wwhheerree,, iinntt
+       rreett)).  The wwhheerree argument specifies information about where (in which
+       context) the callback function was called. If rreett is 0, an error condi-
+       tion occurred.  If an alert is handled, SSL_CB_ALERT is set and rreett
+       specifies the alert information.
+
+       wwhheerree is a bitmask made up of the following bits:
+
+       SSL_CB_LOOP
+           Callback has been called to indicate state change inside a loop.
+
+       SSL_CB_EXIT
+           Callback has been called to indicate error exit of a handshake
+           function.  (May be soft error with retry option for non-blocking
+           setups.)
+
+       SSL_CB_READ
+           Callback has been called during read operation.
+
+       SSL_CB_WRITE
+           Callback has been called during write operation.
+
+       SSL_CB_ALERT
+           Callback has been called due to an alert being sent or received.
+
+       SSL_CB_READ_ALERT               (SSL_CB_ALERT|SSL_CB_READ)
+       SSL_CB_WRITE_ALERT              (SSL_CB_ALERT|SSL_CB_WRITE)
+       SSL_CB_ACCEPT_LOOP              (SSL_ST_ACCEPT|SSL_CB_LOOP)
+       SSL_CB_ACCEPT_EXIT              (SSL_ST_ACCEPT|SSL_CB_EXIT)
+       SSL_CB_CONNECT_LOOP             (SSL_ST_CONNECT|SSL_CB_LOOP)
+       SSL_CB_CONNECT_EXIT             (SSL_ST_CONNECT|SSL_CB_EXIT)
+       SSL_CB_HANDSHAKE_START
+           Callback has been called because a new handshake is started.
+
+       SSL_CB_HANDSHAKE_DONE           0x20
+           Callback has been called because a handshake is finished.
+
+       The current state information can be obtained using the
+       _S_S_L___s_t_a_t_e___s_t_r_i_n_g(3) family of functions.
+
+       The rreett information can be evaluated using the _S_S_L___a_l_e_r_t___t_y_p_e___s_t_r_i_n_g(3)
+       family of functions.
+
+RREETTUURRNN VVAALLUUEESS
+       _S_S_L___s_e_t___i_n_f_o___c_a_l_l_b_a_c_k_(_) does not provide diagnostic information.
+
+       _S_S_L___g_e_t___i_n_f_o___c_a_l_l_b_a_c_k_(_) returns the current setting.
+
+EEXXAAMMPPLLEESS
+       The following example callback function prints state strings, informa-
+       tion about alerts being handled and error messages to the bbiioo__eerrrr BIO.
+
+        void apps_ssl_info_callback(SSL *s, int where, int ret)
+               {
+               const char *str;
+               int w;
+
+               w=where& ~SSL_ST_MASK;
+
+               if (w & SSL_ST_CONNECT) str="SSL_connect";
+               else if (w & SSL_ST_ACCEPT) str="SSL_accept";
+               else str="undefined";
+
+               if (where & SSL_CB_LOOP)
+                       {
+                       BIO_printf(bio_err,"%s:%s\n",str,SSL_state_string_long(s));
+                       }
+               else if (where & SSL_CB_ALERT)
+                       {
+                       str=(where & SSL_CB_READ)?"read":"write";
+                       BIO_printf(bio_err,"SSL3 alert %s:%s:%s\n",
+                               str,
+                               SSL_alert_type_string_long(ret),
+                               SSL_alert_desc_string_long(ret));
+                       }
+               else if (where & SSL_CB_EXIT)
+                       {
+                       if (ret == 0)
+                               BIO_printf(bio_err,"%s:failed in %s\n",
+                                       str,SSL_state_string_long(s));
+                       else if (ret < 0)
+                               {
+                               BIO_printf(bio_err,"%s:error in %s\n",
+                                       str,SSL_state_string_long(s));
+                               }
+                       }
+               }
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___s_t_a_t_e___s_t_r_i_n_g(3), _S_S_L___a_l_e_r_t___t_y_p_e___s_t_r_i_n_g(3)
+
+
+
+1.0.0g                            2005-03-30      SSL_CTX_set_info_callback(3)

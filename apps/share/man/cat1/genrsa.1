@@ -1,0 +1,74 @@
+GENRSA(1)                           OpenSSL                          GENRSA(1)
+
+
+
+NNAAMMEE
+       genrsa - generate an RSA private key
+
+SSYYNNOOPPSSIISS
+       ooppeennssssll ggeennrrssaa [--oouutt ffiilleennaammee] [--ppaassssoouutt aarrgg] [--ddeess] [--ddeess33] [--iiddeeaa]
+       [--ff44] [--33] [--rraanndd ffiillee((ss))] [--eennggiinnee iidd] [nnuummbbiittss]
+
+DDEESSCCRRIIPPTTIIOONN
+       The ggeennrrssaa command generates an RSA private key.
+
+OOPPTTIIOONNSS
+       --oouutt ffiilleennaammee
+           the output filename. If this argument is not specified then stan-
+           dard output is used.
+
+       --ppaassssoouutt aarrgg
+           the output file password source. For more information about the
+           format of aarrgg see the PPAASSSS PPHHRRAASSEE AARRGGUUMMEENNTTSS section in _o_p_e_n_s_s_l(1).
+
+       --ddeess||--ddeess33||--iiddeeaa
+           These options encrypt the private key with the DES, triple DES, or
+           the IDEA ciphers respectively before outputting it. If none of
+           these options is specified no encryption is used. If encryption is
+           used a pass phrase is prompted for if it is not supplied via the
+           --ppaassssoouutt argument.
+
+       --FF44||--33
+           the public exponent to use, either 65537 or 3. The default is
+           65537.
+
+       --rraanndd ffiillee((ss))
+           a file or files containing random data used to seed the random num-
+           ber generator, or an EGD socket (see _R_A_N_D___e_g_d(3)).  Multiple files
+           can be specified separated by a OS-dependent character.  The sepa-
+           rator is ;; for MS-Windows, ,, for OpenVMS, and :: for all others.
+
+       --eennggiinnee iidd
+           specifying an engine (by its unique iidd string) will cause ggeennrrssaa to
+           attempt to obtain a functional reference to the specified engine,
+           thus initialising it if needed. The engine will then be set as the
+           default for all available algorithms.
+
+       nnuummbbiittss
+           the size of the private key to generate in bits. This must be the
+           last option specified. The default is 512.
+
+NNOOTTEESS
+       RSA private key generation essentially involves the generation of two
+       prime numbers. When generating a private key various symbols will be
+       output to indicate the progress of the generation. A .. represents each
+       number which has passed an initial sieve test, ++ means a number has
+       passed a single round of the Miller-Rabin primality test. A newline
+       means that the number has passed all the prime tests (the actual number
+       depends on the key size).
+
+       Because key generation is a random process the time taken to generate a
+       key may vary somewhat.
+
+BBUUGGSS
+       A quirk of the prime generation algorithm is that it cannot generate
+       small primes. Therefore the number of bits should not be less that 64.
+       For typical private keys this will not matter because for security rea-
+       sons they will be much larger (typically 1024 bits).
+
+SSEEEE AALLSSOO
+       _g_e_n_d_s_a(1)
+
+
+
+1.0.0g                            2009-04-10                         GENRSA(1)

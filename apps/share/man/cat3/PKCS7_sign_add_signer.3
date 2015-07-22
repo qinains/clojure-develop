@@ -1,0 +1,82 @@
+PKCS7_sign_add_signer(3)            OpenSSL           PKCS7_sign_add_signer(3)
+
+
+
+NNAAMMEE
+       PKCS7_sign_add_signer - add a signer PKCS7 signed data structure.
+
+SSYYNNOOPPSSIISS
+        #include <openssl/pkcs7.h>
+
+        PKCS7_SIGNER_INFO *PKCS7_sign_add_signer(PKCS7 *p7, X509 *signcert, EVP_PKEY *pkey, const EVP_MD *md, int flags);
+
+DDEESSCCRRIIPPTTIIOONN
+       _P_K_C_S_7___s_i_g_n___a_d_d___s_i_g_n_e_r_(_) adds a signer with certificate ssiiggnncceerrtt and
+       private key ppkkeeyy using message digest mmdd to a PKCS7 signed data struc-
+       ture pp77.
+
+       The PKCS7 structure should be obtained from an initial call to
+       _P_K_C_S_7___s_i_g_n_(_) with the flag PPKKCCSS77__PPAARRTTIIAALL set or in the case or re-sign-
+       ing a valid PKCS7 signed data structure.
+
+       If the mmdd parameter is NNUULLLL then the default digest for the public key
+       algorithm will be used.
+
+       Unless the PPKKCCSS77__RREEUUSSEE__DDIIGGEESSTT flag is set the returned PKCS7 structure
+       is not complete and must be finalized either by streaming (if applica-
+       ble) or a call to _P_K_C_S_7___f_i_n_a_l_(_).
+
+NNOOTTEESS
+       The main purpose of this function is to provide finer control over a
+       PKCS#7 signed data structure where the simpler _P_K_C_S_7___s_i_g_n_(_) function
+       defaults are not appropriate. For example if multiple signers or non
+       default digest algorithms are needed.
+
+       Any of the following flags (ored together) can be passed in the ffllaaggss
+       parameter.
+
+       If PPKKCCSS77__RREEUUSSEE__DDIIGGEESSTT is set then an attempt is made to copy the con-
+       tent digest value from the PKCS7 struture: to add a signer to an exist-
+       ing structure.  An error occurs if a matching digest value cannot be
+       found to copy. The returned PKCS7 structure will be valid and finalized
+       when this flag is set.
+
+       If PPKKCCSS77__PPAARRTTIIAALL is set in addition to PPKKCCSS77__RREEUUSSEE__DDIIGGEESSTT then the
+       PPKKCCSS77__SSIIGGNNEERR__IINNOO structure will not be finalized so additional
+       attributes can be added. In this case an explicit call to
+       _P_K_C_S_7___S_I_G_N_E_R___I_N_F_O___s_i_g_n_(_) is needed to finalize it.
+
+       If PPKKCCSS77__NNOOCCEERRTTSS is set the signer's certificate will not be included
+       in the PKCS7 structure, the signer's certificate must still be supplied
+       in the ssiiggnncceerrtt parameter though. This can reduce the size of the sig-
+       nature if the signers certificate can be obtained by other means: for
+       example a previously signed message.
+
+       The signedData structure includes several PKCS#7 autenticatedAttributes
+       including the signing time, the PKCS#7 content type and the supported
+       list of ciphers in an SMIMECapabilities attribute. If PPKKCCSS77__NNOOAATTTTRR is
+       set then no authenticatedAttributes will be used. If PPKKCCSS77__NNOOSSMMIIMMEECCAAPP
+       is set then just the SMIMECapabilities are omitted.
+
+       If present the SMIMECapabilities attribute indicates support for the
+       following algorithms: triple DES, 128 bit RC2, 64 bit RC2, DES and 40
+       bit RC2. If any of these algorithms is disabled then it will not be
+       included.
+
+       _P_K_C_S_7___s_i_g_n___a_d_d___s_i_g_n_e_r_s_(_) returns an internal pointer to the
+       PKCS7_SIGNER_INFO structure just added, this can be used to set addi-
+       tional attributes before it is finalized.
+
+RREETTUURRNN VVAALLUUEESS
+       _P_K_C_S_7___s_i_g_n___a_d_d___s_i_g_n_e_r_s_(_) returns an internal pointer to the
+       PKCS7_SIGNER_INFO structure just added or NULL if an error occurs.
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _P_K_C_S_7___s_i_g_n(3), _P_K_C_S_7___f_i_n_a_l(3),
+
+HHIISSTTOORRYY
+       _P_P_K_C_S_7___s_i_g_n___a_d_d___s_i_g_n_e_r_(_) was added to OpenSSL 1.0.0
+
+
+
+1.0.0g                            2009-10-01          PKCS7_sign_add_signer(3)

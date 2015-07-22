@@ -1,0 +1,198 @@
+RSA_set_method(3)                   OpenSSL                  RSA_set_method(3)
+
+
+
+NNAAMMEE
+       RSA_set_default_method, RSA_get_default_method, RSA_set_method,
+       RSA_get_method, RSA_PKCS1_SSLeay, RSA_null_method, RSA_flags,
+       RSA_new_method - select RSA method
+
+SSYYNNOOPPSSIISS
+        #include <openssl/rsa.h>
+
+        void RSA_set_default_method(const RSA_METHOD *meth);
+
+        RSA_METHOD *RSA_get_default_method(void);
+
+        int RSA_set_method(RSA *rsa, const RSA_METHOD *meth);
+
+        RSA_METHOD *RSA_get_method(const RSA *rsa);
+
+        RSA_METHOD *RSA_PKCS1_SSLeay(void);
+
+        RSA_METHOD *RSA_null_method(void);
+
+        int RSA_flags(const RSA *rsa);
+
+        RSA *RSA_new_method(RSA_METHOD *method);
+
+DDEESSCCRRIIPPTTIIOONN
+       An RRSSAA__MMEETTHHOODD specifies the functions that OpenSSL uses for RSA opera-
+       tions. By modifying the method, alternative implementations such as
+       hardware accelerators may be used. IMPORTANT: See the NOTES section for
+       important information about how these RSA API functions are affected by
+       the use of EENNGGIINNEE API calls.
+
+       Initially, the default RSA_METHOD is the OpenSSL internal implementa-
+       tion, as returned by _R_S_A___P_K_C_S_1___S_S_L_e_a_y_(_).
+
+       _R_S_A___s_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_) makes mmeetthh the default method for all RSA
+       structures created later. NNBB: This is true only whilst no ENGINE has
+       been set as a default for RSA, so this function is no longer recom-
+       mended.
+
+       _R_S_A___g_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_) returns a pointer to the current default
+       RSA_METHOD. However, the meaningfulness of this result is dependent on
+       whether the ENGINE API is being used, so this function is no longer
+       recommended.
+
+       _R_S_A___s_e_t___m_e_t_h_o_d_(_) selects mmeetthh to perform all operations using the key
+       rrssaa. This will replace the RSA_METHOD used by the RSA key and if the
+       previous method was supplied by an ENGINE, the handle to that ENGINE
+       will be released during the change. It is possible to have RSA keys
+       that only work with certain RSA_METHOD implementations (eg. from an
+       ENGINE module that supports embedded hardware-protected keys), and in
+       such cases attempting to change the RSA_METHOD for the key can have
+       unexpected results.
+
+       _R_S_A___g_e_t___m_e_t_h_o_d_(_) returns a pointer to the RSA_METHOD being used by rrssaa.
+       This method may or may not be supplied by an ENGINE implementation, but
+       if it is, the return value can only be guaranteed to be valid as long
+       as the RSA key itself is valid and does not have its implementation
+       changed by _R_S_A___s_e_t___m_e_t_h_o_d_(_).
+
+       _R_S_A___f_l_a_g_s_(_) returns the ffllaaggss that are set for rrssaa's current
+       RSA_METHOD. See the BUGS section.
+
+       _R_S_A___n_e_w___m_e_t_h_o_d_(_) allocates and initializes an RSA structure so that
+       eennggiinnee will be used for the RSA operations. If eennggiinnee is NULL, the
+       default ENGINE for RSA operations is used, and if no default ENGINE is
+       set, the RSA_METHOD controlled by _R_S_A___s_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_) is used.
+
+       _R_S_A___f_l_a_g_s_(_) returns the ffllaaggss that are set for rrssaa's current method.
+
+       _R_S_A___n_e_w___m_e_t_h_o_d_(_) allocates and initializes an RRSSAA structure so that
+       mmeetthhoodd will be used for the RSA operations. If mmeetthhoodd is NNUULLLL, the
+       default method is used.
+
+TTHHEE RRSSAA__MMEETTHHOODD SSTTRRUUCCTTUURREE
+        typedef struct rsa_meth_st
+        {
+            /* name of the implementation */
+               const char *name;
+
+            /* encrypt */
+               int (*rsa_pub_enc)(int flen, unsigned char *from,
+                 unsigned char *to, RSA *rsa, int padding);
+
+            /* verify arbitrary data */
+               int (*rsa_pub_dec)(int flen, unsigned char *from,
+                 unsigned char *to, RSA *rsa, int padding);
+
+            /* sign arbitrary data */
+               int (*rsa_priv_enc)(int flen, unsigned char *from,
+                 unsigned char *to, RSA *rsa, int padding);
+
+            /* decrypt */
+               int (*rsa_priv_dec)(int flen, unsigned char *from,
+                 unsigned char *to, RSA *rsa, int padding);
+
+            /* compute r0 = r0 ^ I mod rsa->n (May be NULL for some
+                                               implementations) */
+               int (*rsa_mod_exp)(BIGNUM *r0, BIGNUM *I, RSA *rsa);
+
+            /* compute r = a ^ p mod m (May be NULL for some implementations) */
+               int (*bn_mod_exp)(BIGNUM *r, BIGNUM *a, const BIGNUM *p,
+                 const BIGNUM *m, BN_CTX *ctx, BN_MONT_CTX *m_ctx);
+
+            /* called at RSA_new */
+               int (*init)(RSA *rsa);
+
+            /* called at RSA_free */
+               int (*finish)(RSA *rsa);
+
+            /* RSA_FLAG_EXT_PKEY        - rsa_mod_exp is called for private key
+             *                            operations, even if p,q,dmp1,dmq1,iqmp
+             *                            are NULL
+             * RSA_FLAG_SIGN_VER        - enable rsa_sign and rsa_verify
+             * RSA_METHOD_FLAG_NO_CHECK - don't check pub/private match
+             */
+               int flags;
+
+               char *app_data; /* ?? */
+
+            /* sign. For backward compatibility, this is used only
+             * if (flags & RSA_FLAG_SIGN_VER)
+             */
+               int (*rsa_sign)(int type, unsigned char *m, unsigned int m_len,
+                  unsigned char *sigret, unsigned int *siglen, RSA *rsa);
+
+            /* verify. For backward compatibility, this is used only
+             * if (flags & RSA_FLAG_SIGN_VER)
+             */
+               int (*rsa_verify)(int type, unsigned char *m, unsigned int m_len,
+                  unsigned char *sigbuf, unsigned int siglen, RSA *rsa);
+
+        } RSA_METHOD;
+
+RREETTUURRNN VVAALLUUEESS
+       _R_S_A___P_K_C_S_1___S_S_L_e_a_y_(_), _R_S_A___P_K_C_S_1___n_u_l_l___m_e_t_h_o_d_(_), _R_S_A___g_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_)
+       and _R_S_A___g_e_t___m_e_t_h_o_d_(_) return pointers to the respective RSA_METHODs.
+
+       _R_S_A___s_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_) returns no value.
+
+       _R_S_A___s_e_t___m_e_t_h_o_d_(_) returns a pointer to the old RSA_METHOD implementation
+       that was replaced. However, this return value should probably be
+       ignored because if it was supplied by an ENGINE, the pointer could be
+       invalidated at any time if the ENGINE is unloaded (in fact it could be
+       unloaded as a result of the _R_S_A___s_e_t___m_e_t_h_o_d_(_) function releasing its
+       handle to the ENGINE). For this reason, the return type may be replaced
+       with a vvooiidd declaration in a future release.
+
+       _R_S_A___n_e_w___m_e_t_h_o_d_(_) returns NULL and sets an error code that can be
+       obtained by _E_R_R___g_e_t___e_r_r_o_r(3) if the allocation fails. Otherwise it
+       returns a pointer to the newly allocated structure.
+
+NNOOTTEESS
+       As of version 0.9.7, RSA_METHOD implementations are grouped together
+       with other algorithmic APIs (eg. DSA_METHOD, EVP_CIPHER, etc) into
+       EENNGGIINNEE modules. If a default ENGINE is specified for RSA functionality
+       using an ENGINE API function, that will override any RSA defaults set
+       using the RSA API (ie.  _R_S_A___s_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_)). For this reason, the
+       ENGINE API is the recommended way to control default implementations
+       for use in RSA and other cryptographic algorithms.
+
+BBUUGGSS
+       The behaviour of _R_S_A___f_l_a_g_s_(_) is a mis-feature that is left as-is for
+       now to avoid creating compatibility problems. RSA functionality, such
+       as the encryption functions, are controlled by the ffllaaggss value in the
+       RSA key itself, not by the ffllaaggss value in the RSA_METHOD attached to
+       the RSA key (which is what this function returns). If the flags element
+       of an RSA key is changed, the changes will be honoured by RSA function-
+       ality but will not be reflected in the return value of the _R_S_A___f_l_a_g_s_(_)
+       function - in effect _R_S_A___f_l_a_g_s_(_) behaves more like an
+       _R_S_A___d_e_f_a_u_l_t___f_l_a_g_s_(_) function (which does not currently exist).
+
+SSEEEE AALLSSOO
+       _r_s_a(3), _R_S_A___n_e_w(3)
+
+HHIISSTTOORRYY
+       _R_S_A___n_e_w___m_e_t_h_o_d_(_) and _R_S_A___s_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_) appeared in SSLeay 0.8.
+       _R_S_A___g_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_), _R_S_A___s_e_t___m_e_t_h_o_d_(_) and _R_S_A___g_e_t___m_e_t_h_o_d_(_) as well
+       as the rsa_sign and rsa_verify components of RSA_METHOD were added in
+       OpenSSL 0.9.4.
+
+       _R_S_A___s_e_t___d_e_f_a_u_l_t___o_p_e_n_s_s_l___m_e_t_h_o_d_(_) and _R_S_A___g_e_t___d_e_f_a_u_l_t___o_p_e_n_s_s_l___m_e_t_h_o_d_(_)
+       replaced _R_S_A___s_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_) and _R_S_A___g_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_) respec-
+       tively, and _R_S_A___s_e_t___m_e_t_h_o_d_(_) and _R_S_A___n_e_w___m_e_t_h_o_d_(_) were altered to use
+       EENNGGIINNEEs rather than RRSSAA__MMEETTHHOODDs during development of the engine ver-
+       sion of OpenSSL 0.9.6. For 0.9.7, the handling of defaults in the
+       ENGINE API was restructured so that this change was reversed, and be-
+       haviour of the other functions resembled more closely the previous be-
+       haviour. The behaviour of defaults in the ENGINE API now transparently
+       overrides the behaviour of defaults in the RSA API without requiring
+       changing these function prototypes.
+
+
+
+1.0.0g                            2007-11-19                 RSA_set_method(3)

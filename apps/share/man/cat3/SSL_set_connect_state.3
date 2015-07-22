@@ -1,0 +1,50 @@
+SSL_set_connect_state(3)            OpenSSL           SSL_set_connect_state(3)
+
+
+
+NNAAMMEE
+       SSL_set_connect_state, SSL_get_accept_state - prepare SSL object to
+       work in client or server mode
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        void SSL_set_connect_state(SSL *ssl);
+
+        void SSL_set_accept_state(SSL *ssl);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___s_e_t___c_o_n_n_e_c_t___s_t_a_t_e_(_) sets ssssll to work in client mode.
+
+       _S_S_L___s_e_t___a_c_c_e_p_t___s_t_a_t_e_(_) sets ssssll to work in server mode.
+
+NNOOTTEESS
+       When the SSL_CTX object was created with _S_S_L___C_T_X___n_e_w(3), it was either
+       assigned a dedicated client method, a dedicated server method, or a
+       generic method, that can be used for both client and server connec-
+       tions. (The method might have been changed with _S_S_L___C_T_X___s_e_t___s_s_l___v_e_r_-
+       _s_i_o_n(3) or _S_S_L___s_e_t___s_s_l___m_e_t_h_o_d_(_).)
+
+       When beginning a new handshake, the SSL engine must know whether it
+       must call the connect (client) or accept (server) routines. Even though
+       it may be clear from the method chosen, whether client or server mode
+       was requested, the handshake routines must be explicitly set.
+
+       When using the _S_S_L___c_o_n_n_e_c_t(3) or _S_S_L___a_c_c_e_p_t(3) routines, the correct
+       handshake routines are automatically set. When performing a transparent
+       negotiation using _S_S_L___w_r_i_t_e(3) or _S_S_L___r_e_a_d(3), the handshake routines
+       must be explicitly set in advance using either _S_S_L___s_e_t___c_o_n_n_e_c_t___s_t_a_t_e_(_)
+       or _S_S_L___s_e_t___a_c_c_e_p_t___s_t_a_t_e_(_).
+
+RREETTUURRNN VVAALLUUEESS
+       _S_S_L___s_e_t___c_o_n_n_e_c_t___s_t_a_t_e_(_) and _S_S_L___s_e_t___a_c_c_e_p_t___s_t_a_t_e_(_) do not return diag-
+       nostic information.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___n_e_w(3), _S_S_L___C_T_X___n_e_w(3), _S_S_L___c_o_n_n_e_c_t(3), _S_S_L___a_c_c_e_p_t(3),
+       _S_S_L___w_r_i_t_e(3), _S_S_L___r_e_a_d(3), _S_S_L___d_o___h_a_n_d_s_h_a_k_e(3), _S_S_L___C_T_X___s_e_t___s_s_l___v_e_r_-
+       _s_i_o_n(3)
+
+
+
+1.0.0g                            2002-07-19          SSL_set_connect_state(3)

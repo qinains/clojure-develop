@@ -1,0 +1,90 @@
+EVP_VerifyInit(3)                   OpenSSL                  EVP_VerifyInit(3)
+
+
+
+NNAAMMEE
+       EVP_VerifyInit, EVP_VerifyUpdate, EVP_VerifyFinal - EVP signature veri-
+       fication functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/evp.h>
+
+        int EVP_VerifyInit_ex(EVP_MD_CTX *ctx, const EVP_MD *type, ENGINE *impl);
+        int EVP_VerifyUpdate(EVP_MD_CTX *ctx, const void *d, unsigned int cnt);
+        int EVP_VerifyFinal(EVP_MD_CTX *ctx,unsigned char *sigbuf, unsigned int siglen,EVP_PKEY *pkey);
+
+        int EVP_VerifyInit(EVP_MD_CTX *ctx, const EVP_MD *type);
+
+DDEESSCCRRIIPPTTIIOONN
+       The EVP signature verification routines are a high level interface to
+       digital signatures.
+
+       _E_V_P___V_e_r_i_f_y_I_n_i_t___e_x_(_) sets up verification context ccttxx to use digest ttyyppee
+       from ENGINE iimmppll. ccttxx must be initialized by calling _E_V_P___M_D___C_T_X___i_n_i_t_(_)
+       before calling this function.
+
+       _E_V_P___V_e_r_i_f_y_U_p_d_a_t_e_(_) hashes ccnntt bytes of data at dd into the verification
+       context ccttxx. This function can be called several times on the same ccttxx
+       to include additional data.
+
+       _E_V_P___V_e_r_i_f_y_F_i_n_a_l_(_) verifies the data in ccttxx using the public key ppkkeeyy
+       and against the ssiigglleenn bytes at ssiiggbbuuff.
+
+       _E_V_P___V_e_r_i_f_y_I_n_i_t_(_) initializes verification context ccttxx to use the
+       default implementation of digest ttyyppee.
+
+RREETTUURRNN VVAALLUUEESS
+       _E_V_P___V_e_r_i_f_y_I_n_i_t___e_x_(_) and _E_V_P___V_e_r_i_f_y_U_p_d_a_t_e_(_) return 1 for success and 0
+       for failure.
+
+       _E_V_P___V_e_r_i_f_y_F_i_n_a_l_(_) returns 1 for a correct signature, 0 for failure and
+       -1 if some other error occurred.
+
+       The error codes can be obtained by _E_R_R___g_e_t___e_r_r_o_r(3).
+
+NNOOTTEESS
+       The EEVVPP interface to digital signatures should almost always be used in
+       preference to the low level interfaces. This is because the code then
+       becomes transparent to the algorithm used and much more flexible.
+
+       Due to the link between message digests and public key algorithms the
+       correct digest algorithm must be used with the correct public key type.
+       A list of algorithms and associated public key algorithms appears in
+       _E_V_P___D_i_g_e_s_t_I_n_i_t(3).
+
+       The call to _E_V_P___V_e_r_i_f_y_F_i_n_a_l_(_) internally finalizes a copy of the digest
+       context.  This means that calls to _E_V_P___V_e_r_i_f_y_U_p_d_a_t_e_(_) and _E_V_P___V_e_r_i_f_y_F_i_-
+       _n_a_l_(_) can be called later to digest and verify additional data.
+
+       Since only a copy of the digest context is ever finalized the context
+       must be cleaned up after use by calling _E_V_P___M_D___C_T_X___c_l_e_a_n_u_p_(_) or a mem-
+       ory leak will occur.
+
+BBUUGGSS
+       Older versions of this documentation wrongly stated that calls to
+       _E_V_P___V_e_r_i_f_y_U_p_d_a_t_e_(_) could not be made after calling _E_V_P___V_e_r_i_f_y_F_i_n_a_l_(_).
+
+       Since the public key is passed in the call to _E_V_P___S_i_g_n_F_i_n_a_l_(_) any error
+       relating to the private key (for example an unsuitable key and digest
+       combination) will not be indicated until after potentially large
+       amounts of data have been passed through _E_V_P___S_i_g_n_U_p_d_a_t_e_(_).
+
+       It is not possible to change the signing parameters using these func-
+       tion.
+
+       The previous two bugs are fixed in the newer EVP_VerifyDigest*() func-
+       tion.
+
+SSEEEE AALLSSOO
+       _e_v_p(3), _E_V_P___S_i_g_n_I_n_i_t(3), _E_V_P___D_i_g_e_s_t_I_n_i_t(3), _e_r_r(3), _e_v_p(3), _h_m_a_c(3),
+       _m_d_2(3), _m_d_5(3), _m_d_c_2(3), _r_i_p_e_m_d(3), _s_h_a(3), _d_g_s_t(1)
+
+HHIISSTTOORRYY
+       _E_V_P___V_e_r_i_f_y_I_n_i_t_(_), _E_V_P___V_e_r_i_f_y_U_p_d_a_t_e_(_) and _E_V_P___V_e_r_i_f_y_F_i_n_a_l_(_) are avail-
+       able in all versions of SSLeay and OpenSSL.
+
+       _E_V_P___V_e_r_i_f_y_I_n_i_t___e_x_(_) was added in OpenSSL 0.9.7
+
+
+
+1.0.0g                            2006-07-12                 EVP_VerifyInit(3)

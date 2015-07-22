@@ -1,0 +1,78 @@
+ASN1_STRING_length(3)               OpenSSL              ASN1_STRING_length(3)
+
+
+
+NNAAMMEE
+       ASN1_STRING_dup, ASN1_STRING_cmp, ASN1_STRING_set, ASN1_STRING_length,
+       ASN1_STRING_length_set, ASN1_STRING_type, ASN1_STRING_data -
+       ASN1_STRING utility functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/asn1.h>
+
+        int ASN1_STRING_length(ASN1_STRING *x);
+        unsigned char * ASN1_STRING_data(ASN1_STRING *x);
+
+        ASN1_STRING * ASN1_STRING_dup(ASN1_STRING *a);
+
+        int ASN1_STRING_cmp(ASN1_STRING *a, ASN1_STRING *b);
+
+        int ASN1_STRING_set(ASN1_STRING *str, const void *data, int len);
+
+        int ASN1_STRING_type(ASN1_STRING *x);
+
+        int ASN1_STRING_to_UTF8(unsigned char **out, ASN1_STRING *in);
+
+DDEESSCCRRIIPPTTIIOONN
+       These functions allow an AASSNN11__SSTTRRIINNGG structure to be manipulated.
+
+       _A_S_N_1___S_T_R_I_N_G___l_e_n_g_t_h_(_) returns the length of the content of xx.
+
+       _A_S_N_1___S_T_R_I_N_G___d_a_t_a_(_) returns an internal pointer to the data of xx.  Since
+       this is an internal pointer it should nnoott be freed or modified in any
+       way.
+
+       _A_S_N_1___S_T_R_I_N_G___d_u_p_(_) returns a copy of the structure aa.
+
+       _A_S_N_1___S_T_R_I_N_G___c_m_p_(_) compares aa and bb returning 0 if the two are identi-
+       cal. The string types and content are compared.
+
+       _A_S_N_1___S_T_R_I_N_G___s_e_t_(_) sets the data of string ssttrr to the buffer ddaattaa or
+       length lleenn. The supplied data is copied. If lleenn is -1 then the length
+       is determined by strlen(data).
+
+       _A_S_N_1___S_T_R_I_N_G___t_y_p_e_(_) returns the type of xx, using standard constants such
+       as VV__AASSNN11__OOCCTTEETT__SSTTRRIINNGG.
+
+       _A_S_N_1___S_T_R_I_N_G___t_o___U_T_F_8_(_) converts the string iinn to UTF8 format, the con-
+       verted data is allocated in a buffer in **oouutt. The length of oouutt is
+       returned or a negative error code. The buffer **oouutt should be free using
+       _O_P_E_N_S_S_L___f_r_e_e_(_).
+
+NNOOTTEESS
+       Almost all ASN1 types in OpenSSL are represented as an AASSNN11__SSTTRRIINNGG
+       structure. Other types such as AASSNN11__OOCCTTEETT__SSTTRRIINNGG are simply typedefed
+       to AASSNN11__SSTTRRIINNGG and the functions call the AASSNN11__SSTTRRIINNGG equivalents.
+       AASSNN11__SSTTRRIINNGG is also used for some CCHHOOIICCEE types which consist entirely
+       of primitive string types such as DDiirreeccttoorryySSttrriinngg and TTiimmee.
+
+       These functions should nnoott be used to examine or modify AASSNN11__IINNTTEEGGEERR or
+       AASSNN11__EENNUUMMEERRAATTEEDD types: the relevant IINNTTEEGGEERR or EENNUUMMEERRAATTEEDD utility func-
+       tions should be used instead.
+
+       In general it cannot be assumed that the data returned by
+       _A_S_N_1___S_T_R_I_N_G___d_a_t_a_(_) is null terminated or does not contain embedded
+       nulls. The actual format of the data will depend on the actual string
+       type itself: for example for and IA5String the data will be ASCII, for
+       a BMPString two bytes per character in big endian format, UTF8String
+       will be in UTF8 format.
+
+       Similar care should be take to ensure the data is in the correct format
+       when calling _A_S_N_1___S_T_R_I_N_G___s_e_t_(_).
+
+RREETTUURRNN VVAALLUUEESS
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3)
+
+HHIISSTTOORRYY
+1.0.0g                            2006-05-14             ASN1_STRING_length(3)

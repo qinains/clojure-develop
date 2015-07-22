@@ -1,0 +1,114 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_want_x509_lookup - obtain state information TLS/SSL I/O operation</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_want, SSL_want_nothing, SSL_want_read, SSL_want_write, SSL_want_x509_lookup - obtain state information TLS/SSL I/O operation</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ int SSL_want(const SSL *ssl);
+ int SSL_want_nothing(const SSL *ssl);
+ int SSL_want_read(const SSL *ssl);
+ int SSL_want_write(const SSL *ssl);
+ int SSL_want_x509_lookup(const SSL *ssl);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_want()</code> returns state information for the SSL object <strong>ssl</strong>.</p>
+<p>The other SSL_want_*() calls are shortcuts for the possible states returned
+by SSL_want().</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p><code>SSL_want()</code> examines the internal state information of the SSL object. Its
+return values are similar to that of <a href="../ssl/SSL_get_error.html">SSL_get_error</a>.
+Unlike <a href="../ssl/SSL_get_error.html">SSL_get_error</a>, which also evaluates the
+error queue, the results are obtained by examining an internal state flag
+only. The information must therefore only be used for normal operation under
+non-blocking I/O. Error conditions are not handled and must be treated
+using <a href="../ssl/SSL_get_error.html">SSL_get_error</a>.</p>
+<p>The result returned by <code>SSL_want()</code> should always be consistent with
+the result of <a href="../ssl/SSL_get_error.html">SSL_get_error</a>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>The following return values can currently occur for SSL_want():</p>
+<dl>
+<dt><strong><a name="item_ssl_nothing">SSL_NOTHING</a></strong>
+
+<dd>
+<p>There is no data to be written or to be read.</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_writing">SSL_WRITING</a></strong>
+
+<dd>
+<p>There are data in the SSL buffer that must be written to the underlying
+<strong>BIO</strong> layer in order to complete the actual SSL_*() operation.
+A call to <a href="../ssl/SSL_get_error.html">SSL_get_error</a> should return
+SSL_ERROR_WANT_WRITE.</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_reading">SSL_READING</a></strong>
+
+<dd>
+<p>More data must be read from the underlying <strong>BIO</strong> layer in order to
+complete the actual SSL_*() operation.
+A call to <a href="../ssl/SSL_get_error.html">SSL_get_error</a> should return
+SSL_ERROR_WANT_READ.</p>
+</dd>
+</li>
+<dt><strong><a name="item_ssl_x509_lookup">SSL_X509_LOOKUP</a></strong>
+
+<dd>
+<p>The operation did not complete because an application callback set by
+<code>SSL_CTX_set_client_cert_cb()</code> has asked to be called again.
+A call to <a href="../ssl/SSL_get_error.html">SSL_get_error</a> should return
+SSL_ERROR_WANT_X509_LOOKUP.</p>
+</dd>
+</li>
+</dl>
+<p>SSL_want_nothing(), SSL_want_read(), SSL_want_write(), <code>SSL_want_x509_lookup()</code>
+return 1, when the corresponding condition is true or 0 otherwise.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a>, <a href="../crypto/err.html">err</a>, <a href="../ssl/SSL_get_error.html">SSL_get_error</a></p>
+
+</body>
+
+</html>

@@ -1,0 +1,134 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_CTX_new - create a new SSL_CTX object as framework for TLS/SSL enabled functions</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_CTX_new - create a new SSL_CTX object as framework for TLS/SSL enabled functions</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ SSL_CTX *SSL_CTX_new(const SSL_METHOD *method);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_CTX_new()</code> creates a new <strong>SSL_CTX</strong> object as framework to establish
+TLS/SSL enabled connections.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>The SSL_CTX object uses <strong>method</strong> as connection method. The methods exist
+in a generic type (for client and server use), a server only type, and a
+client only type. <strong>method</strong> can be of the following types:</p>
+<dl>
+<dt><strong><a name="item_sslv2_method">SSLv2_method(void), SSLv2_server_method(void), <code>SSLv2_client_method(void)</code></a></strong>
+
+<dd>
+<p>A TLS/SSL connection established with these methods will only understand
+the SSLv2 protocol. A client will send out SSLv2 client hello messages
+and will also indicate that it only understand SSLv2. A server will only
+understand SSLv2 client hello messages.</p>
+</dd>
+</li>
+<dt><strong><a name="item_sslv3_method">SSLv3_method(void), SSLv3_server_method(void), <code>SSLv3_client_method(void)</code></a></strong>
+
+<dd>
+<p>A TLS/SSL connection established with these methods will only understand the
+SSLv3 protocol. A client will send out SSLv3 client hello messages
+and will indicate that it only understands SSLv3. A server will only understand
+SSLv3 client hello messages. This especially means, that it will
+not understand SSLv2 client hello messages which are widely used for
+compatibility reasons, see SSLv23_*_method().</p>
+</dd>
+</li>
+<dt><strong><a name="item_tlsv1_method">TLSv1_method(void), TLSv1_server_method(void), <code>TLSv1_client_method(void)</code></a></strong>
+
+<dd>
+<p>A TLS/SSL connection established with these methods will only understand the
+TLSv1 protocol. A client will send out TLSv1 client hello messages
+and will indicate that it only understands TLSv1. A server will only understand
+TLSv1 client hello messages. This especially means, that it will
+not understand SSLv2 client hello messages which are widely used for
+compatibility reasons, see SSLv23_*_method(). It will also not understand
+SSLv3 client hello messages.</p>
+</dd>
+</li>
+<dt><strong><a name="item_sslv23_method">SSLv23_method(void), SSLv23_server_method(void), <code>SSLv23_client_method(void)</code></a></strong>
+
+<dd>
+<p>A TLS/SSL connection established with these methods will understand the SSLv2,
+SSLv3, and TLSv1 protocol. A client will send out SSLv2 client hello messages
+and will indicate that it also understands SSLv3 and TLSv1. A server will
+understand SSLv2, SSLv3, and TLSv1 client hello messages. This is the best
+choice when compatibility is a concern.</p>
+</dd>
+</li>
+</dl>
+<p>The list of protocols available can later be limited using the SSL_OP_NO_SSLv2,
+SSL_OP_NO_SSLv3, SSL_OP_NO_TLSv1 options of the <strong>SSL_CTX_set_options()</strong> or
+<strong>SSL_set_options()</strong> functions. Using these options it is possible to choose
+e.g. <code>SSLv23_server_method()</code> and be able to negotiate with all possible
+clients, but to only allow newer protocols like SSLv3 or TLSv1.</p>
+<p><code>SSL_CTX_new()</code> initializes the list of ciphers, the session cache setting,
+the callbacks, the keys and certificates, and the options to its default
+values.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>The following return values can occur:</p>
+<dl>
+<dt><strong><a name="item_null">NULL</a></strong>
+
+<dd>
+<p>The creation of a new SSL_CTX object failed. Check the error stack to
+find out the reason.</p>
+</dd>
+</li>
+<dt><strong><a name="item_pointer_to_an_ssl_ctx_object">Pointer to an SSL_CTX object</a></strong>
+
+<dd>
+<p>The return value points to an allocated SSL_CTX object.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/SSL_CTX_free.html">SSL_CTX_free</a>, <a href="../ssl/SSL_accept.html">SSL_accept</a>,
+<a href="../ssl/ssl.html">ssl</a>,  <a href="../ssl/SSL_set_connect_state.html">SSL_set_connect_state</a></p>
+
+</body>
+
+</html>

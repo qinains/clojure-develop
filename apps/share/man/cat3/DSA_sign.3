@@ -1,0 +1,61 @@
+DSA_sign(3)                         OpenSSL                        DSA_sign(3)
+
+
+
+NNAAMMEE
+       DSA_sign, DSA_sign_setup, DSA_verify - DSA signatures
+
+SSYYNNOOPPSSIISS
+        #include <openssl/dsa.h>
+
+        int    DSA_sign(int type, const unsigned char *dgst, int len,
+                       unsigned char *sigret, unsigned int *siglen, DSA *dsa);
+
+        int    DSA_sign_setup(DSA *dsa, BN_CTX *ctx, BIGNUM **kinvp,
+                       BIGNUM **rp);
+
+        int    DSA_verify(int type, const unsigned char *dgst, int len,
+                       unsigned char *sigbuf, int siglen, DSA *dsa);
+
+DDEESSCCRRIIPPTTIIOONN
+       _D_S_A___s_i_g_n_(_) computes a digital signature on the lleenn byte message digest
+       ddggsstt using the private key ddssaa and places its ASN.1 DER encoding at
+       ssiiggrreett. The length of the signature is places in *ssiigglleenn. ssiiggrreett must
+       point to DSA_size(ddssaa) bytes of memory.
+
+       _D_S_A___s_i_g_n___s_e_t_u_p_(_) may be used to precompute part of the signing opera-
+       tion in case signature generation is time-critical. It expects ddssaa to
+       contain DSA parameters. It places the precomputed values in newly allo-
+       cated BBIIGGNNUUMMs at *kkiinnvvpp and *rrpp, after freeing the old ones unless
+       *kkiinnvvpp and *rrpp are NULL. These values may be passed to _D_S_A___s_i_g_n_(_) in
+       ddssaa-->>kkiinnvv and ddssaa-->>rr.  ccttxx is a pre-allocated BBNN__CCTTXX or NULL.
+
+       _D_S_A___v_e_r_i_f_y_(_) verifies that the signature ssiiggbbuuff of size ssiigglleenn matches
+       a given message digest ddggsstt of size lleenn.  ddssaa is the signer's public
+       key.
+
+       The ttyyppee parameter is ignored.
+
+       The PRNG must be seeded before _D_S_A___s_i_g_n_(_) (or _D_S_A___s_i_g_n___s_e_t_u_p_(_)) is
+       called.
+
+RREETTUURRNN VVAALLUUEESS
+       _D_S_A___s_i_g_n_(_) and _D_S_A___s_i_g_n___s_e_t_u_p_(_) return 1 on success, 0 on error.
+       _D_S_A___v_e_r_i_f_y_(_) returns 1 for a valid signature, 0 for an incorrect signa-
+       ture and -1 on error. The error codes can be obtained by
+       _E_R_R___g_e_t___e_r_r_o_r(3).
+
+CCOONNFFOORRMMIINNGG TTOO
+       US Federal Information Processing Standard FIPS 186 (Digital Signature
+       Standard, DSS), ANSI X9.30
+
+SSEEEE AALLSSOO
+       _d_s_a(3), _E_R_R___g_e_t___e_r_r_o_r(3), _r_a_n_d(3), _D_S_A___d_o___s_i_g_n(3)
+
+HHIISSTTOORRYY
+       _D_S_A___s_i_g_n_(_) and _D_S_A___v_e_r_i_f_y_(_) are available in all versions of SSLeay.
+       _D_S_A___s_i_g_n___s_e_t_u_p_(_) was added in SSLeay 0.8.
+
+
+
+1.0.0g                            2002-09-25                       DSA_sign(3)

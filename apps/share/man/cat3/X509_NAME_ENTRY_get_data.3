@@ -1,0 +1,71 @@
+X509_NAME_ENTRY_get_object(3)       OpenSSL      X509_NAME_ENTRY_get_object(3)
+
+
+
+NNAAMMEE
+       X509_NAME_ENTRY_get_object, X509_NAME_ENTRY_get_data,
+       X509_NAME_ENTRY_set_object, X509_NAME_ENTRY_set_data,
+       X509_NAME_ENTRY_create_by_txt, X509_NAME_ENTRY_create_by_NID,
+       X509_NAME_ENTRY_create_by_OBJ - X509_NAME_ENTRY utility functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/x509.h>
+
+        ASN1_OBJECT * X509_NAME_ENTRY_get_object(X509_NAME_ENTRY *ne);
+        ASN1_STRING * X509_NAME_ENTRY_get_data(X509_NAME_ENTRY *ne);
+
+        int X509_NAME_ENTRY_set_object(X509_NAME_ENTRY *ne, ASN1_OBJECT *obj);
+        int X509_NAME_ENTRY_set_data(X509_NAME_ENTRY *ne, int type, const unsigned char *bytes, int len);
+
+        X509_NAME_ENTRY *X509_NAME_ENTRY_create_by_txt(X509_NAME_ENTRY **ne, const char *field, int type, const unsigned char *bytes, int len);
+        X509_NAME_ENTRY *X509_NAME_ENTRY_create_by_NID(X509_NAME_ENTRY **ne, int nid, int type,unsigned char *bytes, int len);
+        X509_NAME_ENTRY *X509_NAME_ENTRY_create_by_OBJ(X509_NAME_ENTRY **ne, ASN1_OBJECT *obj, int type, const unsigned char *bytes, int len);
+
+DDEESSCCRRIIPPTTIIOONN
+       _X_5_0_9___N_A_M_E___E_N_T_R_Y___g_e_t___o_b_j_e_c_t_(_) retrieves the field name of nnee in and
+       AASSNN11__OOBBJJEECCTT structure.
+
+       _X_5_0_9___N_A_M_E___E_N_T_R_Y___g_e_t___d_a_t_a_(_) retrieves the field value of nnee in and
+       AASSNN11__SSTTRRIINNGG structure.
+
+       _X_5_0_9___N_A_M_E___E_N_T_R_Y___s_e_t___o_b_j_e_c_t_(_) sets the field name of nnee to oobbjj.
+
+       _X_5_0_9___N_A_M_E___E_N_T_R_Y___s_e_t___d_a_t_a_(_) sets the field value of nnee to string type
+       ttyyppee and value determined by bbyytteess and lleenn.
+
+       _X_5_0_9___N_A_M_E___E_N_T_R_Y___c_r_e_a_t_e___b_y___t_x_t_(_), _X_5_0_9___N_A_M_E___E_N_T_R_Y___c_r_e_a_t_e___b_y___N_I_D_(_) and
+       _X_5_0_9___N_A_M_E___E_N_T_R_Y___c_r_e_a_t_e___b_y___O_B_J_(_) create and return an XX550099__NNAAMMEE__EENNTTRRYY
+       structure.
+
+NNOOTTEESS
+       _X_5_0_9___N_A_M_E___E_N_T_R_Y___g_e_t___o_b_j_e_c_t_(_) and _X_5_0_9___N_A_M_E___E_N_T_R_Y___g_e_t___d_a_t_a_(_) can be used
+       to examine an XX550099__NNAAMMEE__EENNTTRRYY function as returned by
+       _X_5_0_9___N_A_M_E___g_e_t___e_n_t_r_y_(_) for example.
+
+       _X_5_0_9___N_A_M_E___E_N_T_R_Y___c_r_e_a_t_e___b_y___t_x_t_(_), _X_5_0_9___N_A_M_E___E_N_T_R_Y___c_r_e_a_t_e___b_y___N_I_D_(_), and
+       _X_5_0_9___N_A_M_E___E_N_T_R_Y___c_r_e_a_t_e___b_y___O_B_J_(_) create and return an
+
+       _X_5_0_9___N_A_M_E___E_N_T_R_Y___c_r_e_a_t_e___b_y___t_x_t_(_), _X_5_0_9___N_A_M_E___E_N_T_R_Y___c_r_e_a_t_e___b_y___O_B_J_(_),
+       _X_5_0_9___N_A_M_E___E_N_T_R_Y___c_r_e_a_t_e___b_y___N_I_D_(_) and _X_5_0_9___N_A_M_E___E_N_T_R_Y___s_e_t___d_a_t_a_(_) are sel-
+       dom used in practice because XX550099__NNAAMMEE__EENNTTRRYY structures are almost
+       always part of XX550099__NNAAMMEE structures and the corresponding XX550099__NNAAMMEE
+       functions are typically used to create and add new entries in a single
+       operation.
+
+       The arguments of these functions support similar options to the simi-
+       larly named ones of the corresponding XX550099__NNAAMMEE functions such as
+       _X_5_0_9___N_A_M_E___a_d_d___e_n_t_r_y___b_y___t_x_t_(_). So for example ttyyppee can be set to
+       MMBBSSTTRRIINNGG__AASSCC but in the case of _X_5_0_9___s_e_t___d_a_t_a_(_) the field name must be
+       set first so the relevant field information can be looked up inter-
+       nally.
+
+RREETTUURRNN VVAALLUUEESS
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _d_2_i___X_5_0_9___N_A_M_E(3), _O_B_J___n_i_d_2_o_b_j(3),_O_B_J___n_i_d_2_o_b_j(3)
+
+HHIISSTTOORRYY
+       TBA
+
+
+
+1.0.0g                            2006-05-14     X509_NAME_ENTRY_get_object(3)

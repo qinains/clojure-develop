@@ -1,0 +1,104 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SMIME_read_PKCS7 - parse S/MIME message.</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SMIME_read_PKCS7 - parse S/MIME message.</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/pkcs7.h&gt;</pre>
+<pre>
+ PKCS7 *SMIME_read_PKCS7(BIO *in, BIO **bcont);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SMIME_read_PKCS7()</code> parses a message in S/MIME format.</p>
+<p><strong>in</strong> is a BIO to read the message from.</p>
+<p>If cleartext signing is used then the content is saved in
+a memory bio which is written to <strong>*bcont</strong>, otherwise
+<strong>*bcont</strong> is set to <strong>NULL</strong>.</p>
+<p>The parsed PKCS#7 structure is returned or <strong>NULL</strong> if an
+error occurred.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>If <strong>*bcont</strong> is not <strong>NULL</strong> then the message is clear text
+signed. <strong>*bcont</strong> can then be passed to <code>PKCS7_verify()</code> with
+the <strong>PKCS7_DETACHED</strong> flag set.</p>
+<p>Otherwise the type of the returned structure can be determined
+using PKCS7_type().</p>
+<p>To support future functionality if <strong>bcont</strong> is not <strong>NULL</strong>
+<strong>*bcont</strong> should be initialized to <strong>NULL</strong>. For example:</p>
+<pre>
+ BIO *cont = NULL;
+ PKCS7 *p7;</pre>
+<pre>
+ p7 = SMIME_read_PKCS7(in, &amp;cont);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>The MIME parser used by <code>SMIME_read_PKCS7()</code> is somewhat primitive.
+While it will handle most S/MIME messages more complex compound
+formats may not work.</p>
+<p>The parser assumes that the PKCS7 structure is always base64
+encoded and will not handle the case where it is in binary format
+or uses quoted printable format.</p>
+<p>The use of a memory BIO to hold the signed content limits the size
+of message which can be processed due to memory restraints: a
+streaming single pass option should be available.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>SMIME_read_PKCS7()</code> returns a valid <strong>PKCS7</strong> structure or <strong>NULL</strong>
+is an error occurred. The error can be obtained from ERR_get_error(3).</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../crypto/ERR_get_error.html">ERR_get_error</a>, <em>PKCS7_type</em>
+<a href="../crypto/SMIME_read_PKCS7.html">SMIME_read_PKCS7</a>, <a href="../crypto/PKCS7_sign.html">PKCS7_sign</a>,
+<a href="../crypto/PKCS7_verify.html">PKCS7_verify</a>, <a href="../crypto/PKCS7_encrypt.html">PKCS7_encrypt</a>
+<a href="../crypto/PKCS7_decrypt.html">PKCS7_decrypt</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p><code>SMIME_read_PKCS7()</code> was added to OpenSSL 0.9.5</p>
+
+</body>
+
+</html>

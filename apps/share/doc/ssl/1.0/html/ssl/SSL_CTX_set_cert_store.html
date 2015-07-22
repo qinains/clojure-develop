@@ -1,0 +1,87 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_CTX_get_cert_store - manipulate X509 certificate verification storage</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_CTX_set_cert_store, SSL_CTX_get_cert_store - manipulate X509 certificate verification storage</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ void SSL_CTX_set_cert_store(SSL_CTX *ctx, X509_STORE *store);
+ X509_STORE *SSL_CTX_get_cert_store(const SSL_CTX *ctx);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_CTX_set_cert_store()</code> sets/replaces the certificate verification storage
+of <strong>ctx</strong> to/with <strong>store</strong>. If another X509_STORE object is currently
+set in <strong>ctx</strong>, it will be X509_STORE_free()ed.</p>
+<p><code>SSL_CTX_get_cert_store()</code> returns a pointer to the current certificate
+verification storage.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>In order to verify the certificates presented by the peer, trusted CA
+certificates must be accessed. These CA certificates are made available
+via lookup methods, handled inside the X509_STORE. From the X509_STORE
+the X509_STORE_CTX used when verifying certificates is created.</p>
+<p>Typically the trusted certificate store is handled indirectly via using
+<a href="../ssl/SSL_CTX_load_verify_locations.html">SSL_CTX_load_verify_locations</a>.
+Using the <code>SSL_CTX_set_cert_store()</code> and <code>SSL_CTX_get_cert_store()</code> functions
+it is possible to manipulate the X509_STORE object beyond the
+<a href="../ssl/SSL_CTX_load_verify_locations.html">SSL_CTX_load_verify_locations</a>
+call.</p>
+<p>Currently no detailed documentation on how to use the X509_STORE
+object is available. Not all members of the X509_STORE are used when
+the verification takes place. So will e.g. the <code>verify_callback()</code> be
+overridden with the <code>verify_callback()</code> set via the
+<a href="../ssl/SSL_CTX_set_verify.html">SSL_CTX_set_verify</a> family of functions.
+This document must therefore be updated when documentation about the
+X509_STORE object and its handling becomes available.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>SSL_CTX_set_cert_store()</code> does not return diagnostic output.</p>
+<p><code>SSL_CTX_get_cert_store()</code> returns the current setting.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a>,
+<a href="../ssl/SSL_CTX_load_verify_locations.html">SSL_CTX_load_verify_locations</a>,
+<a href="../ssl/SSL_CTX_set_verify.html">SSL_CTX_set_verify</a></p>
+
+</body>
+
+</html>

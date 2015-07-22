@@ -1,0 +1,22 @@
+OPENSSL_Applink(3)                  OpenSSL                 OPENSSL_Applink(3)
+
+
+
+NNAAMMEE
+       OPENSSL_Applink - glue between OpenSSL BIO and Win32 compiler run-time
+
+SSYYNNOOPPSSIISS
+        __declspec(dllexport) void **OPENSSL_Applink();
+
+DDEESSCCRRIIPPTTIIOONN
+       OPENSSL_Applink is application-side interface which provides a glue
+       between OpenSSL BIO layer and Win32 compiler run-time environment.
+       Even though it appears at application side, it's essentially OpenSSL
+       private interface. For this reason application developers are not
+       expected to implement it, but to compile provided module with compiler
+       of their choice and link it into the target application.  The referred
+       module is available as <openssl>/ms/applink.c.
+
+
+
+1.0.0g                            2005-06-24                OPENSSL_Applink(3)

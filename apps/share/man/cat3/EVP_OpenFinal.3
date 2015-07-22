@@ -1,0 +1,55 @@
+EVP_OpenInit(3)                     OpenSSL                    EVP_OpenInit(3)
+
+
+
+NNAAMMEE
+       EVP_OpenInit, EVP_OpenUpdate, EVP_OpenFinal - EVP envelope decryption
+
+SSYYNNOOPPSSIISS
+        #include <openssl/evp.h>
+
+        int EVP_OpenInit(EVP_CIPHER_CTX *ctx,EVP_CIPHER *type,unsigned char *ek,
+                       int ekl,unsigned char *iv,EVP_PKEY *priv);
+        int EVP_OpenUpdate(EVP_CIPHER_CTX *ctx, unsigned char *out,
+                int *outl, unsigned char *in, int inl);
+        int EVP_OpenFinal(EVP_CIPHER_CTX *ctx, unsigned char *out,
+                int *outl);
+
+DDEESSCCRRIIPPTTIIOONN
+       The EVP envelope routines are a high level interface to envelope
+       decryption. They decrypt a public key encrypted symmetric key and then
+       decrypt data using it.
+
+       _E_V_P___O_p_e_n_I_n_i_t_(_) initializes a cipher context ccttxx for decryption with
+       cipher ttyyppee. It decrypts the encrypted symmetric key of length eekkll
+       bytes passed in the eekk parameter using the private key pprriivv.  The IV is
+       supplied in the iivv parameter.
+
+       _E_V_P___O_p_e_n_U_p_d_a_t_e_(_) and _E_V_P___O_p_e_n_F_i_n_a_l_(_) have exactly the same properties
+       as the _E_V_P___D_e_c_r_y_p_t_U_p_d_a_t_e_(_) and _E_V_P___D_e_c_r_y_p_t_F_i_n_a_l_(_) routines, as docu-
+       mented on the _E_V_P___E_n_c_r_y_p_t_I_n_i_t(3) manual page.
+
+NNOOTTEESS
+       It is possible to call _E_V_P___O_p_e_n_I_n_i_t_(_) twice in the same way as
+       _E_V_P___D_e_c_r_y_p_t_I_n_i_t_(_). The first call should have pprriivv set to NULL and
+       (after setting any cipher parameters) it should be called again with
+       ttyyppee set to NULL.
+
+       If the cipher passed in the ttyyppee parameter is a variable length cipher
+       then the key length will be set to the value of the recovered key
+       length. If the cipher is a fixed length cipher then the recovered key
+       length must match the fixed cipher length.
+
+RREETTUURRNN VVAALLUUEESS
+       _E_V_P___O_p_e_n_I_n_i_t_(_) returns 0 on error or a non zero integer (actually the
+       recovered secret key size) if successful.
+
+       _E_V_P___O_p_e_n_U_p_d_a_t_e_(_) returns 1 for success or 0 for failure.
+
+       _E_V_P___O_p_e_n_F_i_n_a_l_(_) returns 0 if the decrypt failed or 1 for success.
+
+SSEEEE AALLSSOO
+       _e_v_p(3), _r_a_n_d(3), _E_V_P___E_n_c_r_y_p_t_I_n_i_t(3), _E_V_P___S_e_a_l_I_n_i_t(3)
+
+HHIISSTTOORRYY
+1.0.0g                            2000-09-23                   EVP_OpenInit(3)

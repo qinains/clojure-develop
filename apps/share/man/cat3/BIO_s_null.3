@@ -1,0 +1,38 @@
+BIO_s_null(3)                       OpenSSL                      BIO_s_null(3)
+
+
+
+NNAAMMEE
+       BIO_s_null - null data sink
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bio.h>
+
+        BIO_METHOD *   BIO_s_null(void);
+
+DDEESSCCRRIIPPTTIIOONN
+       _B_I_O___s___n_u_l_l_(_) returns the null sink BIO method. Data written to the null
+       sink is discarded, reads return EOF.
+
+NNOOTTEESS
+       A null sink BIO behaves in a similar manner to the Unix /dev/null
+       device.
+
+       A null bio can be placed on the end of a chain to discard any data
+       passed through it.
+
+       A null sink is useful if, for example, an application wishes to digest
+       some data by writing through a digest bio but not send the digested
+       data anywhere.  Since a BIO chain must normally include a source/sink
+       BIO this can be achieved by adding a null sink BIO to the end of the
+       chain
+
+RREETTUURRNN VVAALLUUEESS
+       _B_I_O___s___n_u_l_l_(_) returns the null sink BIO method.
+
+SSEEEE AALLSSOO
+       TBA
+
+
+
+1.0.0g                            2000-09-14                     BIO_s_null(3)

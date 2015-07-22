@@ -1,0 +1,122 @@
+CMS_verify(3)                       OpenSSL                      CMS_verify(3)
+
+
+
+NNAAMMEE
+        CMS_verify - verify a CMS SignedData structure
+
+SSYYNNOOPPSSIISS
+        #include <openssl/cms.h>
+
+        int CMS_verify(CMS_ContentInfo *cms, STACK_OF(X509) *certs, X509_STORE *store, BIO *indata, BIO *out, unsigned int flags);
+
+        STACK_OF(X509) *CMS_get0_signers(CMS_ContentInfo *cms);
+
+DDEESSCCRRIIPPTTIIOONN
+       _C_M_S___v_e_r_i_f_y_(_) verifies a CMS SignedData structure. ccmmss is the CMS_Con-
+       tentInfo structure to verify. cceerrttss is a set of certificates in which
+       to search for the signing certificate(s). ssttoorree is a trusted certifi-
+       cate store used for chain verification. iinnddaattaa is the detached content
+       if the content is not present in ccmmss. The content is written to oouutt if
+       it is not NULL.
+
+       ffllaaggss is an optional set of flags, which can be used to modify the ver-
+       ify operation.
+
+       _C_M_S___g_e_t_0___s_i_g_n_e_r_s_(_) retrieves the signing certificate(s) from ccmmss, it
+       must be called after a successful _C_M_S___v_e_r_i_f_y_(_) operation.
+
+VVEERRIIFFYY PPRROOCCEESSSS
+       Normally the verify process proceeds as follows.
+
+       Initially some sanity checks are performed on ccmmss. The type of ccmmss must
+       be SignedData. There must be at least one signature on the data and if
+       the content is detached iinnddaattaa cannot be NNUULLLL.
+
+       An attempt is made to locate all the signing certificate(s), first
+       looking in the cceerrttss parameter (if it is not NULL) and then looking in
+       any certificates contained in the ccmmss structure itself. If any signing
+       certificate cannot be located the operation fails.
+
+       Each signing certificate is chain verified using the ssmmiimmeessiiggnn purpose
+       and the supplied trusted certificate store. Any internal certificates
+       in the message are used as untrusted CAs. If CRL checking is enabled in
+       ssttoorree any internal CRLs are used in addition to attempting to look them
+       up in ssttoorree. If any chain verify fails an error code is returned.
+
+       Finally the signed content is read (and written to oouutt is it is not
+       NULL) and the signature's checked.
+
+       If all signature's verify correctly then the function is successful.
+
+       Any of the following flags (ored together) can be passed in the ffllaaggss
+       parameter to change the default verify behaviour.
+
+       If CCMMSS__NNOOIINNTTEERRNN is set the certificates in the message itself are not
+       searched when locating the signing certificate(s). This means that all
+       the signing certificates must be in the cceerrttss parameter.
+
+       If CCMMSS__NNOOCCRRLL is set and CRL checking is enabled in ssttoorree then any CRLs
+       in the message itself are ignored.
+
+       If the CCMMSS__TTEEXXTT flag is set MIME headers for type tteexxtt//ppllaaiinn are
+       deleted from the content. If the content is not of type tteexxtt//ppllaaiinn then
+       an error is returned.
+
+       If CCMMSS__NNOO__SSIIGGNNEERR__CCEERRTT__VVEERRIIFFYY is set the signing certificates are not
+       verified.
+
+       If CCMMSS__NNOO__AATTTTRR__VVEERRIIFFYY is set the signed attributes signature is not
+       verified.
+
+       If CCMMSS__NNOO__CCOONNTTEENNTT__VVEERRIIFFYY is set then the content digest is not checked.
+
+NNOOTTEESS
+       One application of CCMMSS__NNOOIINNTTEERRNN is to only accept messages signed by a
+       small number of certificates. The acceptable certificates would be
+       passed in the cceerrttss parameter. In this case if the signer is not one of
+       the certificates supplied in cceerrttss then the verify will fail because
+       the signer cannot be found.
+
+       In some cases the standard techniques for looking up and validating
+       certificates are not appropriate: for example an application may wish
+       to lookup certificates in a database or perform customised verifica-
+       tion. This can be achieved by setting and verifying the signers cer-
+       tificates manually using the signed data utility functions.
+
+       Care should be taken when modifying the default verify behaviour, for
+       example setting CCMMSS__NNOO__CCOONNTTEENNTT__VVEERRIIFFYY will totally disable all content
+       verification and any modified content will be considered valid. This
+       combination is however useful if one merely wishes to write the content
+       to oouutt and its validity is not considered important.
+
+       Chain verification should arguably be performed using the signing time
+       rather than the current time. However since the signing time is sup-
+       plied by the signer it cannot be trusted without additional evidence
+       (such as a trusted timestamp).
+
+RREETTUURRNN VVAALLUUEESS
+       _C_M_S___v_e_r_i_f_y_(_) returns 1 for a successful verification and zero if an
+       error occurred.
+
+       _C_M_S___g_e_t_0___s_i_g_n_e_r_s_(_) returns all signers or NULL if an error occurred.
+
+       The error can be obtained from _E_R_R___g_e_t___e_r_r_o_r(3)
+
+BBUUGGSS
+       The trusted certificate store is not searched for the signing certifi-
+       cate, this is primarily due to the inadequacies of the current
+       XX550099__SSTTOORREE functionality.
+
+       The lack of single pass processing means that the signed content must
+       all be held in memory if it is not detached.
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _C_M_S___s_i_g_n(3)
+
+HHIISSTTOORRYY
+       _C_M_S___v_e_r_i_f_y_(_) was added to OpenSSL 0.9.8
+
+
+
+1.0.0g                            2008-04-11                     CMS_verify(3)

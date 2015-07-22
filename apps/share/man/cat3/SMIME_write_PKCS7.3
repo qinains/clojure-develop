@@ -1,0 +1,61 @@
+SMIME_write_PKCS7(3)                OpenSSL               SMIME_write_PKCS7(3)
+
+
+
+NNAAMMEE
+       SMIME_write_PKCS7 - convert PKCS#7 structure to S/MIME format.
+
+SSYYNNOOPPSSIISS
+        #include <openssl/pkcs7.h>
+
+        int SMIME_write_PKCS7(BIO *out, PKCS7 *p7, BIO *data, int flags);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_M_I_M_E___w_r_i_t_e___P_K_C_S_7_(_) adds the appropriate MIME headers to a PKCS#7
+       structure to produce an S/MIME message.
+
+       oouutt is the BIO to write the data to. pp77 is the appropriate PPKKCCSS77 struc-
+       ture. If streaming is enabled then the content must be supplied in the
+       ddaattaa argument. ffllaaggss is an optional set of flags.
+
+NNOOTTEESS
+       The following flags can be passed in the ffllaaggss parameter.
+
+       If PPKKCCSS77__DDEETTAACCHHEEDD is set then cleartext signing will be used, this
+       option only makes sense for signedData where PPKKCCSS77__DDEETTAACCHHEEDD is also set
+       when _P_K_C_S_7___s_i_g_n_(_) is also called.
+
+       If the PPKKCCSS77__TTEEXXTT flag is set MIME headers for type tteexxtt//ppllaaiinn are
+       added to the content, this only makes sense if PPKKCCSS77__DDEETTAACCHHEEDD is also
+       set.
+
+       If the PPKKCCSS77__SSTTRREEAAMM flag is set streaming is performed. This flag
+       should only be set if PPKKCCSS77__SSTTRREEAAMM was also set in the previous call to
+       _P_K_C_S_7___s_i_g_n_(_) or _PP_KK_CC_SS_77____ee_nn_cc_rr_yy_pp_tt_((_)).
+
+       If cleartext signing is being used and PPKKCCSS77__SSTTRREEAAMM not set then the
+       data must be read twice: once to compute the signature in _P_K_C_S_7___s_i_g_n_(_)
+       and once to output the S/MIME message.
+
+       If streaming is performed the content is output in BER format using
+       indefinite length constructuted encoding except in the case of signed
+       data with detached content where the content is absent and DER format
+       is used.
+
+BBUUGGSS
+       _S_M_I_M_E___w_r_i_t_e___P_K_C_S_7_(_) always base64 encodes PKCS#7 structures, there
+       should be an option to disable this.
+
+RREETTUURRNN VVAALLUUEESS
+       _S_M_I_M_E___w_r_i_t_e___P_K_C_S_7_(_) returns 1 for success or 0 for failure.
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _P_K_C_S_7___s_i_g_n(3), _P_K_C_S_7___v_e_r_i_f_y(3), _P_K_C_S_7___e_n_c_r_y_p_t(3)
+       _P_K_C_S_7___d_e_c_r_y_p_t(3)
+
+HHIISSTTOORRYY
+       _S_M_I_M_E___w_r_i_t_e___P_K_C_S_7_(_) was added to OpenSSL 0.9.5
+
+
+
+1.0.0g                            2007-04-13              SMIME_write_PKCS7(3)

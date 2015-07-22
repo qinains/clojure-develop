@@ -1,0 +1,95 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>CMS_get0_eContentType - get and set CMS content types</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<pre>
+ CMS_get0_type, CMS_set1_eContentType, CMS_get0_eContentType - get and set CMS content types</pre>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/cms.h&gt;</pre>
+<pre>
+ const ASN1_OBJECT *CMS_get0_type(CMS_ContentInfo *cms);
+ int CMS_set1_eContentType(CMS_ContentInfo *cms, const ASN1_OBJECT *oid);
+ const ASN1_OBJECT *CMS_get0_eContentType(CMS_ContentInfo *cms);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>CMS_get0_type()</code> returns the content type of a CMS_ContentInfo structure as
+and ASN1_OBJECT pointer. An application can then decide how to process the
+CMS_ContentInfo structure based on this value.</p>
+<p><code>CMS_set1_eContentType()</code> sets the embedded content type of a CMS_ContentInfo
+structure. It should be called with CMS functions with the <strong>CMS_PARTIAL</strong>
+flag and <strong>before</strong> the structure is finalised, otherwise the results are
+undefined.</p>
+<p>ASN1_OBJECT *CMS_get0_eContentType() returns a pointer to the embedded
+content type.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>As the <strong>0</strong> implies <code>CMS_get0_type()</code> and <code>CMS_get0_eContentType()</code> return internal
+pointers which should <strong>not</strong> be freed up. <code>CMS_set1_eContentType()</code> copies the
+supplied OID and it <strong>should</strong> be freed up after use.</p>
+<p>The <strong>ASN1_OBJECT</strong> values returned can be converted to an integer <strong>NID</strong> value
+using OBJ_obj2nid(). For the currently supported content types the following
+values are returned:</p>
+<pre>
+ NID_pkcs7_data
+ NID_pkcs7_signed
+ NID_pkcs7_digest
+ NID_id_smime_ct_compressedData:
+ NID_pkcs7_encrypted
+ NID_pkcs7_enveloped</pre>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>CMS_get0_type()</code> and <code>CMS_get0_eContentType()</code> return and ASN1_OBJECT structure.</p>
+<p><code>CMS_set1_eContentType()</code> returns 1 for success or 0 if an error occurred.  The
+error can be obtained from ERR_get_error(3).</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../crypto/ERR_get_error.html">ERR_get_error</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>CMS_get0_type(), <code>CMS_set1_eContentType()</code> and <code>CMS_get0_eContentType()</code> were all
+first added to OpenSSL 0.9.8</p>
+
+</body>
+
+</html>

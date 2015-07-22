@@ -1,0 +1,104 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_get_session - retrieve TLS/SSL session data</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_get_session - retrieve TLS/SSL session data</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ SSL_SESSION *SSL_get_session(const SSL *ssl);
+ SSL_SESSION *SSL_get0_session(const SSL *ssl);
+ SSL_SESSION *SSL_get1_session(SSL *ssl);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_get_session()</code> returns a pointer to the <strong>SSL_SESSION</strong> actually used in
+<strong>ssl</strong>. The reference count of the <strong>SSL_SESSION</strong> is not incremented, so
+that the pointer can become invalid by other operations.</p>
+<p><code>SSL_get0_session()</code> is the same as SSL_get_session().</p>
+<p><code>SSL_get1_session()</code> is the same as SSL_get_session(), but the reference
+count of the <strong>SSL_SESSION</strong> is incremented by one.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>The ssl session contains all information required to re-establish the
+connection without a new handshake.</p>
+<p><code>SSL_get0_session()</code> returns a pointer to the actual session. As the
+reference counter is not incremented, the pointer is only valid while
+the connection is in use. If <a href="../ssl/SSL_clear.html">SSL_clear</a> or
+<a href="../ssl/SSL_free.html">SSL_free</a> is called, the session may be removed completely
+(if considered bad), and the pointer obtained will become invalid. Even
+if the session is valid, it can be removed at any time due to timeout
+during <a href="../ssl/SSL_CTX_flush_sessions.html">SSL_CTX_flush_sessions</a>.</p>
+<p>If the data is to be kept, <code>SSL_get1_session()</code> will increment the reference
+count, so that the session will not be implicitly removed by other operations
+but stays in memory. In order to remove the session
+<a href="../ssl/SSL_SESSION_free.html">SSL_SESSION_free</a> must be explicitly called once
+to decrement the reference count again.</p>
+<p>SSL_SESSION objects keep internal link information about the session cache
+list, when being inserted into one SSL_CTX object's session cache.
+One SSL_SESSION object, regardless of its reference count, must therefore
+only be used with one SSL_CTX object (and the SSL objects created
+from this SSL_CTX object).</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>The following return values can occur:</p>
+<dl>
+<dt><strong><a name="item_null">NULL</a></strong>
+
+<dd>
+<p>There is no session available in <strong>ssl</strong>.</p>
+</dd>
+</li>
+<dt><strong><a name="item_pointer_to_an_ssl">Pointer to an SSL</a></strong>
+
+<dd>
+<p>The return value points to the data of an SSL session.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a>, <a href="../ssl/SSL_free.html">SSL_free</a>,
+<a href="../ssl/SSL_clear.html">SSL_clear</a>,
+<a href="../ssl/SSL_SESSION_free.html">SSL_SESSION_free</a></p>
+
+</body>
+
+</html>

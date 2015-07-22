@@ -1,0 +1,36 @@
+SSL_get_default_timeout(3)          OpenSSL         SSL_get_default_timeout(3)
+
+
+
+NNAAMMEE
+       SSL_get_default_timeout - get default session timeout value
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        long SSL_get_default_timeout(const SSL *ssl);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___g_e_t___d_e_f_a_u_l_t___t_i_m_e_o_u_t_(_) returns the default timeout value assigned to
+       SSL_SESSION objects negotiated for the protocol valid for ssssll.
+
+NNOOTTEESS
+       Whenever a new session is negotiated, it is assigned a timeout value,
+       after which it will not be accepted for session reuse. If the timeout
+       value was not explicitly set using _S_S_L___C_T_X___s_e_t___t_i_m_e_o_u_t(3), the hard-
+       coded default timeout for the protocol will be used.
+
+       _S_S_L___g_e_t___d_e_f_a_u_l_t___t_i_m_e_o_u_t_(_) return this hardcoded value, which is 300
+       seconds for all currently supported protocols (SSLv2, SSLv3, and
+       TLSv1).
+
+RREETTUURRNN VVAALLUUEESS
+       See description.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___C_T_X___s_e_t___s_e_s_s_i_o_n___c_a_c_h_e___m_o_d_e(3), _S_S_L___S_E_S_S_I_O_N___g_e_t___t_i_m_e(3),
+       _S_S_L___C_T_X___f_l_u_s_h___s_e_s_s_i_o_n_s(3), _S_S_L___g_e_t___d_e_f_a_u_l_t___t_i_m_e_o_u_t(3)
+
+
+
+1.0.0g                            2005-03-30        SSL_get_default_timeout(3)

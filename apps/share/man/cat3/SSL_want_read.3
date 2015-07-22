@@ -1,0 +1,66 @@
+SSL_want(3)                         OpenSSL                        SSL_want(3)
+
+
+
+NNAAMMEE
+       SSL_want, SSL_want_nothing, SSL_want_read, SSL_want_write,
+       SSL_want_x509_lookup - obtain state information TLS/SSL I/O operation
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        int SSL_want(const SSL *ssl);
+        int SSL_want_nothing(const SSL *ssl);
+        int SSL_want_read(const SSL *ssl);
+        int SSL_want_write(const SSL *ssl);
+        int SSL_want_x509_lookup(const SSL *ssl);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___w_a_n_t_(_) returns state information for the SSL object ssssll.
+
+       The other SSL_want_*() calls are shortcuts for the possible states
+       returned by _S_S_L___w_a_n_t_(_).
+
+NNOOTTEESS
+       _S_S_L___w_a_n_t_(_) examines the internal state information of the SSL object.
+       Its return values are similar to that of _S_S_L___g_e_t___e_r_r_o_r(3).  Unlike
+       _S_S_L___g_e_t___e_r_r_o_r(3), which also evaluates the error queue, the results are
+       obtained by examining an internal state flag only. The information must
+       therefore only be used for normal operation under non-blocking I/O.
+       Error conditions are not handled and must be treated using
+       _S_S_L___g_e_t___e_r_r_o_r(3).
+
+       The result returned by _S_S_L___w_a_n_t_(_) should always be consistent with the
+       result of _S_S_L___g_e_t___e_r_r_o_r(3).
+
+RREETTUURRNN VVAALLUUEESS
+       The following return values can currently occur for _S_S_L___w_a_n_t_(_):
+
+       SSL_NOTHING
+           There is no data to be written or to be read.
+
+       SSL_WRITING
+           There are data in the SSL buffer that must be written to the under-
+           lying BBIIOO layer in order to complete the actual SSL_*() operation.
+           A call to _S_S_L___g_e_t___e_r_r_o_r(3) should return SSL_ERROR_WANT_WRITE.
+
+       SSL_READING
+           More data must be read from the underlying BBIIOO layer in order to
+           complete the actual SSL_*() operation.  A call to _S_S_L___g_e_t___e_r_r_o_r(3)
+           should return SSL_ERROR_WANT_READ.
+
+       SSL_X509_LOOKUP
+           The operation did not complete because an application callback set
+           by _S_S_L___C_T_X___s_e_t___c_l_i_e_n_t___c_e_r_t___c_b_(_) has asked to be called again.  A
+           call to _S_S_L___g_e_t___e_r_r_o_r(3) should return SSL_ERROR_WANT_X509_LOOKUP.
+
+       _S_S_L___w_a_n_t___n_o_t_h_i_n_g_(_), _S_S_L___w_a_n_t___r_e_a_d_(_), _S_S_L___w_a_n_t___w_r_i_t_e_(_),
+       _S_S_L___w_a_n_t___x_5_0_9___l_o_o_k_u_p_(_) return 1, when the corresponding condition is
+       true or 0 otherwise.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _e_r_r(3), _S_S_L___g_e_t___e_r_r_o_r(3)
+
+
+
+1.0.0g                            2005-03-30                       SSL_want(3)

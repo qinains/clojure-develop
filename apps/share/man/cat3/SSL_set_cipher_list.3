@@ -1,0 +1,66 @@
+SSL_CTX_set_cipher_list(3)          OpenSSL         SSL_CTX_set_cipher_list(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_set_cipher_list, SSL_set_cipher_list - choose list of available
+       SSL_CIPHERs
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        int SSL_CTX_set_cipher_list(SSL_CTX *ctx, const char *str);
+        int SSL_set_cipher_list(SSL *ssl, const char *str);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___C_T_X___s_e_t___c_i_p_h_e_r___l_i_s_t_(_) sets the list of available ciphers for ccttxx
+       using the control string ssttrr. The format of the string is described in
+       _c_i_p_h_e_r_s(1). The list of ciphers is inherited by all ssssll objects created
+       from ccttxx.
+
+       _S_S_L___s_e_t___c_i_p_h_e_r___l_i_s_t_(_) sets the list of ciphers only for ssssll.
+
+NNOOTTEESS
+       The control string ssttrr should be universally usable and not depend on
+       details of the library configuration (ciphers compiled in). Thus no
+       syntax checking takes place. Items that are not recognized, because the
+       corresponding ciphers are not compiled in or because they are mistyped,
+       are simply ignored. Failure is only flagged if no ciphers could be col-
+       lected at all.
+
+       It should be noted, that inclusion of a cipher to be used into the list
+       is a necessary condition. On the client side, the inclusion into the
+       list is also sufficient. On the server side, additional restrictions
+       apply. All ciphers have additional requirements. ADH ciphers don't need
+       a certificate, but DH-parameters must have been set. All other ciphers
+       need a corresponding certificate and key.
+
+       A RSA cipher can only be chosen, when a RSA certificate is available.
+       RSA export ciphers with a keylength of 512 bits for the RSA key require
+       a temporary 512 bit RSA key, as typically the supplied key has a length
+       of 1024 bit (see _S_S_L___C_T_X___s_e_t___t_m_p___r_s_a___c_a_l_l_b_a_c_k(3)).  RSA ciphers using
+       EDH need a certificate and key and additional DH-parameters (see
+       _S_S_L___C_T_X___s_e_t___t_m_p___d_h___c_a_l_l_b_a_c_k(3)).
+
+       A DSA cipher can only be chosen, when a DSA certificate is available.
+       DSA ciphers always use DH key exchange and therefore need DH-parameters
+       (see _S_S_L___C_T_X___s_e_t___t_m_p___d_h___c_a_l_l_b_a_c_k(3)).
+
+       When these conditions are not met for any cipher in the list (e.g. a
+       client only supports export RSA ciphers with a asymmetric key length of
+       512 bits and the server is not configured to use temporary RSA keys),
+       the "no shared cipher" (SSL_R_NO_SHARED_CIPHER) error is generated and
+       the handshake will fail.
+
+RREETTUURRNN VVAALLUUEESS
+       _S_S_L___C_T_X___s_e_t___c_i_p_h_e_r___l_i_s_t_(_) and _S_S_L___s_e_t___c_i_p_h_e_r___l_i_s_t_(_) return 1 if any
+       cipher could be selected and 0 on complete failure.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___g_e_t___c_i_p_h_e_r_s(3), _S_S_L___C_T_X___u_s_e___c_e_r_t_i_f_i_c_a_t_e(3),
+       _S_S_L___C_T_X___s_e_t___t_m_p___r_s_a___c_a_l_l_b_a_c_k(3), _S_S_L___C_T_X___s_e_t___t_m_p___d_h___c_a_l_l_b_a_c_k(3),
+       _c_i_p_h_e_r_s(1)
+
+
+
+1.0.0g                            2001-07-23        SSL_CTX_set_cipher_list(3)

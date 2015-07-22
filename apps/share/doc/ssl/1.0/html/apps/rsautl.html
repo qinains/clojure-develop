@@ -1,0 +1,235 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>rsautl - RSA utility</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#command_options">COMMAND OPTIONS</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>rsautl - RSA utility</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>openssl</strong> <strong>rsautl</strong>
+[<strong>-in file</strong>]
+[<strong>-out file</strong>]
+[<strong>-inkey file</strong>]
+[<strong>-pubin</strong>]
+[<strong>-certin</strong>]
+[<strong>-sign</strong>]
+[<strong>-verify</strong>]
+[<strong>-encrypt</strong>]
+[<strong>-decrypt</strong>]
+[<strong>-pkcs</strong>]
+[<strong>-ssl</strong>]
+[<strong>-raw</strong>]
+[<strong>-hexdump</strong>]
+[<strong>-asn1parse</strong>]</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>rsautl</strong> command can be used to sign, verify, encrypt and decrypt
+data using the RSA algorithm.</p>
+<p>
+</p>
+<hr />
+<h1><a name="command_options">COMMAND OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item__2din_filename"><strong>-in filename</strong></a></strong>
+
+<dd>
+<p>This specifies the input filename to read data from or standard input
+if this option is not specified.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dout_filename"><strong>-out filename</strong></a></strong>
+
+<dd>
+<p>specifies the output filename to write to or standard output by
+default.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dinkey_file"><strong>-inkey file</strong></a></strong>
+
+<dd>
+<p>the input key file, by default it should be an RSA private key.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpubin"><strong>-pubin</strong></a></strong>
+
+<dd>
+<p>the input file is an RSA public key.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dcertin"><strong>-certin</strong></a></strong>
+
+<dd>
+<p>the input is a certificate containing an RSA public key.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dsign"><strong>-sign</strong></a></strong>
+
+<dd>
+<p>sign the input data and output the signed result. This requires
+and RSA private key.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dverify"><strong>-verify</strong></a></strong>
+
+<dd>
+<p>verify the input data and output the recovered data.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dencrypt"><strong>-encrypt</strong></a></strong>
+
+<dd>
+<p>encrypt the input data using an RSA public key.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2ddecrypt"><strong>-decrypt</strong></a></strong>
+
+<dd>
+<p>decrypt the input data using an RSA private key.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpkcs_2c__2doaep_2c__2dssl_2c__2draw"><strong>-pkcs, -oaep, -ssl, -raw</strong></a></strong>
+
+<dd>
+<p>the padding to use: PKCS#1 v1.5 (the default), PKCS#1 OAEP,
+special padding used in SSL v2 backwards compatible handshakes,
+or no padding, respectively.
+For signatures, only <strong>-pkcs</strong> and <strong>-raw</strong> can be used.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dhexdump"><strong>-hexdump</strong></a></strong>
+
+<dd>
+<p>hex dump the output data.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dasn1parse"><strong>-asn1parse</strong></a></strong>
+
+<dd>
+<p>asn1parse the output data, this is useful when combined with the
+<strong>-verify</strong> option.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p><strong>rsautl</strong> because it uses the RSA algorithm directly can only be
+used to sign or verify small pieces of data.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>Sign some data using a private key:</p>
+<pre>
+ openssl rsautl -sign -in file -inkey key.pem -out sig</pre>
+<p>Recover the signed data</p>
+<pre>
+ openssl rsautl -verify -in sig -inkey key.pem</pre>
+<p>Examine the raw signed data:</p>
+<pre>
+ openssl rsautl -verify -in file -inkey key.pem -raw -hexdump</pre>
+<pre>
+ 0000 - 00 01 ff ff ff ff ff ff-ff ff ff ff ff ff ff ff   ................
+ 0010 - ff ff ff ff ff ff ff ff-ff ff ff ff ff ff ff ff   ................
+ 0020 - ff ff ff ff ff ff ff ff-ff ff ff ff ff ff ff ff   ................
+ 0030 - ff ff ff ff ff ff ff ff-ff ff ff ff ff ff ff ff   ................
+ 0040 - ff ff ff ff ff ff ff ff-ff ff ff ff ff ff ff ff   ................
+ 0050 - ff ff ff ff ff ff ff ff-ff ff ff ff ff ff ff ff   ................
+ 0060 - ff ff ff ff ff ff ff ff-ff ff ff ff ff ff ff ff   ................
+ 0070 - ff ff ff ff 00 68 65 6c-6c 6f 20 77 6f 72 6c 64   .....hello world</pre>
+<p>The PKCS#1 block formatting is evident from this. If this was done using
+encrypt and decrypt the block would have been of type 2 (the second byte)
+and random padding data visible instead of the 0xff bytes.</p>
+<p>It is possible to analyse the signature of certificates using this
+utility in conjunction with <strong>asn1parse</strong>. Consider the self signed
+example in certs/pca-cert.pem . Running <strong>asn1parse</strong> as follows yields:</p>
+<pre>
+ openssl asn1parse -in pca-cert.pem</pre>
+<pre>
+    0:d=0  hl=4 l= 742 cons: SEQUENCE          
+    4:d=1  hl=4 l= 591 cons:  SEQUENCE          
+    8:d=2  hl=2 l=   3 cons:   cont [ 0 ]        
+   10:d=3  hl=2 l=   1 prim:    INTEGER           :02
+   13:d=2  hl=2 l=   1 prim:   INTEGER           :00
+   16:d=2  hl=2 l=  13 cons:   SEQUENCE          
+   18:d=3  hl=2 l=   9 prim:    OBJECT            :md5WithRSAEncryption
+   29:d=3  hl=2 l=   0 prim:    NULL              
+   31:d=2  hl=2 l=  92 cons:   SEQUENCE          
+   33:d=3  hl=2 l=  11 cons:    SET               
+   35:d=4  hl=2 l=   9 cons:     SEQUENCE          
+   37:d=5  hl=2 l=   3 prim:      OBJECT            :countryName
+   42:d=5  hl=2 l=   2 prim:      PRINTABLESTRING   :AU
+  ....
+  599:d=1  hl=2 l=  13 cons:  SEQUENCE          
+  601:d=2  hl=2 l=   9 prim:   OBJECT            :md5WithRSAEncryption
+  612:d=2  hl=2 l=   0 prim:   NULL              
+  614:d=1  hl=3 l= 129 prim:  BIT STRING</pre>
+<p>The final BIT STRING contains the actual signature. It can be extracted with:</p>
+<pre>
+ openssl asn1parse -in pca-cert.pem -out sig -noout -strparse 614</pre>
+<p>The certificate public key can be extracted with:
+</p>
+<pre>
+
+ openssl x509 -in test/testx509.pem -pubkey -noout &gt;pubkey.pem</pre>
+<p>The signature can be analysed with:</p>
+<pre>
+ openssl rsautl -in sig -verify -asn1parse -inkey pubkey.pem -pubin</pre>
+<pre>
+    0:d=0  hl=2 l=  32 cons: SEQUENCE          
+    2:d=1  hl=2 l=  12 cons:  SEQUENCE          
+    4:d=2  hl=2 l=   8 prim:   OBJECT            :md5
+   14:d=2  hl=2 l=   0 prim:   NULL              
+   16:d=1  hl=2 l=  16 prim:  OCTET STRING      
+      0000 - f3 46 9e aa 1a 4a 73 c9-37 ea 93 00 48 25 08 b5   .F...Js.7...H%..</pre>
+<p>This is the parsed version of an ASN1 DigestInfo structure. It can be seen that
+the digest used was md5. The actual part of the certificate that was signed can
+be extracted with:</p>
+<pre>
+ openssl asn1parse -in pca-cert.pem -out tbs -noout -strparse 4</pre>
+<p>and its digest computed with:</p>
+<pre>
+ openssl md5 -c tbs
+ MD5(tbs)= f3:46:9e:aa:1a:4a:73:c9:37:ea:93:00:48:25:08:b5</pre>
+<p>which it can be seen agrees with the recovered value above.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../apps/dgst.html">dgst</a>, <a href="../apps/rsa.html">rsa</a>, <a href="../apps/genrsa.html">genrsa</a>
+</p>
+
+</body>
+
+</html>

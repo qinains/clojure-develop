@@ -1,0 +1,58 @@
+lh_stats(3)                         OpenSSL                        lh_stats(3)
+
+
+
+NNAAMMEE
+       lh_stats, lh_node_stats, lh_node_usage_stats, lh_stats_bio,
+       lh_node_stats_bio, lh_node_usage_stats_bio - LHASH statistics
+
+SSYYNNOOPPSSIISS
+        #include <openssl/lhash.h>
+
+        void lh_stats(LHASH *table, FILE *out);
+        void lh_node_stats(LHASH *table, FILE *out);
+        void lh_node_usage_stats(LHASH *table, FILE *out);
+
+        void lh_stats_bio(LHASH *table, BIO *out);
+        void lh_node_stats_bio(LHASH *table, BIO *out);
+        void lh_node_usage_stats_bio(LHASH *table, BIO *out);
+
+DDEESSCCRRIIPPTTIIOONN
+       The LLHHAASSHH structure records statistics about most aspects of accessing
+       the hash table.  This is mostly a legacy of Eric Young writing this
+       library for the reasons of implementing what looked like a nice algo-
+       rithm rather than for a particular software product.
+
+       _l_h___s_t_a_t_s_(_) prints out statistics on the size of the hash table, how
+       many entries are in it, and the number and result of calls to the rou-
+       tines in this library.
+
+       _l_h___n_o_d_e___s_t_a_t_s_(_) prints the number of entries for each 'bucket' in the
+       hash table.
+
+       _l_h___n_o_d_e___u_s_a_g_e___s_t_a_t_s_(_) prints out a short summary of the state of the
+       hash table.  It prints the 'load' and the 'actual load'.  The load is
+       the average number of data items per 'bucket' in the hash table.  The
+       'actual load' is the average number of items per 'bucket', but only for
+       buckets which contain entries.  So the 'actual load' is the average
+       number of searches that will need to find an item in the hash table,
+       while the 'load' is the average number that will be done to record a
+       miss.
+
+       _l_h___s_t_a_t_s___b_i_o_(_), _l_h___n_o_d_e___s_t_a_t_s___b_i_o_(_) and _l_h___n_o_d_e___u_s_a_g_e___s_t_a_t_s___b_i_o_(_) are
+       the same as the above, except that the output goes to a BBIIOO.
+
+RREETTUURRNN VVAALLUUEESS
+       These functions do not return values.
+
+SSEEEE AALLSSOO
+       _b_i_o(3), _l_h_a_s_h(3)
+
+HHIISSTTOORRYY
+       These functions are available in all versions of SSLeay and OpenSSL.
+
+       This manpage is derived from the SSLeay documentation.
+
+
+
+1.0.0g                            2000-01-31                       lh_stats(3)

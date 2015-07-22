@@ -1,0 +1,36 @@
+d2i_X509_REQ(3)                     OpenSSL                    d2i_X509_REQ(3)
+
+
+
+NNAAMMEE
+       d2i_X509_REQ, i2d_X509_REQ, d2i_X509_REQ_bio, d2i_X509_REQ_fp,
+       i2d_X509_REQ_bio, i2d_X509_REQ_fp - PKCS#10 certificate request func-
+       tions.
+
+SSYYNNOOPPSSIISS
+        #include <openssl/x509.h>
+
+        X509_REQ *d2i_X509_REQ(X509_REQ **a, const unsigned char **pp, long length);
+        int i2d_X509_REQ(X509_REQ *a, unsigned char **pp);
+
+        X509_REQ *d2i_X509_REQ_bio(BIO *bp, X509_REQ **x);
+        X509_REQ *d2i_X509_REQ_fp(FILE *fp, X509_REQ **x);
+
+        int i2d_X509_REQ_bio(BIO *bp, X509_REQ *x);
+        int i2d_X509_REQ_fp(FILE *fp, X509_REQ *x);
+
+DDEESSCCRRIIPPTTIIOONN
+       These functions decode and encode a PKCS#10 certificate request.
+
+       Othewise these behave in a similar way to _d_2_i___X_5_0_9_(_) and _i_2_d___X_5_0_9_(_)
+       described in the _d_2_i___X_5_0_9(3) manual page.
+
+SSEEEE AALLSSOO
+       _d_2_i___X_5_0_9(3)
+
+HHIISSTTOORRYY
+       TBA
+
+
+
+1.0.0g                            2009-09-13                   d2i_X509_REQ(3)

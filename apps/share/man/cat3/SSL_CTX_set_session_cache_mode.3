@@ -1,0 +1,120 @@
+SSL_CTX_set_session_cache_mode(3)   OpenSSL  SSL_CTX_set_session_cache_mode(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_set_session_cache_mode, SSL_CTX_get_session_cache_mode -
+       enable/disable session caching
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        long SSL_CTX_set_session_cache_mode(SSL_CTX ctx, long mode);
+        long SSL_CTX_get_session_cache_mode(SSL_CTX ctx);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___C_T_X___s_e_t___s_e_s_s_i_o_n___c_a_c_h_e___m_o_d_e_(_) enables/disables session caching by
+       setting the operational mode for ccttxx to <mode>.
+
+       _S_S_L___C_T_X___g_e_t___s_e_s_s_i_o_n___c_a_c_h_e___m_o_d_e_(_) returns the currently used cache mode.
+
+NNOOTTEESS
+       The OpenSSL library can store/retrieve SSL/TLS sessions for later re-
+       use.  The sessions can be held in memory for each ccttxx, if more than one
+       SSL_CTX object is being maintained, the sessions are unique for each
+       SSL_CTX object.
+
+       In order to reuse a session, a client must send the session's id to the
+       server. It can only send exactly one id.  The server then either agrees
+       to reuse the session or it starts a full handshake (to create a new
+       session).
+
+       A server will lookup up the session in its internal session storage. If
+       the session is not found in internal storage or lookups for the inter-
+       nal storage have been deactivated (SSL_SESS_CACHE_NO_INTERNAL_LOOKUP),
+       the server will try the external storage if available.
+
+       Since a client may try to reuse a session intended for use in a differ-
+       ent context, the session id context must be set by the server (see
+       _S_S_L___C_T_X___s_e_t___s_e_s_s_i_o_n___i_d___c_o_n_t_e_x_t(3)).
+
+       The following session cache modes and modifiers are available:
+
+       SSL_SESS_CACHE_OFF
+           No session caching for client or server takes place.
+
+       SSL_SESS_CACHE_CLIENT
+           Client sessions are added to the session cache. As there is no
+           reliable way for the OpenSSL library to know whether a session
+           should be reused or which session to choose (due to the abstract
+           BIO layer the SSL engine does not have details about the connec-
+           tion), the application must select the session to be reused by
+           using the _S_S_L___s_e_t___s_e_s_s_i_o_n(3) function. This option is not activated
+           by default.
+
+       SSL_SESS_CACHE_SERVER
+           Server sessions are added to the session cache. When a client pro-
+           poses a session to be reused, the server looks for the correspond-
+           ing session in (first) the internal session cache (unless
+           SSL_SESS_CACHE_NO_INTERNAL_LOOKUP is set), then (second) in the
+           external cache if available. If the session is found, the server
+           will try to reuse the session.  This is the default.
+
+       SSL_SESS_CACHE_BOTH
+           Enable both SSL_SESS_CACHE_CLIENT and SSL_SESS_CACHE_SERVER at the
+           same time.
+
+       SSL_SESS_CACHE_NO_AUTO_CLEAR
+           Normally the session cache is checked for expired sessions every
+           255 connections using the _S_S_L___C_T_X___f_l_u_s_h___s_e_s_s_i_o_n_s(3) function. Since
+           this may lead to a delay which cannot be controlled, the automatic
+           flushing may be disabled and _S_S_L___C_T_X___f_l_u_s_h___s_e_s_s_i_o_n_s(3) can be
+           called explicitly by the application.
+
+       SSL_SESS_CACHE_NO_INTERNAL_LOOKUP
+           By setting this flag, session-resume operations in an SSL/TLS
+           server will not automatically look up sessions in the internal
+           cache, even if sessions are automatically stored there. If external
+           session caching callbacks are in use, this flag guarantees that all
+           lookups are directed to the external cache.  As automatic lookup
+           only applies for SSL/TLS servers, the flag has no effect on
+           clients.
+
+       SSL_SESS_CACHE_NO_INTERNAL_STORE
+           Depending on the presence of SSL_SESS_CACHE_CLIENT and/or
+           SSL_SESS_CACHE_SERVER, sessions negotiated in an SSL/TLS handshake
+           may be cached for possible reuse.  Normally a new session is added
+           to the internal cache as well as any external session caching
+           (callback) that is configured for the SSL_CTX. This flag will pre-
+           vent sessions being stored in the internal cache (though the appli-
+           cation can add them manually using _S_S_L___C_T_X___a_d_d___s_e_s_s_i_o_n(3)). Note:
+           in any SSL/TLS servers where external caching is configured, any
+           successful session lookups in the external cache (ie. for session-
+           resume requests) would normally be copied into the local cache
+           before processing continues - this flag prevents these additions to
+           the internal cache as well.
+
+       SSL_SESS_CACHE_NO_INTERNAL
+           Enable both SSL_SESS_CACHE_NO_INTERNAL_LOOKUP and
+           SSL_SESS_CACHE_NO_INTERNAL_STORE at the same time.
+
+       The default mode is SSL_SESS_CACHE_SERVER.
+
+RREETTUURRNN VVAALLUUEESS
+       _S_S_L___C_T_X___s_e_t___s_e_s_s_i_o_n___c_a_c_h_e___m_o_d_e_(_) returns the previously set cache mode.
+
+       _S_S_L___C_T_X___g_e_t___s_e_s_s_i_o_n___c_a_c_h_e___m_o_d_e_(_) returns the currently set cache mode.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___s_e_t___s_e_s_s_i_o_n(3), _S_S_L___s_e_s_s_i_o_n___r_e_u_s_e_d(3), _S_S_L___C_T_X___a_d_d___s_e_s_-
+       _s_i_o_n(3), _S_S_L___C_T_X___s_e_s_s___n_u_m_b_e_r(3), _S_S_L___C_T_X___s_e_s_s___s_e_t___c_a_c_h_e___s_i_z_e(3),
+       _S_S_L___C_T_X___s_e_s_s___s_e_t___g_e_t___c_b(3), _S_S_L___C_T_X___s_e_t___s_e_s_s_i_o_n___i_d___c_o_n_t_e_x_t(3),
+       _S_S_L___C_T_X___s_e_t___t_i_m_e_o_u_t(3), _S_S_L___C_T_X___f_l_u_s_h___s_e_s_s_i_o_n_s(3)
+
+HHIISSTTOORRYY
+       SSL_SESS_CACHE_NO_INTERNAL_STORE and SSL_SESS_CACHE_NO_INTERNAL were
+       introduced in OpenSSL 0.9.6h.
+
+
+
+1.0.0g                            2002-10-29 SSL_CTX_set_session_cache_mode(3)

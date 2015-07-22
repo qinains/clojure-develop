@@ -1,0 +1,91 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>RSA_verify_ASN1_OCTET_STRING - RSA signatures</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>RSA_sign_ASN1_OCTET_STRING, RSA_verify_ASN1_OCTET_STRING - RSA signatures</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/rsa.h&gt;</pre>
+<pre>
+ int RSA_sign_ASN1_OCTET_STRING(int dummy, unsigned char *m,
+    unsigned int m_len, unsigned char *sigret, unsigned int *siglen,
+    RSA *rsa);</pre>
+<pre>
+ int RSA_verify_ASN1_OCTET_STRING(int dummy, unsigned char *m,
+    unsigned int m_len, unsigned char *sigbuf, unsigned int siglen,
+    RSA *rsa);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>RSA_sign_ASN1_OCTET_STRING()</code> signs the octet string <strong>m</strong> of size
+<strong>m_len</strong> using the private key <strong>rsa</strong> represented in DER using PKCS #1
+padding. It stores the signature in <strong>sigret</strong> and the signature size
+in <strong>siglen</strong>. <strong>sigret</strong> must point to <strong>RSA_size(rsa)</strong> bytes of
+memory.</p>
+<p><strong>dummy</strong> is ignored.</p>
+<p>The random number generator must be seeded prior to calling RSA_sign_ASN1_OCTET_STRING().</p>
+<p><code>RSA_verify_ASN1_OCTET_STRING()</code> verifies that the signature <strong>sigbuf</strong>
+of size <strong>siglen</strong> is the DER representation of a given octet string
+<strong>m</strong> of size <strong>m_len</strong>. <strong>dummy</strong> is ignored. <strong>rsa</strong> is the signer's
+public key.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>RSA_sign_ASN1_OCTET_STRING()</code> returns 1 on success, 0 otherwise.
+<code>RSA_verify_ASN1_OCTET_STRING()</code> returns 1 on successful verification, 0
+otherwise.</p>
+<p>The error codes can be obtained by <a href="../crypto/ERR_get_error.html">ERR_get_error</a>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>These functions serve no recognizable purpose.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../crypto/ERR_get_error.html">ERR_get_error</a>, <em>objects</em>,
+<a href="../apps/rand.html">rand</a>, <a href="../apps/rsa.html">rsa</a>, <a href="../crypto/RSA_sign.html">RSA_sign</a>,
+<em>RSA_verify</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p><code>RSA_sign_ASN1_OCTET_STRING()</code> and <code>RSA_verify_ASN1_OCTET_STRING()</code> were
+added in SSLeay 0.8.</p>
+
+</body>
+
+</html>

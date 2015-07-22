@@ -1,0 +1,30 @@
+d2i_X509_NAME(3)                    OpenSSL                   d2i_X509_NAME(3)
+
+
+
+NNAAMMEE
+       d2i_X509_NAME, i2d_X509_NAME - X509_NAME encoding functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/x509.h>
+
+        X509_NAME *d2i_X509_NAME(X509_NAME **a, unsigned char **pp, long length);
+        int i2d_X509_NAME(X509_NAME *a, unsigned char **pp);
+
+DDEESSCCRRIIPPTTIIOONN
+       These functions decode and encode an XX550099__NNAAMMEE structure which is the
+       the same as the NNaammee type defined in RFC2459 (and elsewhere) and used
+       for example in certificate subject and issuer names.
+
+       Othewise the functions behave in a similar way to _d_2_i___X_5_0_9_(_) and
+       _i_2_d___X_5_0_9_(_) described in the _d_2_i___X_5_0_9(3) manual page.
+
+SSEEEE AALLSSOO
+       _d_2_i___X_5_0_9(3)
+
+HHIISSTTOORRYY
+       TBA
+
+
+
+1.0.0g                            2002-10-09                  d2i_X509_NAME(3)

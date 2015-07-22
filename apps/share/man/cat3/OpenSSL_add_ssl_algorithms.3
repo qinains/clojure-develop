@@ -1,0 +1,51 @@
+SSL_library_init(3)                 OpenSSL                SSL_library_init(3)
+
+
+
+NNAAMMEE
+       SSL_library_init, OpenSSL_add_ssl_algorithms, SSLeay_add_ssl_algorithms
+       - initialize SSL library by registering algorithms
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        int SSL_library_init(void);
+        #define OpenSSL_add_ssl_algorithms()    SSL_library_init()
+        #define SSLeay_add_ssl_algorithms()     SSL_library_init()
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___l_i_b_r_a_r_y___i_n_i_t_(_) registers the available SSL/TLS ciphers and digests.
+
+       _O_p_e_n_S_S_L___a_d_d___s_s_l___a_l_g_o_r_i_t_h_m_s_(_) and _S_S_L_e_a_y___a_d_d___s_s_l___a_l_g_o_r_i_t_h_m_s_(_) are syn-
+       onyms for _S_S_L___l_i_b_r_a_r_y___i_n_i_t_(_).
+
+NNOOTTEESS
+       _S_S_L___l_i_b_r_a_r_y___i_n_i_t_(_) must be called before any other action takes place.
+       _S_S_L___l_i_b_r_a_r_y___i_n_i_t_(_) is not reentrant.
+
+WWAARRNNIINNGG
+       _S_S_L___l_i_b_r_a_r_y___i_n_i_t_(_) adds ciphers and digests used directly and indi-
+       rectly by SSL/TLS.
+
+EEXXAAMMPPLLEESS
+       A typical TLS/SSL application will start with the library initializa-
+       tion, and provide readable error messages.
+
+        SSL_load_error_strings();                /* readable error messages */
+        SSL_library_init();                      /* initialize library */
+
+RREETTUURRNN VVAALLUUEESS
+       _S_S_L___l_i_b_r_a_r_y___i_n_i_t_(_) always returns "1", so it is safe to discard the
+       return value.
+
+NNOOTTEESS
+       OpenSSL 0.9.8o and 1.0.0a and later added SHA2 algorithms to
+       _S_S_L___l_i_b_r_a_r_y___i_n_i_t_(_).  Applications which need to use SHA2 in earlier
+       versions of OpenSSL should call _O_p_e_n_S_S_L___a_d_d___a_l_l___a_l_g_o_r_i_t_h_m_s_(_) as well.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___l_o_a_d___e_r_r_o_r___s_t_r_i_n_g_s(3), _R_A_N_D___a_d_d(3)
+
+
+
+1.0.0g                            2010-04-07               SSL_library_init(3)

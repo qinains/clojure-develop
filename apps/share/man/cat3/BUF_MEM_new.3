@@ -1,0 +1,71 @@
+buffer(3)                           OpenSSL                          buffer(3)
+
+
+
+NNAAMMEE
+       BUF_MEM_new, BUF_MEM_free, BUF_MEM_grow, BUF_strdup - simple character
+       arrays structure
+
+SSYYNNOOPPSSIISS
+        #include <openssl/buffer.h>
+
+        BUF_MEM *BUF_MEM_new(void);
+
+        void   BUF_MEM_free(BUF_MEM *a);
+
+        int    BUF_MEM_grow(BUF_MEM *str, int len);
+
+        char * BUF_strdup(const char *str);
+
+DDEESSCCRRIIPPTTIIOONN
+       The buffer library handles simple character arrays. Buffers are used
+       for various purposes in the library, most notably memory BIOs.
+
+       The library uses the BUF_MEM structure defined in buffer.h:
+
+        typedef struct buf_mem_st
+        {
+               int length;     /* current number of bytes */
+               char *data;
+               int max;        /* size of buffer */
+        } BUF_MEM;
+
+       lleennggtthh is the current size of the buffer in bytes, mmaaxx is the amount of
+       memory allocated to the buffer. There are three functions which handle
+       these and one "miscellaneous" function.
+
+       _B_U_F___M_E_M___n_e_w_(_) allocates a new buffer of zero size.
+
+       _B_U_F___M_E_M___f_r_e_e_(_) frees up an already existing buffer. The data is zeroed
+       before freeing up in case the buffer contains sensitive data.
+
+       _B_U_F___M_E_M___g_r_o_w_(_) changes the size of an already existing buffer to lleenn.
+       Any data already in the buffer is preserved if it increases in size.
+
+       _B_U_F___s_t_r_d_u_p_(_) copies a null terminated string into a block of allocated
+       memory and returns a pointer to the allocated block.  Unlike the stan-
+       dard C library _s_t_r_d_u_p_(_) this function uses _O_P_E_N_S_S_L___m_a_l_l_o_c_(_) and so
+       should be used in preference to the standard library _s_t_r_d_u_p_(_) because
+       it can be used for memory leak checking or replacing the _m_a_l_l_o_c_(_) func-
+       tion.
+
+       The memory allocated from _B_U_F___s_t_r_d_u_p_(_) should be freed up using the
+       _O_P_E_N_S_S_L___f_r_e_e_(_) function.
+
+RREETTUURRNN VVAALLUUEESS
+       _B_U_F___M_E_M___n_e_w_(_) returns the buffer or NULL on error.
+
+       _B_U_F___M_E_M___f_r_e_e_(_) has no return value.
+
+       _B_U_F___M_E_M___g_r_o_w_(_) returns zero on error or the new size (i.e. lleenn).
+
+SSEEEE AALLSSOO
+       _b_i_o(3)
+
+HHIISSTTOORRYY
+       _B_U_F___M_E_M___n_e_w_(_), _B_U_F___M_E_M___f_r_e_e_(_) and _B_U_F___M_E_M___g_r_o_w_(_) are available in all
+       versions of SSLeay and OpenSSL. _B_U_F___s_t_r_d_u_p_(_) was added in SSLeay 0.8.
+
+
+
+1.0.0g                            2000-09-20                         buffer(3)

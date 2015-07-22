@@ -1,0 +1,44 @@
+SSL_state_string(3)                 OpenSSL                SSL_state_string(3)
+
+
+
+NNAAMMEE
+       SSL_state_string, SSL_state_string_long - get textual description of
+       state of an SSL object
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        const char *SSL_state_string(const SSL *ssl);
+        const char *SSL_state_string_long(const SSL *ssl);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___s_t_a_t_e___s_t_r_i_n_g_(_) returns a 6 letter string indicating the current
+       state of the SSL object ssssll.
+
+       _S_S_L___s_t_a_t_e___s_t_r_i_n_g___l_o_n_g_(_) returns a string indicating the current state
+       of the SSL object ssssll.
+
+NNOOTTEESS
+       During its use, an SSL objects passes several states. The state is
+       internally maintained. Querying the state information is not very
+       informative before or when a connection has been established. It how-
+       ever can be of significant interest during the handshake.
+
+       When using non-blocking sockets, the function call performing the hand-
+       shake may return with SSL_ERROR_WANT_READ or SSL_ERROR_WANT_WRITE con-
+       dition, so that SSL_state_string[_long]() may be called.
+
+       For both blocking or non-blocking sockets, the details state informa-
+       tion can be used within the info_callback function set with the
+       _S_S_L___s_e_t___i_n_f_o___c_a_l_l_b_a_c_k_(_) call.
+
+RREETTUURRNN VVAALLUUEESS
+       Detailed description of possible states to be included later.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___C_T_X___s_e_t___i_n_f_o___c_a_l_l_b_a_c_k(3)
+
+
+
+1.0.0g                            2005-03-30               SSL_state_string(3)

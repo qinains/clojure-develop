@@ -1,0 +1,87 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_CTX_get_timeout - manipulate timeout values for session caching</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_CTX_set_timeout, SSL_CTX_get_timeout - manipulate timeout values for session caching</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ long SSL_CTX_set_timeout(SSL_CTX *ctx, long t);
+ long SSL_CTX_get_timeout(SSL_CTX *ctx);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_CTX_set_timeout()</code> sets the timeout for newly created sessions for
+<strong>ctx</strong> to <strong>t</strong>. The timeout value <strong>t</strong> must be given in seconds.</p>
+<p><code>SSL_CTX_get_timeout()</code> returns the currently set timeout value for <strong>ctx</strong>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>Whenever a new session is created, it is assigned a maximum lifetime. This
+lifetime is specified by storing the creation time of the session and the
+timeout value valid at this time. If the actual time is later than creation
+time plus timeout, the session is not reused.</p>
+<p>Due to this realization, all sessions behave according to the timeout value
+valid at the time of the session negotiation. Changes of the timeout value
+do not affect already established sessions.</p>
+<p>The expiration time of a single session can be modified using the
+<a href="../ssl/SSL_SESSION_get_time.html">SSL_SESSION_get_time</a> family of functions.</p>
+<p>Expired sessions are removed from the internal session cache, whenever
+<a href="../ssl/SSL_CTX_flush_sessions.html">SSL_CTX_flush_sessions</a> is called, either
+directly by the application or automatically (see
+<a href="../ssl/SSL_CTX_set_session_cache_mode.html">SSL_CTX_set_session_cache_mode</a>)</p>
+<p>The default value for session timeout is decided on a per protocol
+basis, see <a href="../ssl/SSL_get_default_timeout.html">SSL_get_default_timeout</a>.
+All currently supported protocols have the same default timeout value
+of 300 seconds.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>SSL_CTX_set_timeout()</code> returns the previously set timeout value.</p>
+<p><code>SSL_CTX_get_timeout()</code> returns the currently set timeout value.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a>,
+<a href="../ssl/SSL_CTX_set_session_cache_mode.html">SSL_CTX_set_session_cache_mode</a>,
+<a href="../ssl/SSL_SESSION_get_time.html">SSL_SESSION_get_time</a>,
+<a href="../ssl/SSL_CTX_flush_sessions.html">SSL_CTX_flush_sessions</a>,
+<a href="../ssl/SSL_get_default_timeout.html">SSL_get_default_timeout</a></p>
+
+</body>
+
+</html>

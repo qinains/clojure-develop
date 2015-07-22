@@ -1,0 +1,36 @@
+SSL_set_verify_result(3)            OpenSSL           SSL_set_verify_result(3)
+
+
+
+NNAAMMEE
+       SSL_set_verify_result - override result of peer certificate verifica-
+       tion
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        void SSL_set_verify_result(SSL *ssl, long verify_result);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___s_e_t___v_e_r_i_f_y___r_e_s_u_l_t_(_) sets vveerriiffyy__rreessuulltt of the object ssssll to be the
+       result of the verification of the X509 certificate presented by the
+       peer, if any.
+
+NNOOTTEESS
+       _S_S_L___s_e_t___v_e_r_i_f_y___r_e_s_u_l_t_(_) overrides the verification result. It only
+       changes the verification result of the ssssll object. It does not become
+       part of the established session, so if the session is to be reused
+       later, the original value will reappear.
+
+       The valid codes for vveerriiffyy__rreessuulltt are documented in _v_e_r_i_f_y(1).
+
+RREETTUURRNN VVAALLUUEESS
+       _S_S_L___s_e_t___v_e_r_i_f_y___r_e_s_u_l_t_(_) does not provide a return value.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___g_e_t___v_e_r_i_f_y___r_e_s_u_l_t(3), _S_S_L___g_e_t___p_e_e_r___c_e_r_t_i_f_i_c_a_t_e(3), _v_e_r_-
+       _i_f_y(1)
+
+
+
+1.0.0g                            2000-09-20          SSL_set_verify_result(3)

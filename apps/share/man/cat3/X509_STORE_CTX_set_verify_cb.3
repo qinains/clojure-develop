@@ -1,0 +1,155 @@
+X509_STORE_CTX_set_verify_cb(3)     OpenSSL    X509_STORE_CTX_set_verify_cb(3)
+
+
+
+NNAAMMEE
+       X509_STORE_CTX_set_verify_cb - set verification callback
+
+SSYYNNOOPPSSIISS
+        #include <openssl/x509_vfy.h>
+
+        void X509_STORE_CTX_set_verify_cb(X509_STORE_CTX *ctx,
+                                       int (*verify_cb)(int ok, X509_STORE_CTX *ctx));
+
+DDEESSCCRRIIPPTTIIOONN
+       _X_5_0_9___S_T_O_R_E___C_T_X___s_e_t___v_e_r_i_f_y___c_b_(_) sets the verification callback of ccttxx to
+       vveerriiffyy__ccbb overwriting any existing callback.
+
+       The verification callback can be used to customise the operation of
+       certificate verification, either by overriding error conditions or log-
+       ging errors for debugging purposes.
+
+       However a verification callback is nnoott essential and the default opera-
+       tion is often sufficient.
+
+       The ookk parameter to the callback indicates the value the callback
+       should return to retain the default behaviour. If it is zero then and
+       error condition is indicated. If it is 1 then no error occurred. If the
+       flag XX550099__VV__FFLLAAGG__NNOOTTIIFFYY__PPOOLLIICCYY is set then ookk is set to 2 to indicate
+       the policy checking is complete.
+
+       The ccttxx parameter to the callback is the XX550099__SSTTOORREE__CCTTXX structure that
+       is performing the verification operation. A callback can examine this
+       structure and receive additional information about the error, for exam-
+       ple by calling _X_5_0_9___S_T_O_R_E___C_T_X___g_e_t___c_u_r_r_e_n_t___c_e_r_t_(_). Additional applica-
+       tion data can be passed to the callback via the eexx__ddaattaa mechanism.
+
+WWAARRNNIINNGG
+       In general a verification callback should NNOOTT unconditionally return 1
+       in all circumstances because this will allow verification to succeed no
+       matter what the error. This effectively removes all security from the
+       application because aannyy certificate (including untrusted generated
+       ones) will be accepted.
+
+NNOOTTEESS
+       The verification callback can be set and inherited from the parent
+       structure performing the operation. In some cases (such as S/MIME veri-
+       fication) the XX550099__SSTTOORREE__CCTTXX structure is created and destroyed inter-
+       nally and the only way to set a custom verification callback is by
+       inheriting it from the associated XX550099__SSTTOORREE.
+
+RREETTUURRNN VVAALLUUEESS
+       _X_5_0_9___S_T_O_R_E___C_T_X___s_e_t___v_e_r_i_f_y___c_b_(_) does not return a value.
+
+EEXXAAMMPPLLEESS
+       Default callback operation:
+
+        int verify_callback(int ok, X509_STORE_CTX *ctx)
+               {
+               return ok;
+               }
+
+       Simple example, suppose a certificate in the chain is expired and we
+       wish to continue after this error:
+
+        int verify_callback(int ok, X509_STORE_CTX *ctx)
+               {
+               /* Tolerate certificate expiration */
+               if (X509_STORE_CTX_get_error(ctx) == X509_V_ERR_CERT_HAS_EXPIRED)
+                               return 1;
+               /* Otherwise don't override */
+               return ok;
+               }
+
+       More complex example, we don't wish to continue after aannyy certificate
+       has expired just one specific case:
+
+        int verify_callback(int ok, X509_STORE_CTX *ctx)
+               {
+               int err = X509_STORE_CTX_get_error(ctx);
+               X509 *err_cert = X509_STORE_CTX_get_current_cert(ctx);
+               if (err == X509_V_ERR_CERT_HAS_EXPIRED)
+                       {
+                       if (check_is_acceptable_expired_cert(err_cert)
+                               return 1;
+                       }
+               return ok;
+               }
+
+       Full featured logging callback. In this case the bbiioo__eerrrr is assumed to
+       be a global logging BBIIOO, an alternative would to store a BIO in ccttxx
+       using eexx__ddaattaa.
+
+        int verify_callback(int ok, X509_STORE_CTX *ctx)
+               {
+               X509 *err_cert;
+               int err,depth;
+
+               err_cert = X509_STORE_CTX_get_current_cert(ctx);
+               err =   X509_STORE_CTX_get_error(ctx);
+               depth = X509_STORE_CTX_get_error_depth(ctx);
+
+               BIO_printf(bio_err,"depth=%d ",depth);
+               if (err_cert)
+                       {
+                       X509_NAME_print_ex(bio_err, X509_get_subject_name(err_cert),
+                                               0, XN_FLAG_ONELINE);
+                       BIO_puts(bio_err, "\n");
+                       }
+               else
+                       BIO_puts(bio_err, "<no cert>\n");
+               if (!ok)
+                       BIO_printf(bio_err,"verify error:num=%d:%s\n",err,
+                               X509_verify_cert_error_string(err));
+               switch (err)
+                       {
+               case X509_V_ERR_UNABLE_TO_GET_ISSUER_CERT:
+                       BIO_puts(bio_err,"issuer= ");
+                       X509_NAME_print_ex(bio_err, X509_get_issuer_name(err_cert),
+                                               0, XN_FLAG_ONELINE);
+                       BIO_puts(bio_err, "\n");
+                       break;
+               case X509_V_ERR_CERT_NOT_YET_VALID:
+               case X509_V_ERR_ERROR_IN_CERT_NOT_BEFORE_FIELD:
+                       BIO_printf(bio_err,"notBefore=");
+                       ASN1_TIME_print(bio_err,X509_get_notBefore(err_cert));
+                       BIO_printf(bio_err,"\n");
+                       break;
+               case X509_V_ERR_CERT_HAS_EXPIRED:
+               case X509_V_ERR_ERROR_IN_CERT_NOT_AFTER_FIELD:
+                       BIO_printf(bio_err,"notAfter=");
+                       ASN1_TIME_print(bio_err,X509_get_notAfter(err_cert));
+                       BIO_printf(bio_err,"\n");
+                       break;
+               case X509_V_ERR_NO_EXPLICIT_POLICY:
+                       policies_print(bio_err, ctx);
+                       break;
+                       }
+               if (err == X509_V_OK && ok == 2)
+                       /* print out policies */
+
+               BIO_printf(bio_err,"verify return:%d\n",ok);
+               return(ok);
+               }
+
+SSEEEE AALLSSOO
+       _X_5_0_9___S_T_O_R_E___C_T_X___g_e_t___e_r_r_o_r(3) _X_5_0_9___S_T_O_R_E___s_e_t___v_e_r_i_f_y___c_b___f_u_n_c(3)
+       _X_5_0_9___S_T_O_R_E___C_T_X___g_e_t___e_x___n_e_w___i_n_d_e_x(3)
+
+HHIISSTTOORRYY
+       _X_5_0_9___S_T_O_R_E___C_T_X___s_e_t___v_e_r_i_f_y___c_b_(_) is available in all versions of SSLeay
+       and OpenSSL.
+
+
+
+1.0.0g                            2009-10-18   X509_STORE_CTX_set_verify_cb(3)

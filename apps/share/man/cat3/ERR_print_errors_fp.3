@@ -1,0 +1,46 @@
+ERR_print_errors(3)                 OpenSSL                ERR_print_errors(3)
+
+
+
+NNAAMMEE
+       ERR_print_errors, ERR_print_errors_fp - print error messages
+
+SSYYNNOOPPSSIISS
+        #include <openssl/err.h>
+
+        void ERR_print_errors(BIO *bp);
+        void ERR_print_errors_fp(FILE *fp);
+
+DDEESSCCRRIIPPTTIIOONN
+       _E_R_R___p_r_i_n_t___e_r_r_o_r_s_(_) is a convenience function that prints the error
+       strings for all errors that OpenSSL has recorded to bbpp, thus emptying
+       the error queue.
+
+       _E_R_R___p_r_i_n_t___e_r_r_o_r_s___f_p_(_) is the same, except that the output goes to a
+       FFIILLEE.
+
+       The error strings will have the following format:
+
+        [pid]:error:[error code]:[library name]:[function name]:[reason string]:[file name]:[line]:[optional text message]
+
+       _e_r_r_o_r _c_o_d_e is an 8 digit hexadecimal number. _l_i_b_r_a_r_y _n_a_m_e, _f_u_n_c_t_i_o_n
+       _n_a_m_e and _r_e_a_s_o_n _s_t_r_i_n_g are ASCII text, as is _o_p_t_i_o_n_a_l _t_e_x_t _m_e_s_s_a_g_e if
+       one was set for the respective error code.
+
+       If there is no text string registered for the given error code, the
+       error string will contain the numeric code.
+
+RREETTUURRNN VVAALLUUEESS
+       _E_R_R___p_r_i_n_t___e_r_r_o_r_s_(_) and _E_R_R___p_r_i_n_t___e_r_r_o_r_s___f_p_(_) return no values.
+
+SSEEEE AALLSSOO
+       _e_r_r(3), _E_R_R___e_r_r_o_r___s_t_r_i_n_g(3), _E_R_R___g_e_t___e_r_r_o_r(3),
+       _E_R_R___l_o_a_d___c_r_y_p_t_o___s_t_r_i_n_g_s(3), _S_S_L___l_o_a_d___e_r_r_o_r___s_t_r_i_n_g_s(3)
+
+HHIISSTTOORRYY
+       _E_R_R___p_r_i_n_t___e_r_r_o_r_s_(_) and _E_R_R___p_r_i_n_t___e_r_r_o_r_s___f_p_(_) are available in all ver-
+       sions of SSLeay and OpenSSL.
+
+
+
+1.0.0g                            2000-02-01               ERR_print_errors(3)

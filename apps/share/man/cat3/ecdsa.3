@@ -1,0 +1,201 @@
+ecdsa(3)                            OpenSSL                           ecdsa(3)
+
+
+
+NNAAMMEE
+       ecdsa - Elliptic Curve Digital Signature Algorithm
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ecdsa.h>
+
+        ECDSA_SIG*     ECDSA_SIG_new(void);
+        void           ECDSA_SIG_free(ECDSA_SIG *sig);
+        int            i2d_ECDSA_SIG(const ECDSA_SIG *sig, unsigned char **pp);
+        ECDSA_SIG*     d2i_ECDSA_SIG(ECDSA_SIG **sig, const unsigned char **pp,
+                       long len);
+
+        ECDSA_SIG*     ECDSA_do_sign(const unsigned char *dgst, int dgst_len,
+                               EC_KEY *eckey);
+        ECDSA_SIG*     ECDSA_do_sign_ex(const unsigned char *dgst, int dgstlen,
+                               const BIGNUM *kinv, const BIGNUM *rp,
+                               EC_KEY *eckey);
+        int            ECDSA_do_verify(const unsigned char *dgst, int dgst_len,
+                               const ECDSA_SIG *sig, EC_KEY* eckey);
+        int            ECDSA_sign_setup(EC_KEY *eckey, BN_CTX *ctx,
+                               BIGNUM **kinv, BIGNUM **rp);
+        int            ECDSA_sign(int type, const unsigned char *dgst,
+                               int dgstlen, unsigned char *sig,
+                               unsigned int *siglen, EC_KEY *eckey);
+        int            ECDSA_sign_ex(int type, const unsigned char *dgst,
+                               int dgstlen, unsigned char *sig,
+                               unsigned int *siglen, const BIGNUM *kinv,
+                               const BIGNUM *rp, EC_KEY *eckey);
+        int            ECDSA_verify(int type, const unsigned char *dgst,
+                               int dgstlen, const unsigned char *sig,
+                               int siglen, EC_KEY *eckey);
+        int            ECDSA_size(const EC_KEY *eckey);
+
+        const ECDSA_METHOD*    ECDSA_OpenSSL(void);
+        void           ECDSA_set_default_method(const ECDSA_METHOD *meth);
+        const ECDSA_METHOD*    ECDSA_get_default_method(void);
+        int            ECDSA_set_method(EC_KEY *eckey,const ECDSA_METHOD *meth);
+
+        int            ECDSA_get_ex_new_index(long argl, void *argp,
+                               CRYPTO_EX_new *new_func,
+                               CRYPTO_EX_dup *dup_func,
+                               CRYPTO_EX_free *free_func);
+        int            ECDSA_set_ex_data(EC_KEY *d, int idx, void *arg);
+        void*          ECDSA_get_ex_data(EC_KEY *d, int idx);
+
+DDEESSCCRRIIPPTTIIOONN
+       The EECCDDSSAA__SSIIGG structure consists of two BIGNUMs for the r and s value
+       of a ECDSA signature (see X9.62 or FIPS 186-2).
+
+        struct
+               {
+               BIGNUM *r;
+               BIGNUM *s;
+        } ECDSA_SIG;
+
+       _E_C_D_S_A___S_I_G___n_e_w_(_) allocates a new EECCDDSSAA__SSIIGG structure (note: this func-
+       tion also allocates the BIGNUMs) and initialize it.
+
+       _E_C_D_S_A___S_I_G___f_r_e_e_(_) frees the EECCDDSSAA__SSIIGG structure ssiigg.
+
+       _i_2_d___E_C_D_S_A___S_I_G_(_) creates the DER encoding of the ECDSA signature ssiigg and
+       writes the encoded signature to **pppp (note: if pppp is NULL ii22dd__EECCDDSSAA__SSIIGG
+       returns the expected length in bytes of the DER encoded signature).
+       ii22dd__EECCDDSSAA__SSIIGG returns the length of the DER encoded signature (or 0 on
+       error).
+
+       _d_2_i___E_C_D_S_A___S_I_G_(_) decodes a DER encoded ECDSA signature and returns the
+       decoded signature in a newly allocated EECCDDSSAA__SSIIGG structure.  **ssiigg
+       points to the buffer containing the DER encoded signature of size lleenn.
+
+       _E_C_D_S_A___s_i_z_e_(_) returns the maximum length of a DER encoded ECDSA signa-
+       ture created with the private EC key eecckkeeyy.
+
+       _E_C_D_S_A___s_i_g_n___s_e_t_u_p_(_) may be used to precompute parts of the signing oper-
+       ation. eecckkeeyy is the private EC key and ccttxx is a pointer to BBNN__CCTTXX
+       structure (or NULL). The precomputed values or returned in kkiinnvv and rrpp
+       and can be used in a later call to EECCDDSSAA__ssiiggnn__eexx or EECCDDSSAA__ddoo__ssiiggnn__eexx.
+
+       _E_C_D_S_A___s_i_g_n_(_) is wrapper function for ECDSA_sign_ex with kkiinnvv and rrpp set
+       to NULL.
+
+       _E_C_D_S_A___s_i_g_n___e_x_(_) computes a digital signature of the ddggssttlleenn bytes hash
+       value ddggsstt using the private EC key eecckkeeyy and the optional pre-computed
+       values kkiinnvv and rrpp. The DER encoded signatures is stored in ssiigg and
+       it's length is returned in ssiigg__lleenn. Note: ssiigg must point to EECCDDSSAA__ssiizzee
+       bytes of memory. The parameter ttyyppee is ignored.
+
+       _E_C_D_S_A___v_e_r_i_f_y_(_) verifies that the signature in ssiigg of size ssiigglleenn is a
+       valid ECDSA signature of the hash value value ddggsstt of size ddggssttlleenn
+       using the public key eecckkeeyy.  The parameter ttyyppee is ignored.
+
+       _E_C_D_S_A___d_o___s_i_g_n_(_) is wrapper function for ECDSA_do_sign_ex with kkiinnvv and
+       rrpp set to NULL.
+
+       _E_C_D_S_A___d_o___s_i_g_n___e_x_(_) computes a digital signature of the ddggsstt__lleenn bytes
+       hash value ddggsstt using the private key eecckkeeyy and the optional pre-com-
+       puted values kkiinnvv and rrpp. The signature is returned in a newly allo-
+       cated EECCDDSSAA__SSIIGG structure (or NULL on error).
+
+       _E_C_D_S_A___d_o___v_e_r_i_f_y_(_) verifies that the signature ssiigg is a valid ECDSA sig-
+       nature of the hash value ddggsstt of size ddggsstt__lleenn using the public key
+       eecckkeeyy.
+
+RREETTUURRNN VVAALLUUEESS
+       _E_C_D_S_A___s_i_z_e_(_) returns the maximum length signature or 0 on error.
+
+       _E_C_D_S_A___s_i_g_n___s_e_t_u_p_(_) and _E_C_D_S_A___s_i_g_n_(_) return 1 if successful or 0 on
+       error.
+
+       _E_C_D_S_A___v_e_r_i_f_y_(_) and _E_C_D_S_A___d_o___v_e_r_i_f_y_(_) return 1 for a valid signature, 0
+       for an invalid signature and -1 on error.  The error codes can be
+       obtained by _E_R_R___g_e_t___e_r_r_o_r(3).
+
+EEXXAAMMPPLLEESS
+       Creating a ECDSA signature of given SHA-1 hash value using the named
+       curve secp192k1.
+
+       First step: create a EC_KEY object (note: this part is nnoott ECDSA spe-
+       cific)
+
+        int        ret;
+        ECDSA_SIG *sig;
+        EC_KEY    *eckey = EC_KEY_new();
+        if (eckey == NULL)
+               {
+               /* error */
+               }
+        key->group = EC_GROUP_new_by_nid(NID_secp192k1);
+        if (key->group == NULL)
+               {
+               /* error */
+               }
+        if (!EC_KEY_generate_key(eckey))
+               {
+               /* error */
+               }
+
+       Second step: compute the ECDSA signature of a SHA-1 hash value using
+       EECCDDSSAA__ddoo__ssiiggnn
+
+        sig = ECDSA_do_sign(digest, 20, eckey);
+        if (sig == NULL)
+               {
+               /* error */
+               }
+
+       or using EECCDDSSAA__ssiiggnn
+
+        unsigned char *buffer, *pp;
+        int            buf_len;
+        buf_len = ECDSA_size(eckey);
+        buffer  = OPENSSL_malloc(buf_len);
+        pp = buffer;
+        if (!ECDSA_sign(0, dgst, dgstlen, pp, &buf_len, eckey);
+               {
+               /* error */
+               }
+
+       Third step: verify the created ECDSA signature using EECCDDSSAA__ddoo__vveerriiffyy
+
+        ret = ECDSA_do_verify(digest, 20, sig, eckey);
+
+       or using EECCDDSSAA__vveerriiffyy
+
+        ret = ECDSA_verify(0, digest, 20, buffer, buf_len, eckey);
+
+       and finally evaluate the return value:
+
+        if (ret == -1)
+               {
+               /* error */
+               }
+        else if (ret == 0)
+               {
+               /* incorrect signature */
+               }
+        else   /* ret == 1 */
+               {
+               /* signature ok */
+               }
+
+CCOONNFFOORRMMIINNGG TTOO
+       ANSI X9.62, US Federal Information Processing Standard FIPS 186-2 (Dig-
+       ital Signature Standard, DSS)
+
+SSEEEE AALLSSOO
+       _d_s_a(3), _r_s_a(3)
+
+HHIISSTTOORRYY
+       The ecdsa implementation was first introduced in OpenSSL 0.9.8
+
+AAUUTTHHOORR
+       Nils Larsch for the OpenSSL project (http://www.openssl.org).
+
+
+
+1.0.0g                            2012-01-11                          ecdsa(3)

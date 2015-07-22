@@ -1,0 +1,72 @@
+RSA_public_encrypt(3)               OpenSSL              RSA_public_encrypt(3)
+
+
+
+NNAAMMEE
+       RSA_public_encrypt, RSA_private_decrypt - RSA public key cryptography
+
+SSYYNNOOPPSSIISS
+        #include <openssl/rsa.h>
+
+        int RSA_public_encrypt(int flen, unsigned char *from,
+           unsigned char *to, RSA *rsa, int padding);
+
+        int RSA_private_decrypt(int flen, unsigned char *from,
+            unsigned char *to, RSA *rsa, int padding);
+
+DDEESSCCRRIIPPTTIIOONN
+       _R_S_A___p_u_b_l_i_c___e_n_c_r_y_p_t_(_) encrypts the fflleenn bytes at ffrroomm (usually a session
+       key) using the public key rrssaa and stores the ciphertext in ttoo. ttoo must
+       point to RSA_size(rrssaa) bytes of memory.
+
+       ppaaddddiinngg denotes one of the following modes:
+
+       RSA_PKCS1_PADDING
+           PKCS #1 v1.5 padding. This currently is the most widely used mode.
+
+       RSA_PKCS1_OAEP_PADDING
+           EME-OAEP as defined in PKCS #1 v2.0 with SHA-1, MGF1 and an empty
+           encoding parameter. This mode is recommended for all new applica-
+           tions.
+
+       RSA_SSLV23_PADDING
+           PKCS #1 v1.5 padding with an SSL-specific modification that denotes
+           that the server is SSL3 capable.
+
+       RSA_NO_PADDING
+           Raw RSA encryption. This mode should _o_n_l_y be used to implement
+           cryptographically sound padding modes in the application code.
+           Encrypting user data directly with RSA is insecure.
+
+       fflleenn must be less than RSA_size(rrssaa) - 11 for the PKCS #1 v1.5 based
+       padding modes, less than RSA_size(rrssaa) - 41 for RSA_PKCS1_OAEP_PADDING
+       and exactly RSA_size(rrssaa) for RSA_NO_PADDING.  The random number gener-
+       ator must be seeded prior to calling _R_S_A___p_u_b_l_i_c___e_n_c_r_y_p_t_(_).
+
+       _R_S_A___p_r_i_v_a_t_e___d_e_c_r_y_p_t_(_) decrypts the fflleenn bytes at ffrroomm using the private
+       key rrssaa and stores the plaintext in ttoo. ttoo must point to a memory sec-
+       tion large enough to hold the decrypted data (which is smaller than
+       RSA_size(rrssaa)). ppaaddddiinngg is the padding mode that was used to encrypt
+       the data.
+
+RREETTUURRNN VVAALLUUEESS
+       _R_S_A___p_u_b_l_i_c___e_n_c_r_y_p_t_(_) returns the size of the encrypted data (i.e.,
+       RSA_size(rrssaa)). _R_S_A___p_r_i_v_a_t_e___d_e_c_r_y_p_t_(_) returns the size of the recovered
+       plaintext.
+
+       On error, -1 is returned; the error codes can be obtained by
+       _E_R_R___g_e_t___e_r_r_o_r(3).
+
+CCOONNFFOORRMMIINNGG TTOO
+       SSL, PKCS #1 v2.0
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _r_a_n_d(3), _r_s_a(3), _R_S_A___s_i_z_e(3)
+
+HHIISSTTOORRYY
+       The ppaaddddiinngg argument was added in SSLeay 0.8. RSA_NO_PADDING is avail-
+       able since SSLeay 0.9.0, OAEP was added in OpenSSL 0.9.2b.
+
+
+
+1.0.0g                            2004-03-23             RSA_public_encrypt(3)

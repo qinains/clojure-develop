@@ -1,0 +1,40 @@
+DSA_do_sign(3)                      OpenSSL                     DSA_do_sign(3)
+
+
+
+NNAAMMEE
+       DSA_do_sign, DSA_do_verify - raw DSA signature operations
+
+SSYYNNOOPPSSIISS
+        #include <openssl/dsa.h>
+
+        DSA_SIG *DSA_do_sign(const unsigned char *dgst, int dlen, DSA *dsa);
+
+        int DSA_do_verify(const unsigned char *dgst, int dgst_len,
+                    DSA_SIG *sig, DSA *dsa);
+
+DDEESSCCRRIIPPTTIIOONN
+       _D_S_A___d_o___s_i_g_n_(_) computes a digital signature on the lleenn byte message
+       digest ddggsstt using the private key ddssaa and returns it in a newly allo-
+       cated DDSSAA__SSIIGG structure.
+
+       _D_S_A___s_i_g_n___s_e_t_u_p(3) may be used to precompute part of the signing opera-
+       tion in case signature generation is time-critical.
+
+       _D_S_A___d_o___v_e_r_i_f_y_(_) verifies that the signature ssiigg matches a given message
+       digest ddggsstt of size lleenn.  ddssaa is the signer's public key.
+
+RREETTUURRNN VVAALLUUEESS
+       _D_S_A___d_o___s_i_g_n_(_) returns the signature, NULL on error.  _D_S_A___d_o___v_e_r_i_f_y_(_)
+       returns 1 for a valid signature, 0 for an incorrect signature and -1 on
+       error. The error codes can be obtained by _E_R_R___g_e_t___e_r_r_o_r(3).
+
+SSEEEE AALLSSOO
+       _d_s_a(3), _E_R_R___g_e_t___e_r_r_o_r(3), _r_a_n_d(3), _D_S_A___S_I_G___n_e_w(3), _D_S_A___s_i_g_n(3)
+
+HHIISSTTOORRYY
+       _D_S_A___d_o___s_i_g_n_(_) and _D_S_A___d_o___v_e_r_i_f_y_(_) were added in OpenSSL 0.9.3.
+
+
+
+1.0.0g                            2002-09-25                    DSA_do_sign(3)

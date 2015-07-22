@@ -1,0 +1,80 @@
+RAND_set_rand_method(3)             OpenSSL            RAND_set_rand_method(3)
+
+
+
+NNAAMMEE
+       RAND_set_rand_method, RAND_get_rand_method, RAND_SSLeay - select RAND
+       method
+
+SSYYNNOOPPSSIISS
+        #include <openssl/rand.h>
+
+        void RAND_set_rand_method(const RAND_METHOD *meth);
+
+        const RAND_METHOD *RAND_get_rand_method(void);
+
+        RAND_METHOD *RAND_SSLeay(void);
+
+DDEESSCCRRIIPPTTIIOONN
+       A RRAANNDD__MMEETTHHOODD specifies the functions that OpenSSL uses for random num-
+       ber generation. By modifying the method, alternative implementations
+       such as hardware RNGs may be used. IMPORTANT: See the NOTES section for
+       important information about how these RAND API functions are affected
+       by the use of EENNGGIINNEE API calls.
+
+       Initially, the default RAND_METHOD is the OpenSSL internal implementa-
+       tion, as returned by _R_A_N_D___S_S_L_e_a_y_(_).
+
+       _R_A_N_D___s_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_) makes mmeetthh the method for PRNG use. NNBB: This
+       is true only whilst no ENGINE has been set as a default for RAND, so
+       this function is no longer recommended.
+
+       _R_A_N_D___g_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_) returns a pointer to the current RAND_METHOD.
+       However, the meaningfulness of this result is dependent on whether the
+       ENGINE API is being used, so this function is no longer recommended.
+
+TTHHEE RRAANNDD__MMEETTHHOODD SSTTRRUUCCTTUURREE
+        typedef struct rand_meth_st
+        {
+               void (*seed)(const void *buf, int num);
+               int (*bytes)(unsigned char *buf, int num);
+               void (*cleanup)(void);
+               void (*add)(const void *buf, int num, int entropy);
+               int (*pseudorand)(unsigned char *buf, int num);
+               int (*status)(void);
+        } RAND_METHOD;
+
+       The components point to the implementation of _R_A_N_D___s_e_e_d_(_),
+       _R_A_N_D___b_y_t_e_s_(_), _R_A_N_D___c_l_e_a_n_u_p_(_), _R_A_N_D___a_d_d_(_), _R_A_N_D___p_s_e_u_d_o___r_a_n_d_(_) and
+       _R_A_N_D___s_t_a_t_u_s_(_).  Each component may be NULL if the function is not
+       implemented.
+
+RREETTUURRNN VVAALLUUEESS
+       _R_A_N_D___s_e_t___r_a_n_d___m_e_t_h_o_d_(_) returns no value. _R_A_N_D___g_e_t___r_a_n_d___m_e_t_h_o_d_(_) and
+       _R_A_N_D___S_S_L_e_a_y_(_) return pointers to the respective methods.
+
+NNOOTTEESS
+       As of version 0.9.7, RAND_METHOD implementations are grouped together
+       with other algorithmic APIs (eg. RSA_METHOD, EVP_CIPHER, etc) in EENNGGIINNEE
+       modules. If a default ENGINE is specified for RAND functionality using
+       an ENGINE API function, that will override any RAND defaults set using
+       the RAND API (ie.  _R_A_N_D___s_e_t___r_a_n_d___m_e_t_h_o_d_(_)). For this reason, the ENGINE
+       API is the recommended way to control default implementations for use
+       in RAND and other cryptographic algorithms.
+
+SSEEEE AALLSSOO
+       _r_a_n_d(3), _e_n_g_i_n_e(3)
+
+HHIISSTTOORRYY
+       _R_A_N_D___s_e_t___r_a_n_d___m_e_t_h_o_d_(_), _R_A_N_D___g_e_t___r_a_n_d___m_e_t_h_o_d_(_) and _R_A_N_D___S_S_L_e_a_y_(_) are
+       available in all versions of OpenSSL.
+
+       In the engine version of version 0.9.6, _R_A_N_D___s_e_t___r_a_n_d___m_e_t_h_o_d_(_) was
+       altered to take an ENGINE pointer as its argument. As of version 0.9.7,
+       that has been reverted as the ENGINE API transparently overrides RAND
+       defaults if used, otherwise RAND API functions work as before.
+       _R_A_N_D___s_e_t___r_a_n_d___e_n_g_i_n_e_(_) was also introduced in version 0.9.7.
+
+
+
+1.0.0g                            2007-11-19           RAND_set_rand_method(3)

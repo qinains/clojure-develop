@@ -1,0 +1,515 @@
+EVP_EncryptInit(3)                  OpenSSL                 EVP_EncryptInit(3)
+
+
+
+NNAAMMEE
+       EVP_CIPHER_CTX_init, EVP_EncryptInit_ex, EVP_EncryptUpdate,
+       EVP_EncryptFinal_ex, EVP_DecryptInit_ex, EVP_DecryptUpdate,
+       EVP_DecryptFinal_ex, EVP_CipherInit_ex, EVP_CipherUpdate, EVP_CipherFi-
+       nal_ex, EVP_CIPHER_CTX_set_key_length, EVP_CIPHER_CTX_ctrl,
+       EVP_CIPHER_CTX_cleanup, EVP_EncryptInit, EVP_EncryptFinal, EVP_Decryp-
+       tInit, EVP_DecryptFinal, EVP_CipherInit, EVP_CipherFinal,
+       EVP_get_cipherbyname, EVP_get_cipherbynid, EVP_get_cipherbyobj,
+       EVP_CIPHER_nid, EVP_CIPHER_block_size, EVP_CIPHER_key_length,
+       EVP_CIPHER_iv_length, EVP_CIPHER_flags, EVP_CIPHER_mode,
+       EVP_CIPHER_type, EVP_CIPHER_CTX_cipher, EVP_CIPHER_CTX_nid,
+       EVP_CIPHER_CTX_block_size, EVP_CIPHER_CTX_key_length,
+       EVP_CIPHER_CTX_iv_length, EVP_CIPHER_CTX_get_app_data,
+       EVP_CIPHER_CTX_set_app_data, EVP_CIPHER_CTX_type, EVP_CIPHER_CTX_flags,
+       EVP_CIPHER_CTX_mode, EVP_CIPHER_param_to_asn1,
+       EVP_CIPHER_asn1_to_param, EVP_CIPHER_CTX_set_padding - EVP cipher rou-
+       tines
+
+SSYYNNOOPPSSIISS
+        #include <openssl/evp.h>
+
+        void EVP_CIPHER_CTX_init(EVP_CIPHER_CTX *a);
+
+        int EVP_EncryptInit_ex(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type,
+                ENGINE *impl, unsigned char *key, unsigned char *iv);
+        int EVP_EncryptUpdate(EVP_CIPHER_CTX *ctx, unsigned char *out,
+                int *outl, unsigned char *in, int inl);
+        int EVP_EncryptFinal_ex(EVP_CIPHER_CTX *ctx, unsigned char *out,
+                int *outl);
+
+        int EVP_DecryptInit_ex(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type,
+                ENGINE *impl, unsigned char *key, unsigned char *iv);
+        int EVP_DecryptUpdate(EVP_CIPHER_CTX *ctx, unsigned char *out,
+                int *outl, unsigned char *in, int inl);
+        int EVP_DecryptFinal_ex(EVP_CIPHER_CTX *ctx, unsigned char *outm,
+                int *outl);
+
+        int EVP_CipherInit_ex(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type,
+                ENGINE *impl, unsigned char *key, unsigned char *iv, int enc);
+        int EVP_CipherUpdate(EVP_CIPHER_CTX *ctx, unsigned char *out,
+                int *outl, unsigned char *in, int inl);
+        int EVP_CipherFinal_ex(EVP_CIPHER_CTX *ctx, unsigned char *outm,
+                int *outl);
+
+        int EVP_EncryptInit(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type,
+                unsigned char *key, unsigned char *iv);
+        int EVP_EncryptFinal(EVP_CIPHER_CTX *ctx, unsigned char *out,
+                int *outl);
+
+        int EVP_DecryptInit(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type,
+                unsigned char *key, unsigned char *iv);
+        int EVP_DecryptFinal(EVP_CIPHER_CTX *ctx, unsigned char *outm,
+                int *outl);
+
+        int EVP_CipherInit(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type,
+                unsigned char *key, unsigned char *iv, int enc);
+        int EVP_CipherFinal(EVP_CIPHER_CTX *ctx, unsigned char *outm,
+                int *outl);
+
+        int EVP_CIPHER_CTX_set_padding(EVP_CIPHER_CTX *x, int padding);
+        int EVP_CIPHER_CTX_set_key_length(EVP_CIPHER_CTX *x, int keylen);
+        int EVP_CIPHER_CTX_ctrl(EVP_CIPHER_CTX *ctx, int type, int arg, void *ptr);
+        int EVP_CIPHER_CTX_cleanup(EVP_CIPHER_CTX *a);
+
+        const EVP_CIPHER *EVP_get_cipherbyname(const char *name);
+        #define EVP_get_cipherbynid(a) EVP_get_cipherbyname(OBJ_nid2sn(a))
+        #define EVP_get_cipherbyobj(a) EVP_get_cipherbynid(OBJ_obj2nid(a))
+
+        #define EVP_CIPHER_nid(e)              ((e)->nid)
+        #define EVP_CIPHER_block_size(e)       ((e)->block_size)
+        #define EVP_CIPHER_key_length(e)       ((e)->key_len)
+        #define EVP_CIPHER_iv_length(e)                ((e)->iv_len)
+        #define EVP_CIPHER_flags(e)            ((e)->flags)
+        #define EVP_CIPHER_mode(e)             ((e)->flags) & EVP_CIPH_MODE)
+        int EVP_CIPHER_type(const EVP_CIPHER *ctx);
+
+        #define EVP_CIPHER_CTX_cipher(e)       ((e)->cipher)
+        #define EVP_CIPHER_CTX_nid(e)          ((e)->cipher->nid)
+        #define EVP_CIPHER_CTX_block_size(e)   ((e)->cipher->block_size)
+        #define EVP_CIPHER_CTX_key_length(e)   ((e)->key_len)
+        #define EVP_CIPHER_CTX_iv_length(e)    ((e)->cipher->iv_len)
+        #define EVP_CIPHER_CTX_get_app_data(e) ((e)->app_data)
+        #define EVP_CIPHER_CTX_set_app_data(e,d) ((e)->app_data=(char *)(d))
+        #define EVP_CIPHER_CTX_type(c)         EVP_CIPHER_type(EVP_CIPHER_CTX_cipher(c))
+        #define EVP_CIPHER_CTX_flags(e)                ((e)->cipher->flags)
+        #define EVP_CIPHER_CTX_mode(e)         ((e)->cipher->flags & EVP_CIPH_MODE)
+
+        int EVP_CIPHER_param_to_asn1(EVP_CIPHER_CTX *c, ASN1_TYPE *type);
+        int EVP_CIPHER_asn1_to_param(EVP_CIPHER_CTX *c, ASN1_TYPE *type);
+
+DDEESSCCRRIIPPTTIIOONN
+       The EVP cipher routines are a high level interface to certain symmetric
+       ciphers.
+
+       _E_V_P___C_I_P_H_E_R___C_T_X___i_n_i_t_(_) initializes cipher contex ccttxx.
+
+       _E_V_P___E_n_c_r_y_p_t_I_n_i_t___e_x_(_) sets up cipher context ccttxx for encryption with
+       cipher ttyyppee from ENGINE iimmppll. ccttxx must be initialized before calling
+       this function. ttyyppee is normally supplied by a function such as
+       _E_V_P___d_e_s___c_b_c_(_). If iimmppll is NULL then the default implementation is used.
+       kkeeyy is the symmetric key to use and iivv is the IV to use (if necessary),
+       the actual number of bytes used for the key and IV depends on the
+       cipher. It is possible to set all parameters to NULL except ttyyppee in an
+       initial call and supply the remaining parameters in subsequent calls,
+       all of which have ttyyppee set to NULL. This is done when the default
+       cipher parameters are not appropriate.
+
+       _E_V_P___E_n_c_r_y_p_t_U_p_d_a_t_e_(_) encrypts iinnll bytes from the buffer iinn and writes
+       the encrypted version to oouutt. This function can be called multiple
+       times to encrypt successive blocks of data. The amount of data written
+       depends on the block alignment of the encrypted data: as a result the
+       amount of data written may be anything from zero bytes to (inl +
+       cipher_block_size - 1) so oouuttll should contain sufficient room. The
+       actual number of bytes written is placed in oouuttll.
+
+       If padding is enabled (the default) then _E_V_P___E_n_c_r_y_p_t_F_i_n_a_l___e_x_(_) encrypts
+       the "final" data, that is any data that remains in a partial block.  It
+       uses standard block padding (aka PKCS padding). The encrypted final
+       data is written to oouutt which should have sufficient space for one
+       cipher block. The number of bytes written is placed in oouuttll. After this
+       function is called the encryption operation is finished and no further
+       calls to _E_V_P___E_n_c_r_y_p_t_U_p_d_a_t_e_(_) should be made.
+
+       If padding is disabled then _E_V_P___E_n_c_r_y_p_t_F_i_n_a_l___e_x_(_) will not encrypt any
+       more data and it will return an error if any data remains in a partial
+       block: that is if the total data length is not a multiple of the block
+       size.
+
+       _E_V_P___D_e_c_r_y_p_t_I_n_i_t___e_x_(_), _E_V_P___D_e_c_r_y_p_t_U_p_d_a_t_e_(_) and _E_V_P___D_e_c_r_y_p_t_F_i_n_a_l___e_x_(_) are
+       the corresponding decryption operations. _E_V_P___D_e_c_r_y_p_t_F_i_n_a_l_(_) will return
+       an error code if padding is enabled and the final block is not cor-
+       rectly formatted. The parameters and restrictions are identical to the
+       encryption operations except that if padding is enabled the decrypted
+       data buffer oouutt passed to _E_V_P___D_e_c_r_y_p_t_U_p_d_a_t_e_(_) should have sufficient
+       room for (iinnll + cipher_block_size) bytes unless the cipher block size
+       is 1 in which case iinnll bytes is sufficient.
+
+       _E_V_P___C_i_p_h_e_r_I_n_i_t___e_x_(_), _E_V_P___C_i_p_h_e_r_U_p_d_a_t_e_(_) and _E_V_P___C_i_p_h_e_r_F_i_n_a_l___e_x_(_) are
+       functions that can be used for decryption or encryption. The operation
+       performed depends on the value of the eenncc parameter. It should be set
+       to 1 for encryption, 0 for decryption and -1 to leave the value
+       unchanged (the actual value of 'enc' being supplied in a previous
+       call).
+
+       _E_V_P___C_I_P_H_E_R___C_T_X___c_l_e_a_n_u_p_(_) clears all information from a cipher context
+       and free up any allocated memory associate with it. It should be called
+       after all operations using a cipher are complete so sensitive informa-
+       tion does not remain in memory.
+
+       _E_V_P___E_n_c_r_y_p_t_I_n_i_t_(_), _E_V_P___D_e_c_r_y_p_t_I_n_i_t_(_) and _E_V_P___C_i_p_h_e_r_I_n_i_t_(_) behave in a
+       similar way to _E_V_P___E_n_c_r_y_p_t_I_n_i_t___e_x_(_), EVP_DecryptInit_ex and
+       _E_V_P___C_i_p_h_e_r_I_n_i_t___e_x_(_) except the ccttxx paramter does not need to be ini-
+       tialized and they always use the default cipher implementation.
+
+       _E_V_P___E_n_c_r_y_p_t_F_i_n_a_l_(_), _E_V_P___D_e_c_r_y_p_t_F_i_n_a_l_(_) and _E_V_P___C_i_p_h_e_r_F_i_n_a_l_(_) behave in
+       a similar way to _E_V_P___E_n_c_r_y_p_t_F_i_n_a_l___e_x_(_), _E_V_P___D_e_c_r_y_p_t_F_i_n_a_l___e_x_(_) and
+       _E_V_P___C_i_p_h_e_r_F_i_n_a_l___e_x_(_) except ccttxx is automatically cleaned up after the
+       call.
+
+       _E_V_P___g_e_t___c_i_p_h_e_r_b_y_n_a_m_e_(_), _E_V_P___g_e_t___c_i_p_h_e_r_b_y_n_i_d_(_) and _E_V_P___g_e_t___c_i_p_h_e_r_b_y_o_b_j_(_)
+       return an EVP_CIPHER structure when passed a cipher name, a NID or an
+       ASN1_OBJECT structure.
+
+       _E_V_P___C_I_P_H_E_R___n_i_d_(_) and _E_V_P___C_I_P_H_E_R___C_T_X___n_i_d_(_) return the NID of a cipher
+       when passed an EEVVPP__CCIIPPHHEERR or EEVVPP__CCIIPPHHEERR__CCTTXX structure.  The actual NID
+       value is an internal value which may not have a corresponding OBJECT
+       IDENTIFIER.
+
+       _E_V_P___C_I_P_H_E_R___C_T_X___s_e_t___p_a_d_d_i_n_g_(_) enables or disables padding. By default
+       encryption operations are padded using standard block padding and the
+       padding is checked and removed when decrypting. If the ppaadd parameter is
+       zero then no padding is performed, the total amount of data encrypted
+       or decrypted must then be a multiple of the block size or an error will
+       occur.
+
+       _E_V_P___C_I_P_H_E_R___k_e_y___l_e_n_g_t_h_(_) and _E_V_P___C_I_P_H_E_R___C_T_X___k_e_y___l_e_n_g_t_h_(_) return the key
+       length of a cipher when passed an EEVVPP__CCIIPPHHEERR or EEVVPP__CCIIPPHHEERR__CCTTXX struc-
+       ture. The constant EEVVPP__MMAAXX__KKEEYY__LLEENNGGTTHH is the maximum key length for all
+       ciphers. Note: although _E_V_P___C_I_P_H_E_R___k_e_y___l_e_n_g_t_h_(_) is fixed for a given
+       cipher, the value of _E_V_P___C_I_P_H_E_R___C_T_X___k_e_y___l_e_n_g_t_h_(_) may be different for
+       variable key length ciphers.
+
+       _E_V_P___C_I_P_H_E_R___C_T_X___s_e_t___k_e_y___l_e_n_g_t_h_(_) sets the key length of the cipher ctx.
+       If the cipher is a fixed length cipher then attempting to set the key
+       length to any value other than the fixed value is an error.
+
+       _E_V_P___C_I_P_H_E_R___i_v___l_e_n_g_t_h_(_) and _E_V_P___C_I_P_H_E_R___C_T_X___i_v___l_e_n_g_t_h_(_) return the IV
+       length of a cipher when passed an EEVVPP__CCIIPPHHEERR or EEVVPP__CCIIPPHHEERR__CCTTXX.  It
+       will return zero if the cipher does not use an IV.  The constant
+       EEVVPP__MMAAXX__IIVV__LLEENNGGTTHH is the maximum IV length for all ciphers.
+
+       _E_V_P___C_I_P_H_E_R___b_l_o_c_k___s_i_z_e_(_) and _E_V_P___C_I_P_H_E_R___C_T_X___b_l_o_c_k___s_i_z_e_(_) return the
+       block size of a cipher when passed an EEVVPP__CCIIPPHHEERR or EEVVPP__CCIIPPHHEERR__CCTTXX
+       structure. The constant EEVVPP__MMAAXX__IIVV__LLEENNGGTTHH is also the maximum block
+       length for all ciphers.
+
+       _E_V_P___C_I_P_H_E_R___t_y_p_e_(_) and _E_V_P___C_I_P_H_E_R___C_T_X___t_y_p_e_(_) return the type of the
+       passed cipher or context. This "type" is the actual NID of the cipher
+       OBJECT IDENTIFIER as such it ignores the cipher parameters and 40 bit
+       RC2 and 128 bit RC2 have the same NID. If the cipher does not have an
+       object identifier or does not have ASN1 support this function will
+       return NNIIDD__uunnddeeff.
+
+       _E_V_P___C_I_P_H_E_R___C_T_X___c_i_p_h_e_r_(_) returns the EEVVPP__CCIIPPHHEERR structure when passed an
+       EEVVPP__CCIIPPHHEERR__CCTTXX structure.
+
+       _E_V_P___C_I_P_H_E_R___m_o_d_e_(_) and _E_V_P___C_I_P_H_E_R___C_T_X___m_o_d_e_(_) return the block cipher
+       mode: EVP_CIPH_ECB_MODE, EVP_CIPH_CBC_MODE, EVP_CIPH_CFB_MODE or
+       EVP_CIPH_OFB_MODE. If the cipher is a stream cipher then
+       EVP_CIPH_STREAM_CIPHER is returned.
+
+       _E_V_P___C_I_P_H_E_R___p_a_r_a_m___t_o___a_s_n_1_(_) sets the AlgorithmIdentifier "parameter"
+       based on the passed cipher. This will typically include any parameters
+       and an IV. The cipher IV (if any) must be set when this call is made.
+       This call should be made before the cipher is actually "used" (before
+       any _E_V_P___E_n_c_r_y_p_t_U_p_d_a_t_e_(_), _E_V_P___D_e_c_r_y_p_t_U_p_d_a_t_e_(_) calls for example). This
+       function may fail if the cipher does not have any ASN1 support.
+
+       _E_V_P___C_I_P_H_E_R___a_s_n_1___t_o___p_a_r_a_m_(_) sets the cipher parameters based on an ASN1
+       AlgorithmIdentifier "parameter". The precise effect depends on the
+       cipher In the case of RC2, for example, it will set the IV and effec-
+       tive key length.  This function should be called after the base cipher
+       type is set but before the key is set. For example _E_V_P___C_i_p_h_e_r_I_n_i_t_(_)
+       will be called with the IV and key set to NULL,
+       _E_V_P___C_I_P_H_E_R___a_s_n_1___t_o___p_a_r_a_m_(_) will be called and finally _E_V_P___C_i_p_h_e_r_I_n_i_t_(_)
+       again with all parameters except the key set to NULL. It is possible
+       for this function to fail if the cipher does not have any ASN1 support
+       or the parameters cannot be set (for example the RC2 effective key
+       length is not supported.
+
+       _E_V_P___C_I_P_H_E_R___C_T_X___c_t_r_l_(_) allows various cipher specific parameters to be
+       determined and set. Currently only the RC2 effective key length and the
+       number of rounds of RC5 can be set.
+
+RREETTUURRNN VVAALLUUEESS
+       _E_V_P___E_n_c_r_y_p_t_I_n_i_t___e_x_(_), _E_V_P___E_n_c_r_y_p_t_U_p_d_a_t_e_(_) and _E_V_P___E_n_c_r_y_p_t_F_i_n_a_l___e_x_(_)
+       return 1 for success and 0 for failure.
+
+       _E_V_P___D_e_c_r_y_p_t_I_n_i_t___e_x_(_) and _E_V_P___D_e_c_r_y_p_t_U_p_d_a_t_e_(_) return 1 for success and 0
+       for failure.  _E_V_P___D_e_c_r_y_p_t_F_i_n_a_l___e_x_(_) returns 0 if the decrypt failed or
+       1 for success.
+
+       _E_V_P___C_i_p_h_e_r_I_n_i_t___e_x_(_) and _E_V_P___C_i_p_h_e_r_U_p_d_a_t_e_(_) return 1 for success and 0
+       for failure.  _E_V_P___C_i_p_h_e_r_F_i_n_a_l___e_x_(_) returns 0 for a decryption failure
+       or 1 for success.
+
+       _E_V_P___C_I_P_H_E_R___C_T_X___c_l_e_a_n_u_p_(_) returns 1 for success and 0 for failure.
+
+       _E_V_P___g_e_t___c_i_p_h_e_r_b_y_n_a_m_e_(_), _E_V_P___g_e_t___c_i_p_h_e_r_b_y_n_i_d_(_) and _E_V_P___g_e_t___c_i_p_h_e_r_b_y_o_b_j_(_)
+       return an EEVVPP__CCIIPPHHEERR structure or NULL on error.
+
+       _E_V_P___C_I_P_H_E_R___n_i_d_(_) and _E_V_P___C_I_P_H_E_R___C_T_X___n_i_d_(_) return a NID.
+
+       _E_V_P___C_I_P_H_E_R___b_l_o_c_k___s_i_z_e_(_) and _E_V_P___C_I_P_H_E_R___C_T_X___b_l_o_c_k___s_i_z_e_(_) return the
+       block size.
+
+       _E_V_P___C_I_P_H_E_R___k_e_y___l_e_n_g_t_h_(_) and _E_V_P___C_I_P_H_E_R___C_T_X___k_e_y___l_e_n_g_t_h_(_) return the key
+       length.
+
+       _E_V_P___C_I_P_H_E_R___C_T_X___s_e_t___p_a_d_d_i_n_g_(_) always returns 1.
+
+       _E_V_P___C_I_P_H_E_R___i_v___l_e_n_g_t_h_(_) and _E_V_P___C_I_P_H_E_R___C_T_X___i_v___l_e_n_g_t_h_(_) return the IV
+       length or zero if the cipher does not use an IV.
+
+       _E_V_P___C_I_P_H_E_R___t_y_p_e_(_) and _E_V_P___C_I_P_H_E_R___C_T_X___t_y_p_e_(_) return the NID of the
+       cipher's OBJECT IDENTIFIER or NID_undef if it has no defined OBJECT
+       IDENTIFIER.
+
+       _E_V_P___C_I_P_H_E_R___C_T_X___c_i_p_h_e_r_(_) returns an EEVVPP__CCIIPPHHEERR structure.
+
+       _E_V_P___C_I_P_H_E_R___p_a_r_a_m___t_o___a_s_n_1_(_) and _E_V_P___C_I_P_H_E_R___a_s_n_1___t_o___p_a_r_a_m_(_) return 1 for
+       success or zero for failure.
+
+CCIIPPHHEERR LLIISSTTIINNGG
+       All algorithms have a fixed key length unless otherwise stated.
+
+       _E_V_P___e_n_c___n_u_l_l_(_)
+           Null cipher: does nothing.
+
+       EVP_des_cbc(void), EVP_des_ecb(void), EVP_des_cfb(void),
+       EVP_des_ofb(void)
+           DES in CBC, ECB, CFB and OFB modes respectively.
+
+       EVP_des_ede_cbc(void), _E_V_P___d_e_s___e_d_e_(_), EVP_des_ede_ofb(void),
+       EVP_des_ede_cfb(void)
+           Two key triple DES in CBC, ECB, CFB and OFB modes respectively.
+
+       EVP_des_ede3_cbc(void), _E_V_P___d_e_s___e_d_e_3_(_), EVP_des_ede3_ofb(void),
+       EVP_des_ede3_cfb(void)
+           Three key triple DES in CBC, ECB, CFB and OFB modes respectively.
+
+       EVP_desx_cbc(void)
+           DESX algorithm in CBC mode.
+
+       EVP_rc4(void)
+           RC4 stream cipher. This is a variable key length cipher with
+           default key length 128 bits.
+
+       EVP_rc4_40(void)
+           RC4 stream cipher with 40 bit key length. This is obsolete and new
+           code should use _E_V_P___r_c_4_(_) and the _E_V_P___C_I_P_H_E_R___C_T_X___s_e_t___k_e_y___l_e_n_g_t_h_(_)
+           function.
+
+       _E_V_P___i_d_e_a___c_b_c_(_) EVP_idea_ecb(void), EVP_idea_cfb(void),
+       EVP_idea_ofb(void), EVP_idea_cbc(void)
+           IDEA encryption algorithm in CBC, ECB, CFB and OFB modes respec-
+           tively.
+
+       EVP_rc2_cbc(void), EVP_rc2_ecb(void), EVP_rc2_cfb(void),
+       EVP_rc2_ofb(void)
+           RC2 encryption algorithm in CBC, ECB, CFB and OFB modes respec-
+           tively. This is a variable key length cipher with an additional
+           parameter called "effective key bits" or "effective key length".
+           By default both are set to 128 bits.
+
+       EVP_rc2_40_cbc(void), EVP_rc2_64_cbc(void)
+           RC2 algorithm in CBC mode with a default key length and effective
+           key length of 40 and 64 bits.  These are obsolete and new code
+           should use _E_V_P___r_c_2___c_b_c_(_), _E_V_P___C_I_P_H_E_R___C_T_X___s_e_t___k_e_y___l_e_n_g_t_h_(_) and
+           _E_V_P___C_I_P_H_E_R___C_T_X___c_t_r_l_(_) to set the key length and effective key
+           length.
+
+       EVP_bf_cbc(void), EVP_bf_ecb(void), EVP_bf_cfb(void), EVP_bf_ofb(void);
+           Blowfish encryption algorithm in CBC, ECB, CFB and OFB modes
+           respectively. This is a variable key length cipher.
+
+       EVP_cast5_cbc(void), EVP_cast5_ecb(void), EVP_cast5_cfb(void),
+       EVP_cast5_ofb(void)
+           CAST encryption algorithm in CBC, ECB, CFB and OFB modes respec-
+           tively. This is a variable key length cipher.
+
+       EVP_rc5_32_12_16_cbc(void), EVP_rc5_32_12_16_ecb(void),
+       EVP_rc5_32_12_16_cfb(void), EVP_rc5_32_12_16_ofb(void)
+           RC5 encryption algorithm in CBC, ECB, CFB and OFB modes respec-
+           tively. This is a variable key length cipher with an additional
+           "number of rounds" parameter. By default the key length is set to
+           128 bits and 12 rounds.
+
+NNOOTTEESS
+       Where possible the EEVVPP interface to symmetric ciphers should be used in
+       preference to the low level interfaces. This is because the code then
+       becomes transparent to the cipher used and much more flexible.
+
+       PKCS padding works by adding nn padding bytes of value nn to make the
+       total length of the encrypted data a multiple of the block size. Pad-
+       ding is always added so if the data is already a multiple of the block
+       size nn will equal the block size. For example if the block size is 8
+       and 11 bytes are to be encrypted then 5 padding bytes of value 5 will
+       be added.
+
+       When decrypting the final block is checked to see if it has the correct
+       form.
+
+       Although the decryption operation can produce an error if padding is
+       enabled, it is not a strong test that the input data or key is correct.
+       A random block has better than 1 in 256 chance of being of the correct
+       format and problems with the input data earlier on will not produce a
+       final decrypt error.
+
+       If padding is disabled then the decryption operation will always suc-
+       ceed if the total amount of data decrypted is a multiple of the block
+       size.
+
+       The functions _E_V_P___E_n_c_r_y_p_t_I_n_i_t_(_), _E_V_P___E_n_c_r_y_p_t_F_i_n_a_l_(_), _E_V_P___D_e_c_r_y_p_t_I_n_i_t_(_),
+       _E_V_P___C_i_p_h_e_r_I_n_i_t_(_) and _E_V_P___C_i_p_h_e_r_F_i_n_a_l_(_) are obsolete but are retained
+       for compatibility with existing code. New code should use _E_V_P___E_n_c_r_y_p_-
+       _t_I_n_i_t___e_x_(_), _E_V_P___E_n_c_r_y_p_t_F_i_n_a_l___e_x_(_), _E_V_P___D_e_c_r_y_p_t_I_n_i_t___e_x_(_), _E_V_P___D_e_c_r_y_p_t_F_i_-
+       _n_a_l___e_x_(_), _E_V_P___C_i_p_h_e_r_I_n_i_t___e_x_(_) and _E_V_P___C_i_p_h_e_r_F_i_n_a_l___e_x_(_) because they can
+       reuse an existing context without allocating and freeing it up on each
+       call.
+
+BBUUGGSS
+       For RC5 the number of rounds can currently only be set to 8, 12 or 16.
+       This is a limitation of the current RC5 code rather than the EVP inter-
+       face.
+
+       EVP_MAX_KEY_LENGTH and EVP_MAX_IV_LENGTH only refer to the internal
+       ciphers with default key lengths. If custom ciphers exceed these values
+       the results are unpredictable. This is because it has become standard
+       practice to define a generic key as a fixed unsigned char array con-
+       taining EVP_MAX_KEY_LENGTH bytes.
+
+       The ASN1 code is incomplete (and sometimes inaccurate) it has only been
+       tested for certain common S/MIME ciphers (RC2, DES, triple DES) in CBC
+       mode.
+
+EEXXAAMMPPLLEESS
+       Get the number of rounds used in RC5:
+
+        int nrounds;
+        EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GET_RC5_ROUNDS, 0, &nrounds);
+
+       Get the RC2 effective key length:
+
+        int key_bits;
+        EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GET_RC2_KEY_BITS, 0, &key_bits);
+
+       Set the number of rounds used in RC5:
+
+        int nrounds;
+        EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_SET_RC5_ROUNDS, nrounds, NULL);
+
+       Set the effective key length used in RC2:
+
+        int key_bits;
+        EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_SET_RC2_KEY_BITS, key_bits, NULL);
+
+       Encrypt a string using blowfish:
+
+        int do_crypt(char *outfile)
+               {
+               unsigned char outbuf[1024];
+               int outlen, tmplen;
+               /* Bogus key and IV: we'd normally set these from
+                * another source.
+                */
+               unsigned char key[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+               unsigned char iv[] = {1,2,3,4,5,6,7,8};
+               char intext[] = "Some Crypto Text";
+               EVP_CIPHER_CTX ctx;
+               FILE *out;
+               EVP_CIPHER_CTX_init(&ctx);
+               EVP_EncryptInit_ex(&ctx, EVP_bf_cbc(), NULL, key, iv);
+
+               if(!EVP_EncryptUpdate(&ctx, outbuf, &outlen, intext, strlen(intext)))
+                       {
+                       /* Error */
+                       return 0;
+                       }
+               /* Buffer passed to EVP_EncryptFinal() must be after data just
+                * encrypted to avoid overwriting it.
+                */
+               if(!EVP_EncryptFinal_ex(&ctx, outbuf + outlen, &tmplen))
+                       {
+                       /* Error */
+                       return 0;
+                       }
+               outlen += tmplen;
+               EVP_CIPHER_CTX_cleanup(&ctx);
+               /* Need binary mode for fopen because encrypted data is
+                * binary data. Also cannot use strlen() on it because
+                * it wont be null terminated and may contain embedded
+                * nulls.
+                */
+               out = fopen(outfile, "wb");
+               fwrite(outbuf, 1, outlen, out);
+               fclose(out);
+               return 1;
+               }
+
+       The ciphertext from the above example can be decrypted using the
+       ooppeennssssll utility with the command line:
+
+        S<openssl bf -in cipher.bin -K 000102030405060708090A0B0C0D0E0F -iv 0102030405060708 -d>
+
+       General encryption, decryption function example using FILE I/O and RC2
+       with an 80 bit key:
+
+        int do_crypt(FILE *in, FILE *out, int do_encrypt)
+               {
+               /* Allow enough space in output buffer for additional block */
+               inbuf[1024], outbuf[1024 + EVP_MAX_BLOCK_LENGTH];
+               int inlen, outlen;
+               /* Bogus key and IV: we'd normally set these from
+                * another source.
+                */
+               unsigned char key[] = "0123456789";
+               unsigned char iv[] = "12345678";
+               /* Don't set key or IV because we will modify the parameters */
+               EVP_CIPHER_CTX_init(&ctx);
+               EVP_CipherInit_ex(&ctx, EVP_rc2(), NULL, NULL, NULL, do_encrypt);
+               EVP_CIPHER_CTX_set_key_length(&ctx, 10);
+               /* We finished modifying parameters so now we can set key and IV */
+               EVP_CipherInit_ex(&ctx, NULL, NULL, key, iv, do_encrypt);
+
+               for(;;)
+                       {
+                       inlen = fread(inbuf, 1, 1024, in);
+                       if(inlen <= 0) break;
+                       if(!EVP_CipherUpdate(&ctx, outbuf, &outlen, inbuf, inlen))
+                               {
+                               /* Error */
+                               EVP_CIPHER_CTX_cleanup(&ctx);
+                               return 0;
+                               }
+                       fwrite(outbuf, 1, outlen, out);
+                       }
+               if(!EVP_CipherFinal_ex(&ctx, outbuf, &outlen))
+                       {
+                       /* Error */
+                       EVP_CIPHER_CTX_cleanup(&ctx);
+                       return 0;
+                       }
+               fwrite(outbuf, 1, outlen, out);
+
+               EVP_CIPHER_CTX_cleanup(&ctx);
+               return 1;
+               }
+
+SSEEEE AALLSSOO
+       _e_v_p(3)
+
+HHIISSTTOORRYY
+       _E_V_P___C_I_P_H_E_R___C_T_X___i_n_i_t_(_), _E_V_P___E_n_c_r_y_p_t_I_n_i_t___e_x_(_), _E_V_P___E_n_c_r_y_p_t_F_i_n_a_l___e_x_(_),
+       _E_V_P___D_e_c_r_y_p_t_I_n_i_t___e_x_(_), _E_V_P___D_e_c_r_y_p_t_F_i_n_a_l___e_x_(_), _E_V_P___C_i_p_h_e_r_I_n_i_t___e_x_(_),
+       _E_V_P___C_i_p_h_e_r_F_i_n_a_l___e_x_(_) and _E_V_P___C_I_P_H_E_R___C_T_X___s_e_t___p_a_d_d_i_n_g_(_) appeared in
+       OpenSSL 0.9.7.
+
+
+
+1.0.0g                            2005-04-15                EVP_EncryptInit(3)

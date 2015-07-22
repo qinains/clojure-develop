@@ -1,0 +1,52 @@
+CRYPTO_set_ex_data(3)               OpenSSL              CRYPTO_set_ex_data(3)
+
+
+
+NNAAMMEE
+       CRYPTO_set_ex_data, CRYPTO_get_ex_data - internal application specific
+       data functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/crypto.h>
+
+        int CRYPTO_set_ex_data(CRYPTO_EX_DATA *r, int idx, void *arg);
+
+        void *CRYPTO_get_ex_data(CRYPTO_EX_DATA *r, int idx);
+
+DDEESSCCRRIIPPTTIIOONN
+       Several OpenSSL structures can have application specific data attached
+       to them.  These functions are used internally by OpenSSL to manipulate
+       application specific data attached to a specific structure.
+
+       These functions should only be used by applications to manipulate
+       CCRRYYPPTTOO__EEXX__DDAATTAA structures passed to the _nn_ee_ww____ff_uu_nn_cc_((_)), _ff_rr_ee_ee____ff_uu_nn_cc_((_)) and
+       _dd_uu_pp____ff_uu_nn_cc_((_)) callbacks: as passed to _RR_SS_AA____gg_ee_tt____ee_xx____nn_ee_ww____ii_nn_dd_ee_xx_((_)) for example.
+
+       _CC_RR_YY_PP_TT_OO____ss_ee_tt____ee_xx____dd_aa_tt_aa_((_)) is used to set application specific data, the data
+       is supplied in the aarrgg parameter and its precise meaning is up to the
+       application.
+
+       _CC_RR_YY_PP_TT_OO____gg_ee_tt____ee_xx____dd_aa_tt_aa_((_)) is used to retrieve application specific data. The
+       data is returned to the application, this will be the same value as
+       supplied to a previous _CC_RR_YY_PP_TT_OO____ss_ee_tt____ee_xx____dd_aa_tt_aa_((_)) call.
+
+RREETTUURRNN VVAALLUUEESS
+       _CC_RR_YY_PP_TT_OO____ss_ee_tt____ee_xx____dd_aa_tt_aa_((_)) returns 1 on success or 0 on failure.
+
+       _CC_RR_YY_PP_TT_OO____gg_ee_tt____ee_xx____dd_aa_tt_aa_((_)) returns the application data or 0 on failure. 0
+       may also be valid application data but currently it can only fail if
+       given an invalid iiddxx parameter.
+
+       On failure an error code can be obtained from _E_R_R___g_e_t___e_r_r_o_r(3).
+
+SSEEEE AALLSSOO
+       _R_S_A___g_e_t___e_x___n_e_w___i_n_d_e_x(3), _D_S_A___g_e_t___e_x___n_e_w___i_n_d_e_x(3),
+       _D_H___g_e_t___e_x___n_e_w___i_n_d_e_x(3)
+
+HHIISSTTOORRYY
+       _C_R_Y_P_T_O___s_e_t___e_x___d_a_t_a_(_) and _C_R_Y_P_T_O___g_e_t___e_x___d_a_t_a_(_) have been available since
+       SSLeay 0.9.0.
+
+
+
+1.0.0g                            2006-05-14             CRYPTO_set_ex_data(3)

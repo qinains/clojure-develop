@@ -1,0 +1,98 @@
+BIO_set_callback(3)                 OpenSSL                BIO_set_callback(3)
+
+
+
+NNAAMMEE
+       BIO_set_callback, BIO_get_callback, BIO_set_callback_arg, BIO_get_call-
+       back_arg, BIO_debug_callback - BIO callback functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bio.h>
+
+        #define BIO_set_callback(b,cb)         ((b)->callback=(cb))
+        #define BIO_get_callback(b)            ((b)->callback)
+        #define BIO_set_callback_arg(b,arg)    ((b)->cb_arg=(char *)(arg))
+        #define BIO_get_callback_arg(b)                ((b)->cb_arg)
+
+        long BIO_debug_callback(BIO *bio,int cmd,const char *argp,int argi,
+               long argl,long ret);
+
+        typedef long (*callback)(BIO *b, int oper, const char *argp,
+                               int argi, long argl, long retvalue);
+
+DDEESSCCRRIIPPTTIIOONN
+       _B_I_O___s_e_t___c_a_l_l_b_a_c_k_(_) and _B_I_O___g_e_t___c_a_l_l_b_a_c_k_(_) set and retrieve the BIO
+       callback, they are both macros. The callback is called during most high
+       level BIO operations. It can be used for debugging purposes to trace
+       operations on a BIO or to modify its operation.
+
+       _B_I_O___s_e_t___c_a_l_l_b_a_c_k___a_r_g_(_) and _B_I_O___g_e_t___c_a_l_l_b_a_c_k___a_r_g_(_) are macros which can
+       be used to set and retrieve an argument for use in the callback.
+
+       _B_I_O___d_e_b_u_g___c_a_l_l_b_a_c_k_(_) is a standard debugging callback which prints out
+       information relating to each BIO operation. If the callback argument is
+       set if is interpreted as a BIO to send the information to, otherwise
+       stderr is used.
+
+       _c_a_l_l_b_a_c_k_(_) is the callback function itself. The meaning of each argu-
+       ment is described below.
+
+       The BIO the callback is attached to is passed in bb.
+
+       ooppeerr is set to the operation being performed. For some operations the
+       callback is called twice, once before and once after the actual opera-
+       tion, the latter case has ooppeerr or'ed with BIO_CB_RETURN.
+
+       The meaning of the arguments aarrggpp, aarrggii and aarrggll depends on the value
+       of ooppeerr, that is the operation being performed.
+
+       rreettvvaalluuee is the return value that would be returned to the application
+       if no callback were present. The actual value returned is the return
+       value of the callback itself. In the case of callbacks called before
+       the actual BIO operation 1 is placed in retvalue, if the return value
+       is not positive it will be immediately returned to the application and
+       the BIO operation will not be performed.
+
+       The callback should normally simply return rreettvvaalluuee when it has fin-
+       ished processing, unless if specifically wishes to modify the value
+       returned to the application.
+
+CCAALLLLBBAACCKK OOPPEERRAATTIIOONNSS
+       BBIIOO__ffrreeee((bb))
+           callback(b, BIO_CB_FREE, NULL, 0L, 0L, 1L) is called before the
+           free operation.
+
+       BBIIOO__rreeaadd((bb,, oouutt,, oouuttll))
+           callback(b, BIO_CB_READ, out, outl, 0L, 1L) is called before the
+           read and callback(b, BIO_CB_READ|BIO_CB_RETURN, out, outl, 0L, ret-
+           value) after.
+
+       BBIIOO__wwrriittee((bb,, iinn,, iinnll))
+           callback(b, BIO_CB_WRITE, in, inl, 0L, 1L) is called before the
+           write and callback(b, BIO_CB_WRITE|BIO_CB_RETURN, in, inl, 0L, ret-
+           value) after.
+
+       BBIIOO__ggeettss((bb,, oouutt,, oouuttll))
+           callback(b, BIO_CB_GETS, out, outl, 0L, 1L) is called before the
+           operation and callback(b, BIO_CB_GETS|BIO_CB_RETURN, out, outl, 0L,
+           retvalue) after.
+
+       BBIIOO__ppuuttss((bb,, iinn))
+           callback(b, BIO_CB_WRITE, in, 0, 0L, 1L) is called before the oper-
+           ation and callback(b, BIO_CB_WRITE|BIO_CB_RETURN, in, 0, 0L, ret-
+           value) after.
+
+       BBIIOO__ccttrrll((BBIIOO **bb,, iinntt ccmmdd,, lloonngg llaarrgg,, vvooiidd **ppaarrgg))
+           callback(b,BIO_CB_CTRL,parg,cmd,larg,1L) is called before the call
+           and callback(b,BIO_CB_CTRL|BIO_CB_RETURN,parg,cmd, larg,ret) after.
+
+EEXXAAMMPPLLEE
+       The _B_I_O___d_e_b_u_g___c_a_l_l_b_a_c_k_(_) function is a good example, its source is in
+       crypto/bio/bio_cb.c
+
+SSEEEE AALLSSOO
+       TBA
+
+
+
+1.0.0g                            2006-12-06               BIO_set_callback(3)

@@ -1,0 +1,49 @@
+X509_verify_cert(3)                 OpenSSL                X509_verify_cert(3)
+
+
+
+NNAAMMEE
+       X509_verify_cert - discover and verify X509 certificte chain
+
+SSYYNNOOPPSSIISS
+        #include <openssl/x509.h>
+
+        int X509_verify_cert(X509_STORE_CTX *ctx);
+
+DDEESSCCRRIIPPTTIIOONN
+       The _X_5_0_9___v_e_r_i_f_y___c_e_r_t_(_) function attempts to discover and validate a
+       certificate chain based on parameters in ccttxx. A complete description of
+       the process is contained in the _v_e_r_i_f_y(1) manual page.
+
+RREETTUURRNN VVAALLUUEESS
+       If a complete chain can be built and validated this function returns 1,
+       otherwise it return zero, in exceptional circumstances it can also
+       return a negative code.
+
+       If the function fails additional error information can be obtained by
+       examining ccttxx using, for example _X_5_0_9___S_T_O_R_E___C_T_X___g_e_t___e_r_r_o_r_(_).
+
+NNOOTTEESS
+       Applications rarely call this function directly but it is used by
+       OpenSSL internally for certificate validation, in both the S/MIME and
+       SSL/TLS code.
+
+       The negative return value from _X_5_0_9___v_e_r_i_f_y___c_e_r_t_(_) can only occur if no
+       certificate is set in ccttxx (due to a programming error) or if a retry
+       operation is requested during internal lookups (which never happens
+       with standard lookup methods). It is however recommended that applica-
+       tion check for <= 0 return value on error.
+
+BBUUGGSS
+       This function uses the header xx550099..hh as opposed to most chain verifica-
+       tion functiosn which use xx550099__vvffyy..hh.
+
+SSEEEE AALLSSOO
+       _X_5_0_9___S_T_O_R_E___C_T_X___g_e_t___e_r_r_o_r(3)
+
+HHIISSTTOORRYY
+       _X_5_0_9___v_e_r_i_f_y___c_e_r_t_(_) is available in all versions of SSLeay and OpenSSL.
+
+
+
+1.0.0g                            2009-10-18               X509_verify_cert(3)

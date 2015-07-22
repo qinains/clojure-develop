@@ -1,0 +1,60 @@
+SMIME_write_CMS(3)                  OpenSSL                 SMIME_write_CMS(3)
+
+
+
+NNAAMMEE
+        SMIME_write_CMS - convert CMS structure to S/MIME format.
+
+SSYYNNOOPPSSIISS
+        #include <openssl/cms.h>
+
+        int SMIME_write_CMS(BIO *out, CMS_ContentInfo *cms, BIO *data, int flags);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_M_I_M_E___w_r_i_t_e___C_M_S_(_) adds the appropriate MIME headers to a CMS structure
+       to produce an S/MIME message.
+
+       oouutt is the BIO to write the data to. ccmmss is the appropriate CCMMSS__CCoonn--
+       tteennttIInnffoo structure. If streaming is enabled then the content must be
+       supplied in the ddaattaa argument. ffllaaggss is an optional set of flags.
+
+NNOOTTEESS
+       The following flags can be passed in the ffllaaggss parameter.
+
+       If CCMMSS__DDEETTAACCHHEEDD is set then cleartext signing will be used, this option
+       only makes sense for SignedData where CCMMSS__DDEETTAACCHHEEDD is also set when
+       _C_M_S___s_i_g_n_(_) is called.
+
+       If the CCMMSS__TTEEXXTT flag is set MIME headers for type tteexxtt//ppllaaiinn are added
+       to the content, this only makes sense if CCMMSS__DDEETTAACCHHEEDD is also set.
+
+       If the CCMMSS__SSTTRREEAAMM flag is set streaming is performed. This flag should
+       only be set if CCMMSS__SSTTRREEAAMM was also set in the previous call to a
+       CMS_ContentInfo creation function.
+
+       If cleartext signing is being used and CCMMSS__SSTTRREEAAMM not set then the data
+       must be read twice: once to compute the signature in _C_M_S___s_i_g_n_(_) and
+       once to output the S/MIME message.
+
+       If streaming is performed the content is output in BER format using
+       indefinite length constructed encoding except in the case of signed
+       data with detached content where the content is absent and DER format
+       is used.
+
+BBUUGGSS
+       _S_M_I_M_E___w_r_i_t_e___C_M_S_(_) always base64 encodes CMS structures, there should be
+       an option to disable this.
+
+RREETTUURRNN VVAALLUUEESS
+       _S_M_I_M_E___w_r_i_t_e___C_M_S_(_) returns 1 for success or 0 for failure.
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _C_M_S___s_i_g_n(3), _C_M_S___v_e_r_i_f_y(3), _C_M_S___e_n_c_r_y_p_t(3)
+       _C_M_S___d_e_c_r_y_p_t(3)
+
+HHIISSTTOORRYY
+       _S_M_I_M_E___w_r_i_t_e___C_M_S_(_) was added to OpenSSL 0.9.8
+
+
+
+1.0.0g                            2008-04-11                SMIME_write_CMS(3)

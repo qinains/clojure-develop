@@ -1,0 +1,60 @@
+d2i_PKCS8PrivateKey(3)              OpenSSL             d2i_PKCS8PrivateKey(3)
+
+
+
+NNAAMMEE
+       d2i_PKCS8PrivateKey_bio, d2i_PKCS8PrivateKey_fp, i2d_PKCS8Pri-
+       vateKey_bio, i2d_PKCS8PrivateKey_fp, i2d_PKCS8PrivateKey_nid_bio,
+       i2d_PKCS8PrivateKey_nid_fp - PKCS#8 format private key functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/evp.h>
+
+        EVP_PKEY *d2i_PKCS8PrivateKey_bio(BIO *bp, EVP_PKEY **x, pem_password_cb *cb, void *u);
+        EVP_PKEY *d2i_PKCS8PrivateKey_fp(FILE *fp, EVP_PKEY **x, pem_password_cb *cb, void *u);
+
+        int i2d_PKCS8PrivateKey_bio(BIO *bp, EVP_PKEY *x, const EVP_CIPHER *enc,
+                                         char *kstr, int klen,
+                                         pem_password_cb *cb, void *u);
+
+        int i2d_PKCS8PrivateKey_fp(FILE *fp, EVP_PKEY *x, const EVP_CIPHER *enc,
+                                         char *kstr, int klen,
+                                         pem_password_cb *cb, void *u);
+
+        int i2d_PKCS8PrivateKey_nid_bio(BIO *bp, EVP_PKEY *x, int nid,
+                                         char *kstr, int klen,
+                                         pem_password_cb *cb, void *u);
+
+        int i2d_PKCS8PrivateKey_nid_fp(FILE *fp, EVP_PKEY *x, int nid,
+                                         char *kstr, int klen,
+                                         pem_password_cb *cb, void *u);
+
+DDEESSCCRRIIPPTTIIOONN
+       The PKCS#8 functions encode and decode private keys in PKCS#8 format
+       using both PKCS#5 v1.5 and PKCS#5 v2.0 password based encryption algo-
+       rithms.
+
+       Other than the use of DER as opposed to PEM these functions are identi-
+       cal to the corresponding PPEEMM function as described in the _p_e_m(3) manual
+       page.
+
+NNOOTTEESS
+       Before using these functions _O_p_e_n_S_S_L___a_d_d___a_l_l___a_l_g_o_r_i_t_h_m_s(3) should be
+       called to initialize the internal algorithm lookup tables otherwise
+       errors about unknown algorithms will occur if an attempt is made to
+       decrypt a private key.
+
+       These functions are currently the only way to store encrypted private
+       keys using DER format.
+
+       Currently all the functions use BIOs or FILE pointers, there are no
+       functions which work directly on memory: this can be readily worked
+       around by converting the buffers to memory BIOs, see _B_I_O___s___m_e_m(3) for
+       details.
+
+SSEEEE AALLSSOO
+       _p_e_m(3)
+
+
+
+1.0.0g                            2002-10-07            d2i_PKCS8PrivateKey(3)

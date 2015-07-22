@@ -1,0 +1,66 @@
+BIO_new(3)                          OpenSSL                         BIO_new(3)
+
+
+
+NNAAMMEE
+       BIO_new, BIO_set, BIO_free, BIO_vfree, BIO_free_all - BIO allocation
+       and freeing functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bio.h>
+
+        BIO *  BIO_new(BIO_METHOD *type);
+        int    BIO_set(BIO *a,BIO_METHOD *type);
+        int    BIO_free(BIO *a);
+        void   BIO_vfree(BIO *a);
+        void   BIO_free_all(BIO *a);
+
+DDEESSCCRRIIPPTTIIOONN
+       The _B_I_O___n_e_w_(_) function returns a new BIO using method ttyyppee.
+
+       _B_I_O___s_e_t_(_) sets the method of an already existing BIO.
+
+       _B_I_O___f_r_e_e_(_) frees up a single BIO, _B_I_O___v_f_r_e_e_(_) also frees up a single
+       BIO but it does not return a value. Calling _B_I_O___f_r_e_e_(_) may also have
+       some effect on the underlying I/O structure, for example it may close
+       the file being referred to under certain circumstances. For more
+       details see the individual BIO_METHOD descriptions.
+
+       _B_I_O___f_r_e_e___a_l_l_(_) frees up an entire BIO chain, it does not halt if an
+       error occurs freeing up an individual BIO in the chain.
+
+RREETTUURRNN VVAALLUUEESS
+       _B_I_O___n_e_w_(_) returns a newly created BIO or NULL if the call fails.
+
+       _B_I_O___s_e_t_(_), _B_I_O___f_r_e_e_(_) return 1 for success and 0 for failure.
+
+       _B_I_O___f_r_e_e___a_l_l_(_) and _B_I_O___v_f_r_e_e_(_) do not return values.
+
+NNOOTTEESS
+       Some BIOs (such as memory BIOs) can be used immediately after calling
+       _B_I_O___n_e_w_(_). Others (such as file BIOs) need some additional initializa-
+       tion, and frequently a utility function exists to create and initialize
+       such BIOs.
+
+       If _B_I_O___f_r_e_e_(_) is called on a BIO chain it will only free one BIO
+       resulting in a memory leak.
+
+       Calling _B_I_O___f_r_e_e___a_l_l_(_) a single BIO has the same effect as calling
+       _B_I_O___f_r_e_e_(_) on it other than the discarded return value.
+
+       Normally the ttyyppee argument is supplied by a function which returns a
+       pointer to a BIO_METHOD. There is a naming convention for such func-
+       tions: a source/sink BIO is normally called BIO_s_*() and a filter BIO
+       BIO_f_*();
+
+EEXXAAMMPPLLEE
+       Create a memory BIO:
+
+        BIO *mem = BIO_new(BIO_s_mem());
+
+SSEEEE AALLSSOO
+       TBA
+
+
+
+1.0.0g                            2000-09-16                        BIO_new(3)

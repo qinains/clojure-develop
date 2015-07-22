@@ -1,0 +1,66 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_callback_ctrl - internal handling functions for SSL_CTX and SSL objects</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_CTX_ctrl, SSL_CTX_callback_ctrl, SSL_ctrl, SSL_callback_ctrl - internal handling functions for SSL_CTX and SSL objects</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ long SSL_CTX_ctrl(SSL_CTX *ctx, int cmd, long larg, void *parg);
+ long SSL_CTX_callback_ctrl(SSL_CTX *, int cmd, void (*fp)());</pre>
+<pre>
+ long SSL_ctrl(SSL *ssl, int cmd, long larg, void *parg);
+ long SSL_callback_ctrl(SSL *, int cmd, void (*fp)());</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The SSL_*_ctrl() family of functions is used to manipulate settings of
+the SSL_CTX and SSL objects. Depending on the command <strong>cmd</strong> the arguments
+<strong>larg</strong>, <strong>parg</strong>, or <strong>fp</strong> are evaluated. These functions should never
+be called directly. All functionalities needed are made available via
+other functions or macros.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>The return values of the SSL*_ctrl() functions depend on the command
+supplied via the <strong>cmd</strong> parameter.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a></p>
+
+</body>
+
+</html>

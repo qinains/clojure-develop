@@ -1,0 +1,79 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_CTX_get_ex_data - internal application specific data functions</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_CTX_get_ex_new_index, SSL_CTX_set_ex_data, SSL_CTX_get_ex_data - internal application specific data functions</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ int SSL_CTX_get_ex_new_index(long argl, void *argp,
+                CRYPTO_EX_new *new_func,
+                CRYPTO_EX_dup *dup_func,
+                CRYPTO_EX_free *free_func);</pre>
+<pre>
+ int SSL_CTX_set_ex_data(SSL_CTX *ctx, int idx, void *arg);</pre>
+<pre>
+ void *SSL_CTX_get_ex_data(const SSL_CTX *ctx, int idx);</pre>
+<pre>
+ typedef int new_func(void *parent, void *ptr, CRYPTO_EX_DATA *ad,
+                int idx, long argl, void *argp);
+ typedef void free_func(void *parent, void *ptr, CRYPTO_EX_DATA *ad,
+                int idx, long argl, void *argp);
+ typedef int dup_func(CRYPTO_EX_DATA *to, CRYPTO_EX_DATA *from, void *from_d,
+                int idx, long argl, void *argp);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Several OpenSSL structures can have application specific data attached to them.
+These functions are used internally by OpenSSL to manipulate application
+specific data attached to a specific structure.</p>
+<p><code>SSL_CTX_get_ex_new_index()</code> is used to register a new index for application
+specific data.</p>
+<p><code>SSL_CTX_set_ex_data()</code> is used to store application data at <strong>arg</strong> for <strong>idx</strong>
+into the <strong>ctx</strong> object.</p>
+<p><code>SSL_CTX_get_ex_data()</code> is used to retrieve the information for <strong>idx</strong> from
+<strong>ctx</strong>.</p>
+<p>A detailed description for the <strong>*_get_ex_new_index()</strong> functionality
+can be found in <a href="../crypto/RSA_get_ex_new_index.html">RSA_get_ex_new_index</a>.
+The <strong>*_get_ex_data()</strong> and <strong>*_set_ex_data()</strong> functionality is described in
+<a href="../crypto/CRYPTO_set_ex_data.html">CRYPTO_set_ex_data</a>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a>,
+<a href="../crypto/RSA_get_ex_new_index.html">RSA_get_ex_new_index</a>,
+<a href="../crypto/CRYPTO_set_ex_data.html">CRYPTO_set_ex_data</a></p>
+
+</body>
+
+</html>

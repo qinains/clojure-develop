@@ -1,0 +1,163 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>dsaparam - DSA parameter manipulation and generation</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#options">OPTIONS</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>dsaparam - DSA parameter manipulation and generation</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>openssl dsaparam</strong>
+[<strong>-inform DER|PEM</strong>]
+[<strong>-outform DER|PEM</strong>]
+[<strong>-in filename</strong>]
+[<strong>-out filename</strong>]
+[<strong>-noout</strong>]
+[<strong>-text</strong>]
+[<strong>-C</strong>]
+[<strong>-rand file(s)</strong>]
+[<strong>-genkey</strong>]
+[<strong>-engine id</strong>]
+[<strong>numbits</strong>]</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This command is used to manipulate or generate DSA parameter files.</p>
+<p>
+</p>
+<hr />
+<h1><a name="options">OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item__2dinform_der_7cpem"><strong>-inform DER|PEM</strong></a></strong>
+
+<dd>
+<p>This specifies the input format. The <strong>DER</strong> option uses an ASN1 DER encoded
+form compatible with RFC2459 (PKIX) DSS-Parms that is a SEQUENCE consisting
+of p, q and g respectively. The PEM form is the default format: it consists
+of the <strong>DER</strong> format base64 encoded with additional header and footer lines.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2doutform_der_7cpem"><strong>-outform DER|PEM</strong></a></strong>
+
+<dd>
+<p>This specifies the output format, the options have the same meaning as the 
+<strong>-inform</strong> option.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2din_filename"><strong>-in filename</strong></a></strong>
+
+<dd>
+<p>This specifies the input filename to read parameters from or standard input if
+this option is not specified. If the <strong>numbits</strong> parameter is included then
+this option will be ignored.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dout_filename"><strong>-out filename</strong></a></strong>
+
+<dd>
+<p>This specifies the output filename parameters to. Standard output is used
+if this option is not present. The output filename should <strong>not</strong> be the same
+as the input filename.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dnoout"><strong>-noout</strong></a></strong>
+
+<dd>
+<p>this option inhibits the output of the encoded version of the parameters.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dtext"><strong>-text</strong></a></strong>
+
+<dd>
+<p>this option prints out the DSA parameters in human readable form.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dc"><strong>-C</strong></a></strong>
+
+<dd>
+<p>this option converts the parameters into C code. The parameters can then
+be loaded by calling the <strong>get_dsaXXX()</strong> function.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dgenkey"><strong>-genkey</strong></a></strong>
+
+<dd>
+<p>this option will generate a DSA either using the specified or generated
+parameters.</p>
+</dd>
+</li>
+<dt><strong><a name="item_file"><strong>-rand file(s)</strong></a></strong>
+
+<dd>
+<p>a file or files containing random data used to seed the random number
+generator, or an EGD socket (see <a href="../crypto/RAND_egd.html">RAND_egd</a>).
+Multiple files can be specified separated by a OS-dependent character.
+The separator is <strong>;</strong> for MS-Windows, <strong>,</strong> for OpenVMS, and <strong>:</strong> for
+all others.</p>
+</dd>
+</li>
+<dt><strong><a name="item_numbits"><strong>numbits</strong></a></strong>
+
+<dd>
+<p>this option specifies that a parameter set should be generated of size
+<strong>numbits</strong>. It must be the last option. If this option is included then
+the input file (if any) is ignored.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dengine_id"><strong>-engine id</strong></a></strong>
+
+<dd>
+<p>specifying an engine (by its unique <strong>id</strong> string) will cause <strong>dsaparam</strong>
+to attempt to obtain a functional reference to the specified engine,
+thus initialising it if needed. The engine will then be set as the default
+for all available algorithms.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>PEM format DSA parameters use the header and footer lines:</p>
+<pre>
+ -----BEGIN DSA PARAMETERS-----
+ -----END DSA PARAMETERS-----</pre>
+<p>DSA parameter generation is a slow process and as a result the same set of
+DSA parameters is often used to generate several distinct keys.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../apps/gendsa.html">gendsa</a>, <a href="../apps/dsa.html">dsa</a>, <a href="../apps/genrsa.html">genrsa</a>,
+<a href="../apps/rsa.html">rsa</a></p>
+
+</body>
+
+</html>

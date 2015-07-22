@@ -1,0 +1,278 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>genpkey - generate a private key</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#options">OPTIONS</a></li>
+	<li><a href="#key_generation_options">KEY GENERATION OPTIONS</a></li>
+	<li><a href="#rsa_key_generation_options">RSA KEY GENERATION OPTIONS</a></li>
+	<li><a href="#dsa_parameter_generation_options">DSA PARAMETER GENERATION OPTIONS</a></li>
+	<li><a href="#dh_parameter_generation_options">DH PARAMETER GENERATION OPTIONS</a></li>
+	<li><a href="#ec_parameter_generation_options">EC PARAMETER GENERATION OPTIONS</a></li>
+	<li><a href="#gost2001_key_generation_and_parameter_options">GOST2001 KEY GENERATION AND PARAMETER OPTIONS</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>genpkey - generate a private key</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>openssl</strong> <strong>genpkey</strong>
+[<strong>-out filename</strong>]
+[<strong>-outform PEM|DER</strong>]
+[<strong>-pass arg</strong>]
+[<strong>-cipher</strong>]
+[<strong>-engine id</strong>]
+[<strong>-paramfile file</strong>]
+[<strong>-algorithm alg</strong>]
+[<strong>-pkeyopt opt:value</strong>]
+[<strong>-genparam</strong>]
+[<strong>-text</strong>]</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>genpkey</strong> command generates a private key.</p>
+<p>
+</p>
+<hr />
+<h1><a name="options">OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item__2dout_filename"><strong>-out filename</strong></a></strong>
+
+<dd>
+<p>the output filename. If this argument is not specified then standard output is
+used.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2doutform_der_7cpem"><strong>-outform DER|PEM</strong></a></strong>
+
+<dd>
+<p>This specifies the output format DER or PEM.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpass_arg"><strong>-pass arg</strong></a></strong>
+
+<dd>
+<p>the output file password source. For more information about the format of <strong>arg</strong>
+see the <strong>PASS PHRASE ARGUMENTS</strong> section in <a href="../apps/openssl.html">openssl</a>.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dcipher"><strong>-cipher</strong></a></strong>
+
+<dd>
+<p>This option encrypts the private key with the supplied cipher. Any algorithm
+name accepted by <code>EVP_get_cipherbyname()</code> is acceptable such as <strong>des3</strong>.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dengine_id"><strong>-engine id</strong></a></strong>
+
+<dd>
+<p>specifying an engine (by its unique <strong>id</strong> string) will cause <strong>genpkey</strong>
+to attempt to obtain a functional reference to the specified engine,
+thus initialising it if needed. The engine will then be set as the default
+for all available algorithms. If used this option should precede all other
+options.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dalgorithm_alg"><strong>-algorithm alg</strong></a></strong>
+
+<dd>
+<p>public key algorithm to use such as RSA, DSA or DH. If used this option must
+precede any <strong>-pkeyopt</strong> options. The options <strong>-paramfile</strong> and <strong>-algorithm</strong>
+are mutually exclusive.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpkeyopt_opt_3avalue"><strong>-pkeyopt opt:value</strong></a></strong>
+
+<dd>
+<p>set the public key algorithm option <strong>opt</strong> to <strong>value</strong>. The precise set of
+options supported depends on the public key algorithm used and its
+implementation. See <strong>KEY GENERATION OPTIONS</strong> below for more details.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dgenparam"><strong>-genparam</strong></a></strong>
+
+<dd>
+<p>generate a set of parameters instead of a private key. If used this option must
+precede and <strong>-algorithm</strong>, <strong>-paramfile</strong> or <strong>-pkeyopt</strong> options.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dparamfile_filename"><strong>-paramfile filename</strong></a></strong>
+
+<dd>
+<p>Some public key algorithms generate a private key based on a set of parameters.
+They can be supplied using this option. If this option is used the public key
+algorithm used is determined by the parameters. If used this option must
+precede and <strong>-pkeyopt</strong> options. The options <strong>-paramfile</strong> and <strong>-algorithm</strong>
+are mutually exclusive.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dtext"><strong>-text</strong></a></strong>
+
+<dd>
+<p>Print an (unencrypted) text representation of private and public keys and
+parameters along with the PEM or DER structure.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="key_generation_options">KEY GENERATION OPTIONS</a></h1>
+<p>The options supported by each algorith and indeed each implementation of an
+algorithm can vary. The options for the OpenSSL implementations are detailed
+below.</p>
+<p>
+</p>
+<hr />
+<h1><a name="rsa_key_generation_options">RSA KEY GENERATION OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item_rsa_keygen_bits_3anumbits"><strong>rsa_keygen_bits:numbits</strong></a></strong>
+
+<dd>
+<p>The number of bits in the generated key. If not specified 1024 is used.</p>
+</dd>
+</li>
+<dt><strong><a name="item_rsa_keygen_pubexp_3avalue"><strong>rsa_keygen_pubexp:value</strong></a></strong>
+
+<dd>
+<p>The RSA public exponent value. This can be a large decimal or
+hexadecimal value if preceded by <strong>0x</strong>. Default value is 65537.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="dsa_parameter_generation_options">DSA PARAMETER GENERATION OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item_dsa_paramgen_bits_3anumbits"><strong>dsa_paramgen_bits:numbits</strong></a></strong>
+
+<dd>
+<p>The number of bits in the generated parameters. If not specified 1024 is used.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="dh_parameter_generation_options">DH PARAMETER GENERATION OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item_dh_paramgen_prime_len_3anumbits"><strong>dh_paramgen_prime_len:numbits</strong></a></strong>
+
+<dd>
+<p>The number of bits in the prime parameter <strong>p</strong>.</p>
+</dd>
+</li>
+<dt><strong><a name="item_dh_paramgen_generator_3avalue"><strong>dh_paramgen_generator:value</strong></a></strong>
+
+<dd>
+<p>The value to use for the generator <strong>g</strong>.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="ec_parameter_generation_options">EC PARAMETER GENERATION OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item_ec_paramgen_curve_3acurve"><strong>ec_paramgen_curve:curve</strong></a></strong>
+
+<dd>
+<p>the EC curve to use.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="gost2001_key_generation_and_parameter_options">GOST2001 KEY GENERATION AND PARAMETER OPTIONS</a></h1>
+<p>Gost 2001 support is not enabled by default. To enable this algorithm,
+one should load the ccgost engine in the OpenSSL configuration file.
+See README.gost file in the engines/ccgost directiry of the source
+distribution for more details.</p>
+<p>Use of a parameter file for the GOST R 34.10 algorithm is optional.
+Parameters can be specified during key generation directly as well as
+during generation of parameter file.</p>
+<dl>
+<dt><strong><a name="item_paramset_3aname"><strong>paramset:name</strong></a></strong>
+
+<dd>
+<p>Specifies GOST R 34.10-2001 parameter set according to RFC 4357.
+Parameter set can be specified using abbreviated name, object short name or
+numeric OID. Following parameter sets are supported:</p>
+</dd>
+<dd>
+<pre>
+  paramset   OID               Usage
+  A          1.2.643.2.2.35.1  Signature
+  B          1.2.643.2.2.35.2  Signature
+  C          1.2.643.2.2.35.3  Signature
+  XA         1.2.643.2.2.36.0  Key exchange
+  XB         1.2.643.2.2.36.1  Key exchange
+  test       1.2.643.2.2.35.0  Test purposes</pre>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>The use of the genpkey program is encouraged over the algorithm specific
+utilities because additional algorithm options and ENGINE provided algorithms
+can be used.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>Generate an RSA private key using default parameters:</p>
+<pre>
+ openssl genpkey -algorithm RSA -out key.pem</pre>
+<p>Encrypt output private key using 128 bit AES and the passphrase ``hello'':</p>
+<pre>
+ openssl genpkey -algorithm RSA -out key.pem -aes-128-cbc -pass pass:hello</pre>
+<p>Generate a 2048 bit RSA key using 3 as the public exponent:</p>
+<pre>
+ openssl genpkey -algorithm RSA -out key.pem -pkeyopt rsa_keygen_bits:2048 \
+                                                -pkeyopt rsa_keygen_pubexp:3</pre>
+<p>Generate 1024 bit DSA parameters:</p>
+<pre>
+ openssl genpkey -genparam -algorithm DSA -out dsap.pem \
+                                                -pkeyopt dsa_paramgen_bits:1024</pre>
+<p>Generate DSA key from parameters:</p>
+<pre>
+ openssl genpkey -paramfile dsap.pem -out dsakey.pem</pre>
+<p>Generate 1024 bit DH parameters:</p>
+<pre>
+ openssl genpkey -genparam -algorithm DH -out dhp.pem \
+                                        -pkeyopt dh_paramgen_prime_len:1024</pre>
+<p>Generate DH key from parameters:</p>
+<pre>
+ openssl genpkey -paramfile dhp.pem -out dhkey.pem</pre>
+
+</body>
+
+</html>

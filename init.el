@@ -153,7 +153,10 @@
 
 ;;配置clj-refactor,用C-c RET键开启
 (require 'clj-refactor)
-(add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1) (cljr-add-keybindings-with-prefix "C-c RET")))
+(add-hook 'clojure-mode-hook (lambda ()
+                               (clj-refactor-mode 1)
+                               (yas-minor-mode 1) ; for adding require/use/import
+                               (cljr-add-keybindings-with-prefix "C-c RET")))
 (setq cljr-sort-comparator 'cljr--semantic-comparator)
 
 ;;配置cider

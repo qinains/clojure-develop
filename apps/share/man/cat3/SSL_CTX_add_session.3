@@ -1,0 +1,64 @@
+SSL_CTX_add_session(3)              OpenSSL             SSL_CTX_add_session(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_add_session, SSL_add_session, SSL_CTX_remove_session,
+       SSL_remove_session - manipulate session cache
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        int SSL_CTX_add_session(SSL_CTX *ctx, SSL_SESSION *c);
+        int SSL_add_session(SSL_CTX *ctx, SSL_SESSION *c);
+
+        int SSL_CTX_remove_session(SSL_CTX *ctx, SSL_SESSION *c);
+        int SSL_remove_session(SSL_CTX *ctx, SSL_SESSION *c);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___C_T_X___a_d_d___s_e_s_s_i_o_n_(_) adds the session cc to the context ccttxx. The refer-
+       ence count for session cc is incremented by 1. If a session with the
+       same session id already exists, the old session is removed by calling
+       _S_S_L___S_E_S_S_I_O_N___f_r_e_e(3).
+
+       _S_S_L___C_T_X___r_e_m_o_v_e___s_e_s_s_i_o_n_(_) removes the session cc from the context ccttxx.
+       _S_S_L___S_E_S_S_I_O_N___f_r_e_e(3) is called once for cc.
+
+       _S_S_L___a_d_d___s_e_s_s_i_o_n_(_) and _S_S_L___r_e_m_o_v_e___s_e_s_s_i_o_n_(_) are synonyms for their
+       SSL_CTX_*() counterparts.
+
+NNOOTTEESS
+       When adding a new session to the internal session cache, it is examined
+       whether a session with the same session id already exists. In this case
+       it is assumed that both sessions are identical. If the same session is
+       stored in a different SSL_SESSION object, The old session is removed
+       and replaced by the new session. If the session is actually identical
+       (the SSL_SESSION object is identical), _S_S_L___C_T_X___a_d_d___s_e_s_s_i_o_n_(_) is a
+       no-op, and the return value is 0.
+
+       If a server SSL_CTX is configured with the SSL_SESS_CACHE_NO_INTER-
+       NAL_STORE flag then the internal cache will not be populated automati-
+       cally by new sessions negotiated by the SSL/TLS implementation, even
+       though the internal cache will be searched automatically for session-
+       resume requests (the latter can be surpressed by
+       SSL_SESS_CACHE_NO_INTERNAL_LOOKUP). So the application can use
+       _S_S_L___C_T_X___a_d_d___s_e_s_s_i_o_n_(_) directly to have full control over the sessions
+       that can be resumed if desired.
+
+RREETTUURRNN VVAALLUUEESS
+       The following values are returned by all functions:
+
+       0
+            The operation failed. In case of the add operation, it was tried to add
+            the same (identical) session twice. In case of the remove operation, the
+            session was not found in the cache.
+
+       1
+            The operation succeeded.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___C_T_X___s_e_t___s_e_s_s_i_o_n___c_a_c_h_e___m_o_d_e(3), _S_S_L___S_E_S_S_I_O_N___f_r_e_e(3)
+
+
+
+1.0.0g                            2002-10-29            SSL_CTX_add_session(3)

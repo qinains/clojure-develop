@@ -1,0 +1,145 @@
+OBJ_nid2obj(3)                      OpenSSL                     OBJ_nid2obj(3)
+
+
+
+NNAAMMEE
+       OBJ_nid2obj, OBJ_nid2ln, OBJ_nid2sn, OBJ_obj2nid, OBJ_txt2nid,
+       OBJ_ln2nid, OBJ_sn2nid, OBJ_cmp, OBJ_dup, OBJ_txt2obj, OBJ_obj2txt,
+       OBJ_create, OBJ_cleanup - ASN1 object utility functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/objects.h>
+
+        ASN1_OBJECT * OBJ_nid2obj(int n);
+        const char *  OBJ_nid2ln(int n);
+        const char *  OBJ_nid2sn(int n);
+
+        int OBJ_obj2nid(const ASN1_OBJECT *o);
+        int OBJ_ln2nid(const char *ln);
+        int OBJ_sn2nid(const char *sn);
+
+        int OBJ_txt2nid(const char *s);
+
+        ASN1_OBJECT * OBJ_txt2obj(const char *s, int no_name);
+        int OBJ_obj2txt(char *buf, int buf_len, const ASN1_OBJECT *a, int no_name);
+
+        int OBJ_cmp(const ASN1_OBJECT *a,const ASN1_OBJECT *b);
+        ASN1_OBJECT * OBJ_dup(const ASN1_OBJECT *o);
+
+        int OBJ_create(const char *oid,const char *sn,const char *ln);
+        void OBJ_cleanup(void);
+
+DDEESSCCRRIIPPTTIIOONN
+       The ASN1 object utility functions process ASN1_OBJECT structures which
+       are a representation of the ASN1 OBJECT IDENTIFIER (OID) type.
+
+       _O_B_J___n_i_d_2_o_b_j_(_), _O_B_J___n_i_d_2_l_n_(_) and _O_B_J___n_i_d_2_s_n_(_) convert the NID nn to an
+       ASN1_OBJECT structure, its long name and its short name respectively,
+       or NNUULLLL is an error occurred.
+
+       _O_B_J___o_b_j_2_n_i_d_(_), _O_B_J___l_n_2_n_i_d_(_), _O_B_J___s_n_2_n_i_d_(_) return the corresponding NID
+       for the object oo, the long name <ln> or the short name <sn> respec-
+       tively or NID_undef if an error occurred.
+
+       _O_B_J___t_x_t_2_n_i_d_(_) returns NID corresponding to text string <s>. ss can be a
+       long name, a short name or the numerical respresentation of an object.
+
+       _O_B_J___t_x_t_2_o_b_j_(_) converts the text string ss into an ASN1_OBJECT structure.
+       If nnoo__nnaammee is 0 then long names and short names will be interpreted as
+       well as numerical forms. If nnoo__nnaammee is 1 only the numerical form is
+       acceptable.
+
+       _O_B_J___o_b_j_2_t_x_t_(_) converts the AASSNN11__OOBBJJEECCTT aa into a textual representation.
+       The representation is written as a null terminated string to bbuuff at
+       most bbuuff__lleenn bytes are written, truncating the result if necessary.
+       The total amount of space required is returned. If nnoo__nnaammee is 0 then if
+       the object has a long or short name then that will be used, otherwise
+       the numerical form will be used. If nnoo__nnaammee is 1 then the numerical
+       form will always be used.
+
+       _O_B_J___c_m_p_(_) compares aa to bb. If the two are identical 0 is returned.
+
+       _O_B_J___d_u_p_(_) returns a copy of oo.
+
+       _O_B_J___c_r_e_a_t_e_(_) adds a new object to the internal table. ooiidd is the numer-
+       ical form of the object, ssnn the short name and llnn the long name. A new
+       NID is returned for the created object.
+
+       _O_B_J___c_l_e_a_n_u_p_(_) cleans up OpenSSLs internal object table: this should be
+       called before an application exits if any new objects were added using
+       _O_B_J___c_r_e_a_t_e_(_).
+
+NNOOTTEESS
+       Objects in OpenSSL can have a short name, a long name and a numerical
+       identifier (NID) associated with them. A standard set of objects is
+       represented in an internal table. The appropriate values are defined in
+       the header file oobbjjeeccttss..hh.
+
+       For example the OID for commonName has the following definitions:
+
+        #define SN_commonName                   "CN"
+        #define LN_commonName                   "commonName"
+        #define NID_commonName                  13
+
+       New objects can be added by calling _O_B_J___c_r_e_a_t_e_(_).
+
+       Table objects have certain advantages over other objects: for example
+       their NIDs can be used in a C language switch statement. They are also
+       static constant structures which are shared: that is there is only a
+       single constant structure for each table object.
+
+       Objects which are not in the table have the NID value NID_undef.
+
+       Objects do not need to be in the internal tables to be processed, the
+       functions _O_B_J___t_x_t_2_o_b_j_(_) and _O_B_J___o_b_j_2_t_x_t_(_) can process the numerical
+       form of an OID.
+
+EEXXAAMMPPLLEESS
+       Create an object for ccoommmmoonnNNaammee:
+
+        ASN1_OBJECT *o;
+        o = OBJ_nid2obj(NID_commonName);
+
+       Check if an object is ccoommmmoonnNNaammee
+
+        if (OBJ_obj2nid(obj) == NID_commonName)
+               /* Do something */
+
+       Create a new NID and initialize an object from it:
+
+        int new_nid;
+        ASN1_OBJECT *obj;
+        new_nid = OBJ_create("1.2.3.4", "NewOID", "New Object Identifier");
+
+        obj = OBJ_nid2obj(new_nid);
+
+       Create a new object directly:
+
+        obj = OBJ_txt2obj("1.2.3.4", 1);
+
+BBUUGGSS
+       _O_B_J___o_b_j_2_t_x_t_(_) is awkward and messy to use: it doesn't follow the con-
+       vention of other OpenSSL functions where the buffer can be set to NNUULLLL
+       to determine the amount of data that should be written.  Instead bbuuff
+       must point to a valid buffer and bbuuff__lleenn should be set to a positive
+       value. A buffer length of 80 should be more than enough to handle any
+       OID encountered in practice.
+
+RREETTUURRNN VVAALLUUEESS
+       _O_B_J___n_i_d_2_o_b_j_(_) returns an AASSNN11__OOBBJJEECCTT structure or NNUULLLL is an error
+       occurred.
+
+       _O_B_J___n_i_d_2_l_n_(_) and _O_B_J___n_i_d_2_s_n_(_) returns a valid string or NNUULLLL on error.
+
+       _O_B_J___o_b_j_2_n_i_d_(_), _O_B_J___l_n_2_n_i_d_(_), _O_B_J___s_n_2_n_i_d_(_) and _O_B_J___t_x_t_2_n_i_d_(_) return a
+       NID or NNIIDD__uunnddeeff on error.
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3)
+
+HHIISSTTOORRYY
+       TBA
+
+
+
+1.0.0g                            2006-05-14                    OBJ_nid2obj(3)

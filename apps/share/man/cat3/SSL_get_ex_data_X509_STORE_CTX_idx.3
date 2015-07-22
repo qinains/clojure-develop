@@ -1,0 +1,51 @@
+SSL_get_ex_data_X509_STORE_CTX_idx(3)OpenSSSLSL_get_ex_data_X509_STORE_CTX_idx(3)
+
+
+
+NNAAMMEE
+       SSL_get_ex_data_X509_STORE_CTX_idx - get ex_data index to access SSL
+       structure from X509_STORE_CTX
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        int SSL_get_ex_data_X509_STORE_CTX_idx(void);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___g_e_t___e_x___d_a_t_a___X_5_0_9___S_T_O_R_E___C_T_X___i_d_x_(_) returns the index number under
+       which the pointer to the SSL object is stored into the X509_STORE_CTX
+       object.
+
+NNOOTTEESS
+       Whenever a X509_STORE_CTX object is created for the verification of the
+       peers certificate during a handshake, a pointer to the SSL object is
+       stored into the X509_STORE_CTX object to identify the connection
+       affected.  To retrieve this pointer the _X_5_0_9___S_T_O_R_E___C_T_X___g_e_t___e_x___d_a_t_a_(_)
+       function can be used with the correct index. This index is globally the
+       same for all X509_STORE_CTX objects and can be retrieved using
+       _S_S_L___g_e_t___e_x___d_a_t_a___X_5_0_9___S_T_O_R_E___C_T_X___i_d_x_(_). The index value is set when
+       _S_S_L___g_e_t___e_x___d_a_t_a___X_5_0_9___S_T_O_R_E___C_T_X___i_d_x_(_) is first called either by the
+       application program directly or indirectly during other SSL setup func-
+       tions or during the handshake.
+
+       The value depends on other index values defined for X509_STORE_CTX
+       objects before the SSL index is created.
+
+RREETTUURRNN VVAALLUUEESS
+       >=0 The index value to access the pointer.
+
+       <0  An error occurred, check the error stack for a detailed error mes-
+           sage.
+
+EEXXAAMMPPLLEESS
+       The index returned from _S_S_L___g_e_t___e_x___d_a_t_a___X_5_0_9___S_T_O_R_E___C_T_X___i_d_x_(_) allows to
+       access the SSL object for the connection to be accessed during the _v_e_r_-
+       _i_f_y___c_a_l_l_b_a_c_k_(_) when checking the peers certificate. Please check the
+       example in _S_S_L___C_T_X___s_e_t___v_e_r_i_f_y(3),
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___C_T_X___s_e_t___v_e_r_i_f_y(3), _C_R_Y_P_T_O___s_e_t___e_x___d_a_t_a(3)
+
+
+
+1.0.0g                            2001-01-S2S0L_get_ex_data_X509_STORE_CTX_idx(3)

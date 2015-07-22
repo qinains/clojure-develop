@@ -1,0 +1,81 @@
+OPENSSL_config(3)                   OpenSSL                  OPENSSL_config(3)
+
+
+
+NNAAMMEE
+       OPENSSL_config, OPENSSL_no_config - simple OpenSSL configuration func-
+       tions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/conf.h>
+
+        void OPENSSL_config(const char *config_name);
+        void OPENSSL_no_config(void);
+
+DDEESSCCRRIIPPTTIIOONN
+       _O_P_E_N_S_S_L___c_o_n_f_i_g_(_) configures OpenSSL using the standard ooppeennssssll..ccnnff con-
+       figuration file name using ccoonnffiigg__nnaammee. If ccoonnffiigg__nnaammee is NULL then the
+       default name ooppeennssssll__ccoonnff will be used. Any errors are ignored. Further
+       calls to _O_P_E_N_S_S_L___c_o_n_f_i_g_(_) will have no effect. The configuration file
+       format is documented in the _c_o_n_f(5) manual page.
+
+       _O_P_E_N_S_S_L___n_o___c_o_n_f_i_g_(_) disables configuration. If called before
+       _O_P_E_N_S_S_L___c_o_n_f_i_g_(_) no configuration takes place.
+
+NNOOTTEESS
+       It is ssttrroonnggllyy recommended that aallll new applications call _O_P_E_N_S_S_L___c_o_n_-
+       _f_i_g_(_) or the more sophisticated functions such as _C_O_N_F___m_o_d_u_l_e_s___l_o_a_d_(_)
+       during initialization (that is before starting any threads). By doing
+       this an application does not need to keep track of all configuration
+       options and some new functionality can be supported automatically.
+
+       It is also possible to automatically call _O_P_E_N_S_S_L___c_o_n_f_i_g_(_) when an
+       application calls _O_P_E_N_S_S_L___a_d_d___a_l_l___a_l_g_o_r_i_t_h_m_s_(_) by compiling an applica-
+       tion with the preprocessor symbol OOPPEENNSSSSLL__LLOOAADD__CCOONNFF #define'd. In this
+       way configuration can be added without source changes.
+
+       The environment variable OOPPEENNSSSSLL__CCOONNFF can be set to specify the loca-
+       tion of the configuration file.
+
+       Currently ASN1 OBJECTs and ENGINE configuration can be performed future
+       versions of OpenSSL will add new configuration options.
+
+       There are several reasons why calling the OpenSSL configuration rou-
+       tines is advisable. For example new ENGINE functionality was added to
+       OpenSSL 0.9.7.  In OpenSSL 0.9.7 control functions can be supported by
+       ENGINEs, this can be used (among other things) to load dynamic ENGINEs
+       from shared libraries (DSOs).  However very few applications currently
+       support the control interface and so very few can load and use dynamic
+       ENGINEs. Equally in future more sophisticated ENGINEs will require cer-
+       tain control operations to customize them. If an application calls
+       _O_P_E_N_S_S_L___c_o_n_f_i_g_(_) it doesn't need to know or care about ENGINE control
+       operations because they can be performed by editing a configuration
+       file.
+
+       Applications should free up configuration at application closedown by
+       calling _C_O_N_F___m_o_d_u_l_e_s___f_r_e_e_(_).
+
+RREESSTTRRIICCTTIIOONNSS
+       The _O_P_E_N_S_S_L___c_o_n_f_i_g_(_) function is designed to be a very simple "call it
+       and forget it" function. As a result its behaviour is somewhat limited.
+       It ignores all errors silently and it can only load from the standard
+       configuration file location for example.
+
+       It is however mmuucchh better than nothing. Applications which need finer
+       control over their configuration functionality should use the configu-
+       ration functions such as _C_O_N_F___l_o_a_d___m_o_d_u_l_e_s_(_) directly.
+
+RREETTUURRNN VVAALLUUEESS
+       Neither _O_P_E_N_S_S_L___c_o_n_f_i_g_(_) nor _O_P_E_N_S_S_L___n_o___c_o_n_f_i_g_(_) return a value.
+
+SSEEEE AALLSSOO
+       _c_o_n_f(5), _C_O_N_F___l_o_a_d___m_o_d_u_l_e_s___f_i_l_e(3), _C_O_N_F___m_o_d_u_l_e_s___f_r_e_e(3),_C_O_N_F___m_o_d_-
+       _u_l_e_s___f_r_e_e(3)
+
+HHIISSTTOORRYY
+       _O_P_E_N_S_S_L___c_o_n_f_i_g_(_) and _O_P_E_N_S_S_L___n_o___c_o_n_f_i_g_(_) first appeared in OpenSSL
+       0.9.7
+
+
+
+1.0.0g                            2005-06-03                 OPENSSL_config(3)

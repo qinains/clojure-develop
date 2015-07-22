@@ -1,0 +1,79 @@
+EVP_SealInit(3)                     OpenSSL                    EVP_SealInit(3)
+
+
+
+NNAAMMEE
+       EVP_SealInit, EVP_SealUpdate, EVP_SealFinal - EVP envelope encryption
+
+SSYYNNOOPPSSIISS
+        #include <openssl/evp.h>
+
+        int EVP_SealInit(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type,
+                         unsigned char **ek, int *ekl, unsigned char *iv,
+                         EVP_PKEY **pubk, int npubk);
+        int EVP_SealUpdate(EVP_CIPHER_CTX *ctx, unsigned char *out,
+                int *outl, unsigned char *in, int inl);
+        int EVP_SealFinal(EVP_CIPHER_CTX *ctx, unsigned char *out,
+                int *outl);
+
+DDEESSCCRRIIPPTTIIOONN
+       The EVP envelope routines are a high level interface to envelope
+       encryption. They generate a random key and IV (if required) then "enve-
+       lope" it by using public key encryption. Data can then be encrypted
+       using this key.
+
+       _E_V_P___S_e_a_l_I_n_i_t_(_) initializes a cipher context ccttxx for encryption with
+       cipher ttyyppee using a random secret key and IV. ttyyppee is normally supplied
+       by a function such as _E_V_P___d_e_s___c_b_c_(_). The secret key is encrypted using
+       one or more public keys, this allows the same encrypted data to be
+       decrypted using any of the corresponding private keys. eekk is an array
+       of buffers where the public key encrypted secret key will be written,
+       each buffer must contain enough room for the corresponding encrypted
+       key: that is eekk[[ii]] must have room for EEVVPP__PPKKEEYY__ssiizzee((ppuubbkk[[ii]])) bytes. The
+       actual size of each encrypted secret key is written to the array eekkll.
+       ppuubbkk is an array of nnppuubbkk public keys.
+
+       The iivv parameter is a buffer where the generated IV is written to. It
+       must contain enough room for the corresponding cipher's IV, as deter-
+       mined by (for example) EVP_CIPHER_iv_length(type).
+
+       If the cipher does not require an IV then the iivv parameter is ignored
+       and can be NNUULLLL.
+
+       _E_V_P___S_e_a_l_U_p_d_a_t_e_(_) and _E_V_P___S_e_a_l_F_i_n_a_l_(_) have exactly the same properties
+       as the _E_V_P___E_n_c_r_y_p_t_U_p_d_a_t_e_(_) and _E_V_P___E_n_c_r_y_p_t_F_i_n_a_l_(_) routines, as docu-
+       mented on the _E_V_P___E_n_c_r_y_p_t_I_n_i_t(3) manual page.
+
+RREETTUURRNN VVAALLUUEESS
+       _E_V_P___S_e_a_l_I_n_i_t_(_) returns 0 on error or nnppuubbkk if successful.
+
+       _E_V_P___S_e_a_l_U_p_d_a_t_e_(_) and _E_V_P___S_e_a_l_F_i_n_a_l_(_) return 1 for success and 0 for
+       failure.
+
+NNOOTTEESS
+       Because a random secret key is generated the random number generator
+       must be seeded before calling _E_V_P___S_e_a_l_I_n_i_t_(_).
+
+       The public key must be RSA because it is the only OpenSSL public key
+       algorithm that supports key transport.
+
+       Envelope encryption is the usual method of using public key encryption
+       on large amounts of data, this is because public key encryption is slow
+       but symmetric encryption is fast. So symmetric encryption is used for
+       bulk encryption and the small random symmetric key used is transferred
+       using public key encryption.
+
+       It is possible to call _E_V_P___S_e_a_l_I_n_i_t_(_) twice in the same way as
+       _E_V_P___E_n_c_r_y_p_t_I_n_i_t_(_). The first call should have nnppuubbkk set to 0 and (after
+       setting any cipher parameters) it should be called again with ttyyppee set
+       to NULL.
+
+SSEEEE AALLSSOO
+       _e_v_p(3), _r_a_n_d(3), _E_V_P___E_n_c_r_y_p_t_I_n_i_t(3), _E_V_P___O_p_e_n_I_n_i_t(3)
+
+HHIISSTTOORRYY
+       _E_V_P___S_e_a_l_F_i_n_a_l_(_) did not return a value before OpenSSL 0.9.7.
+
+
+
+1.0.0g                            2005-03-29                   EVP_SealInit(3)

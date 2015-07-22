@@ -1,0 +1,69 @@
+CMS_compress(3)                     OpenSSL                    CMS_compress(3)
+
+
+
+NNAAMMEE
+       CMS_compress - create a CMS CompressedData structure
+
+SSYYNNOOPPSSIISS
+        #include <openssl/cms.h>
+
+        CMS_ContentInfo *CMS_compress(BIO *in, int comp_nid, unsigned int flags);
+
+DDEESSCCRRIIPPTTIIOONN
+       _C_M_S___c_o_m_p_r_e_s_s_(_) creates and returns a CMS CompressedData structure.
+       ccoommpp__nniidd is the compression algorithm to use or NNIIDD__uunnddeeff to use the
+       default algorithm (zlib compression). iinn is the content to be com-
+       pressed.  ffllaaggss is an optional set of flags.
+
+NNOOTTEESS
+       The only currently supported compression algorithm is zlib using the
+       NID NID_zlib_compression.
+
+       If zlib support is not compiled into OpenSSL then _C_M_S___c_o_m_p_r_e_s_s_(_) will
+       return an error.
+
+       If the CCMMSS__TTEEXXTT flag is set MIME headers for type tteexxtt//ppllaaiinn are
+       prepended to the data.
+
+       Normally the supplied content is translated into MIME canonical format
+       (as required by the S/MIME specifications) if CCMMSS__BBIINNAARRYY is set no
+       translation occurs. This option should be used if the supplied data is
+       in binary format otherwise the translation will corrupt it. If
+       CCMMSS__BBIINNAARRYY is set then CCMMSS__TTEEXXTT is ignored.
+
+       If the CCMMSS__SSTTRREEAAMM flag is set a partial CCMMSS__CCoonntteennttIInnffoo structure is
+       returned suitable for streaming I/O: no data is read from the BIO iinn.
+
+       The compressed data is included in the CMS_ContentInfo structure,
+       unless CCMMSS__DDEETTAACCHHEEDD is set in which case it is omitted. This is rarely
+       used in practice and is not supported by _S_M_I_M_E___w_r_i_t_e___C_M_S_(_).
+
+NNOOTTEESS
+       If the flag CCMMSS__SSTTRREEAAMM is set the returned CCMMSS__CCoonntteennttIInnffoo structure is
+       nnoott complete and outputting its contents via a function that does not
+       properly finalize the CCMMSS__CCoonntteennttIInnffoo structure will give unpredictable
+       results.
+
+       Several functions including _S_M_I_M_E___w_r_i_t_e___C_M_S_(_), _i_2_d___C_M_S___b_i_o___s_t_r_e_a_m_(_),
+       _P_E_M___w_r_i_t_e___b_i_o___C_M_S___s_t_r_e_a_m_(_) finalize the structure. Alternatively final-
+       ization can be performed by obtaining the streaming ASN1 BBIIOO directly
+       using _B_I_O___n_e_w___C_M_S_(_).
+
+       Additional compression parameters such as the zlib compression level
+       cannot currently be set.
+
+RREETTUURRNN VVAALLUUEESS
+       _C_M_S___c_o_m_p_r_e_s_s_(_) returns either a CMS_ContentInfo structure or NULL if an
+       error occurred. The error can be obtained from _E_R_R___g_e_t___e_r_r_o_r(3).
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _C_M_S___u_n_c_o_m_p_r_e_s_s(3)
+
+HHIISSTTOORRYY
+       _C_M_S___c_o_m_p_r_e_s_s_(_) was added to OpenSSL 0.9.8 The CCMMSS__SSTTRREEAAMM flag was first
+       supported in OpenSSL 1.0.0.
+
+
+
+1.0.0g                            2009-10-01                   CMS_compress(3)

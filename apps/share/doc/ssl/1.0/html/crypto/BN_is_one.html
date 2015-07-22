@@ -1,0 +1,79 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>BN_is_odd - BIGNUM comparison and test functions</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>BN_cmp, BN_ucmp, BN_is_zero, BN_is_one, BN_is_word, BN_is_odd - BIGNUM comparison and test functions</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/bn.h&gt;</pre>
+<pre>
+ int BN_cmp(BIGNUM *a, BIGNUM *b);
+ int BN_ucmp(BIGNUM *a, BIGNUM *b);</pre>
+<pre>
+ int BN_is_zero(BIGNUM *a);
+ int BN_is_one(BIGNUM *a);
+ int BN_is_word(BIGNUM *a, BN_ULONG w);
+ int BN_is_odd(BIGNUM *a);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>BN_cmp()</code> compares the numbers <strong>a</strong> and <strong>b</strong>. <code>BN_ucmp()</code> compares their
+absolute values.</p>
+<p>BN_is_zero(), <code>BN_is_one()</code> and <code>BN_is_word()</code> test if <strong>a</strong> equals 0, 1,
+or <strong>w</strong> respectively. <code>BN_is_odd()</code> tests if a is odd.</p>
+<p>BN_is_zero(), BN_is_one(), <code>BN_is_word()</code> and <code>BN_is_odd()</code> are macros.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>BN_cmp()</code> returns -1 if <strong>a</strong> &lt; <strong>b</strong>, 0 if <strong>a</strong> == <strong>b</strong> and 1 if
+<strong>a</strong> &gt; <strong>b</strong>. <code>BN_ucmp()</code> is the same using the absolute values
+of <strong>a</strong> and <strong>b</strong>.</p>
+<p>BN_is_zero(), <code>BN_is_one()</code> <code>BN_is_word()</code> and <code>BN_is_odd()</code> return 1 if
+the condition is true, 0 otherwise.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../crypto/bn.html">bn</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>BN_cmp(), BN_ucmp(), BN_is_zero(), <code>BN_is_one()</code> and <code>BN_is_word()</code> are
+available in all versions of SSLeay and OpenSSL.
+<code>BN_is_odd()</code> was added in SSLeay 0.8.</p>
+
+</body>
+
+</html>

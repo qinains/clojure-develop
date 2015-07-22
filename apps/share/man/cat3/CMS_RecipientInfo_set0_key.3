@@ -1,0 +1,108 @@
+CMS_get0_RecipientInfos(3)          OpenSSL         CMS_get0_RecipientInfos(3)
+
+
+
+NNAAMMEE
+        CMS_get0_RecipientInfos, CMS_RecipientInfo_type, CMS_RecipientInfo_ktri_get0_signer_id,CMS_RecipientInfo_ktri_cert_cmp, CMS_RecipientInfo_set0_pkey, CMS_RecipientInfo_kekri_get0_id, CMS_RecipientInfo_kekri_id_cmp, CMS_RecipientInfo_set0_key, CMS_RecipientInfo_decrypt - CMS envelopedData RecipientInfo routines
+
+SSYYNNOOPPSSIISS
+        #include <openssl/cms.h>
+
+        STACK_OF(CMS_RecipientInfo) *CMS_get0_RecipientInfos(CMS_ContentInfo *cms);
+        int CMS_RecipientInfo_type(CMS_RecipientInfo *ri);
+
+        int CMS_RecipientInfo_ktri_get0_signer_id(CMS_RecipientInfo *ri, ASN1_OCTET_STRING **keyid, X509_NAME **issuer, ASN1_INTEGER **sno);
+        int CMS_RecipientInfo_ktri_cert_cmp(CMS_RecipientInfo *ri, X509 *cert);
+        int CMS_RecipientInfo_set0_pkey(CMS_RecipientInfo *ri, EVP_PKEY *pkey);
+
+        int CMS_RecipientInfo_kekri_get0_id(CMS_RecipientInfo *ri, X509_ALGOR **palg, ASN1_OCTET_STRING **pid, ASN1_GENERALIZEDTIME **pdate, ASN1_OBJECT **potherid, ASN1_TYPE **pothertype);
+        int CMS_RecipientInfo_kekri_id_cmp(CMS_RecipientInfo *ri, const unsigned char *id, size_t idlen);
+        int CMS_RecipientInfo_set0_key(CMS_RecipientInfo *ri, unsigned char *key, size_t keylen);
+
+        int CMS_RecipientInfo_decrypt(CMS_ContentInfo *cms, CMS_RecipientInfo *ri);
+
+DDEESSCCRRIIPPTTIIOONN
+       The function _C_M_S___g_e_t_0___R_e_c_i_p_i_e_n_t_I_n_f_o_s_(_) returns all the CMS_Recipi-
+       entInfo structures associated with a CMS EnvelopedData structure.
+
+       _C_M_S___R_e_c_i_p_i_e_n_t_I_n_f_o___t_y_p_e_(_) returns the type of CMS_RecipientInfo struc-
+       ture rrii.  It will currently return CMS_RECIPINFO_TRANS, CMS_RECIP-
+       INFO_AGREE, CMS_RECIPINFO_KEK, CMS_RECIPINFO_PASS, or CMS_RECIP-
+       INFO_OTHER.
+
+       _C_M_S___R_e_c_i_p_i_e_n_t_I_n_f_o___k_t_r_i___g_e_t_0___s_i_g_n_e_r___i_d_(_) retrieves the certificate
+       recipient identifier associated with a specific CMS_RecipientInfo
+       structure rrii, which must be of type CMS_RECIPINFO_TRANS. Either the
+       keyidentifier will be set in kkeeyyiidd or bbootthh issuer name and serial num-
+       ber in iissssuueerr and ssnnoo.
+
+       _C_M_S___R_e_c_i_p_i_e_n_t_I_n_f_o___k_t_r_i___c_e_r_t___c_m_p_(_) compares the certificate cceerrtt against
+       the CMS_RecipientInfo structure rrii, which must be of type CMS_RECIP-
+       INFO_TRANS.  It returns zero if the comparison is successful and non
+       zero if not.
+
+       _C_M_S___R_e_c_i_p_i_e_n_t_I_n_f_o___s_e_t_0___p_k_e_y_(_) associates the private key ppkkeeyy with the
+       CMS_RecipientInfo structure rrii, which must be of type CMS_RECIP-
+       INFO_TRANS.
+
+       _C_M_S___R_e_c_i_p_i_e_n_t_I_n_f_o___k_e_k_r_i___g_e_t_0___i_d_(_) retrieves the key information from
+       the CMS_RecipientInfo structure rrii which must be of type CMS_RECIP-
+       INFO_KEK.  Any of the remaining parameters can be NULL if the applica-
+       tion is not interested in the value of a field. Where a field is
+       optional and absent NULL will be written to the corresponding parame-
+       ter. The keyEncryptionAlgorithm field is written to ppaallgg, the kkeeyyIIddeenn--
+       ttiiffiieerr field is written to ppiidd, the ddaattee field if present is written to
+       ppddaattee, if the ootthheerr field is present the components kkeeyyAAttttrrIIdd and kkeeyy--
+       AAttttrr are written to parameters ppootthheerriidd and ppootthheerrttyyppee.
+
+       _C_M_S___R_e_c_i_p_i_e_n_t_I_n_f_o___k_e_k_r_i___i_d___c_m_p_(_) compares the ID in the iidd and iiddlleenn
+       parameters against the kkeeyyIIddeennttiiffiieerr CMS_RecipientInfo structure rrii,
+       which must be of type CMS_RECIPINFO_KEK.  It returns zero if the com-
+       parison is successful and non zero if not.
+
+       _C_M_S___R_e_c_i_p_i_e_n_t_I_n_f_o___s_e_t_0___k_e_y_(_) associates the symmetric key kkeeyy of length
+       kkeeyylleenn with the CMS_RecipientInfo structure rrii, which must be of type
+       CMS_RECIPINFO_KEK.
+
+       _C_M_S___R_e_c_i_p_i_e_n_t_I_n_f_o___d_e_c_r_y_p_t_(_) attempts to decrypt CMS_RecipientInfo
+       structure rrii in structure ccmmss. A key must have been associated with the
+       structure first.
+
+NNOOTTEESS
+       The main purpose of these functions is to enable an application to
+       lookup recipient keys using any appropriate technique when the simpler
+       method of _C_M_S___d_e_c_r_y_p_t_(_) is not appropriate.
+
+       In typical usage and application will retrieve all CMS_RecipientInfo
+       structures using _C_M_S___g_e_t_0___R_e_c_i_p_i_e_n_t_I_n_f_o_s_(_) and check the type of each
+       using _C_M_S___R_e_c_p_i_e_n_t_I_n_f_o___t_y_p_e_(_). Depending on the type the CMS_Recipi-
+       entInfo structure can be ignored or its key identifier data retrieved
+       using an appropriate function. Then if the corresponding secret or pri-
+       vate key can be obtained by any appropriate means it can then associ-
+       ated with the structure and _C_M_S___R_e_c_p_i_e_n_t_I_n_f_o___d_e_c_r_y_p_t_(_) called. If suc-
+       cessful _C_M_S___d_e_c_r_y_p_t_(_) can be called with a NULL key to decrypt the
+       enveloped content.
+
+RREETTUURRNN VVAALLUUEESS
+       _C_M_S___g_e_t_0___R_e_c_i_p_i_e_n_t_I_n_f_o_s_(_) returns all CMS_RecipientInfo structures, or
+       NULL if an error occurs.
+
+       _C_M_S___R_e_c_i_p_i_e_n_t_I_n_f_o___k_t_r_i___g_e_t_0___s_i_g_n_e_r___i_d_(_), _C_M_S___R_e_c_i_p_i_e_n_t_I_n_f_o___s_e_t_0___p_k_e_y_(_),
+       _C_M_S___R_e_c_i_p_i_e_n_t_I_n_f_o___k_e_k_r_i___g_e_t_0___i_d_(_), _C_M_S___R_e_c_i_p_i_e_n_t_I_n_f_o___s_e_t_0___k_e_y_(_) and
+       _C_M_S___R_e_c_i_p_i_e_n_t_I_n_f_o___d_e_c_r_y_p_t_(_) return 1 for success or 0 if an error
+       occurs.
+
+       _C_M_S___R_e_c_i_p_i_e_n_t_I_n_f_o___k_t_r_i___c_e_r_t___c_m_p_(_) and _C_M_S___R_e_c_i_p_i_e_n_t_I_n_f_o___k_e_k_r_i___c_m_p_(_)
+       return 0 for a successful comparison and non zero otherwise.
+
+       Any error can be obtained from _E_R_R___g_e_t___e_r_r_o_r(3).
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _C_M_S___d_e_c_r_y_p_t(3)
+
+HHIISSTTOORRYY
+       These functions were first was added to OpenSSL 0.9.8
+
+
+
+1.0.0g                            2008-04-11        CMS_get0_RecipientInfos(3)

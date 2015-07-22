@@ -1,0 +1,87 @@
+BN_generate_prime(3)                OpenSSL               BN_generate_prime(3)
+
+
+
+NNAAMMEE
+       BN_generate_prime, BN_is_prime, BN_is_prime_fasttest - generate primes
+       and test for primality
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bn.h>
+
+        BIGNUM *BN_generate_prime(BIGNUM *ret, int num, int safe, BIGNUM *add,
+            BIGNUM *rem, void (*callback)(int, int, void *), void *cb_arg);
+
+        int BN_is_prime(const BIGNUM *a, int checks, void (*callback)(int, int,
+            void *), BN_CTX *ctx, void *cb_arg);
+
+        int BN_is_prime_fasttest(const BIGNUM *a, int checks,
+            void (*callback)(int, int, void *), BN_CTX *ctx, void *cb_arg,
+            int do_trial_division);
+
+DDEESSCCRRIIPPTTIIOONN
+       _B_N___g_e_n_e_r_a_t_e___p_r_i_m_e_(_) generates a pseudo-random prime number of nnuumm bits.
+       If rreett is not NNUULLLL, it will be used to store the number.
+
+       If ccaallllbbaacckk is not NNUULLLL, it is called as follows:
+
+       +o   ccaallllbbaacckk((00,, ii,, ccbb__aarrgg)) is called after generating the i-th poten-
+           tial prime number.
+
+       +o   While the number is being tested for primality, ccaallllbbaacckk((11,, jj,,
+           ccbb__aarrgg)) is called as described below.
+
+       +o   When a prime has been found, ccaallllbbaacckk((22,, ii,, ccbb__aarrgg)) is called.
+
+       The prime may have to fulfill additional requirements for use in
+       Diffie-Hellman key exchange:
+
+       If aadddd is not NNUULLLL, the prime will fulfill the condition p % aadddd == rreemm
+       (p % aadddd == 1 if rreemm == NNUULLLL) in order to suit a given generator.
+
+       If ssaaffee is true, it will be a safe prime (i.e. a prime p so that
+       (p-1)/2 is also prime).
+
+       The PRNG must be seeded prior to calling _B_N___g_e_n_e_r_a_t_e___p_r_i_m_e_(_).  The
+       prime number generation has a negligible error probability.
+
+       _B_N___i_s___p_r_i_m_e_(_) and _B_N___i_s___p_r_i_m_e___f_a_s_t_t_e_s_t_(_) test if the number aa is prime.
+       The following tests are performed until one of them shows that aa is
+       composite; if aa passes all these tests, it is considered prime.
+
+       _B_N___i_s___p_r_i_m_e___f_a_s_t_t_e_s_t_(_), when called with ddoo__ttrriiaall__ddiivviissiioonn ==== 11, first
+       attempts trial division by a number of small primes; if no divisors are
+       found by this test and ccaallllbbaacckk is not NNUULLLL, ccaallllbbaacckk((11,, --11,, ccbb__aarrgg)) is
+       called.  If ddoo__ttrriiaall__ddiivviissiioonn ==== 00, this test is skipped.
+
+       Both _B_N___i_s___p_r_i_m_e_(_) and _B_N___i_s___p_r_i_m_e___f_a_s_t_t_e_s_t_(_) perform a Miller-Rabin
+       probabilistic primality test with cchheecckkss iterations. If cchheecckkss ====
+       BBNN__pprriimmee__cchheecckkss, a number of iterations is used that yields a false
+       positive rate of at most 2^-80 for random input.
+
+       If ccaallllbbaacckk is not NNUULLLL, ccaallllbbaacckk((11,, jj,, ccbb__aarrgg)) is called after the
+       j-th iteration (j = 0, 1, ...). ccttxx is a pre-allocated BBNN__CCTTXX (to save
+       the overhead of allocating and freeing the structure in a loop), or
+       NNUULLLL.
+
+RREETTUURRNN VVAALLUUEESS
+       _B_N___g_e_n_e_r_a_t_e___p_r_i_m_e_(_) returns the prime number on success, NNUULLLL other-
+       wise.
+
+       _B_N___i_s___p_r_i_m_e_(_) returns 0 if the number is composite, 1 if it is prime
+       with an error probability of less than 0.25^cchheecckkss, and -1 on error.
+
+       The error codes can be obtained by _E_R_R___g_e_t___e_r_r_o_r(3).
+
+SSEEEE AALLSSOO
+       _b_n(3), _E_R_R___g_e_t___e_r_r_o_r(3), _r_a_n_d(3)
+
+HHIISSTTOORRYY
+       The ccbb__aarrgg arguments to _B_N___g_e_n_e_r_a_t_e___p_r_i_m_e_(_) and to _B_N___i_s___p_r_i_m_e_(_) were
+       added in SSLeay 0.9.0. The rreett argument to _B_N___g_e_n_e_r_a_t_e___p_r_i_m_e_(_) was
+       added in SSLeay 0.9.1.  _B_N___i_s___p_r_i_m_e___f_a_s_t_t_e_s_t_(_) was added in OpenSSL
+       0.9.5.
+
+
+
+1.0.0g                            2003-01-13              BN_generate_prime(3)

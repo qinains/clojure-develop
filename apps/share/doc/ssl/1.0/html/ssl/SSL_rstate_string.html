@@ -1,0 +1,97 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_rstate_string_long - get textual description of state of an SSL object during read operation</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_rstate_string, SSL_rstate_string_long - get textual description of state of an SSL object during read operation</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ const char *SSL_rstate_string(SSL *ssl);
+ const char *SSL_rstate_string_long(SSL *ssl);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_rstate_string()</code> returns a 2 letter string indicating the current read state
+of the SSL object <strong>ssl</strong>.</p>
+<p><code>SSL_rstate_string_long()</code> returns a string indicating the current read state of
+the SSL object <strong>ssl</strong>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>When performing a read operation, the SSL/TLS engine must parse the record,
+consisting of header and body. When working in a blocking environment,
+SSL_rstate_string[_long]() should always return ``RD''/``read done''.</p>
+<p>This function should only seldom be needed in applications.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>SSL_rstate_string()</code> and <code>SSL_rstate_string_long()</code> can return the following
+values:</p>
+<dl>
+<dt><strong><a name="item__22rh_22_2f_22read_header_22">``RH''/``read header''</a></strong>
+
+<dd>
+<p>The header of the record is being evaluated.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22rb_22_2f_22read_body_22">``RB''/``read body''</a></strong>
+
+<dd>
+<p>The body of the record is being evaluated.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22rd_22_2f_22read_done_22">``RD''/``read done''</a></strong>
+
+<dd>
+<p>The record has been completely processed.</p>
+</dd>
+</li>
+<dt><strong><a name="item__22unknown_22_2f_22unknown_22">``unknown''/``unknown''</a></strong>
+
+<dd>
+<p>The read state is unknown. This should never happen.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a></p>
+
+</body>
+
+</html>

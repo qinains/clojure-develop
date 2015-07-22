@@ -1,0 +1,82 @@
+d2i_DSAPublicKey(3)                 OpenSSL                d2i_DSAPublicKey(3)
+
+
+
+NNAAMMEE
+       d2i_DSAPublicKey, i2d_DSAPublicKey, d2i_DSAPrivateKey, i2d_DSAPri-
+       vateKey, d2i_DSA_PUBKEY, i2d_DSA_PUBKEY, d2i_DSA_SIG, i2d_DSA_SIG - DSA
+       key encoding and parsing functions.
+
+SSYYNNOOPPSSIISS
+        #include <openssl/dsa.h>
+        #include <openssl/x509.h>
+
+        DSA * d2i_DSAPublicKey(DSA **a, const unsigned char **pp, long length);
+
+        int i2d_DSAPublicKey(const DSA *a, unsigned char **pp);
+
+        DSA * d2i_DSA_PUBKEY(DSA **a, const unsigned char **pp, long length);
+
+        int i2d_DSA_PUBKEY(const DSA *a, unsigned char **pp);
+
+        DSA * d2i_DSAPrivateKey(DSA **a, const unsigned char **pp, long length);
+
+        int i2d_DSAPrivateKey(const DSA *a, unsigned char **pp);
+
+        DSA * d2i_DSAparams(DSA **a, const unsigned char **pp, long length);
+
+        int i2d_DSAparams(const DSA *a, unsigned char **pp);
+
+        DSA * d2i_DSA_SIG(DSA_SIG **a, const unsigned char **pp, long length);
+
+        int i2d_DSA_SIG(const DSA_SIG *a, unsigned char **pp);
+
+DDEESSCCRRIIPPTTIIOONN
+       _d_2_i___D_S_A_P_u_b_l_i_c_K_e_y_(_) and _i_2_d___D_S_A_P_u_b_l_i_c_K_e_y_(_) decode and encode the DSA
+       public key components structure.
+
+       _d_2_i___D_S_A___P_U_B_K_E_Y_(_) and _i_2_d___D_S_A___P_U_B_K_E_Y_(_) decode and encode an DSA public
+       key using a SubjectPublicKeyInfo (certificate public key) structure.
+
+       _d_2_i___D_S_A_P_r_i_v_a_t_e_K_e_y_(_), _i_2_d___D_S_A_P_r_i_v_a_t_e_K_e_y_(_) decode and encode the DSA pri-
+       vate key components.
+
+       _d_2_i___D_S_A_p_a_r_a_m_s_(_), _i_2_d___D_S_A_p_a_r_a_m_s_(_) decode and encode the DSA parameters
+       using a DDssss--PPaarrmmss structure as defined in RFC2459.
+
+       _d_2_i___D_S_A___S_I_G_(_), _i_2_d___D_S_A___S_I_G_(_) decode and encode a DSA signature using a
+       DDssss--SSiigg--VVaalluuee structure as defined in RFC2459.
+
+       The usage of all of these functions is similar to the _d_2_i___X_5_0_9_(_) and
+       _i_2_d___X_5_0_9_(_) described in the _d_2_i___X_5_0_9(3) manual page.
+
+NNOOTTEESS
+       The DDSSAA structure passed to the private key encoding functions should
+       have all the private key components present.
+
+       The data encoded by the private key functions is unencrypted and there-
+       fore offers no private key security.
+
+       The DDSSAA__PPUUBBKKEEYY functions should be used in preference to the DDSSAAPPuubb--
+       lliiccKKeeyy functions when encoding public keys because they use a standard
+       format.
+
+       The DDSSAAPPuubblliiccKKeeyy functions use an non standard format the actual data
+       encoded depends on the value of the wwrriittee__ppaarraammss field of the aa key
+       parameter.  If wwrriittee__ppaarraammss is zero then only the ppuubb__kkeeyy field is
+       encoded as an IINNTTEEGGEERR. If wwrriittee__ppaarraammss is 1 then a SSEEQQUUEENNCCEE consisting
+       of the pp, qq, gg and ppuubb__kkeeyy respectively fields are encoded.
+
+       The DDSSAAPPrriivvaatteeKKeeyy functions also use a non standard structure consiting
+       consisting of a SEQUENCE containing the pp, qq, gg and ppuubb__kkeeyy and
+       pprriivv__kkeeyy fields respectively.
+
+SSEEEE AALLSSOO
+       _d_2_i___X_5_0_9(3)
+
+HHIISSTTOORRYY
+       TBA
+
+
+
+1.0.0g                            2003-12-10               d2i_DSAPublicKey(3)

@@ -1,0 +1,83 @@
+SSL_CTX_sess_set_get_cb(3)          OpenSSL         SSL_CTX_sess_set_get_cb(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_sess_set_new_cb, SSL_CTX_sess_set_remove_cb,
+       SSL_CTX_sess_set_get_cb, SSL_CTX_sess_get_new_cb,
+       SSL_CTX_sess_get_remove_cb, SSL_CTX_sess_get_get_cb - provide callback
+       functions for server side external session caching
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        void SSL_CTX_sess_set_new_cb(SSL_CTX *ctx,
+                                     int (*new_session_cb)(SSL *, SSL_SESSION *));
+        void SSL_CTX_sess_set_remove_cb(SSL_CTX *ctx,
+                  void (*remove_session_cb)(SSL_CTX *ctx, SSL_SESSION *));
+        void SSL_CTX_sess_set_get_cb(SSL_CTX *ctx,
+                  SSL_SESSION (*get_session_cb)(SSL *, unsigned char *, int, int *));
+
+        int (*SSL_CTX_sess_get_new_cb(SSL_CTX *ctx))(struct ssl_st *ssl, SSL_SESSION *sess);
+        void (*SSL_CTX_sess_get_remove_cb(SSL_CTX *ctx))(struct ssl_ctx_st *ctx, SSL_SESSION *sess);
+        SSL_SESSION *(*SSL_CTX_sess_get_get_cb(SSL_CTX *ctx))(struct ssl_st *ssl, unsigned char *data, int len, int *copy);
+
+        int (*new_session_cb)(struct ssl_st *ssl, SSL_SESSION *sess);
+        void (*remove_session_cb)(struct ssl_ctx_st *ctx, SSL_SESSION *sess);
+        SSL_SESSION *(*get_session_cb)(struct ssl_st *ssl, unsigned char *data,
+                      int len, int *copy);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___C_T_X___s_e_s_s___s_e_t___n_e_w___c_b_(_) sets the callback function, which is automat-
+       ically called whenever a new session was negotiated.
+
+       _S_S_L___C_T_X___s_e_s_s___s_e_t___r_e_m_o_v_e___c_b_(_) sets the callback function, which is auto-
+       matically called whenever a session is removed by the SSL engine,
+       because it is considered faulty or the session has become obsolete
+       because of exceeding the timeout value.
+
+       _S_S_L___C_T_X___s_e_s_s___s_e_t___g_e_t___c_b_(_) sets the callback function which is called,
+       whenever a SSL/TLS client proposed to resume a session but the session
+       could not be found in the internal session cache (see _S_S_L___C_T_X___s_e_t___s_e_s_-
+       _s_i_o_n___c_a_c_h_e___m_o_d_e(3)).  (SSL/TLS server only.)
+
+       _S_S_L___C_T_X___s_e_s_s___g_e_t___n_e_w___c_b_(_), _S_S_L___C_T_X___s_e_s_s___g_e_t___r_e_m_o_v_e___c_b_(_), and
+       _S_S_L___C_T_X___s_e_s_s___g_e_t___g_e_t___c_b_(_) allow to retrieve the function pointers of
+       the provided callback functions. If a callback function has not been
+       set, the NULL pointer is returned.
+
+NNOOTTEESS
+       In order to allow external session caching, synchronization with the
+       internal session cache is realized via callback functions. Inside these
+       callback functions, session can be saved to disk or put into a database
+       using the _d_2_i___S_S_L___S_E_S_S_I_O_N(3) interface.
+
+       The _n_e_w___s_e_s_s_i_o_n___c_b_(_) is called, whenever a new session has been negoti-
+       ated and session caching is enabled (see _S_S_L___C_T_X___s_e_t___s_e_s_-
+       _s_i_o_n___c_a_c_h_e___m_o_d_e(3)).  The _n_e_w___s_e_s_s_i_o_n___c_b_(_) is passed the ssssll connection
+       and the ssl session sseessss. If the callback returns 00, the session will
+       be immediately removed again.
+
+       The _r_e_m_o_v_e___s_e_s_s_i_o_n___c_b_(_) is called, whenever the SSL engine removes a
+       session from the internal cache. This happens when the session is
+       removed because it is expired or when a connection was not shutdown
+       cleanly. It also happens for all sessions in the internal session cache
+       when _S_S_L___C_T_X___f_r_e_e(3) is called. The _r_e_m_o_v_e___s_e_s_s_i_o_n___c_b_(_) is passed the
+       ccttxx and the ssl session sseessss. It does not provide any feedback.
+
+       The _g_e_t___s_e_s_s_i_o_n___c_b_(_) is only called on SSL/TLS servers with the session
+       id proposed by the client. The _g_e_t___s_e_s_s_i_o_n___c_b_(_) is always called, also
+       when session caching was disabled. The _g_e_t___s_e_s_s_i_o_n___c_b_(_) is passed the
+       ssssll connection, the session id of length lleennggtthh at the memory location
+       ddaattaa. With the parameter ccooppyy the callback can require the SSL engine
+       to increment the reference count of the SSL_SESSION object, Normally
+       the reference count is not incremented and therefore the session must
+       not be explicitly freed with _S_S_L___S_E_S_S_I_O_N___f_r_e_e(3).
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _d_2_i___S_S_L___S_E_S_S_I_O_N(3), _S_S_L___C_T_X___s_e_t___s_e_s_s_i_o_n___c_a_c_h_e___m_o_d_e(3),
+       _S_S_L___C_T_X___f_l_u_s_h___s_e_s_s_i_o_n_s(3), _S_S_L___S_E_S_S_I_O_N___f_r_e_e(3), _S_S_L___C_T_X___f_r_e_e(3)
+
+
+
+1.0.0g                            2003-03-28        SSL_CTX_sess_set_get_cb(3)

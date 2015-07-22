@@ -1,0 +1,194 @@
+ui(3)                               OpenSSL                              ui(3)
+
+
+
+NNAAMMEE
+       UI_new, UI_new_method, UI_free, UI_add_input_string,
+       UI_dup_input_string, UI_add_verify_string, UI_dup_verify_string,
+       UI_add_input_boolean, UI_dup_input_boolean, UI_add_info_string,
+       UI_dup_info_string, UI_add_error_string, UI_dup_error_string, UI_con-
+       struct_prompt, UI_add_user_data, UI_get0_user_data, UI_get0_result,
+       UI_process, UI_ctrl, UI_set_default_method, UI_get_default_method,
+       UI_get_method, UI_set_method, UI_OpenSSL, ERR_load_UI_strings - New
+       User Interface
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ui.h>
+
+        typedef struct ui_st UI;
+        typedef struct ui_method_st UI_METHOD;
+
+        UI *UI_new(void);
+        UI *UI_new_method(const UI_METHOD *method);
+        void UI_free(UI *ui);
+
+        int UI_add_input_string(UI *ui, const char *prompt, int flags,
+               char *result_buf, int minsize, int maxsize);
+        int UI_dup_input_string(UI *ui, const char *prompt, int flags,
+               char *result_buf, int minsize, int maxsize);
+        int UI_add_verify_string(UI *ui, const char *prompt, int flags,
+               char *result_buf, int minsize, int maxsize, const char *test_buf);
+        int UI_dup_verify_string(UI *ui, const char *prompt, int flags,
+               char *result_buf, int minsize, int maxsize, const char *test_buf);
+        int UI_add_input_boolean(UI *ui, const char *prompt, const char *action_desc,
+               const char *ok_chars, const char *cancel_chars,
+               int flags, char *result_buf);
+        int UI_dup_input_boolean(UI *ui, const char *prompt, const char *action_desc,
+               const char *ok_chars, const char *cancel_chars,
+               int flags, char *result_buf);
+        int UI_add_info_string(UI *ui, const char *text);
+        int UI_dup_info_string(UI *ui, const char *text);
+        int UI_add_error_string(UI *ui, const char *text);
+        int UI_dup_error_string(UI *ui, const char *text);
+
+        /* These are the possible flags.  They can be or'ed together. */
+        #define UI_INPUT_FLAG_ECHO             0x01
+        #define UI_INPUT_FLAG_DEFAULT_PWD      0x02
+
+        char *UI_construct_prompt(UI *ui_method,
+               const char *object_desc, const char *object_name);
+
+        void *UI_add_user_data(UI *ui, void *user_data);
+        void *UI_get0_user_data(UI *ui);
+
+        const char *UI_get0_result(UI *ui, int i);
+
+        int UI_process(UI *ui);
+
+        int UI_ctrl(UI *ui, int cmd, long i, void *p, void (*f)());
+        #define UI_CTRL_PRINT_ERRORS           1
+        #define UI_CTRL_IS_REDOABLE            2
+
+        void UI_set_default_method(const UI_METHOD *meth);
+        const UI_METHOD *UI_get_default_method(void);
+        const UI_METHOD *UI_get_method(UI *ui);
+        const UI_METHOD *UI_set_method(UI *ui, const UI_METHOD *meth);
+
+        UI_METHOD *UI_OpenSSL(void);
+
+DDEESSCCRRIIPPTTIIOONN
+       UI stands for User Interface, and is general purpose set of routines to
+       prompt the user for text-based information.  Through user-written meth-
+       ods (see _u_i___c_r_e_a_t_e(3)), prompting can be done in any way imaginable, be
+       it plain text prompting, through dialog boxes or from a cell phone.
+
+       All the functions work through a context of the type UI.  This context
+       contains all the information needed to prompt correctly as well as a
+       reference to a UI_METHOD, which is an ordered vector of functions that
+       carry out the actual prompting.
+
+       The first thing to do is to create a UI with _U_I___n_e_w_(_) or
+       _U_I___n_e_w___m_e_t_h_o_d_(_), then add information to it with the UI_add or UI_dup
+       functions.  Also, user-defined random data can be passed down to the
+       underlying method through calls to UI_add_user_data.  The default UI
+       method doesn't care about these data, but other methods might.
+       Finally, use _U_I___p_r_o_c_e_s_s_(_) to actually perform the prompting and
+       _U_I___g_e_t_0___r_e_s_u_l_t_(_) to find the result to the prompt.
+
+       A UI can contain more than one prompt, which are performed in the given
+       sequence.  Each prompt gets an index number which is returned by the
+       UI_add and UI_dup functions, and has to be used to get the correspond-
+       ing result with _U_I___g_e_t_0___r_e_s_u_l_t_(_).
+
+       The functions are as follows:
+
+       _U_I___n_e_w_(_) creates a new UI using the default UI method.  When done with
+       this UI, it should be freed using _U_I___f_r_e_e_(_).
+
+       _U_I___n_e_w___m_e_t_h_o_d_(_) creates a new UI using the given UI method.  When done
+       with this UI, it should be freed using _U_I___f_r_e_e_(_).
+
+       _U_I___O_p_e_n_S_S_L_(_) returns the built-in UI method (note: not the default one,
+       since the default can be changed.  See further on).  This method is the
+       most machine/OS dependent part of OpenSSL and normally generates the
+       most problems when porting.
+
+       _U_I___f_r_e_e_(_) removes a UI from memory, along with all other pieces of mem-
+       ory that's connected to it, like duplicated input strings, results and
+       others.
+
+       _U_I___a_d_d___i_n_p_u_t___s_t_r_i_n_g_(_) and _U_I___a_d_d___v_e_r_i_f_y___s_t_r_i_n_g_(_) add a prompt to the
+       UI, as well as flags and a result buffer and the desired minimum and
+       maximum sizes of the result.  The given information is used to prompt
+       for information, for example a password, and to verify a password (i.e.
+       having the user enter it twice and check that the same string was
+       entered twice).  _U_I___a_d_d___v_e_r_i_f_y___s_t_r_i_n_g_(_) takes and extra argument that
+       should be a pointer to the result buffer of the input string that it's
+       supposed to verify, or verification will fail.
+
+       _U_I___a_d_d___i_n_p_u_t___b_o_o_l_e_a_n_(_) adds a prompt to the UI that's supposed to be
+       answered in a boolean way, with a single character for yes and a dif-
+       ferent character for no.  A set of characters that can be used to can-
+       cel the prompt is given as well.  The prompt itself is really divided
+       in two, one part being the descriptive text (given through the _p_r_o_m_p_t
+       argument) and one describing the possible answers (given through the
+       _a_c_t_i_o_n___d_e_s_c argument).
+
+       _U_I___a_d_d___i_n_f_o___s_t_r_i_n_g_(_) and _U_I___a_d_d___e_r_r_o_r___s_t_r_i_n_g_(_) add strings that are
+       shown at the same time as the prompt for extra information or to show
+       an error string.  The difference between the two is only conceptual.
+       With the builtin method, there's no technical difference between them.
+       Other methods may make a difference between them, however.
+
+       The flags currently supported are UI_INPUT_FLAG_ECHO, which is relevant
+       for _U_I___a_d_d___i_n_p_u_t___s_t_r_i_n_g_(_) and will have the users response be echoed
+       (when prompting for a password, this flag should obviously not be used,
+       and UI_INPUT_FLAG_DEFAULT_PWD, which means that a default password of
+       some sort will be used (completely depending on the application and the
+       UI method).
+
+       _U_I___d_u_p___i_n_p_u_t___s_t_r_i_n_g_(_), _U_I___d_u_p___v_e_r_i_f_y___s_t_r_i_n_g_(_), _U_I___d_u_p___i_n_p_u_t___b_o_o_l_e_a_n_(_),
+       _U_I___d_u_p___i_n_f_o___s_t_r_i_n_g_(_) and _U_I___d_u_p___e_r_r_o_r___s_t_r_i_n_g_(_) are basically the same
+       as their UI_add counterparts, except that they make their own copies of
+       all strings.
+
+       _U_I___c_o_n_s_t_r_u_c_t___p_r_o_m_p_t_(_) is a helper function that can be used to create a
+       prompt from two pieces of information: an description and a name.  The
+       default constructor (if there is none provided by the method used) cre-
+       ates a string "Enter _d_e_s_c_r_i_p_t_i_o_n for _n_a_m_e:".  With the description
+       "pass phrase" and the file name "foo.key", that becomes "Enter pass
+       phrase for foo.key:".  Other methods may create whatever string and may
+       include encodings that will be processed by the other method functions.
+
+       _U_I___a_d_d___u_s_e_r___d_a_t_a_(_) adds a piece of memory for the method to use at any
+       time.  The builtin UI method doesn't care about this info.  Note that
+       several calls to this function doesn't add data, it replaces the previ-
+       ous blob with the one given as argument.
+
+       _U_I___g_e_t_0___u_s_e_r___d_a_t_a_(_) retrieves the data that has last been given to the
+       UI with _U_I___a_d_d___u_s_e_r___d_a_t_a_(_).
+
+       _U_I___g_e_t_0___r_e_s_u_l_t_(_) returns a pointer to the result buffer associated with
+       the information indexed by _i.
+
+       _U_I___p_r_o_c_e_s_s_(_) goes through the information given so far, does all the
+       printing and prompting and returns.
+
+       _U_I___c_t_r_l_(_) adds extra control for the application author.  For now, it
+       understands two commands: UI_CTRL_PRINT_ERRORS, which makes
+       _U_I___p_r_o_c_e_s_s_(_) print the OpenSSL error stack as part of processing the
+       UI, and UI_CTRL_IS_REDOABLE, which returns a flag saying if the used UI
+       can be used again or not.
+
+       _U_I___s_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_) changes the default UI method to the one given.
+
+       _U_I___g_e_t___d_e_f_a_u_l_t___m_e_t_h_o_d_(_) returns a pointer to the current default UI
+       method.
+
+       _U_I___g_e_t___m_e_t_h_o_d_(_) returns the UI method associated with a given UI.
+
+       _U_I___s_e_t___m_e_t_h_o_d_(_) changes the UI method associated with a given UI.
+
+SSEEEE AALLSSOO
+       _u_i___c_r_e_a_t_e(3), _u_i___c_o_m_p_a_t(3)
+
+HHIISSTTOORRYY
+       The UI section was first introduced in OpenSSL 0.9.7.
+
+AAUUTTHHOORR
+       Richard Levitte (richard@levitte.org) for the OpenSSL project
+       (http://www.openssl.org).
+
+
+
+1.0.0g                            2003-09-30                             ui(3)

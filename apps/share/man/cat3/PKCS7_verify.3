@@ -1,0 +1,116 @@
+PKCS7_verify(3)                     OpenSSL                    PKCS7_verify(3)
+
+
+
+NNAAMMEE
+       PKCS7_verify - verify a PKCS#7 signedData structure
+
+SSYYNNOOPPSSIISS
+        #include <openssl/pkcs7.h>
+
+        int PKCS7_verify(PKCS7 *p7, STACK_OF(X509) *certs, X509_STORE *store, BIO *indata, BIO *out, int flags);
+
+        STACK_OF(X509) *PKCS7_get0_signers(PKCS7 *p7, STACK_OF(X509) *certs, int flags);
+
+DDEESSCCRRIIPPTTIIOONN
+       _P_K_C_S_7___v_e_r_i_f_y_(_) verifies a PKCS#7 signedData structure. pp77 is the PKCS7
+       structure to verify. cceerrttss is a set of certificates in which to search
+       for the signer's certificate. ssttoorree is a trusted certficate store (used
+       for chain verification). iinnddaattaa is the signed data if the content is
+       not present in pp77 (that is it is detached). The content is written to
+       oouutt if it is not NULL.
+
+       ffllaaggss is an optional set of flags, which can be used to modify the ver-
+       ify operation.
+
+       _P_K_C_S_7___g_e_t_0___s_i_g_n_e_r_s_(_) retrieves the signer's certificates from pp77, it
+       does nnoott check their validity or whether any signatures are valid. The
+       cceerrttss and ffllaaggss parameters have the same meanings as in _P_K_C_S_7___v_e_r_i_f_y_(_).
+
+VVEERRIIFFYY PPRROOCCEESSSS
+       Normally the verify process proceeds as follows.
+
+       Initially some sanity checks are performed on pp77. The type of pp77 must
+       be signedData. There must be at least one signature on the data and if
+       the content is detached iinnddaattaa cannot be NNUULLLL.
+
+       An attempt is made to locate all the signer's certificates, first look-
+       ing in the cceerrttss parameter (if it is not NNUULLLL) and then looking in any
+       certificates contained in the pp77 structure itself. If any signer's cer-
+       tificates cannot be located the operation fails.
+
+       Each signer's certificate is chain verified using the ssmmiimmeessiiggnn purpose
+       and the supplied trusted certificate store. Any internal certificates
+       in the message are used as untrusted CAs. If any chain verify fails an
+       error code is returned.
+
+       Finally the signed content is read (and written to oouutt is it is not
+       NULL) and the signature's checked.
+
+       If all signature's verify correctly then the function is successful.
+
+       Any of the following flags (ored together) can be passed in the ffllaaggss
+       parameter to change the default verify behaviour. Only the flag
+       PPKKCCSS77__NNOOIINNTTEERRNN is meaningful to _P_K_C_S_7___g_e_t_0___s_i_g_n_e_r_s_(_).
+
+       If PPKKCCSS77__NNOOIINNTTEERRNN is set the certificates in the message itself are not
+       searched when locating the signer's certificate. This means that all
+       the signers certificates must be in the cceerrttss parameter.
+
+       If the PPKKCCSS77__TTEEXXTT flag is set MIME headers for type tteexxtt//ppllaaiinn are
+       deleted from the content. If the content is not of type tteexxtt//ppllaaiinn then
+       an error is returned.
+
+       If PPKKCCSS77__NNOOVVEERRIIFFYY is set the signer's certificates are not chain veri-
+       fied.
+
+       If PPKKCCSS77__NNOOCCHHAAIINN is set then the certificates contained in the message
+       are not used as untrusted CAs. This means that the whole verify chain
+       (apart from the signer's certificate) must be contained in the trusted
+       store.
+
+       If PPKKCCSS77__NNOOSSIIGGSS is set then the signatures on the data are not checked.
+
+NNOOTTEESS
+       One application of PPKKCCSS77__NNOOIINNTTEERRNN is to only accept messages signed by
+       a small number of certificates. The acceptable certificates would be
+       passed in the cceerrttss parameter. In this case if the signer is not one of
+       the certificates supplied in cceerrttss then the verify will fail because
+       the signer cannot be found.
+
+       Care should be taken when modifying the default verify behaviour, for
+       example setting PPKKCCSS77__NNOOVVEERRIIFFYY||PPKKCCSS77__NNOOSSIIGGSS will totally disable all
+       verification and any signed message will be considered valid. This com-
+       bination is however useful if one merely wishes to write the content to
+       oouutt and its validity is not considered important.
+
+       Chain verification should arguably be performed  using the signing time
+       rather than the current time. However since the signing time is sup-
+       plied by the signer it cannot be trusted without additional evidence
+       (such as a trusted timestamp).
+
+RREETTUURRNN VVAALLUUEESS
+       _P_K_C_S_7___v_e_r_i_f_y_(_) returns 1 for a successful verification and zero or a
+       negative value if an error occurs.
+
+       _P_K_C_S_7___g_e_t_0___s_i_g_n_e_r_s_(_) returns all signers or NNUULLLL if an error occurred.
+
+       The error can be obtained from _E_R_R___g_e_t___e_r_r_o_r(3)
+
+BBUUGGSS
+       The trusted certificate store is not searched for the signers certifi-
+       cate, this is primarily due to the inadequacies of the current
+       XX550099__SSTTOORREE functionality.
+
+       The lack of single pass processing and need to hold all data in memory
+       as mentioned in _P_K_C_S_7___s_i_g_n_(_) also applies to _P_K_C_S_7___v_e_r_i_f_y_(_).
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _P_K_C_S_7___s_i_g_n(3)
+
+HHIISSTTOORRYY
+       _P_K_C_S_7___v_e_r_i_f_y_(_) was added to OpenSSL 0.9.5
+
+
+
+1.0.0g                            2006-05-14                   PKCS7_verify(3)

@@ -1,0 +1,55 @@
+BN_zero(3)                          OpenSSL                         BN_zero(3)
+
+
+
+NNAAMMEE
+       BN_zero, BN_one, BN_value_one, BN_set_word, BN_get_word - BIGNUM
+       assignment operations
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bn.h>
+
+        int BN_zero(BIGNUM *a);
+        int BN_one(BIGNUM *a);
+
+        const BIGNUM *BN_value_one(void);
+
+        int BN_set_word(BIGNUM *a, unsigned long w);
+        unsigned long BN_get_word(BIGNUM *a);
+
+DDEESSCCRRIIPPTTIIOONN
+       _B_N___z_e_r_o_(_), _B_N___o_n_e_(_) and _B_N___s_e_t___w_o_r_d_(_) set aa to the values 0, 1 and ww
+       respectively.  _B_N___z_e_r_o_(_) and _B_N___o_n_e_(_) are macros.
+
+       _B_N___v_a_l_u_e___o_n_e_(_) returns a BBIIGGNNUUMM constant of value 1. This constant is
+       useful for use in comparisons and assignment.
+
+       _B_N___g_e_t___w_o_r_d_(_) returns aa, if it can be represented as an unsigned long.
+
+RREETTUURRNN VVAALLUUEESS
+       _B_N___g_e_t___w_o_r_d_(_) returns the value aa, and 0xffffffffL if aa cannot be rep-
+       resented as an unsigned long.
+
+       _B_N___z_e_r_o_(_), _B_N___o_n_e_(_) and _B_N___s_e_t___w_o_r_d_(_) return 1 on success, 0 otherwise.
+       _B_N___v_a_l_u_e___o_n_e_(_) returns the constant.
+
+BBUUGGSS
+       Someone might change the constant.
+
+       If a BBIIGGNNUUMM is equal to 0xffffffffL it can be represented as an
+       unsigned long but this value is also returned on error.
+
+SSEEEE AALLSSOO
+       _b_n(3), _B_N___b_n_2_b_i_n(3)
+
+HHIISSTTOORRYY
+       _B_N___z_e_r_o_(_), _B_N___o_n_e_(_) and _B_N___s_e_t___w_o_r_d_(_) are available in all versions of
+       SSLeay and OpenSSL. _B_N___v_a_l_u_e___o_n_e_(_) and _B_N___g_e_t___w_o_r_d_(_) were added in
+       SSLeay 0.8.
+
+       _B_N___v_a_l_u_e___o_n_e_(_) was changed to return a true const BIGNUM * in OpenSSL
+       0.9.7.
+
+
+
+1.0.0g                            2002-07-18                        BN_zero(3)

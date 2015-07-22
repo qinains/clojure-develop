@@ -1,0 +1,45 @@
+SSL_get_client_CA_list(3)           OpenSSL          SSL_get_client_CA_list(3)
+
+
+
+NNAAMMEE
+       SSL_get_client_CA_list, SSL_CTX_get_client_CA_list - get list of client
+       CAs
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        STACK_OF(X509_NAME) *SSL_get_client_CA_list(const SSL *s);
+        STACK_OF(X509_NAME) *SSL_CTX_get_client_CA_list(const SSL_CTX *ctx);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___C_T_X___g_e_t___c_l_i_e_n_t___C_A___l_i_s_t_(_) returns the list of client CAs explicitly
+       set for ccttxx using _S_S_L___C_T_X___s_e_t___c_l_i_e_n_t___C_A___l_i_s_t(3).
+
+       _S_S_L___g_e_t___c_l_i_e_n_t___C_A___l_i_s_t_(_) returns the list of client CAs explicitly set
+       for ssssll using _S_S_L___s_e_t___c_l_i_e_n_t___C_A___l_i_s_t_(_) or ssssll's SSL_CTX object with
+       _S_S_L___C_T_X___s_e_t___c_l_i_e_n_t___C_A___l_i_s_t(3), when in server mode. In client mode,
+       SSL_get_client_CA_list returns the list of client CAs sent from the
+       server, if any.
+
+RREETTUURRNN VVAALLUUEESS
+       _S_S_L___C_T_X___s_e_t___c_l_i_e_n_t___C_A___l_i_s_t_(_) and _S_S_L___s_e_t___c_l_i_e_n_t___C_A___l_i_s_t_(_) do not return
+       diagnostic information.
+
+       _S_S_L___C_T_X___a_d_d___c_l_i_e_n_t___C_A_(_) and _S_S_L___a_d_d___c_l_i_e_n_t___C_A_(_) have the following
+       return values:
+
+       STACK_OF(X509_NAMES)
+           List of CA names explicitly set (for ccttxx or in server mode) or send
+           by the server (client mode).
+
+       NULL
+           No client CA list was explicitly set (for ccttxx or in server mode) or
+           the server did not send a list of CAs (client mode).
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___C_T_X___s_e_t___c_l_i_e_n_t___C_A___l_i_s_t(3), _S_S_L___C_T_X___s_e_t___c_l_i_e_n_t___c_e_r_t___c_b(3)
+
+
+
+1.0.0g                            2005-03-30         SSL_get_client_CA_list(3)

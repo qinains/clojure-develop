@@ -1,0 +1,87 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_get_peer_cert_chain - get the X509 certificate chain of the peer</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_get_peer_cert_chain - get the X509 certificate chain of the peer</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ STACKOF(X509) *SSL_get_peer_cert_chain(const SSL *ssl);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_get_peer_cert_chain()</code> returns a pointer to <a href="#item_stackof"><code>STACKOF(X509)</code></a> certificates
+forming the certificate chain of the peer. If called on the client side,
+the stack also contains the peer's certificate; if called on the server
+side, the peer's certificate must be obtained separately using
+<a href="../ssl/SSL_get_peer_certificate.html">SSL_get_peer_certificate</a>.
+If the peer did not present a certificate, NULL is returned.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>The peer certificate chain is not necessarily available after reusing
+a session, in which case a NULL pointer is returned.</p>
+<p>The reference count of the <a href="#item_stackof"><code>STACKOF(X509)</code></a> object is not incremented.
+If the corresponding session is freed, the pointer must not be used
+any longer.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>The following return values can occur:</p>
+<dl>
+<dt><strong><a name="item_null">NULL</a></strong>
+
+<dd>
+<p>No certificate was presented by the peer or no connection was established
+or the certificate chain is no longer available when a session is reused.</p>
+</dd>
+</li>
+<dt><strong><a name="item_stackof">Pointer to a <code>STACKOF(X509)</code></a></strong>
+
+<dd>
+<p>The return value points to the certificate chain presented by the peer.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a>, <a href="../ssl/SSL_get_peer_certificate.html">SSL_get_peer_certificate</a></p>
+
+</body>
+
+</html>

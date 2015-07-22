@@ -1,0 +1,72 @@
+SSL_CTX_set_session_id_context(3)   OpenSSL  SSL_CTX_set_session_id_context(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_set_session_id_context, SSL_set_session_id_context - set con-
+       text within which session can be reused (server side only)
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        int SSL_CTX_set_session_id_context(SSL_CTX *ctx, const unsigned char *sid_ctx,
+                                           unsigned int sid_ctx_len);
+        int SSL_set_session_id_context(SSL *ssl, const unsigned char *sid_ctx,
+                                       unsigned int sid_ctx_len);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___C_T_X___s_e_t___s_e_s_s_i_o_n___i_d___c_o_n_t_e_x_t_(_) sets the context ssiidd__ccttxx of length
+       ssiidd__ccttxx__lleenn within which a session can be reused for the ccttxx object.
+
+       _S_S_L___s_e_t___s_e_s_s_i_o_n___i_d___c_o_n_t_e_x_t_(_) sets the context ssiidd__ccttxx of length
+       ssiidd__ccttxx__lleenn within which a session can be reused for the ssssll object.
+
+NNOOTTEESS
+       Sessions are generated within a certain context. When exporting/import-
+       ing sessions with ii22dd__SSSSLL__SSEESSSSIIOONN/dd22ii__SSSSLL__SSEESSSSIIOONN it would be possible,
+       to re-import a session generated from another context (e.g. another
+       application), which might lead to malfunctions. Therefore each applica-
+       tion must set its own session id context ssiidd__ccttxx which is used to dis-
+       tinguish the contexts and is stored in exported sessions. The ssiidd__ccttxx
+       can be any kind of binary data with a given length, it is therefore
+       possible to use e.g. the name of the application and/or the hostname
+       and/or service name ...
+
+       The session id context becomes part of the session. The session id con-
+       text is set by the SSL/TLS server. The _S_S_L___C_T_X___s_e_t___s_e_s_s_i_o_n___i_d___c_o_n_t_e_x_t_(_)
+       and _S_S_L___s_e_t___s_e_s_s_i_o_n___i_d___c_o_n_t_e_x_t_(_) functions are therefore only useful on
+       the server side.
+
+       OpenSSL clients will check the session id context returned by the
+       server when reusing a session.
+
+       The maximum length of the ssiidd__ccttxx is limited to SSSSLL__MMAAXX__SSSSLL__SSEESS--
+       SSIIOONN__IIDD__LLEENNGGTTHH.
+
+WWAARRNNIINNGGSS
+       If the session id context is not set on an SSL/TLS server and client
+       certificates are used, stored sessions will not be reused but a fatal
+       error will be flagged and the handshake will fail.
+
+       If a server returns a different session id context to an OpenSSL client
+       when reusing a session, an error will be flagged and the handshake will
+       fail. OpenSSL servers will always return the correct session id con-
+       text, as an OpenSSL server checks the session id context itself before
+       reusing a session as described above.
+
+RREETTUURRNN VVAALLUUEESS
+       _S_S_L___C_T_X___s_e_t___s_e_s_s_i_o_n___i_d___c_o_n_t_e_x_t_(_) and _S_S_L___s_e_t___s_e_s_s_i_o_n___i_d___c_o_n_t_e_x_t_(_)
+       return the following values:
+
+       0   The length ssiidd__ccttxx__lleenn of the session id context ssiidd__ccttxx exceeded
+           the maximum allowed length of SSSSLL__MMAAXX__SSSSLL__SSEESSSSIIOONN__IIDD__LLEENNGGTTHH. The
+           error is logged to the error stack.
+
+       1   The operation succeeded.
+
+SSEEEE AALLSSOO
+       _s_s_l(3)
+
+
+
+1.0.0g                            2004-06-14 SSL_CTX_set_session_id_context(3)

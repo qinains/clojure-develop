@@ -1,0 +1,126 @@
+X509_STORE_CTX_new(3)               OpenSSL              X509_STORE_CTX_new(3)
+
+
+
+NNAAMMEE
+       X509_STORE_CTX_new, X509_STORE_CTX_cleanup, X509_STORE_CTX_free,
+       X509_STORE_CTX_init, X509_STORE_CTX_trusted_stack,
+       X509_STORE_CTX_set_cert, X509_STORE_CTX_set_chain,
+       X509_STORE_CTX_set0_crls, X509_STORE_CTX_get0_param,
+       X509_STORE_CTX_set0_param, X509_STORE_CTX_set_default - X509_STORE_CTX
+       initialisation
+
+SSYYNNOOPPSSIISS
+        #include <openssl/x509_vfy.h>
+
+        X509_STORE_CTX *X509_STORE_CTX_new(void);
+        void X509_STORE_CTX_cleanup(X509_STORE_CTX *ctx);
+        void X509_STORE_CTX_free(X509_STORE_CTX *ctx);
+
+        int X509_STORE_CTX_init(X509_STORE_CTX *ctx, X509_STORE *store,
+                                X509 *x509, STACK_OF(X509) *chain);
+
+        void X509_STORE_CTX_trusted_stack(X509_STORE_CTX *ctx, STACK_OF(X509) *sk);
+
+        void   X509_STORE_CTX_set_cert(X509_STORE_CTX *ctx,X509 *x);
+        void   X509_STORE_CTX_set_chain(X509_STORE_CTX *ctx,STACK_OF(X509) *sk);
+        void   X509_STORE_CTX_set0_crls(X509_STORE_CTX *ctx, STACK_OF(X509_CRL) *sk);
+
+        X509_VERIFY_PARAM *X509_STORE_CTX_get0_param(X509_STORE_CTX *ctx);
+        void X509_STORE_CTX_set0_param(X509_STORE_CTX *ctx, X509_VERIFY_PARAM *param);
+        int X509_STORE_CTX_set_default(X509_STORE_CTX *ctx, const char *name);
+
+DDEESSCCRRIIPPTTIIOONN
+       These functions initialise an XX550099__SSTTOORREE__CCTTXX structure for subsequent
+       use by _X_5_0_9___v_e_r_i_f_y___c_e_r_t_(_).
+
+       _X_5_0_9___S_T_O_R_E___C_T_X___n_e_w_(_) returns a newly initialised XX550099__SSTTOORREE__CCTTXX struc-
+       ture.
+
+       _X_5_0_9___S_T_O_R_E___C_T_X___c_l_e_a_n_u_p_(_) internally cleans up an XX550099__SSTTOORREE__CCTTXX struc-
+       ture.  The context can then be reused with an new call to
+       _X_5_0_9___S_T_O_R_E___C_T_X___i_n_i_t_(_).
+
+       _X_5_0_9___S_T_O_R_E___C_T_X___f_r_e_e_(_) completely frees up ccttxx. After this call ccttxx is
+       no longer valid.
+
+       _X_5_0_9___S_T_O_R_E___C_T_X___i_n_i_t_(_) sets up ccttxx for a subsequent verification opera-
+       tion.  The trusted certificate store is set to ssttoorree, the end entity
+       certificate to be verified is set to xx550099 and a set of additional cer-
+       tificates (which will be untrusted but may be used to build the chain)
+       in cchhaaiinn. Any or all of the ssttoorree, xx550099 and cchhaaiinn parameters can be
+       NNUULLLL.
+
+       _X_5_0_9___S_T_O_R_E___C_T_X___t_r_u_s_t_e_d___s_t_a_c_k_(_) sets the set of trusted certificates of
+       ccttxx to sskk. This is an alternative way of specifying trusted certifi-
+       cates instead of using an XX550099__SSTTOORREE.
+
+       _X_5_0_9___S_T_O_R_E___C_T_X___s_e_t___c_e_r_t_(_) sets the certificate to be vertified in ccttxx
+       to xx.
+
+       _X_5_0_9___S_T_O_R_E___C_T_X___s_e_t___c_h_a_i_n_(_) sets the additional certificate chain used
+       by ccttxx to sskk.
+
+       _X_5_0_9___S_T_O_R_E___C_T_X___s_e_t_0___c_r_l_s_(_) sets a set of CRLs to use to aid certificate
+       verification to sskk. These CRLs will only be used if CRL verification is
+       enabled in the associated XX550099__VVEERRIIFFYY__PPAARRAAMM structure. This might be
+       used where additional "useful" CRLs are supplied as part of a protocol,
+       for example in a PKCS#7 structure.
+
+       X509_VERIFY_PARAM *_X_5_0_9___S_T_O_R_E___C_T_X___g_e_t_0___p_a_r_a_m_(_) retrieves an intenal
+       pointer to the verification parameters associated with ccttxx.
+
+       _X_5_0_9___S_T_O_R_E___C_T_X___s_e_t_0___p_a_r_a_m_(_) sets the intenal verification parameter
+       pointer to ppaarraamm. After this call ppaarraamm should not be used.
+
+       _X_5_0_9___S_T_O_R_E___C_T_X___s_e_t___d_e_f_a_u_l_t_(_) looks up and sets the default verification
+       method to nnaammee. This uses the function _X_5_0_9___V_E_R_I_F_Y___P_A_R_A_M___l_o_o_k_u_p_(_) to
+       find an appropriate set of parameters from nnaammee.
+
+NNOOTTEESS
+       The certificates and CRLs in a store are used internally and should nnoott
+       be freed up until after the associated XX550099__SSTTOORREE__CCTTXX is freed. Legacy
+       applications might implicitly use an XX550099__SSTTOORREE__CCTTXX like this:
+
+         X509_STORE_CTX ctx;
+         X509_STORE_CTX_init(&ctx, store, cert, chain);
+
+       this is nnoott recommended in new applications they should instead do:
+
+         X509_STORE_CTX *ctx;
+         ctx = X509_STORE_CTX_new();
+         if (ctx == NULL)
+               /* Bad error */
+         X509_STORE_CTX_init(ctx, store, cert, chain);
+
+BBUUGGSS
+       The certificates and CRLs in a context are used internally and should
+       nnoott be freed up until after the associated XX550099__SSTTOORREE__CCTTXX is freed.
+       Copies should be made or reference counts increased instead.
+
+RREETTUURRNN VVAALLUUEESS
+       _X_5_0_9___S_T_O_R_E___C_T_X___n_e_w_(_) returns an newly allocates context or NNUULLLL is an
+       error occurred.
+
+       _X_5_0_9___S_T_O_R_E___C_T_X___i_n_i_t_(_) returns 1 for success or 0 if an error occurred.
+
+       _X_5_0_9___S_T_O_R_E___C_T_X___g_e_t_0___p_a_r_a_m_(_) returns a pointer to an XX550099__VVEERRIIFFYY__PPAARRAAMM
+       structure or NNUULLLL if an error occurred.
+
+       _X_5_0_9___S_T_O_R_E___C_T_X___c_l_e_a_n_u_p_(_), _X_5_0_9___S_T_O_R_E___C_T_X___f_r_e_e_(_),
+       _X_5_0_9___S_T_O_R_E___C_T_X___t_r_u_s_t_e_d___s_t_a_c_k_(_), _X_5_0_9___S_T_O_R_E___C_T_X___s_e_t___c_e_r_t_(_),
+       _X_5_0_9___S_T_O_R_E___C_T_X___s_e_t___c_h_a_i_n_(_), _X_5_0_9___S_T_O_R_E___C_T_X___s_e_t_0___c_r_l_s_(_) and
+       _X_5_0_9___S_T_O_R_E___C_T_X___s_e_t_0___p_a_r_a_m_(_) do not return values.
+
+       _X_5_0_9___S_T_O_R_E___C_T_X___s_e_t___d_e_f_a_u_l_t_(_) returns 1 for success or 0 if an error
+       occurred.
+
+SSEEEE AALLSSOO
+       _X_5_0_9___v_e_r_i_f_y___c_e_r_t(3) _X_5_0_9___V_E_R_I_F_Y___P_A_R_A_M___s_e_t___f_l_a_g_s(3)
+
+HHIISSTTOORRYY
+       _X_5_0_9___S_T_O_R_E___C_T_X___s_e_t_0___c_r_l_s_(_) was first added to OpenSSL 1.0.0
+
+
+
+1.0.0g                            2009-10-18             X509_STORE_CTX_new(3)

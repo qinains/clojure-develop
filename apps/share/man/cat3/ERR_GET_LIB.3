@@ -1,0 +1,49 @@
+ERR_GET_LIB(3)                      OpenSSL                     ERR_GET_LIB(3)
+
+
+
+NNAAMMEE
+       ERR_GET_LIB, ERR_GET_FUNC, ERR_GET_REASON - get library, function and
+       reason code
+
+SSYYNNOOPPSSIISS
+        #include <openssl/err.h>
+
+        int ERR_GET_LIB(unsigned long e);
+
+        int ERR_GET_FUNC(unsigned long e);
+
+        int ERR_GET_REASON(unsigned long e);
+
+DDEESSCCRRIIPPTTIIOONN
+       The error code returned by _E_R_R___g_e_t___e_r_r_o_r_(_) consists of a library num-
+       ber, function code and reason code. _E_R_R___G_E_T___L_I_B_(_), _E_R_R___G_E_T___F_U_N_C_(_) and
+       _E_R_R___G_E_T___R_E_A_S_O_N_(_) can be used to extract these.
+
+       The library number and function code describe where the error occurred,
+       the reason code is the information about what went wrong.
+
+       Each sub-library of OpenSSL has a unique library number; function and
+       reason codes are unique within each sub-library.  Note that different
+       libraries may use the same value to signal different functions and rea-
+       sons.
+
+       EERRRR__RR__...... reason codes such as EERRRR__RR__MMAALLLLOOCC__FFAAIILLUURREE are globally
+       unique. However, when checking for sub-library specific reason codes,
+       be sure to also compare the library number.
+
+       _E_R_R___G_E_T___L_I_B_(_), _E_R_R___G_E_T___F_U_N_C_(_) and _E_R_R___G_E_T___R_E_A_S_O_N_(_) are macros.
+
+RREETTUURRNN VVAALLUUEESS
+       The library number, function code and reason code respectively.
+
+SSEEEE AALLSSOO
+       _e_r_r(3), _E_R_R___g_e_t___e_r_r_o_r(3)
+
+HHIISSTTOORRYY
+       _E_R_R___G_E_T___L_I_B_(_), _E_R_R___G_E_T___F_U_N_C_(_) and _E_R_R___G_E_T___R_E_A_S_O_N_(_) are available in all
+       versions of SSLeay and OpenSSL.
+
+
+
+1.0.0g                            2000-02-01                    ERR_GET_LIB(3)

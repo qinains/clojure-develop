@@ -1,0 +1,50 @@
+X509_STORE_set_verify_cb_func(3)    OpenSSL   X509_STORE_set_verify_cb_func(3)
+
+
+
+NNAAMMEE
+       X509_STORE_set_verify_cb_func, X509_STORE_set_verify_cb - set verifica-
+       tion callback
+
+SSYYNNOOPPSSIISS
+        #include <openssl/x509_vfy.h>
+
+        void X509_STORE_set_verify_cb(X509_STORE *st,
+                                       int (*verify_cb)(int ok, X509_STORE_CTX *ctx));
+
+        void X509_STORE_set_verify_cb_func(X509_STORE *st,
+                                       int (*verify_cb)(int ok, X509_STORE_CTX *ctx));
+
+DDEESSCCRRIIPPTTIIOONN
+       _X_5_0_9___S_T_O_R_E___s_e_t___v_e_r_i_f_y___c_b_(_) sets the verification callback of ccttxx to
+       vveerriiffyy__ccbb overwriting any existing callback.
+
+       _X_5_0_9___S_T_O_R_E___s_e_t___v_e_r_i_f_y___c_b___f_u_n_c_(_) also sets the verification callback but
+       it is implemented as a macro.
+
+NNOOTTEESS
+       The verification callback from an XX550099__SSTTOORREE is inherited by the corre-
+       sponding XX550099__SSTTOORREE__CCTTXX structure when it is initialized. This can be
+       used to set the verification callback when the XX550099__SSTTOORREE__CCTTXX is other-
+       wise inaccessible (for example during S/MIME verification).
+
+BBUUGGSS
+       The macro version of this function was the only one available before
+       OpenSSL 1.0.0.
+
+RREETTUURRNN VVAALLUUEESS
+       _X_5_0_9___S_T_O_R_E___s_e_t___v_e_r_i_f_y___c_b_(_) and _X_5_0_9___S_T_O_R_E___s_e_t___v_e_r_i_f_y___c_b___f_u_n_c_(_) do not
+       return a value.
+
+SSEEEE AALLSSOO
+       _X_5_0_9___S_T_O_R_E___C_T_X___s_e_t___v_e_r_i_f_y___c_b(3) _C_M_S___v_e_r_i_f_y(3)
+
+HHIISSTTOORRYY
+       _X_5_0_9___S_T_O_R_E___s_e_t___v_e_r_i_f_y___c_b___f_u_n_c_(_) is available in all versions of SSLeay
+       and OpenSSL.
+
+       _X_5_0_9___S_T_O_R_E___s_e_t___v_e_r_i_f_y___c_b_(_) was added to OpenSSL 1.0.0.
+
+
+
+1.0.0g                            2010-01-27  X509_STORE_set_verify_cb_func(3)

@@ -1,0 +1,143 @@
+BIO_s_file(3)                       OpenSSL                      BIO_s_file(3)
+
+
+
+NNAAMMEE
+       BIO_s_file, BIO_new_file, BIO_new_fp, BIO_set_fp, BIO_get_fp,
+       BIO_read_filename, BIO_write_filename, BIO_append_filename,
+       BIO_rw_filename - FILE bio
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bio.h>
+
+        BIO_METHOD *   BIO_s_file(void);
+        BIO *BIO_new_file(const char *filename, const char *mode);
+        BIO *BIO_new_fp(FILE *stream, int flags);
+
+        BIO_set_fp(BIO *b,FILE *fp, int flags);
+        BIO_get_fp(BIO *b,FILE **fpp);
+
+        int BIO_read_filename(BIO *b, char *name)
+        int BIO_write_filename(BIO *b, char *name)
+        int BIO_append_filename(BIO *b, char *name)
+        int BIO_rw_filename(BIO *b, char *name)
+
+DDEESSCCRRIIPPTTIIOONN
+       _B_I_O___s___f_i_l_e_(_) returns the BIO file method. As its name implies it is a
+       wrapper round the stdio FILE structure and it is a source/sink BIO.
+
+       Calls to _B_I_O___r_e_a_d_(_) and _B_I_O___w_r_i_t_e_(_) read and write data to the underly-
+       ing stream. _B_I_O___g_e_t_s_(_) and _B_I_O___p_u_t_s_(_) are supported on file BIOs.
+
+       _B_I_O___f_l_u_s_h_(_) on a file BIO calls the _f_f_l_u_s_h_(_) function on the wrapped
+       stream.
+
+       _B_I_O___r_e_s_e_t_(_) attempts to change the file pointer to the start of file
+       using fseek(stream, 0, 0).
+
+       _B_I_O___s_e_e_k_(_) sets the file pointer to position ooffss from start of file
+       using fseek(stream, ofs, 0).
+
+       _B_I_O___e_o_f_(_) calls _f_e_o_f_(_).
+
+       Setting the BIO_CLOSE flag calls _f_c_l_o_s_e_(_) on the stream when the BIO is
+       freed.
+
+       _B_I_O___n_e_w___f_i_l_e_(_) creates a new file BIO with mode mmooddee the meaning of
+       mmooddee is the same as the stdio function _f_o_p_e_n_(_). The BIO_CLOSE flag is
+       set on the returned BIO.
+
+       _B_I_O___n_e_w___f_p_(_) creates a file BIO wrapping ssttrreeaamm. Flags can be:
+       BIO_CLOSE, BIO_NOCLOSE (the close flag) BIO_FP_TEXT (sets the underly-
+       ing stream to text mode, default is binary: this only has any effect
+       under Win32).
+
+       _B_I_O___s_e_t___f_p_(_) set the fp of a file BIO to ffpp. ffllaaggss has the same meaning
+       as in _B_I_O___n_e_w___f_p_(_), it is a macro.
+
+       _B_I_O___g_e_t___f_p_(_) retrieves the fp of a file BIO, it is a macro.
+
+       _B_I_O___s_e_e_k_(_) is a macro that sets the position pointer to ooffffsseett bytes
+       from the start of file.
+
+       _B_I_O___t_e_l_l_(_) returns the value of the position pointer.
+
+       _B_I_O___r_e_a_d___f_i_l_e_n_a_m_e_(_), _B_I_O___w_r_i_t_e___f_i_l_e_n_a_m_e_(_), _B_I_O___a_p_p_e_n_d___f_i_l_e_n_a_m_e_(_) and
+       _B_I_O___r_w___f_i_l_e_n_a_m_e_(_) set the file BIO bb to use file nnaammee for reading,
+       writing, append or read write respectively.
+
+NNOOTTEESS
+       When wrapping stdout, stdin or stderr the underlying stream should not
+       normally be closed so the BIO_NOCLOSE flag should be set.
+
+       Because the file BIO calls the underlying stdio functions any quirks in
+       stdio behaviour will be mirrored by the corresponding BIO.
+
+       On Windows BIO_new_files reserves for the filename argument to be UTF-8
+       encoded. In other words if you have to make it work in multi- lingual
+       environment, encode file names in UTF-8.
+
+EEXXAAMMPPLLEESS
+       File BIO "hello world":
+
+        BIO *bio_out;
+        bio_out = BIO_new_fp(stdout, BIO_NOCLOSE);
+        BIO_printf(bio_out, "Hello World\n");
+
+       Alternative technique:
+
+        BIO *bio_out;
+        bio_out = BIO_new(BIO_s_file());
+        if(bio_out == NULL) /* Error ... */
+        if(!BIO_set_fp(bio_out, stdout, BIO_NOCLOSE)) /* Error ... */
+        BIO_printf(bio_out, "Hello World\n");
+
+       Write to a file:
+
+        BIO *out;
+        out = BIO_new_file("filename.txt", "w");
+        if(!out) /* Error occurred */
+        BIO_printf(out, "Hello World\n");
+        BIO_free(out);
+
+       Alternative technique:
+
+        BIO *out;
+        out = BIO_new(BIO_s_file());
+        if(out == NULL) /* Error ... */
+        if(!BIO_write_filename(out, "filename.txt")) /* Error ... */
+        BIO_printf(out, "Hello World\n");
+        BIO_free(out);
+
+RREETTUURRNN VVAALLUUEESS
+       _B_I_O___s___f_i_l_e_(_) returns the file BIO method.
+
+       _B_I_O___n_e_w___f_i_l_e_(_) and _B_I_O___n_e_w___f_p_(_) return a file BIO or NULL if an error
+       occurred.
+
+       _B_I_O___s_e_t___f_p_(_) and _B_I_O___g_e_t___f_p_(_) return 1 for success or 0 for failure
+       (although the current implementation never return 0).
+
+       _B_I_O___s_e_e_k_(_) returns the same value as the underlying _f_s_e_e_k_(_) function: 0
+       for success or -1 for failure.
+
+       _B_I_O___t_e_l_l_(_) returns the current file position.
+
+       _B_I_O___r_e_a_d___f_i_l_e_n_a_m_e_(_), _B_I_O___w_r_i_t_e___f_i_l_e_n_a_m_e_(_),  _B_I_O___a_p_p_e_n_d___f_i_l_e_n_a_m_e_(_) and
+       _B_I_O___r_w___f_i_l_e_n_a_m_e_(_) return 1 for success or 0 for failure.
+
+BBUUGGSS
+       _B_I_O___r_e_s_e_t_(_) and _B_I_O___s_e_e_k_(_) are implemented using _f_s_e_e_k_(_) on the under-
+       lying stream. The return value for _f_s_e_e_k_(_) is 0 for success or -1 if an
+       error occurred this differs from other types of BIO which will typi-
+       cally return 1 for success and a non positive value if an error
+       occurred.
+
+SSEEEE AALLSSOO
+       _B_I_O___s_e_e_k(3), _B_I_O___t_e_l_l(3), _B_I_O___r_e_s_e_t(3), _B_I_O___f_l_u_s_h(3), _B_I_O___r_e_a_d(3),
+       _B_I_O___w_r_i_t_e(3), _B_I_O___p_u_t_s(3), _B_I_O___g_e_t_s(3), _B_I_O___p_r_i_n_t_f(3),
+       _B_I_O___s_e_t___c_l_o_s_e(3), _B_I_O___g_e_t___c_l_o_s_e(3)
+
+
+
+1.0.0g                            2010-04-28                     BIO_s_file(3)

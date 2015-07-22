@@ -1,0 +1,47 @@
+DH_generate_key(3)                  OpenSSL                 DH_generate_key(3)
+
+
+
+NNAAMMEE
+       DH_generate_key, DH_compute_key - perform Diffie-Hellman key exchange
+
+SSYYNNOOPPSSIISS
+        #include <openssl/dh.h>
+
+        int DH_generate_key(DH *dh);
+
+        int DH_compute_key(unsigned char *key, BIGNUM *pub_key, DH *dh);
+
+DDEESSCCRRIIPPTTIIOONN
+       _D_H___g_e_n_e_r_a_t_e___k_e_y_(_) performs the first step of a Diffie-Hellman key
+       exchange by generating private and public DH values. By calling _D_H___c_o_m_-
+       _p_u_t_e___k_e_y_(_), these are combined with the other party's public value to
+       compute the shared key.
+
+       _D_H___g_e_n_e_r_a_t_e___k_e_y_(_) expects ddhh to contain the shared parameters ddhh-->>pp and
+       ddhh-->>gg. It generates a random private DH value unless ddhh-->>pprriivv__kkeeyy is
+       already set, and computes the corresponding public value ddhh-->>ppuubb__kkeeyy,
+       which can then be published.
+
+       _D_H___c_o_m_p_u_t_e___k_e_y_(_) computes the shared secret from the private DH value
+       in ddhh and the other party's public value in ppuubb__kkeeyy and stores it in
+       kkeeyy. kkeeyy must point to DDHH__ssiizzee((ddhh)) bytes of memory.
+
+RREETTUURRNN VVAALLUUEESS
+       _D_H___g_e_n_e_r_a_t_e___k_e_y_(_) returns 1 on success, 0 otherwise.
+
+       _D_H___c_o_m_p_u_t_e___k_e_y_(_) returns the size of the shared secret on success, -1
+       on error.
+
+       The error codes can be obtained by _E_R_R___g_e_t___e_r_r_o_r(3).
+
+SSEEEE AALLSSOO
+       _d_h(3), _E_R_R___g_e_t___e_r_r_o_r(3), _r_a_n_d(3), _D_H___s_i_z_e(3)
+
+HHIISSTTOORRYY
+       _D_H___g_e_n_e_r_a_t_e___k_e_y_(_) and _D_H___c_o_m_p_u_t_e___k_e_y_(_) are available in all versions of
+       SSLeay and OpenSSL.
+
+
+
+1.0.0g                            2002-09-25                DH_generate_key(3)

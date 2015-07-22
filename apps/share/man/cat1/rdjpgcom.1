@@ -1,0 +1,50 @@
+RDJPGCOM(1)                                                        RDJPGCOM(1)
+
+
+
+NNAAMMEE
+       rdjpgcom - display text comments from a JPEG file
+
+SSYYNNOOPPSSIISS
+       rrddjjppggccoomm [ --rraaww ] [ --vveerrbboossee ] [ _f_i_l_e_n_a_m_e ]
+
+DDEESSCCRRIIPPTTIIOONN
+       rrddjjppggccoomm  reads  the  named JPEG/JFIF file, or the standard input if no
+       file is named, and prints any text comments found in the  file  on  the
+       standard output.
+
+       The  JPEG standard allows "comment" (COM) blocks to occur within a JPEG
+       file.  Although the standard doesn't actually define  what  COM  blocks
+       are for, they are widely used to hold user-supplied text strings.  This
+       lets you add annotations, titles, index terms, etc to your JPEG  files,
+       and  later retrieve them as text.  COM blocks do not interfere with the
+       image stored in the JPEG file.  The maximum size of a COM block is 64K,
+       but you can have as many of them as you like in one JPEG file.
+
+OOPPTTIIOONNSS
+       --rraaww   Normally  rrddjjppggccoomm escapes non-printable characters in comments,
+              for security reasons.  This option avoids that.
+
+       --vveerrbboossee Causes rrddjjppggccoomm to also display the JPEG image dimensions.
+
+       Switch names may be abbreviated, and are not case sensitive.
+
+HHIINNTTSS
+       rrddjjppggccoomm does not depend on the IJG JPEG library.  Its source  code  is
+       intended  as  an illustration of the minimum amount of code required to
+       parse a JPEG file header correctly.
+
+       In --vveerrbboossee mode, rrddjjppggccoomm will also attempt to print the  contents  of
+       any  "APP12" markers as text.  Some digital cameras produce APP12 mark-
+       ers containing useful textual information.  If you like, you can modify
+       the source code to print other APPn marker types as well.
+
+SSEEEE AALLSSOO
+       ccjjppeegg(1), ddjjppeegg(1), jjppeeggttrraann(1), wwrrjjppggccoomm(1)
+
+AAUUTTHHOORR
+       Independent JPEG Group
+
+
+
+                               13 September 2013                   RDJPGCOM(1)

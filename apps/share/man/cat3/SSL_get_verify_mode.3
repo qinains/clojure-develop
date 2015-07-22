@@ -1,0 +1,52 @@
+SSL_CTX_get_verify_mode(3)          OpenSSL         SSL_CTX_get_verify_mode(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_get_verify_mode, SSL_get_verify_mode, SSL_CTX_get_verify_depth,
+       SSL_get_verify_depth, SSL_get_verify_callback, SSL_CTX_get_verify_call-
+       back - get currently set verification parameters
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        int SSL_CTX_get_verify_mode(const SSL_CTX *ctx);
+        int SSL_get_verify_mode(const SSL *ssl);
+        int SSL_CTX_get_verify_depth(const SSL_CTX *ctx);
+        int SSL_get_verify_depth(const SSL *ssl);
+        int (*SSL_CTX_get_verify_callback(const SSL_CTX *ctx))(int, X509_STORE_CTX *);
+        int (*SSL_get_verify_callback(const SSL *ssl))(int, X509_STORE_CTX *);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___C_T_X___g_e_t___v_e_r_i_f_y___m_o_d_e_(_) returns the verification mode currently set
+       in ccttxx.
+
+       _S_S_L___g_e_t___v_e_r_i_f_y___m_o_d_e_(_) returns the verification mode currently set in
+       ssssll.
+
+       _S_S_L___C_T_X___g_e_t___v_e_r_i_f_y___d_e_p_t_h_(_) returns the verification depth limit cur-
+       rently set in ccttxx. If no limit has been explicitly set, -1 is returned
+       and the default value will be used.
+
+       _S_S_L___g_e_t___v_e_r_i_f_y___d_e_p_t_h_(_) returns the verification depth limit currently
+       set in ssssll. If no limit has been explicitly set, -1 is returned and the
+       default value will be used.
+
+       _S_S_L___C_T_X___g_e_t___v_e_r_i_f_y___c_a_l_l_b_a_c_k_(_) returns a function pointer to the verifi-
+       cation callback currently set in ccttxx. If no callback was explicitly
+       set, the NULL pointer is returned and the default callback will be
+       used.
+
+       _S_S_L___g_e_t___v_e_r_i_f_y___c_a_l_l_b_a_c_k_(_) returns a function pointer to the verifica-
+       tion callback currently set in ssssll. If no callback was explicitly set,
+       the NULL pointer is returned and the default callback will be used.
+
+RREETTUURRNN VVAALLUUEESS
+       See DESCRIPTION
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___C_T_X___s_e_t___v_e_r_i_f_y(3)
+
+
+
+1.0.0g                            2005-03-30        SSL_CTX_get_verify_mode(3)

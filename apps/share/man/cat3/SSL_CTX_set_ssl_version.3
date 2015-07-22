@@ -1,0 +1,49 @@
+SSL_CTX_set_ssl_version(3)          OpenSSL         SSL_CTX_set_ssl_version(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_set_ssl_version, SSL_set_ssl_method, SSL_get_ssl_method -
+       choose a new TLS/SSL method
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        int SSL_CTX_set_ssl_version(SSL_CTX *ctx, const SSL_METHOD *method);
+        int SSL_set_ssl_method(SSL *s, const SSL_METHOD *method);
+        const SSL_METHOD *SSL_get_ssl_method(SSL *ssl);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___C_T_X___s_e_t___s_s_l___v_e_r_s_i_o_n_(_) sets a new default TLS/SSL mmeetthhoodd for SSL
+       objects newly created from this ccttxx. SSL objects already created with
+       _S_S_L___n_e_w(3) are not affected, except when _S_S_L___c_l_e_a_r(3) is being called.
+
+       _S_S_L___s_e_t___s_s_l___m_e_t_h_o_d_(_) sets a new TLS/SSL mmeetthhoodd for a particular ssssll
+       object. It may be reset, when _S_S_L___c_l_e_a_r_(_) is called.
+
+       _S_S_L___g_e_t___s_s_l___m_e_t_h_o_d_(_) returns a function pointer to the TLS/SSL method
+       set in ssssll.
+
+NNOOTTEESS
+       The available mmeetthhoodd choices are described in _S_S_L___C_T_X___n_e_w(3).
+
+       When _S_S_L___c_l_e_a_r(3) is called and no session is connected to an SSL
+       object, the method of the SSL object is reset to the method currently
+       set in the corresponding SSL_CTX object.
+
+RREETTUURRNN VVAALLUUEESS
+       The following return values can occur for _S_S_L___C_T_X___s_e_t___s_s_l___v_e_r_s_i_o_n_(_) and
+       _S_S_L___s_e_t___s_s_l___m_e_t_h_o_d_(_):
+
+       0   The new choice failed, check the error stack to find out the rea-
+           son.
+
+       1   The operation succeeded.
+
+SSEEEE AALLSSOO
+       _S_S_L___C_T_X___n_e_w(3), _S_S_L___n_e_w(3), _S_S_L___c_l_e_a_r(3), _s_s_l(3), _S_S_L___s_e_t___c_o_n_-
+       _n_e_c_t___s_t_a_t_e(3)
+
+
+
+1.0.0g                            2005-08-15        SSL_CTX_set_ssl_version(3)

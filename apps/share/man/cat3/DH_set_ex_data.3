@@ -1,0 +1,36 @@
+DH_get_ex_new_index(3)              OpenSSL             DH_get_ex_new_index(3)
+
+
+
+NNAAMMEE
+       DH_get_ex_new_index, DH_set_ex_data, DH_get_ex_data - add application
+       specific data to DH structures
+
+SSYYNNOOPPSSIISS
+        #include <openssl/dh.h>
+
+        int DH_get_ex_new_index(long argl, void *argp,
+                       CRYPTO_EX_new *new_func,
+                       CRYPTO_EX_dup *dup_func,
+                       CRYPTO_EX_free *free_func);
+
+        int DH_set_ex_data(DH *d, int idx, void *arg);
+
+        char *DH_get_ex_data(DH *d, int idx);
+
+DDEESSCCRRIIPPTTIIOONN
+       These functions handle application specific data in DH structures.
+       Their usage is identical to that of _R_S_A___g_e_t___e_x___n_e_w___i_n_d_e_x_(_),
+       _R_S_A___s_e_t___e_x___d_a_t_a_(_) and _R_S_A___g_e_t___e_x___d_a_t_a_(_) as described in
+       _R_S_A___g_e_t___e_x___n_e_w___i_n_d_e_x(3).
+
+SSEEEE AALLSSOO
+       _R_S_A___g_e_t___e_x___n_e_w___i_n_d_e_x(3), _d_h(3)
+
+HHIISSTTOORRYY
+       _D_H___g_e_t___e_x___n_e_w___i_n_d_e_x_(_), _D_H___s_e_t___e_x___d_a_t_a_(_) and _D_H___g_e_t___e_x___d_a_t_a_(_) are avail-
+       able since OpenSSL 0.9.5.
+
+
+
+1.0.0g                            2002-07-10            DH_get_ex_new_index(3)

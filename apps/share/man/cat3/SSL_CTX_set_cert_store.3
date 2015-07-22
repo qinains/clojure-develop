@@ -1,0 +1,51 @@
+SSL_CTX_set_cert_store(3)           OpenSSL          SSL_CTX_set_cert_store(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_set_cert_store, SSL_CTX_get_cert_store - manipulate X509 cer-
+       tificate verification storage
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        void SSL_CTX_set_cert_store(SSL_CTX *ctx, X509_STORE *store);
+        X509_STORE *SSL_CTX_get_cert_store(const SSL_CTX *ctx);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___C_T_X___s_e_t___c_e_r_t___s_t_o_r_e_(_) sets/replaces the certificate verification
+       storage of ccttxx to/with ssttoorree. If another X509_STORE object is currently
+       set in ccttxx, it will be _X_5_0_9___S_T_O_R_E___f_r_e_e_(_)ed.
+
+       _S_S_L___C_T_X___g_e_t___c_e_r_t___s_t_o_r_e_(_) returns a pointer to the current certificate
+       verification storage.
+
+NNOOTTEESS
+       In order to verify the certificates presented by the peer, trusted CA
+       certificates must be accessed. These CA certificates are made available
+       via lookup methods, handled inside the X509_STORE. From the X509_STORE
+       the X509_STORE_CTX used when verifying certificates is created.
+
+       Typically the trusted certificate store is handled indirectly via using
+       _S_S_L___C_T_X___l_o_a_d___v_e_r_i_f_y___l_o_c_a_t_i_o_n_s(3).  Using the _S_S_L___C_T_X___s_e_t___c_e_r_t___s_t_o_r_e_(_)
+       and _S_S_L___C_T_X___g_e_t___c_e_r_t___s_t_o_r_e_(_) functions it is possible to manipulate the
+       X509_STORE object beyond the _S_S_L___C_T_X___l_o_a_d___v_e_r_i_f_y___l_o_c_a_t_i_o_n_s(3) call.
+
+       Currently no detailed documentation on how to use the X509_STORE object
+       is available. Not all members of the X509_STORE are used when the veri-
+       fication takes place. So will e.g. the _v_e_r_i_f_y___c_a_l_l_b_a_c_k_(_) be overridden
+       with the _v_e_r_i_f_y___c_a_l_l_b_a_c_k_(_) set via the _S_S_L___C_T_X___s_e_t___v_e_r_i_f_y(3) family of
+       functions.  This document must therefore be updated when documentation
+       about the X509_STORE object and its handling becomes available.
+
+RREETTUURRNN VVAALLUUEESS
+       _S_S_L___C_T_X___s_e_t___c_e_r_t___s_t_o_r_e_(_) does not return diagnostic output.
+
+       _S_S_L___C_T_X___g_e_t___c_e_r_t___s_t_o_r_e_(_) returns the current setting.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___C_T_X___l_o_a_d___v_e_r_i_f_y___l_o_c_a_t_i_o_n_s(3), _S_S_L___C_T_X___s_e_t___v_e_r_i_f_y(3)
+
+
+
+1.0.0g                            2005-03-30         SSL_CTX_set_cert_store(3)

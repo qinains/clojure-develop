@@ -1,0 +1,86 @@
+SSL_CTX_new(3)                      OpenSSL                     SSL_CTX_new(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_new - create a new SSL_CTX object as framework for TLS/SSL
+       enabled functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        SSL_CTX *SSL_CTX_new(const SSL_METHOD *method);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___C_T_X___n_e_w_(_) creates a new SSSSLL__CCTTXX object as framework to establish
+       TLS/SSL enabled connections.
+
+NNOOTTEESS
+       The SSL_CTX object uses mmeetthhoodd as connection method. The methods exist
+       in a generic type (for client and server use), a server only type, and
+       a client only type. mmeetthhoodd can be of the following types:
+
+       SSLv2_method(void), SSLv2_server_method(void),
+       SSLv2_client_method(void)
+           A TLS/SSL connection established with these methods will only
+           understand the SSLv2 protocol. A client will send out SSLv2 client
+           hello messages and will also indicate that it only understand
+           SSLv2. A server will only understand SSLv2 client hello messages.
+
+       SSLv3_method(void), SSLv3_server_method(void),
+       SSLv3_client_method(void)
+           A TLS/SSL connection established with these methods will only
+           understand the SSLv3 protocol. A client will send out SSLv3 client
+           hello messages and will indicate that it only understands SSLv3. A
+           server will only understand SSLv3 client hello messages. This espe-
+           cially means, that it will not understand SSLv2 client hello mes-
+           sages which are widely used for compatibility reasons, see
+           SSLv23_*___m_e_t_h_o_d_(_).
+
+       TLSv1_method(void), TLSv1_server_method(void),
+       TLSv1_client_method(void)
+           A TLS/SSL connection established with these methods will only
+           understand the TLSv1 protocol. A client will send out TLSv1 client
+           hello messages and will indicate that it only understands TLSv1. A
+           server will only understand TLSv1 client hello messages. This espe-
+           cially means, that it will not understand SSLv2 client hello mes-
+           sages which are widely used for compatibility reasons, see
+           SSLv23_*___m_e_t_h_o_d_(_). It will also not understand SSLv3 client hello
+           messages.
+
+       SSLv23_method(void), SSLv23_server_method(void),
+       SSLv23_client_method(void)
+           A TLS/SSL connection established with these methods will understand
+           the SSLv2, SSLv3, and TLSv1 protocol. A client will send out SSLv2
+           client hello messages and will indicate that it also understands
+           SSLv3 and TLSv1. A server will understand SSLv2, SSLv3, and TLSv1
+           client hello messages. This is the best choice when compatibility
+           is a concern.
+
+       The list of protocols available can later be limited using the
+       SSL_OP_NO_SSLv2, SSL_OP_NO_SSLv3, SSL_OP_NO_TLSv1 options of the
+       _SS_SS_LL____CC_TT_XX____ss_ee_tt____oo_pp_tt_ii_oo_nn_ss_((_)) or _SS_SS_LL____ss_ee_tt____oo_pp_tt_ii_oo_nn_ss_((_)) functions. Using these
+       options it is possible to choose e.g. _S_S_L_v_2_3___s_e_r_v_e_r___m_e_t_h_o_d_(_) and be
+       able to negotiate with all possible clients, but to only allow newer
+       protocols like SSLv3 or TLSv1.
+
+       _S_S_L___C_T_X___n_e_w_(_) initializes the list of ciphers, the session cache set-
+       ting, the callbacks, the keys and certificates, and the options to its
+       default values.
+
+RREETTUURRNN VVAALLUUEESS
+       The following return values can occur:
+
+       NULL
+           The creation of a new SSL_CTX object failed. Check the error stack
+           to find out the reason.
+
+       Pointer to an SSL_CTX object
+           The return value points to an allocated SSL_CTX object.
+
+SSEEEE AALLSSOO
+       _S_S_L___C_T_X___f_r_e_e(3), _S_S_L___a_c_c_e_p_t(3), _s_s_l(3),  _S_S_L___s_e_t___c_o_n_n_e_c_t___s_t_a_t_e(3)
+
+
+
+1.0.0g                            2005-08-15                    SSL_CTX_new(3)

@@ -1,0 +1,402 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>s_client - SSL/TLS client program</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#options">OPTIONS</a></li>
+	<li><a href="#connected_commands">CONNECTED COMMANDS</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>s_client - SSL/TLS client program</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>openssl</strong> <strong>s_client</strong>
+[<strong>-connect host:port</strong>]
+[<strong>-verify depth</strong>]
+[<strong>-cert filename</strong>]
+[<strong>-certform DER|PEM</strong>]
+[<strong>-key filename</strong>]
+[<strong>-keyform DER|PEM</strong>]
+[<strong>-pass arg</strong>]
+[<strong>-CApath directory</strong>]
+[<strong>-CAfile filename</strong>]
+[<strong>-reconnect</strong>]
+[<strong>-pause</strong>]
+[<strong>-showcerts</strong>]
+[<strong>-debug</strong>]
+[<strong>-msg</strong>]
+[<strong>-nbio_test</strong>]
+[<strong>-state</strong>]
+[<strong>-nbio</strong>]
+[<strong>-crlf</strong>]
+[<strong>-ign_eof</strong>]
+[<strong>-quiet</strong>]
+[<strong>-ssl2</strong>]
+[<strong>-ssl3</strong>]
+[<strong>-tls1</strong>]
+[<strong>-no_ssl2</strong>]
+[<strong>-no_ssl3</strong>]
+[<strong>-no_tls1</strong>]
+[<strong>-bugs</strong>]
+[<strong>-cipher cipherlist</strong>]
+[<strong>-starttls protocol</strong>]
+[<strong>-engine id</strong>]
+[<strong>-tlsextdebug</strong>]
+[<strong>-no_ticket</strong>]
+[<strong>-sess_out filename</strong>]
+[<strong>-sess_in filename</strong>]
+[<strong>-rand file(s)</strong>]</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>s_client</strong> command implements a generic SSL/TLS client which connects
+to a remote host using SSL/TLS. It is a <em>very</em> useful diagnostic tool for
+SSL servers.</p>
+<p>
+</p>
+<hr />
+<h1><a name="options">OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item__2dconnect_host_3aport"><strong>-connect host:port</strong></a></strong>
+
+<dd>
+<p>This specifies the host and optional port to connect to. If not specified
+then an attempt is made to connect to the local host on port 4433.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dcert_certname"><strong>-cert certname</strong></a></strong>
+
+<dd>
+<p>The certificate to use, if one is requested by the server. The default is
+not to use a certificate.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dcertform_format"><strong>-certform format</strong></a></strong>
+
+<dd>
+<p>The certificate format to use: DER or PEM. PEM is the default.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dkey_keyfile"><strong>-key keyfile</strong></a></strong>
+
+<dd>
+<p>The private key to use. If not specified then the certificate file will
+be used.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dkeyform_format"><strong>-keyform format</strong></a></strong>
+
+<dd>
+<p>The private format to use: DER or PEM. PEM is the default.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpass_arg"><strong>-pass arg</strong></a></strong>
+
+<dd>
+<p>the private key password source. For more information about the format of <strong>arg</strong>
+see the <strong>PASS PHRASE ARGUMENTS</strong> section in <a href="../apps/openssl.html">openssl</a>.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dverify_depth"><strong>-verify depth</strong></a></strong>
+
+<dd>
+<p>The verify depth to use. This specifies the maximum length of the
+server certificate chain and turns on server certificate verification.
+Currently the verify operation continues after errors so all the problems
+with a certificate chain can be seen. As a side effect the connection
+will never fail due to a server certificate verify failure.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dcapath_directory"><strong>-CApath directory</strong></a></strong>
+
+<dd>
+<p>The directory to use for server certificate verification. This directory
+must be in ``hash format'', see <strong>verify</strong> for more information. These are
+also used when building the client certificate chain.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dcafile_file"><strong>-CAfile file</strong></a></strong>
+
+<dd>
+<p>A file containing trusted certificates to use during server authentication
+and to use when attempting to build the client certificate chain.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpurpose_2c__2dignore_critical_2c__2dissuer_chec"><strong>-purpose, -ignore_critical, -issuer_checks, -crl_check, -crl_check_all, -policy_check, -extended_crl, -x509_strict, -policy -check_ss_sig</strong></a></strong>
+
+<dd>
+<p>Set various certificate chain valiadition option. See the
+<a href="../apps/verify.html"><strong>verify</strong></a> manual page for details.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dreconnect"><strong>-reconnect</strong></a></strong>
+
+<dd>
+<p>reconnects to the same server 5 times using the same session ID, this can
+be used as a test that session caching is working.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpause"><strong>-pause</strong></a></strong>
+
+<dd>
+<p>pauses 1 second between each read and write call.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dshowcerts"><strong>-showcerts</strong></a></strong>
+
+<dd>
+<p>display the whole server certificate chain: normally only the server
+certificate itself is displayed.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dprexit"><strong>-prexit</strong></a></strong>
+
+<dd>
+<p>print session information when the program exits. This will always attempt
+to print out information even if the connection fails. Normally information
+will only be printed out once if the connection succeeds. This option is useful
+because the cipher in use may be renegotiated or the connection may fail
+because a client certificate is required or is requested only after an
+attempt is made to access a certain URL. Note: the output produced by this
+option is not always accurate because a connection might never have been
+established.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dstate"><strong>-state</strong></a></strong>
+
+<dd>
+<p>prints out the SSL session states.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2ddebug"><strong>-debug</strong></a></strong>
+
+<dd>
+<p>print extensive debugging information including a hex dump of all traffic.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dmsg"><strong>-msg</strong></a></strong>
+
+<dd>
+<p>show all protocol messages with hex dump.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dnbio_test"><strong>-nbio_test</strong></a></strong>
+
+<dd>
+<p>tests non-blocking I/O</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dnbio"><strong>-nbio</strong></a></strong>
+
+<dd>
+<p>turns on non-blocking I/O</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dcrlf"><strong>-crlf</strong></a></strong>
+
+<dd>
+<p>this option translated a line feed from the terminal into CR+LF as required
+by some servers.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dign_eof"><strong>-ign_eof</strong></a></strong>
+
+<dd>
+<p>inhibit shutting down the connection when end of file is reached in the
+input.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dquiet"><strong>-quiet</strong></a></strong>
+
+<dd>
+<p>inhibit printing of session and certificate information.  This implicitly
+turns on <strong>-ign_eof</strong> as well.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpsk_identity_identity"><strong>-psk_identity identity</strong></a></strong>
+
+<dd>
+<p>Use the PSK identity <strong>identity</strong> when using a PSK cipher suite.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dpsk_key"><strong>-psk key</strong></a></strong>
+
+<dd>
+<p>Use the PSK key <strong>key</strong> when using a PSK cipher suite. The key is
+given as a hexadecimal number without leading 0x, for example -psk
+1a2b3c4d.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dssl2_2c__2dssl3_2c__2dtls1_2c__2dno_ssl2_2c__2d"><strong>-ssl2</strong>, <strong>-ssl3</strong>, <strong>-tls1</strong>, <strong>-no_ssl2</strong>, <strong>-no_ssl3</strong>, <strong>-no_tls1</strong></a></strong>
+
+<dd>
+<p>these options disable the use of certain SSL or TLS protocols. By default
+the initial handshake uses a method which should be compatible with all
+servers and permit them to use SSL v3, SSL v2 or TLS as appropriate.</p>
+</dd>
+<dd>
+<p>Unfortunately there are a lot of ancient and broken servers in use which
+cannot handle this technique and will fail to connect. Some servers only
+work if TLS is turned off with the <strong>-no_tls</strong> option others will only
+support SSL v2 and may need the <strong>-ssl2</strong> option.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dbugs"><strong>-bugs</strong></a></strong>
+
+<dd>
+<p>there are several known bug in SSL and TLS implementations. Adding this
+option enables various workarounds.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dcipher_cipherlist"><strong>-cipher cipherlist</strong></a></strong>
+
+<dd>
+<p>this allows the cipher list sent by the client to be modified. Although
+the server determines which cipher suite is used it should take the first
+supported cipher in the list sent by the client. See the <strong>ciphers</strong>
+command for more information.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dstarttls_protocol"><strong>-starttls protocol</strong></a></strong>
+
+<dd>
+<p>send the protocol-specific <code>message(s)</code> to switch to TLS for communication.
+<strong>protocol</strong> is a keyword for the intended protocol.  Currently, the only
+supported keywords are ``smtp'', ``pop3'', ``imap'', and ``ftp''.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dtlsextdebug"><strong>-tlsextdebug</strong></a></strong>
+
+<dd>
+<p>print out a hex dump of any TLS extensions received from the server.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dno_ticket"><strong>-no_ticket</strong></a></strong>
+
+<dd>
+<p>disable RFC4507bis session ticket support.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dsess_out_filename"><strong>-sess_out filename</strong></a></strong>
+
+<dd>
+<p>output SSL session to <strong>filename</strong></p>
+</dd>
+</li>
+<dt><strong><a name="item__2dsess_in_sess_2epem"><strong>-sess_in sess.pem</strong></a></strong>
+
+<dd>
+<p>load SSL session from <strong>filename</strong>. The client will attempt to resume a
+connection from this session.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dengine_id"><strong>-engine id</strong></a></strong>
+
+<dd>
+<p>specifying an engine (by its unique <strong>id</strong> string) will cause <strong>s_client</strong>
+to attempt to obtain a functional reference to the specified engine,
+thus initialising it if needed. The engine will then be set as the default
+for all available algorithms.</p>
+</dd>
+</li>
+<dt><strong><a name="item_file"><strong>-rand file(s)</strong></a></strong>
+
+<dd>
+<p>a file or files containing random data used to seed the random number
+generator, or an EGD socket (see <a href="../crypto/RAND_egd.html">RAND_egd</a>).
+Multiple files can be specified separated by a OS-dependent character.
+The separator is <strong>;</strong> for MS-Windows, <strong>,</strong> for OpenVMS, and <strong>:</strong> for
+all others.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="connected_commands">CONNECTED COMMANDS</a></h1>
+<p>If a connection is established with an SSL server then any data received
+from the server is displayed and any key presses will be sent to the
+server. When used interactively (which means neither <strong>-quiet</strong> nor <strong>-ign_eof</strong>
+have been given), the session will be renegotiated if the line begins with an
+<strong>R</strong>, and if the line begins with a <strong>Q</strong> or if end of file is reached, the
+connection will be closed down.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p><strong>s_client</strong> can be used to debug SSL servers. To connect to an SSL HTTP
+server the command:</p>
+<pre>
+ openssl s_client -connect servername:443</pre>
+<p>would typically be used (https uses port 443). If the connection succeeds
+then an HTTP command can be given such as ``GET /'' to retrieve a web page.</p>
+<p>If the handshake fails then there are several possible causes, if it is
+nothing obvious like no client certificate then the <strong>-bugs</strong>, <strong>-ssl2</strong>,
+<strong>-ssl3</strong>, <strong>-tls1</strong>, <strong>-no_ssl2</strong>, <strong>-no_ssl3</strong>, <strong>-no_tls1</strong> options can be tried
+in case it is a buggy server. In particular you should play with these
+options <strong>before</strong> submitting a bug report to an OpenSSL mailing list.</p>
+<p>A frequent problem when attempting to get client certificates working
+is that a web client complains it has no certificates or gives an empty
+list to choose from. This is normally because the server is not sending
+the clients certificate authority in its ``acceptable CA list'' when it
+requests a certificate. By using <strong>s_client</strong> the CA list can be viewed
+and checked. However some servers only request client authentication
+after a specific URL is requested. To obtain the list in this case it
+is necessary to use the <strong>-prexit</strong> option and send an HTTP request
+for an appropriate page.</p>
+<p>If a certificate is specified on the command line using the <strong>-cert</strong>
+option it will not be used unless the server specifically requests
+a client certificate. Therefor merely including a client certificate
+on the command line is no guarantee that the certificate works.</p>
+<p>If there are problems verifying a server certificate then the
+<strong>-showcerts</strong> option can be used to show the whole chain.</p>
+<p>Since the SSLv23 client hello cannot include compression methods or extensions
+these will only be supported if its use is disabled, for example by using the
+<strong>-no_sslv2</strong> option.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>Because this program has a lot of options and also because some of
+the techniques used are rather old, the C source of s_client is rather
+hard to read and not a model of how things should be done. A typical
+SSL client program would be much simpler.</p>
+<p>The <strong>-verify</strong> option should really exit if the server verification
+fails.</p>
+<p>The <strong>-prexit</strong> option is a bit of a hack. We should really report
+information whenever a session is renegotiated.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../apps/sess_id.html">sess_id</a>, <a href="../apps/s_server.html">s_server</a>, <a href="../apps/ciphers.html">ciphers</a></p>
+
+</body>
+
+</html>

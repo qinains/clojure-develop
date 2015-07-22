@@ -1,0 +1,62 @@
+SSL_do_handshake(3)                 OpenSSL                SSL_do_handshake(3)
+
+
+
+NNAAMMEE
+       SSL_do_handshake - perform a TLS/SSL handshake
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        int SSL_do_handshake(SSL *ssl);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___d_o___h_a_n_d_s_h_a_k_e_(_) will wait for a SSL/TLS handshake to take place. If
+       the connection is in client mode, the handshake will be started. The
+       handshake routines may have to be explicitly set in advance using
+       either _S_S_L___s_e_t___c_o_n_n_e_c_t___s_t_a_t_e(3) or _S_S_L___s_e_t___a_c_c_e_p_t___s_t_a_t_e(3).
+
+NNOOTTEESS
+       The behaviour of _S_S_L___d_o___h_a_n_d_s_h_a_k_e_(_) depends on the underlying BIO.
+
+       If the underlying BIO is bblloocckkiinngg, _S_S_L___d_o___h_a_n_d_s_h_a_k_e_(_) will only return
+       once the handshake has been finished or an error occurred, except for
+       SGC (Server Gated Cryptography). For SGC, _S_S_L___d_o___h_a_n_d_s_h_a_k_e_(_) may return
+       with -1, but _S_S_L___g_e_t___e_r_r_o_r_(_) will yield SSSSLL__EERRRROORR__WWAANNTT__RREEAADD//WWRRIITTEE and
+       _S_S_L___d_o___h_a_n_d_s_h_a_k_e_(_) should be called again.
+
+       If the underlying BIO is nnoonn--bblloocckkiinngg, _S_S_L___d_o___h_a_n_d_s_h_a_k_e_(_) will also
+       return when the underlying BIO could not satisfy the needs of
+       _S_S_L___d_o___h_a_n_d_s_h_a_k_e_(_) to continue the handshake. In this case a call to
+       _S_S_L___g_e_t___e_r_r_o_r_(_) with the return value of _S_S_L___d_o___h_a_n_d_s_h_a_k_e_(_) will yield
+       SSSSLL__EERRRROORR__WWAANNTT__RREEAADD or SSSSLL__EERRRROORR__WWAANNTT__WWRRIITTEE. The calling process then
+       must repeat the call after taking appropriate action to satisfy the
+       needs of _S_S_L___d_o___h_a_n_d_s_h_a_k_e_(_).  The action depends on the underlying BIO.
+       When using a non-blocking socket, nothing is to be done, but _s_e_l_e_c_t_(_)
+       can be used to check for the required condition. When using a buffering
+       BIO, like a BIO pair, data must be written into or retrieved out of the
+       BIO before being able to continue.
+
+RREETTUURRNN VVAALLUUEESS
+       The following return values can occur:
+
+       1   The TLS/SSL handshake was successfully completed, a TLS/SSL connec-
+           tion has been established.
+
+       0   The TLS/SSL handshake was not successful but was shut down con-
+           trolled and by the specifications of the TLS/SSL protocol. Call
+           _S_S_L___g_e_t___e_r_r_o_r_(_) with the return value rreett to find out the reason.
+
+       <0  The TLS/SSL handshake was not successful because a fatal error
+           occurred either at the protocol level or a connection failure
+           occurred. The shutdown was not clean. It can also occur of action
+           is need to continue the operation for non-blocking BIOs. Call
+           _S_S_L___g_e_t___e_r_r_o_r_(_) with the return value rreett to find out the reason.
+
+SSEEEE AALLSSOO
+       _S_S_L___g_e_t___e_r_r_o_r(3), _S_S_L___c_o_n_n_e_c_t(3), _S_S_L___a_c_c_e_p_t(3), _s_s_l(3), _b_i_o(3),
+       _S_S_L___s_e_t___c_o_n_n_e_c_t___s_t_a_t_e(3)
+
+
+
+1.0.0g                            2002-07-19               SSL_do_handshake(3)

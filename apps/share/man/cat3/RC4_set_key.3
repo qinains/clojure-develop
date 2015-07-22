@@ -1,0 +1,59 @@
+rc4(3)                              OpenSSL                             rc4(3)
+
+
+
+NNAAMMEE
+       RC4_set_key, RC4 - RC4 encryption
+
+SSYYNNOOPPSSIISS
+        #include <openssl/rc4.h>
+
+        void RC4_set_key(RC4_KEY *key, int len, const unsigned char *data);
+
+        void RC4(RC4_KEY *key, unsigned long len, const unsigned char *indata,
+                 unsigned char *outdata);
+
+DDEESSCCRRIIPPTTIIOONN
+       This library implements the Alleged RC4 cipher, which is described for
+       example in _A_p_p_l_i_e_d _C_r_y_p_t_o_g_r_a_p_h_y.  It is believed to be compatible with
+       RC4[TM], a proprietary cipher of RSA Security Inc.
+
+       RC4 is a stream cipher with variable key length.  Typically, 128 bit
+       (16 byte) keys are used for strong encryption, but shorter insecure key
+       sizes have been widely used due to export restrictions.
+
+       RC4 consists of a key setup phase and the actual encryption or decryp-
+       tion phase.
+
+       _R_C_4___s_e_t___k_e_y_(_) sets up the RRCC44__KKEEYY kkeeyy using the lleenn bytes long key at
+       ddaattaa.
+
+       _R_C_4_(_) encrypts or decrypts the lleenn bytes of data at iinnddaattaa using kkeeyy
+       and places the result at oouuttddaattaa.  Repeated _R_C_4_(_) calls with the same
+       kkeeyy yield a continuous key stream.
+
+       Since RC4 is a stream cipher (the input is XORed with a pseudo-random
+       key stream to produce the output), decryption uses the same function
+       calls as encryption.
+
+       Applications should use the higher level functions _E_V_P___E_n_c_r_y_p_t_I_n_i_t(3)
+       etc. instead of calling the RC4 functions directly.
+
+RREETTUURRNN VVAALLUUEESS
+       _R_C_4___s_e_t___k_e_y_(_) and _R_C_4_(_) do not return values.
+
+NNOOTTEE
+       Certain conditions have to be observed to securely use stream ciphers.
+       It is not permissible to perform multiple encryptions using the same
+       key stream.
+
+SSEEEE AALLSSOO
+       _b_l_o_w_f_i_s_h(3), _d_e_s(3), _r_c_2(3)
+
+HHIISSTTOORRYY
+       _R_C_4___s_e_t___k_e_y_(_) and _R_C_4_(_) are available in all versions of SSLeay and
+       OpenSSL.
+
+
+
+1.0.0g                            2000-02-25                            rc4(3)

@@ -1,0 +1,38 @@
+SSL_CTX_free(3)                     OpenSSL                    SSL_CTX_free(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_free - free an allocated SSL_CTX object
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        void SSL_CTX_free(SSL_CTX *ctx);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___C_T_X___f_r_e_e_(_) decrements the reference count of ccttxx, and removes the
+       SSL_CTX object pointed to by ccttxx and frees up the allocated memory if
+       the the reference count has reached 0.
+
+       It also calls the _f_r_e_e_(_)ing procedures for indirectly affected items,
+       if applicable: the session cache, the list of ciphers, the list of
+       Client CAs, the certificates and keys.
+
+WWAARRNNIINNGGSS
+       If a session-remove callback is set (_S_S_L___C_T_X___s_e_s_s___s_e_t___r_e_m_o_v_e___c_b_(_)),
+       this callback will be called for each session being freed from ccttxx's
+       session cache. This implies, that all corresponding sessions from an
+       external session cache are removed as well. If this is not desired, the
+       user should explicitly unset the callback by calling
+       SSL_CTX_sess_set_remove_cb(ccttxx, NULL) prior to calling _S_S_L___C_T_X___f_r_e_e_(_).
+
+RREETTUURRNN VVAALLUUEESS
+       _S_S_L___C_T_X___f_r_e_e_(_) does not provide diagnostic information.
+
+SSEEEE AALLSSOO
+       _S_S_L___C_T_X___n_e_w(3), _s_s_l(3), _S_S_L___C_T_X___s_e_s_s___s_e_t___g_e_t___c_b(3)
+
+
+
+1.0.0g                            2003-03-28                   SSL_CTX_free(3)

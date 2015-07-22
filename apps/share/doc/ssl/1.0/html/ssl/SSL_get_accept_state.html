@@ -1,0 +1,86 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_get_accept_state - prepare SSL object to work in client or server mode</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_set_connect_state, SSL_get_accept_state - prepare SSL object to work in client or server mode</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ void SSL_set_connect_state(SSL *ssl);</pre>
+<pre>
+ void SSL_set_accept_state(SSL *ssl);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_set_connect_state()</code> sets <strong>ssl</strong> to work in client mode.</p>
+<p><code>SSL_set_accept_state()</code> sets <strong>ssl</strong> to work in server mode.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>When the SSL_CTX object was created with <a href="../ssl/SSL_CTX_new.html">SSL_CTX_new</a>,
+it was either assigned a dedicated client method, a dedicated server
+method, or a generic method, that can be used for both client and
+server connections. (The method might have been changed with
+<a href="../ssl/SSL_CTX_set_ssl_version.html">SSL_CTX_set_ssl_version</a> or
+<code>SSL_set_ssl_method().)</code></p>
+<p>When beginning a new handshake, the SSL engine must know whether it must
+call the connect (client) or accept (server) routines. Even though it may
+be clear from the method chosen, whether client or server mode was
+requested, the handshake routines must be explicitly set.</p>
+<p>When using the <a href="../ssl/SSL_connect.html">SSL_connect</a> or
+<a href="../ssl/SSL_accept.html">SSL_accept</a> routines, the correct handshake
+routines are automatically set. When performing a transparent negotiation
+using <a href="../ssl/SSL_write.html">SSL_write</a> or <a href="../ssl/SSL_read.html">SSL_read</a>, the
+handshake routines must be explicitly set in advance using either
+<code>SSL_set_connect_state()</code> or SSL_set_accept_state().</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>SSL_set_connect_state()</code> and <code>SSL_set_accept_state()</code> do not return diagnostic
+information.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a>, <a href="../ssl/SSL_new.html">SSL_new</a>, <a href="../ssl/SSL_CTX_new.html">SSL_CTX_new</a>,
+<a href="../ssl/SSL_connect.html">SSL_connect</a>, <a href="../ssl/SSL_accept.html">SSL_accept</a>,
+<a href="../ssl/SSL_write.html">SSL_write</a>, <a href="../ssl/SSL_read.html">SSL_read</a>,
+<a href="../ssl/SSL_do_handshake.html">SSL_do_handshake</a>,
+<a href="../ssl/SSL_CTX_set_ssl_version.html">SSL_CTX_set_ssl_version</a></p>
+
+</body>
+
+</html>

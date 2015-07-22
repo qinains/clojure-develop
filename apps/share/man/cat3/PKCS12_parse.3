@@ -1,0 +1,55 @@
+PKCS12_parse(3)                     OpenSSL                    PKCS12_parse(3)
+
+
+
+NNAAMMEE
+       PKCS12_parse - parse a PKCS#12 structure
+
+SSYYNNOOPPSSIISS
+        #include <openssl/pkcs12.h>
+
+       int PKCS12_parse(PKCS12 *p12, const char *pass, EVP_PKEY **pkey, X509
+       **cert, STACK_OF(X509) **ca);
+
+DDEESSCCRRIIPPTTIIOONN
+       _P_K_C_S_1_2___p_a_r_s_e_(_) parses a PKCS12 structure.
+
+       pp1122 is the PPKKCCSS1122 structure to parse. ppaassss is the passphrase to use.
+       If successful the private key will be written to **ppkkeeyy, the correspond-
+       ing certificate to **cceerrtt and any additional certificates to **ccaa.
+
+NNOOTTEESS
+       The parameters ppkkeeyy and cceerrtt cannot be NNUULLLL. ccaa can be <NULL> in which
+       case additional certificates will be discarded. **ccaa can also be a valid
+       STACK in which case additional certificates are appended to **ccaa. If **ccaa
+       is NNUULLLL a new STACK will be allocated.
+
+       The ffrriieennddllyyNNaammee and llooccaallKKeeyyIIDD attributes (if present) on each cer-
+       tificate will be stored in the aalliiaass and kkeeyyiidd attributes of the XX550099
+       structure.
+
+RREETTUURRNN VVAALLUUEESS
+       _P_K_C_S_1_2___p_a_r_s_e_(_) returns 1 for success and zero if an error occurred.
+
+       The error can be obtained from _E_R_R___g_e_t___e_r_r_o_r(3)
+
+BBUUGGSS
+       Only a single private key and corresponding certificate is returned by
+       this function. More complex PKCS#12 files with multiple private keys
+       will only return the first match.
+
+       Only ffrriieennddllyyNNaammee and llooccaallKKeeyyIIDD attributes are currently stored in
+       certificates. Other attributes are discarded.
+
+       Attributes currently cannot be stored in the private key EEVVPP__PPKKEEYY
+       structure.
+
+SSEEEE AALLSSOO
+       _d_2_i___P_K_C_S_1_2(3)
+
+HHIISSTTOORRYY
+       PKCS12_parse was added in OpenSSL 0.9.3
+
+
+
+1.0.0g                            2009-05-17                   PKCS12_parse(3)

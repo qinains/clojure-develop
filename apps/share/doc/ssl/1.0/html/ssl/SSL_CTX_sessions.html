@@ -1,0 +1,66 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_CTX_sessions - access internal session cache</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_CTX_sessions - access internal session cache</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ struct lhash_st *SSL_CTX_sessions(SSL_CTX *ctx);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_CTX_sessions()</code> returns a pointer to the lhash databases containing the
+internal session cache for <strong>ctx</strong>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>The sessions in the internal session cache are kept in an
+<a href="../crypto/lhash.html">lhash</a> type database. It is possible to directly
+access this database e.g. for searching. In parallel, the sessions
+form a linked list which is maintained separately from the
+<a href="../crypto/lhash.html">lhash</a> operations, so that the database must not be
+modified directly but by using the
+<a href="../ssl/SSL_CTX_add_session.html">SSL_CTX_add_session</a> family of functions.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a>, <a href="../crypto/lhash.html">lhash</a>,
+<a href="../ssl/SSL_CTX_add_session.html">SSL_CTX_add_session</a>,
+<a href="../ssl/SSL_CTX_set_session_cache_mode.html">SSL_CTX_set_session_cache_mode</a></p>
+
+</body>
+
+</html>

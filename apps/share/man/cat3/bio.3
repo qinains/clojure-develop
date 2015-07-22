@@ -1,0 +1,46 @@
+bio(3)                              OpenSSL                             bio(3)
+
+
+
+NNAAMMEE
+       bio - I/O abstraction
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bio.h>
+
+       TBA
+
+DDEESSCCRRIIPPTTIIOONN
+       A BIO is an I/O abstraction, it hides many of the underlying I/O
+       details from an application. If an application uses a BIO for its I/O
+       it can transparently handle SSL connections, unencrypted network con-
+       nections and file I/O.
+
+       There are two type of BIO, a source/sink BIO and a filter BIO.
+
+       As its name implies a source/sink BIO is a source and/or sink of data,
+       examples include a socket BIO and a file BIO.
+
+       A filter BIO takes data from one BIO and passes it through to another,
+       or the application. The data may be left unmodified (for example a mes-
+       sage digest BIO) or translated (for example an encryption BIO). The
+       effect of a filter BIO may change according to the I/O operation it is
+       performing: for example an encryption BIO will encrypt data if it is
+       being written to and decrypt data if it is being read from.
+
+       BIOs can be joined together to form a chain (a single BIO is a chain
+       with one component). A chain normally consist of one source/sink BIO
+       and one or more filter BIOs. Data read from or written to the first BIO
+       then traverses the chain to the end (normally a source/sink BIO).
+
+SSEEEE AALLSSOO
+       _B_I_O___c_t_r_l(3), _B_I_O___f___b_a_s_e_6_4(3), _B_I_O___f___b_u_f_f_e_r(3), _B_I_O___f___c_i_p_h_e_r(3),
+       _B_I_O___f___m_d(3), _B_I_O___f___n_u_l_l(3), _B_I_O___f___s_s_l(3), _B_I_O___f_i_n_d___t_y_p_e(3), _B_I_O___n_e_w(3),
+       _B_I_O___n_e_w___b_i_o___p_a_i_r(3), _B_I_O___p_u_s_h(3), _B_I_O___r_e_a_d(3), _B_I_O___s___a_c_c_e_p_t(3),
+       _B_I_O___s___b_i_o(3), _B_I_O___s___c_o_n_n_e_c_t(3), _B_I_O___s___f_d(3), _B_I_O___s___f_i_l_e(3),
+       _B_I_O___s___m_e_m(3), _B_I_O___s___n_u_l_l(3), _B_I_O___s___s_o_c_k_e_t(3), _B_I_O___s_e_t___c_a_l_l_b_a_c_k(3),
+       _B_I_O___s_h_o_u_l_d___r_e_t_r_y(3)
+
+
+
+1.0.0g                            2001-04-13                            bio(3)

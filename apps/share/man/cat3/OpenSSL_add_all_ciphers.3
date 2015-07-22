@@ -1,0 +1,64 @@
+OpenSSL_add_all_algorithms(3)       OpenSSL      OpenSSL_add_all_algorithms(3)
+
+
+
+NNAAMMEE
+       OpenSSL_add_all_algorithms, OpenSSL_add_all_ciphers,
+       OpenSSL_add_all_digests - add algorithms to internal table
+
+SSYYNNOOPPSSIISS
+        #include <openssl/evp.h>
+
+        void OpenSSL_add_all_algorithms(void);
+        void OpenSSL_add_all_ciphers(void);
+        void OpenSSL_add_all_digests(void);
+
+        void EVP_cleanup(void);
+
+DDEESSCCRRIIPPTTIIOONN
+       OpenSSL keeps an internal table of digest algorithms and ciphers. It
+       uses this table to lookup ciphers via functions such as
+       _E_V_P___g_e_t___c_i_p_h_e_r___b_y_n_a_m_e_(_).
+
+       _O_p_e_n_S_S_L___a_d_d___a_l_l___d_i_g_e_s_t_s_(_) adds all digest algorithms to the table.
+
+       _O_p_e_n_S_S_L___a_d_d___a_l_l___a_l_g_o_r_i_t_h_m_s_(_) adds all algorithms to the table (digests
+       and ciphers).
+
+       _O_p_e_n_S_S_L___a_d_d___a_l_l___c_i_p_h_e_r_s_(_) adds all encryption algorithms to the table
+       including password based encryption algorithms.
+
+       _E_V_P___c_l_e_a_n_u_p_(_) removes all ciphers and digests from the table.
+
+RREETTUURRNN VVAALLUUEESS
+       None of the functions return a value.
+
+NNOOTTEESS
+       A typical application will call _O_p_e_n_S_S_L___a_d_d___a_l_l___a_l_g_o_r_i_t_h_m_s_(_) initially
+       and _E_V_P___c_l_e_a_n_u_p_(_) before exiting.
+
+       An application does not need to add algorithms to use them explicitly,
+       for example by _E_V_P___s_h_a_1_(_). It just needs to add them if it (or any of
+       the functions it calls) needs to lookup algorithms.
+
+       The cipher and digest lookup functions are used in many parts of the
+       library. If the table is not initialized several functions will misbe-
+       have and complain they cannot find algorithms. This includes the PEM,
+       PKCS#12, SSL and S/MIME libraries.  This is a common query in the
+       OpenSSL mailing lists.
+
+       Calling _O_p_e_n_S_S_L___a_d_d___a_l_l___a_l_g_o_r_i_t_h_m_s_(_) links in all algorithms: as a
+       result a statically linked executable can be quite large. If this is
+       important it is possible to just add the required ciphers and digests.
+
+BBUUGGSS
+       Although the functions do not return error codes it is possible for
+       them to fail.  This will only happen as a result of a memory allocation
+       failure so this is not too much of a problem in practice.
+
+SSEEEE AALLSSOO
+       _e_v_p(3), _E_V_P___D_i_g_e_s_t_I_n_i_t(3), _E_V_P___E_n_c_r_y_p_t_I_n_i_t(3)
+
+
+
+1.0.0g                            2003-12-27     OpenSSL_add_all_algorithms(3)

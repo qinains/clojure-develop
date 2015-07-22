@@ -1,0 +1,78 @@
+BN_mod_mul_reciprocal(3)            OpenSSL           BN_mod_mul_reciprocal(3)
+
+
+
+NNAAMMEE
+       BN_mod_mul_reciprocal,  BN_div_recp, BN_RECP_CTX_new, BN_RECP_CTX_init,
+       BN_RECP_CTX_free, BN_RECP_CTX_set - modular multiplication using recip-
+       rocal
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bn.h>
+
+        BN_RECP_CTX *BN_RECP_CTX_new(void);
+        void BN_RECP_CTX_init(BN_RECP_CTX *recp);
+        void BN_RECP_CTX_free(BN_RECP_CTX *recp);
+
+        int BN_RECP_CTX_set(BN_RECP_CTX *recp, const BIGNUM *m, BN_CTX *ctx);
+
+        int BN_div_recp(BIGNUM *dv, BIGNUM *rem, BIGNUM *a, BN_RECP_CTX *recp,
+               BN_CTX *ctx);
+
+        int BN_mod_mul_reciprocal(BIGNUM *r, BIGNUM *a, BIGNUM *b,
+               BN_RECP_CTX *recp, BN_CTX *ctx);
+
+DDEESSCCRRIIPPTTIIOONN
+       _B_N___m_o_d___m_u_l___r_e_c_i_p_r_o_c_a_l_(_) can be used to perform an efficient
+       _B_N___m_o_d___m_u_l(3) operation when the operation will be performed repeatedly
+       with the same modulus. It computes rr=(aa*bb)%mm using rreeccpp=1/mm, which is
+       set as described below.  ccttxx is a previously allocated BBNN__CCTTXX used for
+       temporary variables.
+
+       _B_N___R_E_C_P___C_T_X___n_e_w_(_) allocates and initializes a BBNN__RREECCPP structure.
+       _B_N___R_E_C_P___C_T_X___i_n_i_t_(_) initializes an existing uninitialized BBNN__RREECCPP.
+
+       _B_N___R_E_C_P___C_T_X___f_r_e_e_(_) frees the components of the BBNN__RREECCPP, and, if it was
+       created by _B_N___R_E_C_P___C_T_X___n_e_w_(_), also the structure itself.
+
+       _B_N___R_E_C_P___C_T_X___s_e_t_(_) stores mm in rreeccpp and sets it up for computing 1/mm and
+       shifting it left by BN_num_bits(mm)+1 to make it an integer. The result
+       and the number of bits it was shifted left will later be stored in
+       rreeccpp.
+
+       _B_N___d_i_v___r_e_c_p_(_) divides aa by mm using rreeccpp. It places the quotient in ddvv
+       and the remainder in rreemm.
+
+       The BBNN__RREECCPP__CCTTXX structure is defined as follows:
+
+        typedef struct bn_recp_ctx_st
+               {
+               BIGNUM N;       /* the divisor */
+               BIGNUM Nr;      /* the reciprocal */
+               int num_bits;
+               int shift;
+               int flags;
+               } BN_RECP_CTX;
+
+       It cannot be shared between threads.
+
+RREETTUURRNN VVAALLUUEESS
+       _B_N___R_E_C_P___C_T_X___n_e_w_(_) returns the newly allocated BBNN__RREECCPP__CCTTXX, and NULL on
+       error.
+
+       _B_N___R_E_C_P___C_T_X___i_n_i_t_(_) and _B_N___R_E_C_P___C_T_X___f_r_e_e_(_) have no return values.
+
+       For the other functions, 1 is returned for success, 0 on error.  The
+       error codes can be obtained by _E_R_R___g_e_t___e_r_r_o_r(3).
+
+SSEEEE AALLSSOO
+       _b_n(3), _E_R_R___g_e_t___e_r_r_o_r(3), _B_N___a_d_d(3), _B_N___C_T_X___n_e_w(3)
+
+HHIISSTTOORRYY
+       BBNN__RREECCPP__CCTTXX was added in SSLeay 0.9.0. Before that, the function
+       _B_N___r_e_c_i_p_r_o_c_a_l_(_) was used instead, and the _B_N___m_o_d___m_u_l___r_e_c_i_p_r_o_c_a_l_(_) argu-
+       ments were different.
+
+
+
+1.0.0g                            2002-09-25          BN_mod_mul_reciprocal(3)

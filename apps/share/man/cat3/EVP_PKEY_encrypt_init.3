@@ -1,0 +1,87 @@
+EVP_PKEY_encrypt(3)                 OpenSSL                EVP_PKEY_encrypt(3)
+
+
+
+NNAAMMEE
+       EVP_PKEY_encrypt_init, EVP_PKEY_encrypt - encrypt using a public key
+       algorithm
+
+SSYYNNOOPPSSIISS
+        #include <openssl/evp.h>
+
+        int EVP_PKEY_encrypt_init(EVP_PKEY_CTX *ctx);
+        int EVP_PKEY_encrypt(EVP_PKEY_CTX *ctx,
+                               unsigned char *out, size_t *outlen,
+                               const unsigned char *in, size_t inlen);
+
+DDEESSCCRRIIPPTTIIOONN
+       The _E_V_P___P_K_E_Y___e_n_c_r_y_p_t___i_n_i_t_(_) function initializes a public key algorithm
+       context using key ppkkeeyy for an encryption operation.
+
+       The _E_V_P___P_K_E_Y___e_n_c_r_y_p_t_(_) function performs a public key encryption opera-
+       tion using ccttxx. The data to be encrypted is specified using the iinn and
+       iinnlleenn parameters. If oouutt is NNUULLLL then the maximum size of the output
+       buffer is written to the oouuttlleenn parameter. If oouutt is not NNUULLLL then
+       before the call the oouuttlleenn parameter should contain the length of the
+       oouutt buffer, if the call is successful the encrypted data is written to
+       oouutt and the amount of data written to oouuttlleenn.
+
+NNOOTTEESS
+       After the call to _E_V_P___P_K_E_Y___e_n_c_r_y_p_t___i_n_i_t_(_) algorithm specific control
+       operations can be performed to set any appropriate parameters for the
+       operation.
+
+       The function _E_V_P___P_K_E_Y___e_n_c_r_y_p_t_(_) can be called more than once on the
+       same context if several operations are performed using the same parame-
+       ters.
+
+RREETTUURRNN VVAALLUUEESS
+       _E_V_P___P_K_E_Y___e_n_c_r_y_p_t___i_n_i_t_(_) and _E_V_P___P_K_E_Y___e_n_c_r_y_p_t_(_) return 1 for success and
+       0 or a negative value for failure. In particular a return value of -2
+       indicates the operation is not supported by the public key algorithm.
+
+EEXXAAMMPPLLEE
+       Encrypt data using OAEP (for RSA keys):
+
+        #include <openssl/evp.h>
+        #include <openssl/rsa.h>
+
+        EVP_PKEY_CTX *ctx;
+        unsigned char *out, *in;
+        size_t outlen, inlen;
+        EVP_PKEY *key;
+        /* NB: assumes key in, inlen are already set up
+         * and that key is an RSA public key
+         */
+        ctx = EVP_PKEY_CTX_new(key);
+        if (!ctx)
+               /* Error occurred */
+        if (EVP_PKEY_encrypt_init(ctx) <= 0)
+               /* Error */
+        if (EVP_PKEY_CTX_set_rsa_padding(ctx, RSA_OAEP_PADDING) <= 0)
+               /* Error */
+
+        /* Determine buffer length */
+        if (EVP_PKEY_encrypt(ctx, NULL, &outlen, in, inlen) <= 0)
+               /* Error */
+
+        out = OPENSSL_malloc(outlen);
+
+        if (!out)
+               /* malloc failure */
+
+        if (EVP_PKEY_encrypt(ctx, out, &outlen, in, inlen) <= 0)
+               /* Error */
+
+        /* Encrypted data is outlen bytes written to buffer out */
+
+SSEEEE AALLSSOO
+       _E_V_P___P_K_E_Y___C_T_X___n_e_w(3), _E_V_P___P_K_E_Y___d_e_c_r_y_p_t(3), _E_V_P___P_K_E_Y___s_i_g_n(3),
+       _E_V_P___P_K_E_Y___v_e_r_i_f_y(3), _E_V_P___P_K_E_Y___v_e_r_i_f_y_r_e_c_o_v_e_r(3), _E_V_P___P_K_E_Y___d_e_r_i_v_e(3)
+
+HHIISSTTOORRYY
+       These functions were first added to OpenSSL 1.0.0.
+
+
+
+1.0.0g                            2009-10-01               EVP_PKEY_encrypt(3)

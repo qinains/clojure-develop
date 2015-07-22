@@ -1,0 +1,43 @@
+ASN1_STRING_new(3)                  OpenSSL                 ASN1_STRING_new(3)
+
+
+
+NNAAMMEE
+       ASN1_STRING_new, ASN1_STRING_type_new, ASN1_STRING_free - ASN1_STRING
+       allocation functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/asn1.h>
+
+        ASN1_STRING * ASN1_STRING_new(void);
+        ASN1_STRING * ASN1_STRING_type_new(int type);
+        void ASN1_STRING_free(ASN1_STRING *a);
+
+DDEESSCCRRIIPPTTIIOONN
+       _A_S_N_1___S_T_R_I_N_G___n_e_w_(_) returns an allocated AASSNN11__SSTTRRIINNGG structure. Its type
+       is undefined.
+
+       _A_S_N_1___S_T_R_I_N_G___t_y_p_e___n_e_w_(_) returns an allocated AASSNN11__SSTTRRIINNGG structure of
+       type ttyyppee.
+
+       _A_S_N_1___S_T_R_I_N_G___f_r_e_e_(_) frees up aa.
+
+NNOOTTEESS
+       Other string types call the AASSNN11__SSTTRRIINNGG functions. For example
+       _A_S_N_1___O_C_T_E_T___S_T_R_I_N_G___n_e_w_(_) calls ASN1_STRING_type(V_ASN1_OCTET_STRING).
+
+RREETTUURRNN VVAALLUUEESS
+       _A_S_N_1___S_T_R_I_N_G___n_e_w_(_) and _A_S_N_1___S_T_R_I_N_G___t_y_p_e___n_e_w_(_) return a valid ASN1_STRING
+       structure or NNUULLLL if an error occurred.
+
+       _A_S_N_1___S_T_R_I_N_G___f_r_e_e_(_) does not return a value.
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3)
+
+HHIISSTTOORRYY
+       TBA
+
+
+
+1.0.0g                            2006-05-14                ASN1_STRING_new(3)

@@ -1,0 +1,113 @@
+PKCS7_sign(3)                       OpenSSL                      PKCS7_sign(3)
+
+
+
+NNAAMMEE
+       PKCS7_sign - create a PKCS#7 signedData structure
+
+SSYYNNOOPPSSIISS
+        #include <openssl/pkcs7.h>
+
+        PKCS7 *PKCS7_sign(X509 *signcert, EVP_PKEY *pkey, STACK_OF(X509) *certs, BIO *data, int flags);
+
+DDEESSCCRRIIPPTTIIOONN
+       _P_K_C_S_7___s_i_g_n_(_) creates and returns a PKCS#7 signedData structure.
+       ssiiggnncceerrtt is the certificate to sign with, ppkkeeyy is the corresponsding
+       private key.  cceerrttss is an optional additional set of certificates to
+       include in the PKCS#7 structure (for example any intermediate CAs in
+       the chain).
+
+       The data to be signed is read from BIO ddaattaa.
+
+       ffllaaggss is an optional set of flags.
+
+NNOOTTEESS
+       Any of the following flags (ored together) can be passed in the ffllaaggss
+       parameter.
+
+       Many S/MIME clients expect the signed content to include valid MIME
+       headers. If the PPKKCCSS77__TTEEXXTT flag is set MIME headers for type tteexxtt//ppllaaiinn
+       are prepended to the data.
+
+       If PPKKCCSS77__NNOOCCEERRTTSS is set the signer's certificate will not be included
+       in the PKCS7 structure, the signer's certificate must still be supplied
+       in the ssiiggnncceerrtt parameter though. This can reduce the size of the sig-
+       nature if the signers certificate can be obtained by other means: for
+       example a previously signed message.
+
+       The data being signed is included in the PKCS7 structure, unless
+       PPKKCCSS77__DDEETTAACCHHEEDD is set in which case it is omitted. This is used for
+       PKCS7 detached signatures which are used in S/MIME plaintext signed
+       messages for example.
+
+       Normally the supplied content is translated into MIME canonical format
+       (as required by the S/MIME specifications) if PPKKCCSS77__BBIINNAARRYY is set no
+       translation occurs. This option should be used if the supplied data is
+       in binary format otherwise the translation will corrupt it.
+
+       The signedData structure includes several PKCS#7 autenticatedAttributes
+       including the signing time, the PKCS#7 content type and the supported
+       list of ciphers in an SMIMECapabilities attribute. If PPKKCCSS77__NNOOAATTTTRR is
+       set then no authenticatedAttributes will be used. If PPKKCCSS77__NNOOSSMMIIMMEECCAAPP
+       is set then just the SMIMECapabilities are omitted.
+
+       If present the SMIMECapabilities attribute indicates support for the
+       following algorithms: triple DES, 128 bit RC2, 64 bit RC2, DES and 40
+       bit RC2. If any of these algorithms is disabled then it will not be
+       included.
+
+       If the flags PPKKCCSS77__SSTTRREEAAMM is set then the returned PPKKCCSS77 structure is
+       just initialized ready to perform the signing operation. The signing is
+       however nnoott performed and the data to be signed is not read from the
+       ddaattaa parameter. Signing is deferred until after the data has been writ-
+       ten. In this way data can be signed in a single pass.
+
+       If the PPKKCCSS77__PPAARRTTIIAALL flag is set a partial PPKKCCSS77 structure is output to
+       which additional signers and capabilities can be added before finaliza-
+       tion.
+
+NNOOTTEESS
+       If the flag PPKKCCSS77__SSTTRREEAAMM is set the returned PPKKCCSS77 structure is nnoott
+       complete and outputting its contents via a function that does not prop-
+       erly finalize the PPKKCCSS77 structure will give unpredictable results.
+
+       Several functions including _S_M_I_M_E___w_r_i_t_e___P_K_C_S_7_(_),
+       _i_2_d___P_K_C_S_7___b_i_o___s_t_r_e_a_m_(_), _P_E_M___w_r_i_t_e___b_i_o___P_K_C_S_7___s_t_r_e_a_m_(_) finalize the
+       structure. Alternatively finalization can be performed by obtaining the
+       streaming ASN1 BBIIOO directly using _B_I_O___n_e_w___P_K_C_S_7_(_).
+
+       If a signer is specified it will use the default digest for the signing
+       algorithm. This is SSHHAA11 for both RSA and DSA keys.
+
+       In OpenSSL 1.0.0 the cceerrttss, ssiiggnncceerrtt and ppkkeeyy parameters can all be
+       NNUULLLL if the PPKKCCSS77__PPAARRTTIIAALL flag is set. One or more signers can be added
+       using the function _PP_KK_CC_SS_77____ss_ii_gg_nn____aa_dd_dd____ss_ii_gg_nn_ee_rr_((_)). _PP_KK_CC_SS_77____ff_ii_nn_aa_ll_((_)) must also be
+       called to finalize the structure if streaming is not enabled. Alterna-
+       tive signing digests can also be specified using this method.
+
+       In OpenSSL 1.0.0 if ssiiggnncceerrtt and ppkkeeyy are NULL then a certificates only
+       PKCS#7 structure is output.
+
+       In versions of OpenSSL before 1.0.0 the ssiiggnncceerrtt and ppkkeeyy parameters
+       must NNOOTT be NULL.
+
+BBUUGGSS
+       Some advanced attributes such as counter signatures are not supported.
+
+RREETTUURRNN VVAALLUUEESS
+       _P_K_C_S_7___s_i_g_n_(_) returns either a valid PKCS7 structure or NULL if an error
+       occurred.  The error can be obtained from _E_R_R___g_e_t___e_r_r_o_r(3).
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _P_K_C_S_7___v_e_r_i_f_y(3)
+
+HHIISSTTOORRYY
+       _P_K_C_S_7___s_i_g_n_(_) was added to OpenSSL 0.9.5
+
+       The PPKKCCSS77__PPAARRTTIIAALL flag was added in OpenSSL 1.0.0
+
+       The PPKKCCSS77__SSTTRREEAAMM flag was added in OpenSSL 1.0.0
+
+
+
+1.0.0g                            2009-10-01                     PKCS7_sign(3)

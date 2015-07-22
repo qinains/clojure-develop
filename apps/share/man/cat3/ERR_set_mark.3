@@ -1,0 +1,37 @@
+ERR_set_mark(3)                     OpenSSL                    ERR_set_mark(3)
+
+
+
+NNAAMMEE
+       ERR_set_mark, ERR_pop_to_mark - set marks and pop errors until mark
+
+SSYYNNOOPPSSIISS
+        #include <openssl/err.h>
+
+        int ERR_set_mark(void);
+
+        int ERR_pop_to_mark(void);
+
+DDEESSCCRRIIPPTTIIOONN
+       _E_R_R___s_e_t___m_a_r_k_(_) sets a mark on the current topmost error record if there
+       is one.
+
+       _E_R_R___p_o_p___t_o___m_a_r_k_(_) will pop the top of the error stack until a mark is
+       found.  The mark is then removed.  If there is no mark, the whole stack
+       is removed.
+
+RREETTUURRNN VVAALLUUEESS
+       _E_R_R___s_e_t___m_a_r_k_(_) returns 0 if the error stack is empty, otherwise 1.
+
+       _E_R_R___p_o_p___t_o___m_a_r_k_(_) returns 0 if there was no mark in the error stack,
+       which implies that the stack became empty, otherwise 1.
+
+SSEEEE AALLSSOO
+       _e_r_r(3)
+
+HHIISSTTOORRYY
+       _E_R_R___s_e_t___m_a_r_k_(_) and _E_R_R___p_o_p___t_o___m_a_r_k_(_) were added in OpenSSL 0.9.8.
+
+
+
+1.0.0g                            2003-06-11                   ERR_set_mark(3)

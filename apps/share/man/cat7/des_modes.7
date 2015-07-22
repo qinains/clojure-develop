@@ -1,0 +1,160 @@
+DES_MODES(7)                        OpenSSL                       DES_MODES(7)
+
+
+
+NNAAMMEE
+       des_modes - the variants of DES and other crypto algorithms of OpenSSL
+
+DDEESSCCRRIIPPTTIIOONN
+       Several crypto algorithms for OpenSSL can be used in a number of modes.
+       Those are used for using block ciphers in a way similar to stream
+       ciphers, among other things.
+
+OOVVEERRVVIIEEWW
+       EElleeccttrroonniicc CCooddeebbooookk MMooddee ((EECCBB))
+
+       Normally, this is found as the function _a_l_g_o_r_i_t_h_m___e_c_b___e_n_c_r_y_p_t_(_).
+
+       +o 64 bits are enciphered at a time.
+
+       +o The order of the blocks can be rearranged without detection.
+
+       +o The same plaintext block always produces the same ciphertext block
+         (for the same key) making it vulnerable to a 'dictionary attack'.
+
+       +o An error will only affect one ciphertext block.
+
+       CCiipphheerr BBlloocckk CChhaaiinniinngg MMooddee ((CCBBCC))
+
+       Normally, this is found as the function _a_l_g_o_r_i_t_h_m___c_b_c___e_n_c_r_y_p_t_(_).  Be
+       aware that _d_e_s___c_b_c___e_n_c_r_y_p_t_(_) is not really DES CBC (it does not update
+       the IV); use _d_e_s___n_c_b_c___e_n_c_r_y_p_t_(_) instead.
+
+       +o a multiple of 64 bits are enciphered at a time.
+
+       +o The CBC mode produces the same ciphertext whenever the same plaintext
+         is encrypted using the same key and starting variable.
+
+       +o The chaining operation makes the ciphertext blocks dependent on the
+         current and all preceding plaintext blocks and therefore blocks can
+         not be rearranged.
+
+       +o The use of different starting variables prevents the same plaintext
+         enciphering to the same ciphertext.
+
+       +o An error will affect the current and the following ciphertext blocks.
+
+       CCiipphheerr FFeeeeddbbaacckk MMooddee ((CCFFBB))
+
+       Normally, this is found as the function _a_l_g_o_r_i_t_h_m___c_f_b___e_n_c_r_y_p_t_(_).
+
+       +o a number of bits (j) <= 64 are enciphered at a time.
+
+       +o The CFB mode produces the same ciphertext whenever the same plaintext
+         is encrypted using the same key and starting variable.
+
+       +o The chaining operation makes the ciphertext variables dependent on
+         the current and all preceding variables and therefore j-bit variables
+         are chained together and can not be rearranged.
+
+       +o The use of different starting variables prevents the same plaintext
+         enciphering to the same ciphertext.
+
+       +o The strength of the CFB mode depends on the size of k (maximal if j
+         == k).  In my implementation this is always the case.
+
+       +o Selection of a small value for j will require more cycles through the
+         encipherment algorithm per unit of plaintext and thus cause greater
+         processing overheads.
+
+       +o Only multiples of j bits can be enciphered.
+
+       +o An error will affect the current and the following ciphertext vari-
+         ables.
+
+       OOuuttppuutt FFeeeeddbbaacckk MMooddee ((OOFFBB))
+
+       Normally, this is found as the function _a_l_g_o_r_i_t_h_m___o_f_b___e_n_c_r_y_p_t_(_).
+
+       +o a number of bits (j) <= 64 are enciphered at a time.
+
+       +o The OFB mode produces the same ciphertext whenever the same plaintext
+         enciphered using the same key and starting variable.  More over, in
+         the OFB mode the same key stream is produced when the same key and
+         start variable are used.  Consequently, for security reasons a spe-
+         cific start variable should be used only once for a given key.
+
+       +o The absence of chaining makes the OFB more vulnerable to specific
+         attacks.
+
+       +o The use of different start variables values prevents the same plain-
+         text enciphering to the same ciphertext, by producing different key
+         streams.
+
+       +o Selection of a small value for j will require more cycles through the
+         encipherment algorithm per unit of plaintext and thus cause greater
+         processing overheads.
+
+       +o Only multiples of j bits can be enciphered.
+
+       +o OFB mode of operation does not extend ciphertext errors in the resul-
+         tant plaintext output.  Every bit error in the ciphertext causes only
+         one bit to be in error in the deciphered plaintext.
+
+       +o OFB mode is not self-synchronizing.  If the two operation of enci-
+         pherment and decipherment get out of synchronism, the system needs to
+         be re-initialized.
+
+       +o Each re-initialization should use a value of the start variable dif-
+         ferent from the start variable values used before with the same key.
+         The reason for this is that an identical bit stream would be produced
+         each time from the same parameters.  This would be susceptible to a
+         'known plaintext' attack.
+
+       TTrriippllee EECCBB MMooddee
+
+       Normally, this is found as the function _a_l_g_o_r_i_t_h_m___e_c_b_3___e_n_c_r_y_p_t_(_).
+
+       +o Encrypt with key1, decrypt with key2 and encrypt with key3 again.
+
+       +o As for ECB encryption but increases the key length to 168 bits.
+         There are theoretic attacks that can be used that make the effective
+         key length 112 bits, but this attack also requires 2^56 blocks of
+         memory, not very likely, even for the NSA.
+
+       +o If both keys are the same it is equivalent to encrypting once with
+         just one key.
+
+       +o If the first and last key are the same, the key length is 112 bits.
+         There are attacks that could reduce the effective key strength to
+         only slightly more than 56 bits, but these require a lot of memory.
+
+       +o If all 3 keys are the same, this is effectively the same as normal
+         ecb mode.
+
+       TTrriippllee CCBBCC MMooddee
+
+       Normally, this is found as the function _a_l_g_o_r_i_t_h_m___e_d_e_3___c_b_c___e_n_c_r_y_p_t_(_).
+
+       +o Encrypt with key1, decrypt with key2 and then encrypt with key3.
+
+       +o As for CBC encryption but increases the key length to 168 bits with
+         the same restrictions as for triple ecb mode.
+
+NNOOTTEESS
+       This text was been written in large parts by Eric Young in his original
+       documentation for SSLeay, the predecessor of OpenSSL.  In turn, he at-
+       tributed it to:
+
+               AS 2805.5.2
+               Australian Standard
+               Electronic funds transfer - Requirements for interfaces,
+               Part 5.2: Modes of operation for an n-bit block cipher algorithm
+               Appendix A
+
+SSEEEE AALLSSOO
+       _b_l_o_w_f_i_s_h(3), _d_e_s(3), _i_d_e_a(3), _r_c_2(3)
+
+
+
+1.0.0g                            2007-02-27                      DES_MODES(7)

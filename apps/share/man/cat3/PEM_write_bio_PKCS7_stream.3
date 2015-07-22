@@ -1,0 +1,35 @@
+PEM_write_bio_PKCS7_stream(3)       OpenSSL      PEM_write_bio_PKCS7_stream(3)
+
+
+
+NNAAMMEE
+       PEM_write_bio_PKCS7_stream - output PKCS7 structure in PEM format.
+
+SSYYNNOOPPSSIISS
+        #include <openssl/pkcs7.h>
+        #include <openssl/pem.h>
+
+        int PEM_write_bio_PKCS7_stream(BIO *out, PKCS7 *p7, BIO *data, int flags);
+
+DDEESSCCRRIIPPTTIIOONN
+       _P_E_M___w_r_i_t_e___b_i_o___P_K_C_S_7___s_t_r_e_a_m_(_) outputs a PKCS7 structure in PEM format.
+
+       It is otherwise identical to the function _S_M_I_M_E___w_r_i_t_e___P_K_C_S_7_(_).
+
+NNOOTTEESS
+       This function is effectively a version of the _P_E_M___w_r_i_t_e___b_i_o___P_K_C_S_7_(_)
+       supporting streaming.
+
+RREETTUURRNN VVAALLUUEESS
+       _P_E_M___w_r_i_t_e___b_i_o___P_K_C_S_7___s_t_r_e_a_m_(_) returns 1 for success or 0 for failure.
+
+SSEEEE AALLSSOO
+       _E_R_R___g_e_t___e_r_r_o_r(3), _P_K_C_S_7___s_i_g_n(3), _P_K_C_S_7___v_e_r_i_f_y(3), _P_K_C_S_7___e_n_c_r_y_p_t(3)
+       _P_K_C_S_7___d_e_c_r_y_p_t(3), _S_M_I_M_E___w_r_i_t_e___P_K_C_S_7(3), _i_2_d___P_K_C_S_7___b_i_o___s_t_r_e_a_m(3)
+
+HHIISSTTOORRYY
+       _P_E_M___w_r_i_t_e___b_i_o___P_K_C_S_7___s_t_r_e_a_m_(_) was added to OpenSSL 1.0.0
+
+
+
+1.0.0g                            2009-10-01     PEM_write_bio_PKCS7_stream(3)

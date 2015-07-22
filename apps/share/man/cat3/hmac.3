@@ -1,0 +1,101 @@
+hmac(3)                             OpenSSL                            hmac(3)
+
+
+
+NNAAMMEE
+       HMAC, HMAC_Init, HMAC_Update, HMAC_Final, HMAC_cleanup - HMAC message
+       authentication code
+
+SSYYNNOOPPSSIISS
+        #include <openssl/hmac.h>
+
+        unsigned char *HMAC(const EVP_MD *evp_md, const void *key,
+                      int key_len, const unsigned char *d, int n,
+                      unsigned char *md, unsigned int *md_len);
+
+        void HMAC_CTX_init(HMAC_CTX *ctx);
+
+        int HMAC_Init(HMAC_CTX *ctx, const void *key, int key_len,
+                      const EVP_MD *md);
+        int HMAC_Init_ex(HMAC_CTX *ctx, const void *key, int key_len,
+                          const EVP_MD *md, ENGINE *impl);
+        int HMAC_Update(HMAC_CTX *ctx, const unsigned char *data, int len);
+        int HMAC_Final(HMAC_CTX *ctx, unsigned char *md, unsigned int *len);
+
+        void HMAC_CTX_cleanup(HMAC_CTX *ctx);
+        void HMAC_cleanup(HMAC_CTX *ctx);
+
+DDEESSCCRRIIPPTTIIOONN
+       HMAC is a MAC (message authentication code), i.e. a keyed hash function
+       used for message authentication, which is based on a hash function.
+
+       _H_M_A_C_(_) computes the message authentication code of the nn bytes at dd
+       using the hash function eevvpp__mmdd and the key kkeeyy which is kkeeyy__lleenn bytes
+       long.
+
+       It places the result in mmdd (which must have space for the output of the
+       hash function, which is no more than EEVVPP__MMAAXX__MMDD__SSIIZZEE bytes).  If mmdd is
+       NULL, the digest is placed in a static array.  The size of the output
+       is placed in mmdd__lleenn, unless it is NNUULLLL.
+
+       eevvpp__mmdd can be _E_V_P___s_h_a_1_(_), _E_V_P___r_i_p_e_m_d_1_6_0_(_) etc.
+
+       _H_M_A_C___C_T_X___i_n_i_t_(_) initialises a HHMMAACC__CCTTXX before first use. It must be
+       called.
+
+       _H_M_A_C___C_T_X___c_l_e_a_n_u_p_(_) erases the key and other data from the HHMMAACC__CCTTXX and
+       releases any associated resources. It must be called when an HHMMAACC__CCTTXX
+       is no longer required.
+
+       _H_M_A_C___c_l_e_a_n_u_p_(_) is an alias for _H_M_A_C___C_T_X___c_l_e_a_n_u_p_(_) included for back
+       compatibility with 0.9.6b, it is deprecated.
+
+       The following functions may be used if the message is not completely
+       stored in memory:
+
+       _H_M_A_C___I_n_i_t_(_) initializes a HHMMAACC__CCTTXX structure to use the hash function
+       eevvpp__mmdd and the key kkeeyy which is kkeeyy__lleenn bytes long. It is deprecated
+       and only included for backward compatibility with OpenSSL 0.9.6b.
+
+       _H_M_A_C___I_n_i_t___e_x_(_) initializes or reuses a HHMMAACC__CCTTXX structure to use the
+       function eevvpp__mmdd and key kkeeyy. Either can be NULL, in which case the
+       existing one will be reused. _H_M_A_C___C_T_X___i_n_i_t_(_) must have been called
+       before the first use of an HHMMAACC__CCTTXX in this function. NN..BB.. _HH_MM_AA_CC____II_nn_ii_tt_((_))
+       hhaadd tthhiiss uunnddooccuummeenntteedd bbeehhaavviioouurr iinn pprreevviioouuss vveerrssiioonnss ooff OOppeennSSSSLL -- ffaaiill--
+       uurree ttoo sswwiittcchh ttoo _HH_MM_AA_CC____II_nn_ii_tt____ee_xx_((_)) iinn pprrooggrraammss tthhaatt eexxppeecctt iitt wwiillll ccaauussee
+       tthheemm ttoo ssttoopp wwoorrkkiinngg.
+
+       _H_M_A_C___U_p_d_a_t_e_(_) can be called repeatedly with chunks of the message to be
+       authenticated (lleenn bytes at ddaattaa).
+
+       _H_M_A_C___F_i_n_a_l_(_) places the message authentication code in mmdd, which must
+       have space for the hash function output.
+
+RREETTUURRNN VVAALLUUEESS
+       _H_M_A_C_(_) returns a pointer to the message authentication code or NULL if
+       an error occurred.
+
+       _H_M_A_C___I_n_i_t___e_x_(_), _H_M_A_C___U_p_d_a_t_e_(_) and _H_M_A_C___F_i_n_a_l_(_) return 1 for success or
+       0 if an error occurred.
+
+       _H_M_A_C___C_T_X___i_n_i_t_(_) and _H_M_A_C___C_T_X___c_l_e_a_n_u_p_(_) do not return values.
+
+CCOONNFFOORRMMIINNGG TTOO
+       RFC 2104
+
+SSEEEE AALLSSOO
+       _s_h_a(3), _e_v_p(3)
+
+HHIISSTTOORRYY
+       _H_M_A_C_(_), _H_M_A_C___I_n_i_t_(_), _H_M_A_C___U_p_d_a_t_e_(_), _H_M_A_C___F_i_n_a_l_(_) and _H_M_A_C___c_l_e_a_n_u_p_(_) are
+       available since SSLeay 0.9.0.
+
+       _H_M_A_C___C_T_X___i_n_i_t_(_), _H_M_A_C___I_n_i_t___e_x_(_) and _H_M_A_C___C_T_X___c_l_e_a_n_u_p_(_) are available
+       since OpenSSL 0.9.7.
+
+       _H_M_A_C___I_n_i_t___e_x_(_), _H_M_A_C___U_p_d_a_t_e_(_) and _H_M_A_C___F_i_n_a_l_(_) did not return values in
+       versions of OpenSSL before 1.0.0.
+
+
+
+1.0.0g                            2009-10-01                           hmac(3)

@@ -1,0 +1,154 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>pkcs7 - PKCS#7 utility</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#command_options">COMMAND OPTIONS</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#restrictions">RESTRICTIONS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>pkcs7 - PKCS#7 utility</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>openssl</strong> <strong>pkcs7</strong>
+[<strong>-inform PEM|DER</strong>]
+[<strong>-outform PEM|DER</strong>]
+[<strong>-in filename</strong>]
+[<strong>-out filename</strong>]
+[<strong>-print_certs</strong>]
+[<strong>-text</strong>]
+[<strong>-noout</strong>]
+[<strong>-engine id</strong>]</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>pkcs7</strong> command processes PKCS#7 files in DER or PEM format.</p>
+<p>
+</p>
+<hr />
+<h1><a name="command_options">COMMAND OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item__2dinform_der_7cpem"><strong>-inform DER|PEM</strong></a></strong>
+
+<dd>
+<p>This specifies the input format. <strong>DER</strong> format is DER encoded PKCS#7
+v1.5 structure.<strong>PEM</strong> (the default) is a base64 encoded version of
+the DER form with header and footer lines.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2doutform_der_7cpem"><strong>-outform DER|PEM</strong></a></strong>
+
+<dd>
+<p>This specifies the output format, the options have the same meaning as the 
+<strong>-inform</strong> option.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2din_filename"><strong>-in filename</strong></a></strong>
+
+<dd>
+<p>This specifies the input filename to read from or standard input if this
+option is not specified.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dout_filename"><strong>-out filename</strong></a></strong>
+
+<dd>
+<p>specifies the output filename to write to or standard output by
+default.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dprint_certs"><strong>-print_certs</strong></a></strong>
+
+<dd>
+<p>prints out any certificates or CRLs contained in the file. They are
+preceded by their subject and issuer names in one line format.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dtext"><strong>-text</strong></a></strong>
+
+<dd>
+<p>prints out certificates details in full rather than just subject and
+issuer names.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dnoout"><strong>-noout</strong></a></strong>
+
+<dd>
+<p>don't output the encoded version of the PKCS#7 structure (or certificates
+is <strong>-print_certs</strong> is set).</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dengine_id"><strong>-engine id</strong></a></strong>
+
+<dd>
+<p>specifying an engine (by its unique <strong>id</strong> string) will cause <strong>pkcs7</strong>
+to attempt to obtain a functional reference to the specified engine,
+thus initialising it if needed. The engine will then be set as the default
+for all available algorithms.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>Convert a PKCS#7 file from PEM to DER:</p>
+<pre>
+ openssl pkcs7 -in file.pem -outform DER -out file.der</pre>
+<p>Output all certificates in a file:</p>
+<pre>
+ openssl pkcs7 -in file.pem -print_certs -out certs.pem</pre>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>The PEM PKCS#7 format uses the header and footer lines:</p>
+<pre>
+ -----BEGIN PKCS7-----
+ -----END PKCS7-----</pre>
+<p>For compatibility with some CAs it will also accept:</p>
+<pre>
+ -----BEGIN CERTIFICATE-----
+ -----END CERTIFICATE-----</pre>
+<p>
+</p>
+<hr />
+<h1><a name="restrictions">RESTRICTIONS</a></h1>
+<p>There is no option to print out all the fields of a PKCS#7 file.</p>
+<p>This PKCS#7 routines only understand PKCS#7 v 1.5 as specified in RFC2315 they 
+cannot currently parse, for example, the new CMS as described in RFC2630.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../apps/crl2pkcs7.html">crl2pkcs7</a></p>
+
+</body>
+
+</html>

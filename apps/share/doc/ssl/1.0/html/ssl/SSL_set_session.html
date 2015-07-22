@@ -1,0 +1,86 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_set_session - set a TLS/SSL session to be used during TLS/SSL connect</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_set_session - set a TLS/SSL session to be used during TLS/SSL connect</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ int SSL_set_session(SSL *ssl, SSL_SESSION *session);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_set_session()</code> sets <strong>session</strong> to be used when the TLS/SSL connection
+is to be established. <code>SSL_set_session()</code> is only useful for TLS/SSL clients.
+When the session is set, the reference count of <strong>session</strong> is incremented
+by 1. If the session is not reused, the reference count is decremented
+again during SSL_connect(). Whether the session was reused can be queried
+with the <a href="../ssl/SSL_session_reused.html">SSL_session_reused</a> call.</p>
+<p>If there is already a session set inside <strong>ssl</strong> (because it was set with
+<code>SSL_set_session()</code> before or because the same <strong>ssl</strong> was already used for
+a connection), <code>SSL_SESSION_free()</code> will be called for that session.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>SSL_SESSION objects keep internal link information about the session cache
+list, when being inserted into one SSL_CTX object's session cache.
+One SSL_SESSION object, regardless of its reference count, must therefore
+only be used with one SSL_CTX object (and the SSL objects created
+from this SSL_CTX object).</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>The following return values can occur:</p>
+<ol>
+<li>
+<p>The operation failed; check the error stack to find out the reason.</p>
+</li>
+<li>
+<p>The operation succeeded.</p>
+</li>
+</ol>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a>, <a href="../ssl/SSL_SESSION_free.html">SSL_SESSION_free</a>,
+<a href="../ssl/SSL_get_session.html">SSL_get_session</a>,
+<a href="../ssl/SSL_session_reused.html">SSL_session_reused</a>,
+<a href="../ssl/SSL_CTX_set_session_cache_mode.html">SSL_CTX_set_session_cache_mode</a></p>
+
+</body>
+
+</html>

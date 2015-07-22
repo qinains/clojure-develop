@@ -9,22 +9,23 @@
 
     /README.md --本文件
     /init.el --配置文件,插件的按键以及细节说明请看该文件注解
-    /bin/ --常用的可执行文件，包括install.sh、install.bat、lein.bat(执行install.bat后生成)、wget、markdown、字体文件
+    /apps/bin/ --常用的可执行文件，包括install.sh、install.bat、lein.bat(执行install.bat后生成)、wget、markdown
+    /others/ 字体文件、leiningen-{version}-standalone.jar等
 
 
 ###安装字体
-双击bin/wqy-microhei-0.2.0-beta.tar.gz或者去[这里下载](http://sourceforge.net/projects/wqy/files/wqy-microhei/)等宽字体之后解压安装。
+双击others/wqy-microhei-0.2.0-beta.tar.gz或者去[这里下载](http://sourceforge.net/projects/wqy/files/wqy-microhei/)等宽字体之后解压安装。
 
 ##将bin/文件夹添加到PATH中
 以Win7为例，
 计算机-右键-属性-高级系统设置-环境变量-系统变量-双击Path-在“变量值”中添加：
 
-    C:\path\to\this\dir\bin\;
+    C:\path\to\this\dir\apps\bin\;
 
 ##安装lein
 双击
 
-    C:/path/to/this/dir/bin/install.bat
+    C:/path/to/this/dir/apps/bin/install.bat
 
 即可安装lein的依赖包。
 
@@ -87,7 +88,7 @@ Windows系统下，
         set http_proxy=127.0.0.1:8580
         set https_proxy=127.0.0.1:8580
 
-**每次运行C:/develop/bin/install.bat文件之后，都要重新编辑。**
+**每次运行C:/develop/apps/bin/install.bat文件之后，都要重新编辑。**
 
 
 在Linux系统下，
@@ -135,7 +136,7 @@ Windows系统下，
 	:plugins [[..其他包..][refactor-nrepl "1.1.0"]]
 
 到依赖文件中。
-按C-c C-m .. 即可启用重构插件。详情请看[演示](https://github.com/clojure-emacs/clj-refactor.el#usage)
+按C-c C-m .. 即可启用重构插件。详情请看[演示](https://github.com/clojure-emacs/clj-refactor.el/wiki)
 
 ##语法检查
 添加

@@ -1,0 +1,94 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_get_verify_result - get result of peer certificate verification</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_get_verify_result - get result of peer certificate verification</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ long SSL_get_verify_result(const SSL *ssl);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_get_verify_result()</code> returns the result of the verification of the
+X509 certificate presented by the peer, if any.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p><code>SSL_get_verify_result()</code> can only return one error code while the verification
+of a certificate can fail because of many reasons at the same time. Only
+the last verification error that occurred during the processing is available
+from SSL_get_verify_result().</p>
+<p>The verification result is part of the established session and is restored
+when a session is reused.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>If no peer certificate was presented, the returned result code is
+X509_V_OK. This is because no verification error occurred, it does however
+not indicate success. <code>SSL_get_verify_result()</code> is only useful in connection
+with <a href="../ssl/SSL_get_peer_certificate.html">SSL_get_peer_certificate</a>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>The following return values can currently occur:</p>
+<dl>
+<dt><strong><a name="item_x509_v_ok">X509_V_OK</a></strong>
+
+<dd>
+<p>The verification succeeded or no peer certificate was presented.</p>
+</dd>
+</li>
+<dt><strong><a name="item_any_other_value">Any other value</a></strong>
+
+<dd>
+<p>Documented in <a href="../apps/verify.html">verify</a>.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a>, <a href="../ssl/SSL_set_verify_result.html">SSL_set_verify_result</a>,
+<a href="../ssl/SSL_get_peer_certificate.html">SSL_get_peer_certificate</a>,
+<a href="../apps/verify.html">verify</a></p>
+
+</body>
+
+</html>

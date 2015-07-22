@@ -1,0 +1,96 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>RSA_generate_key - generate RSA key pair</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#return_value">RETURN VALUE</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>RSA_generate_key - generate RSA key pair</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/rsa.h&gt;</pre>
+<pre>
+ RSA *RSA_generate_key(int num, unsigned long e,
+    void (*callback)(int,int,void *), void *cb_arg);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>RSA_generate_key()</code> generates a key pair and returns it in a newly
+allocated <strong>RSA</strong> structure. The pseudo-random number generator must
+be seeded prior to calling RSA_generate_key().</p>
+<p>The modulus size will be <strong>num</strong> bits, and the public exponent will be
+<strong>e</strong>. Key sizes with <strong>num</strong> &lt; 1024 should be considered insecure.
+The exponent is an odd number, typically 3, 17 or 65537.</p>
+<p>A callback function may be used to provide feedback about the
+progress of the key generation. If <strong>callback</strong> is not <strong>NULL</strong>, it
+will be called as follows:</p>
+<ul>
+<li>
+<p>While a random prime number is generated, it is called as
+described in <a href="../crypto/BN_generate_prime.html">BN_generate_prime</a>.</p>
+</li>
+<li>
+<p>When the n-th randomly generated prime is rejected as not
+suitable for the key, <strong>callback(2, n, cb_arg)</strong> is called.</p>
+</li>
+<li>
+<p>When a random p has been found with p-1 relatively prime to <strong>e</strong>,
+it is called as <strong>callback(3, 0, cb_arg)</strong>.</p>
+</li>
+</ul>
+<p>The process is then repeated for prime q with <strong>callback(3, 1, cb_arg)</strong>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_value">RETURN VALUE</a></h1>
+<p>If key generation fails, <code>RSA_generate_key()</code> returns <strong>NULL</strong>; the
+error codes can be obtained by <a href="../crypto/ERR_get_error.html">ERR_get_error</a>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p><strong>callback(2, x, cb_arg)</strong> is used with two different meanings.</p>
+<p><code>RSA_generate_key()</code> goes into an infinite loop for illegal input values.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../crypto/ERR_get_error.html">ERR_get_error</a>, <a href="../apps/rand.html">rand</a>, <a href="../apps/rsa.html">rsa</a>,
+<em>RSA_free</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>The <strong>cb_arg</strong> argument was added in SSLeay 0.9.0.</p>
+
+</body>
+
+</html>

@@ -1,0 +1,81 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_CTX_sess_get_cache_size - manipulate session cache size</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_CTX_sess_set_cache_size, SSL_CTX_sess_get_cache_size - manipulate session cache size</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ long SSL_CTX_sess_set_cache_size(SSL_CTX *ctx, long t);
+ long SSL_CTX_sess_get_cache_size(SSL_CTX *ctx);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_CTX_sess_set_cache_size()</code> sets the size of the internal session cache
+of context <strong>ctx</strong> to <strong>t</strong>.</p>
+<p><code>SSL_CTX_sess_get_cache_size()</code> returns the currently valid session cache size.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>The internal session cache size is SSL_SESSION_CACHE_MAX_SIZE_DEFAULT,
+currently 1024*20, so that up to 20000 sessions can be held. This size
+can be modified using the <code>SSL_CTX_sess_set_cache_size()</code> call. A special
+case is the size 0, which is used for unlimited size.</p>
+<p>When the maximum number of sessions is reached, no more new sessions are
+added to the cache. New space may be added by calling
+<a href="../ssl/SSL_CTX_flush_sessions.html">SSL_CTX_flush_sessions</a> to remove
+expired sessions.</p>
+<p>If the size of the session cache is reduced and more sessions are already
+in the session cache, old session will be removed at the next time a
+session shall be added. This removal is not synchronized with the
+expiration of sessions.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>SSL_CTX_sess_set_cache_size()</code> returns the previously valid size.</p>
+<p><code>SSL_CTX_sess_get_cache_size()</code> returns the currently valid size.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a>,
+<a href="../ssl/SSL_CTX_set_session_cache_mode.html">SSL_CTX_set_session_cache_mode</a>,
+<a href="../ssl/SSL_CTX_sess_number.html">SSL_CTX_sess_number</a>,
+<a href="../ssl/SSL_CTX_flush_sessions.html">SSL_CTX_flush_sessions</a></p>
+
+</body>
+
+</html>

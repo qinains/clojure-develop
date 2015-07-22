@@ -1,0 +1,170 @@
+X509_VERIFY_PARAM_set_flags(3)      OpenSSL     X509_VERIFY_PARAM_set_flags(3)
+
+
+
+NNAAMMEE
+       X509_VERIFY_PARAM_set_flags, X509_VERIFY_PARAM_clear_flags, X509_VER-
+       IFY_PARAM_get_flags, X509_VERIFY_PARAM_set_purpose, X509_VER-
+       IFY_PARAM_set_trust, X509_VERIFY_PARAM_set_depth, X509_VER-
+       IFY_PARAM_get_depth, X509_VERIFY_PARAM_set_time, X509_VER-
+       IFY_PARAM_add0_policy, X509_VERIFY_PARAM_set1_policies - X509 verifica-
+       tion parameters
+
+SSYYNNOOPPSSIISS
+        #include <openssl/x509_vfy.h>
+
+        int X509_VERIFY_PARAM_set_flags(X509_VERIFY_PARAM *param, unsigned long flags);
+        int X509_VERIFY_PARAM_clear_flags(X509_VERIFY_PARAM *param,
+                                                               unsigned long flags);
+        unsigned long X509_VERIFY_PARAM_get_flags(X509_VERIFY_PARAM *param);
+
+        int X509_VERIFY_PARAM_set_purpose(X509_VERIFY_PARAM *param, int purpose);
+        int X509_VERIFY_PARAM_set_trust(X509_VERIFY_PARAM *param, int trust);
+
+        void X509_VERIFY_PARAM_set_time(X509_VERIFY_PARAM *param, time_t t);
+
+        int X509_VERIFY_PARAM_add0_policy(X509_VERIFY_PARAM *param,
+                                                       ASN1_OBJECT *policy);
+        int X509_VERIFY_PARAM_set1_policies(X509_VERIFY_PARAM *param,
+                                               STACK_OF(ASN1_OBJECT) *policies);
+
+        void X509_VERIFY_PARAM_set_depth(X509_VERIFY_PARAM *param, int depth);
+        int X509_VERIFY_PARAM_get_depth(const X509_VERIFY_PARAM *param);
+
+DDEESSCCRRIIPPTTIIOONN
+       These functions manipulate the XX550099__VVEERRIIFFYY__PPAARRAAMM structure associated
+       with a certificate verification operation.
+
+       The _X_5_0_9___V_E_R_I_F_Y___P_A_R_A_M___s_e_t___f_l_a_g_s_(_) function sets the flags in ppaarraamm by
+       oring it with ffllaaggss. See the VVEERRIIFFIICCAATTIIOONN FFLLAAGGSS section for a complete
+       description of values the ffllaaggss parameter can take.
+
+       _X_5_0_9___V_E_R_I_F_Y___P_A_R_A_M___g_e_t___f_l_a_g_s_(_) returns the flags in ppaarraamm.
+
+       _X_5_0_9___V_E_R_I_F_Y___P_A_R_A_M___c_l_e_a_r___f_l_a_g_s_(_) clears the flags ffllaaggss in ppaarraamm.
+
+       _X_5_0_9___V_E_R_I_F_Y___P_A_R_A_M___s_e_t___p_u_r_p_o_s_e_(_) sets the verification purpose in ppaarraamm
+       to ppuurrppoossee. This determines the acceptable purpose of the certificate
+       chain, for example SSL client or SSL server.
+
+       _X_5_0_9___V_E_R_I_F_Y___P_A_R_A_M___s_e_t___t_r_u_s_t_(_) sets the trust setting in ppaarraamm to ttrruusstt.
+
+       _X_5_0_9___V_E_R_I_F_Y___P_A_R_A_M___s_e_t___t_i_m_e_(_) sets the verification time in ppaarraamm to tt.
+       Normally the current time is used.
+
+       _X_5_0_9___V_E_R_I_F_Y___P_A_R_A_M___a_d_d_0___p_o_l_i_c_y_(_) enables policy checking (it is disabled
+       by default) and adds ppoolliiccyy to the acceptable policy set.
+
+       _X_5_0_9___V_E_R_I_F_Y___P_A_R_A_M___s_e_t_1___p_o_l_i_c_i_e_s_(_) enables policy checking (it is dis-
+       abled by default) and sets the acceptable policy set to ppoolliicciieess. Any
+       existing policy set is cleared. The ppoolliicciieess parameter can be NNUULLLL to
+       clear an existing policy set.
+
+       _X_5_0_9___V_E_R_I_F_Y___P_A_R_A_M___s_e_t___d_e_p_t_h_(_) sets the maximum verification depth to
+       ddeepptthh.  That is the maximum number of untrusted CA certificates that
+       can appear in a chain.
+
+RREETTUURRNN VVAALLUUEESS
+       _X_5_0_9___V_E_R_I_F_Y___P_A_R_A_M___s_e_t___f_l_a_g_s_(_), _X_5_0_9___V_E_R_I_F_Y___P_A_R_A_M___c_l_e_a_r___f_l_a_g_s_(_),
+       _X_5_0_9___V_E_R_I_F_Y___P_A_R_A_M___s_e_t___p_u_r_p_o_s_e_(_), _X_5_0_9___V_E_R_I_F_Y___P_A_R_A_M___s_e_t___t_r_u_s_t_(_),
+       _X_5_0_9___V_E_R_I_F_Y___P_A_R_A_M___a_d_d_0___p_o_l_i_c_y_(_) and _X_5_0_9___V_E_R_I_F_Y___P_A_R_A_M___s_e_t_1___p_o_l_i_c_i_e_s_(_)
+       return 1 for success and 0 for failure.
+
+       _X_5_0_9___V_E_R_I_F_Y___P_A_R_A_M___g_e_t___f_l_a_g_s_(_) returns the current verification flags.
+
+       _X_5_0_9___V_E_R_I_F_Y___P_A_R_A_M___s_e_t___t_i_m_e_(_) and _X_5_0_9___V_E_R_I_F_Y___P_A_R_A_M___s_e_t___d_e_p_t_h_(_) do not
+       return values.
+
+       _X_5_0_9___V_E_R_I_F_Y___P_A_R_A_M___g_e_t___d_e_p_t_h_(_) returns the current verification depth.
+
+VVEERRIIFFIICCAATTIIOONN FFLLAAGGSS
+       The verification flags consists of zero or more of the following flags
+       ored together.
+
+       XX550099__VV__FFLLAAGG__CCRRLL__CCHHEECCKK enables CRL checking for the certificate chain
+       leaf certificate. An error occurs if a suitable CRL cannot be found.
+
+       XX550099__VV__FFLLAAGG__CCRRLL__CCHHEECCKK__AALLLL enables CRL checking for the entire certifi-
+       cate chain.
+
+       XX550099__VV__FFLLAAGG__IIGGNNOORREE__CCRRIITTIICCAALL disabled critical extension checking. By
+       default any unhandled critical extensions in certificates or (if
+       checked) CRLs results in a fatal error. If this flag is set unhandled
+       critical extensions are ignored. WWAARRNNIINNGG setting this option for any-
+       thing other than debugging purposes can be a security risk. Finer con-
+       trol over which extensions are supported can be performed in the veri-
+       fication callback.
+
+       THe XX550099__VV__FFLLAAGG__XX550099__SSTTRRIICCTT flag disables workarounds for some broken
+       certificates and makes the verification strictly apply XX550099 rules.
+
+       XX550099__VV__FFLLAAGG__AALLLLOOWW__PPRROOXXYY__CCEERRTTSS enables proxy certificate verification.
+
+       XX550099__VV__FFLLAAGG__PPOOLLIICCYY__CCHHEECCKK enables certificate policy checking, by
+       default no policy checking is peformed. Additional information is sent
+       to the verification callback relating to policy checking.
+
+       XX550099__VV__FFLLAAGG__EEXXPPLLIICCIITT__PPOOLLIICCYY, XX550099__VV__FFLLAAGG__IINNHHIIBBIITT__AANNYY and
+       XX550099__VV__FFLLAAGG__IINNHHIIBBIITT__MMAAPP set the rreeqquuiirree eexxpplliicciitt ppoolliiccyy, iinnhhiibbiitt aannyy
+       ppoolliiccyy and iinnhhiibbiitt ppoolliiccyy mmaappppiinngg flags respectively as defined in
+       RRFFCC33228800. Policy checking is automatically enabled if any of these flags
+       are set.
+
+       If XX550099__VV__FFLLAAGG__NNOOTTIIFFYY__PPOOLLIICCYY is set and the policy checking is success-
+       ful a special status code is set to the verification callback. This
+       permits it to examine the valid policy tree and perform additional
+       checks or simply log it for debugging purposes.
+
+       By default some addtional features such as indirect CRLs and CRLs
+       signed by different keys are disabled. If XX550099__VV__FFLLAAGG__EEXXTTEENNDDEEDD__CCRRLL__SSUUPP--
+       PPOORRTT is set they are enabled.
+
+       If XX550099__VV__FFLLAAGG__UUSSEE__DDEELLTTAASS ise set delta CRLs (if present) are used to
+       determine certificate status. If not set deltas are ignored.
+
+       XX550099__VV__FFLLAAGG__CCHHEECCKK__SSSS__SSIIGGNNAATTUURREE enables checking of the root CA self
+       signed cerificate signature. By default this check is disabled because
+       it doesn't add any additional security but in some cases applications
+       might want to check the signature anyway. A side effect of not checking
+       the root CA signature is that disabled or unsupported message digests
+       on the root CA are not treated as fatal errors.
+
+       The XX550099__VV__FFLLAAGG__CCBB__IISSSSUUEERR__CCHHEECCKK flag enables debugging of certificate
+       issuer checks. It is nnoott needed unless you are logging certificate ver-
+       ification. If this flag is set then additional status codes will be
+       sent to the verification callback and it mmuusstt be prepared to handle
+       such cases without assuming they are hard errors.
+
+NNOOTTEESS
+       The above functions should be used to manipulate verification parame-
+       ters instead of legacy functions which work in specific structures such
+       as _X_5_0_9___S_T_O_R_E___C_T_X___s_e_t___f_l_a_g_s_(_).
+
+BBUUGGSS
+       Delta CRL checking is currently primitive. Only a single delta can be
+       used and (partly due to limitations of XX550099__SSTTOORREE) constructed CRLs are
+       not maintained.
+
+       If CRLs checking is enable CRLs are expected to be available in the
+       corresponding XX550099__SSTTOORREE structure. No attempt is made to download CRLs
+       from the CRL distribution points extension.
+
+EEXXAAMMPPLLEE
+       Enable CRL checking when performing certificate verification during SSL
+       connections associated with an SSSSLL__CCTTXX structure ccttxx:
+
+         X509_VERIFY_PARAM *param;
+         param = X509_VERIFY_PARAM_new();
+         X509_VERIFY_PARAM_set_flags(param, X509_V_FLAG_CRL_CHECK);
+         SSL_CTX_set1_param(ctx, param);
+         X509_VERIFY_PARAM_free(param);
+
+SSEEEE AALLSSOO
+       _X_5_0_9___v_e_r_i_f_y___c_e_r_t(3)
+
+HHIISSTTOORRYY
+       TBA
+
+
+
+1.0.0g                            2009-10-18    X509_VERIFY_PARAM_set_flags(3)

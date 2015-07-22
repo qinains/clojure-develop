@@ -1,0 +1,128 @@
+EVP_PKEY_CTX_ctrl(3)                OpenSSL               EVP_PKEY_CTX_ctrl(3)
+
+
+
+NNAAMMEE
+       EVP_PKEY_ctrl, EVP_PKEY_ctrl_str - algorithm specific control opera-
+       tions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/evp.h>
+
+        int EVP_PKEY_CTX_ctrl(EVP_PKEY_CTX *ctx, int keytype, int optype,
+                                       int cmd, int p1, void *p2);
+        int EVP_PKEY_CTX_ctrl_str(EVP_PKEY_CTX *ctx, const char *type,
+                                                       const char *value);
+
+        int EVP_PKEY_get_default_digest_nid(EVP_PKEY *pkey, int *pnid);
+
+        #include <openssl/rsa.h>
+
+        int EVP_PKEY_CTX_set_signature_md(EVP_PKEY_CTX *ctx, const EVP_MD *md);
+
+        int EVP_PKEY_CTX_set_rsa_padding(EVP_PKEY_CTX *ctx, int pad);
+        int EVP_PKEY_CTX_set_rsa_pss_saltlen(EVP_PKEY_CTX *ctx, int len);
+        int EVP_PKEY_CTX_set_rsa_rsa_keygen_bits(EVP_PKEY_CTX *ctx, int mbits);
+        int EVP_PKEY_CTX_set_rsa_keygen_pubexp(EVP_PKEY_CTX *ctx, BIGNUM *pubexp);
+
+        #include <openssl/dsa.h>
+        int EVP_PKEY_CTX_set_dsa_paramgen_bits(EVP_PKEY_CTX *ctx, int nbits);
+
+        #include <openssl/dh.h>
+        int EVP_PKEY_CTX_set_dh_paramgen_prime_len(EVP_PKEY_CTX *ctx, int len);
+        int EVP_PKEY_CTX_set_dh_paramgen_generator(EVP_PKEY_CTX *ctx, int gen);
+
+        #include <openssl/ec.h>
+        int EVP_PKEY_CTX_set_ec_paramgen_curve_nid(EVP_PKEY_CTX *ctx, int nid);
+
+DDEESSCCRRIIPPTTIIOONN
+       The function _E_V_P___P_K_E_Y___C_T_X___c_t_r_l_(_) sends a control operation to the con-
+       text ccttxx. The key type used must match kkeeyyttyyppee if it is not -1. The
+       parameter ooppttyyppee is a mask indicating which operations the control can
+       be applied to.  The control command is indicated in ccmmdd and any addi-
+       tional arguments in pp11 and pp22.
+
+       Applications will not normally call _E_V_P___P_K_E_Y___C_T_X___c_t_r_l_(_) directly but
+       will instead call one of the algorithm specific macros below.
+
+       The function _E_V_P___P_K_E_Y___c_t_r_l___s_t_r_(_) allows an application to send an algo-
+       rithm specific control operation to a context ccttxx in string form. This
+       is intended to be used for options specified on the command line or in
+       text files. The commands supported are documented in the openssl util-
+       ity command line pages for the option --ppkkeeyyoopptt which is supported by
+       the ppkkeeyyuuttll, ggeennppkkeeyy and rreeqq commands.
+
+       All the remaining "functions" are implemented as macros.
+
+       The _E_V_P___P_K_E_Y___C_T_X___s_e_t___s_i_g_n_a_t_u_r_e___m_d_(_) macro sets the message digest type
+       used in a signature. It can be used with any public key algorithm sup-
+       porting signature operations.
+
+       The macro _E_V_P___P_K_E_Y___C_T_X___s_e_t___r_s_a___p_a_d_d_i_n_g_(_) sets the RSA padding mode for
+       ccttxx.  The ppaadd parameter can take the value RSA_PKCS1_PADDING for PKCS#1
+       padding, RSA_SSLV23_PADDING for SSLv23 padding, RSA_NO_PADDING for no
+       padding, RSA_PKCS1_OAEP_PADDING for OAEP padding (encrypt and decrypt
+       only), RSA_X931_PADDING for X9.31 padding (signature operations only)
+       and RSA_PKCS1_PSS_PADDING (sign and verify only).
+
+       Two RSA padding modes behave differently if _E_V_P___P_K_E_Y___C_T_X___s_e_t___s_i_g_n_a_-
+       _t_u_r_e___m_d_(_) is used. If this macro is called for PKCS#1 padding the
+       plaintext buffer is an actual digest value and is encapsulated in a
+       DigestInfo structure according to PKCS#1 when signing and this struc-
+       ture is expected (and stripped off) when verifying. If this control is
+       not used with RSA and PKCS#1 padding then the supplied data is used
+       directly and not encapsulated. In the case of X9.31 padding for RSA the
+       algorithm identifier byte is added or checked and removed if this con-
+       trol is called. If it is not called then the first byte of the plain-
+       text buffer is expected to be the algorithm identifier byte.
+
+       The _E_V_P___P_K_E_Y___C_T_X___s_e_t___r_s_a___p_s_s___s_a_l_t_l_e_n_(_) macro sets the RSA PSS salt
+       length to lleenn as its name implies it is only supported for PSS padding.
+       Two special values are supported: -1 sets the salt length to the digest
+       length. When signing -2 sets the salt length to the maximum permissible
+       value. When verifying -2 causes the salt length to be automatically
+       determined based on the PPSSSS block structure. If this macro is not
+       called a salt length value of -2 is used by default.
+
+       The _E_V_P___P_K_E_Y___C_T_X___s_e_t___r_s_a___r_s_a___k_e_y_g_e_n___b_i_t_s_(_) macro sets the RSA key
+       length for RSA key genration to bbiittss. If not specified 1024 bits is
+       used.
+
+       The _E_V_P___P_K_E_Y___C_T_X___s_e_t___r_s_a___k_e_y_g_e_n___p_u_b_e_x_p_(_) macro sets the public exponent
+       value for RSA key generation to ppuubbeexxpp currently it should be an odd
+       integer. The ppuubbeexxpp pointer is used internally by this function so it
+       should not be modified or free after the call. If this macro is not
+       called then 65537 is used.
+
+       The macro _E_V_P___P_K_E_Y___C_T_X___s_e_t___d_s_a___p_a_r_a_m_g_e_n___b_i_t_s_(_) sets the number of bits
+       used for DSA parameter generation to bbiittss. If not specified 1024 is
+       used.
+
+       The macro _E_V_P___P_K_E_Y___C_T_X___s_e_t___d_h___p_a_r_a_m_g_e_n___p_r_i_m_e___l_e_n_(_) sets the length of
+       the DH prime parameter pp for DH parameter generation. If this macro is
+       not called then 1024 is used.
+
+       The _E_V_P___P_K_E_Y___C_T_X___s_e_t___d_h___p_a_r_a_m_g_e_n___g_e_n_e_r_a_t_o_r_(_) macro sets DH generator to
+       ggeenn for DH parameter generation. If not specified 2 is used.
+
+       The _E_V_P___P_K_E_Y___C_T_X___s_e_t___e_c___p_a_r_a_m_g_e_n___c_u_r_v_e___n_i_d_(_) sets the EC curve for EC
+       parameter generation to nniidd. For EC parameter generation this macro
+       must be called or an error occurs because there is no default curve.
+
+RREETTUURRNN VVAALLUUEESS
+       _E_V_P___P_K_E_Y___C_T_X___c_t_r_l_(_) and its macros return a positive value for success
+       and 0 or a negative value for failure. In particular a return value of
+       -2 indicates the operation is not supported by the public key algo-
+       rithm.
+
+SSEEEE AALLSSOO
+       _E_V_P___P_K_E_Y___C_T_X___n_e_w(3), _E_V_P___P_K_E_Y___e_n_c_r_y_p_t(3), _E_V_P___P_K_E_Y___d_e_c_r_y_p_t(3),
+       _E_V_P___P_K_E_Y___s_i_g_n(3), _E_V_P___P_K_E_Y___v_e_r_i_f_y(3), _E_V_P___P_K_E_Y___v_e_r_i_f_y_r_e_c_o_v_e_r(3),
+       _E_V_P___P_K_E_Y___d_e_r_i_v_e(3) _E_V_P___P_K_E_Y___k_e_y_g_e_n(3)
+
+HHIISSTTOORRYY
+       These functions were first added to OpenSSL 1.0.0.
+
+
+
+1.0.0g                            2009-10-01              EVP_PKEY_CTX_ctrl(3)

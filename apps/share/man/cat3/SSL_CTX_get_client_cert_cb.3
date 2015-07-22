@@ -1,0 +1,89 @@
+SSL_CTX_set_client_cert_cb(3)       OpenSSL      SSL_CTX_set_client_cert_cb(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_set_client_cert_cb, SSL_CTX_get_client_cert_cb - handle client
+       certificate callback function
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        void SSL_CTX_set_client_cert_cb(SSL_CTX *ctx, int (*client_cert_cb)(SSL *ssl, X509 **x509, EVP_PKEY **pkey));
+        int (*SSL_CTX_get_client_cert_cb(SSL_CTX *ctx))(SSL *ssl, X509 **x509, EVP_PKEY **pkey);
+        int (*client_cert_cb)(SSL *ssl, X509 **x509, EVP_PKEY **pkey);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___C_T_X___s_e_t___c_l_i_e_n_t___c_e_r_t___c_b_(_) sets the _cc_ll_ii_ee_nn_tt____cc_ee_rr_tt____cc_bb_((_)) callback, that
+       is called when a client certificate is requested by a server and no
+       certificate was yet set for the SSL object.
+
+       When _cc_ll_ii_ee_nn_tt____cc_ee_rr_tt____cc_bb_((_)) is NULL, no callback function is used.
+
+       _S_S_L___C_T_X___g_e_t___c_l_i_e_n_t___c_e_r_t___c_b_(_) returns a pointer to the currently set
+       callback function.
+
+       _c_l_i_e_n_t___c_e_r_t___c_b_(_) is the application defined callback. If it wants to
+       set a certificate, a certificate/private key combination must be set
+       using the xx550099 and ppkkeeyy arguments and "1" must be returned. The cer-
+       tificate will be installed into ssssll, see the NOTES and BUGS sections.
+       If no certificate should be set, "0" has to be returned and no certifi-
+       cate will be sent. A negative return value will suspend the handshake
+       and the handshake function will return immediatly. _S_S_L___g_e_t___e_r_r_o_r(3)
+       will return SSL_ERROR_WANT_X509_LOOKUP to indicate, that the handshake
+       was suspended. The next call to the handshake function will again lead
+       to the call of _c_l_i_e_n_t___c_e_r_t___c_b_(_). It is the job of the _c_l_i_e_n_t___c_e_r_t___c_b_(_)
+       to store information about the state of the last call, if required to
+       continue.
+
+NNOOTTEESS
+       During a handshake (or renegotiation) a server may request a certifi-
+       cate from the client. A client certificate must only be sent, when the
+       server did send the request.
+
+       When a certificate was set using the _S_S_L___C_T_X___u_s_e___c_e_r_t_i_f_i_c_a_t_e(3) family
+       of functions, it will be sent to the server. The TLS standard requires
+       that only a certificate is sent, if it matches the list of acceptable
+       CAs sent by the server. This constraint is violated by the default
+       behavior of the OpenSSL library. Using the callback function it is pos-
+       sible to implement a proper selection routine or to allow a user inter-
+       action to choose the certificate to be sent.
+
+       If a callback function is defined and no certificate was yet defined
+       for the SSL object, the callback function will be called.  If the call-
+       back function returns a certificate, the OpenSSL library will try to
+       load the private key and certificate data into the SSL object using the
+       _S_S_L___u_s_e___c_e_r_t_i_f_i_c_a_t_e_(_) and _S_S_L___u_s_e___p_r_i_v_a_t_e___k_e_y_(_) functions.  Thus it
+       will permanently install the certificate and key for this SSL object.
+       It will not be reset by calling _S_S_L___c_l_e_a_r(3).  If the callback returns
+       no certificate, the OpenSSL library will not send a certificate.
+
+BBUUGGSS
+       The _c_l_i_e_n_t___c_e_r_t___c_b_(_) cannot return a complete certificate chain, it can
+       only return one client certificate. If the chain only has a length of
+       2, the root CA certificate may be omitted according to the TLS standard
+       and thus a standard conforming answer can be sent to the server. For a
+       longer chain, the client must send the complete chain (with the option
+       to leave out the root CA certificate). This can only be accomplished by
+       either adding the intermediate CA certificates into the trusted cer-
+       tificate store for the SSL_CTX object (resulting in having to add CA
+       certificates that otherwise maybe would not be trusted), or by adding
+       the chain certificates using the _S_S_L___C_T_X___a_d_d___e_x_t_r_a___c_h_a_i_n___c_e_r_t(3) func-
+       tion, which is only available for the SSL_CTX object as a whole and
+       that therefore probably can only apply for one client certificate, mak-
+       ing the concept of the callback function (to allow the choice from sev-
+       eral certificates) questionable.
+
+       Once the SSL object has been used in conjunction with the callback
+       function, the certificate will be set for the SSL object and will not
+       be cleared even when _S_S_L___c_l_e_a_r(3) is being called. It is therefore
+       mandatory to destroy the SSL object using _S_S_L___f_r_e_e(3) and create a new
+       one to return to the previous state.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___C_T_X___u_s_e___c_e_r_t_i_f_i_c_a_t_e(3), _S_S_L___C_T_X___a_d_d___e_x_t_r_a___c_h_a_i_n___c_e_r_t(3),
+       _S_S_L___g_e_t___c_l_i_e_n_t___C_A___l_i_s_t(3), _S_S_L___c_l_e_a_r(3), _S_S_L___f_r_e_e(3)
+
+
+
+1.0.0g                            2002-06-12     SSL_CTX_set_client_cert_cb(3)

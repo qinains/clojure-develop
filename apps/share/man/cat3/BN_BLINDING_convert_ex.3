@@ -1,0 +1,112 @@
+BN_BLINDING_new(3)                  OpenSSL                 BN_BLINDING_new(3)
+
+
+
+NNAAMMEE
+       BN_BLINDING_new, BN_BLINDING_free, BN_BLINDING_update, BN_BLINDING_con-
+       vert, BN_BLINDING_invert, BN_BLINDING_convert_ex, BN_BLIND-
+       ING_invert_ex, BN_BLINDING_get_thread_id, BN_BLINDING_set_thread_id,
+       BN_BLINDING_get_flags, BN_BLINDING_set_flags, BN_BLINDING_create_param
+       - blinding related BIGNUM functions.
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bn.h>
+
+        BN_BLINDING *BN_BLINDING_new(const BIGNUM *A, const BIGNUM *Ai,
+               BIGNUM *mod);
+        void BN_BLINDING_free(BN_BLINDING *b);
+        int BN_BLINDING_update(BN_BLINDING *b,BN_CTX *ctx);
+        int BN_BLINDING_convert(BIGNUM *n, BN_BLINDING *b, BN_CTX *ctx);
+        int BN_BLINDING_invert(BIGNUM *n, BN_BLINDING *b, BN_CTX *ctx);
+        int BN_BLINDING_convert_ex(BIGNUM *n, BIGNUM *r, BN_BLINDING *b,
+               BN_CTX *ctx);
+        int BN_BLINDING_invert_ex(BIGNUM *n, const BIGNUM *r, BN_BLINDING *b,
+               BN_CTX *ctx);
+        #ifndef OPENSSL_NO_DEPRECATED
+        unsigned long BN_BLINDING_get_thread_id(const BN_BLINDING *);
+        void BN_BLINDING_set_thread_id(BN_BLINDING *, unsigned long);
+        #endif
+        CRYPTO_THREADID *BN_BLINDING_thread_id(BN_BLINDING *);
+        unsigned long BN_BLINDING_get_flags(const BN_BLINDING *);
+        void BN_BLINDING_set_flags(BN_BLINDING *, unsigned long);
+        BN_BLINDING *BN_BLINDING_create_param(BN_BLINDING *b,
+               const BIGNUM *e, BIGNUM *m, BN_CTX *ctx,
+               int (*bn_mod_exp)(BIGNUM *r, const BIGNUM *a, const BIGNUM *p,
+                                 const BIGNUM *m, BN_CTX *ctx, BN_MONT_CTX *m_ctx),
+               BN_MONT_CTX *m_ctx);
+
+DDEESSCCRRIIPPTTIIOONN
+       _B_N___B_L_I_N_D_I_N_G___n_e_w_(_) allocates a new BBNN__BBLLIINNDDIINNGG structure and copies the
+       AA and AAii values into the newly created BBNN__BBLLIINNDDIINNGG object.
+
+       _B_N___B_L_I_N_D_I_N_G___f_r_e_e_(_) frees the BBNN__BBLLIINNDDIINNGG structure.
+
+       _B_N___B_L_I_N_D_I_N_G___u_p_d_a_t_e_(_) updates the BBNN__BBLLIINNDDIINNGG parameters by squaring the
+       AA and AAii or, after specific number of uses and if the necessary parame-
+       ters are set, by re-creating the blinding parameters.
+
+       _B_N___B_L_I_N_D_I_N_G___c_o_n_v_e_r_t___e_x_(_) multiplies nn with the blinding factor AA.  If rr
+       is not NULL a copy the inverse blinding factor AAii will be returned in rr
+       (this is useful if a RRSSAA object is shared amoung several threads).
+       _B_N___B_L_I_N_D_I_N_G___i_n_v_e_r_t___e_x_(_) multiplies nn with the inverse blinding factor
+       AAii. If rr is not NULL it will be used as the inverse blinding.
+
+       _B_N___B_L_I_N_D_I_N_G___c_o_n_v_e_r_t_(_) and _B_N___B_L_I_N_D_I_N_G___i_n_v_e_r_t_(_) are wrapper functions
+       for _B_N___B_L_I_N_D_I_N_G___c_o_n_v_e_r_t___e_x_(_) and _B_N___B_L_I_N_D_I_N_G___i_n_v_e_r_t___e_x_(_) with rr set to
+       NULL.
+
+       _B_N___B_L_I_N_D_I_N_G___t_h_r_e_a_d___i_d_(_) provides access to the CCRRYYPPTTOO__TTHHRREEAADDIIDD object
+       within the BBNN__BBLLIINNDDIINNGG structure. This is to help users provide proper
+       locking if needed for multi-threaded use. The "thread id" object of a
+       newly allocated BBNN__BBLLIINNDDIINNGG structure is initialised to the thread id
+       in which _B_N___B_L_I_N_D_I_N_G___n_e_w_(_) was called.
+
+       _B_N___B_L_I_N_D_I_N_G___g_e_t___f_l_a_g_s_(_) returns the BN_BLINDING flags. Currently there
+       are two supported flags: BBNN__BBLLIINNDDIINNGG__NNOO__UUPPDDAATTEE and BBNN__BBLLIINNDD--
+       IINNGG__NNOO__RREECCRREEAATTEE. BBNN__BBLLIINNDDIINNGG__NNOO__UUPPDDAATTEE inhibits the automatic update of
+       the BBNN__BBLLIINNDDIINNGG parameters after each use and BBNN__BBLLIINNDDIINNGG__NNOO__RREECCRREEAATTEE
+       inhibits the automatic re-creation of the BBNN__BBLLIINNDDIINNGG parameters after
+       a fixed number of uses (currently 32). In newly allocated BBNN__BBLLIINNDDIINNGG
+       objects no flags are set.  _B_N___B_L_I_N_D_I_N_G___s_e_t___f_l_a_g_s_(_) sets the BBNN__BBLLIINNDDIINNGG
+       parameters flags.
+
+       _B_N___B_L_I_N_D_I_N_G___c_r_e_a_t_e___p_a_r_a_m_(_) creates new BBNN__BBLLIINNDDIINNGG parameters using the
+       exponent ee and the modulus mm. bbnn__mmoodd__eexxpp and mm__ccttxx can be used to pass
+       special functions for exponentiation (normally _B_N___m_o_d___e_x_p___m_o_n_t_(_) and
+       BBNN__MMOONNTT__CCTTXX).
+
+RREETTUURRNN VVAALLUUEESS
+       _B_N___B_L_I_N_D_I_N_G___n_e_w_(_) returns the newly allocated BBNN__BBLLIINNDDIINNGG structure or
+       NULL in case of an error.
+
+       _B_N___B_L_I_N_D_I_N_G___u_p_d_a_t_e_(_), _B_N___B_L_I_N_D_I_N_G___c_o_n_v_e_r_t_(_), _B_N___B_L_I_N_D_I_N_G___i_n_v_e_r_t_(_),
+       _B_N___B_L_I_N_D_I_N_G___c_o_n_v_e_r_t___e_x_(_) and _B_N___B_L_I_N_D_I_N_G___i_n_v_e_r_t___e_x_(_) return 1 on suc-
+       cess and 0 if an error occured.
+
+       _B_N___B_L_I_N_D_I_N_G___t_h_r_e_a_d___i_d_(_) returns a pointer to the thread id object
+       within a BBNN__BBLLIINNDDIINNGG object.
+
+       _B_N___B_L_I_N_D_I_N_G___g_e_t___f_l_a_g_s_(_) returns the currently set BBNN__BBLLIINNDDIINNGG flags (a
+       uunnssiiggnneedd lloonngg value).
+
+       _B_N___B_L_I_N_D_I_N_G___c_r_e_a_t_e___p_a_r_a_m_(_) returns the newly created BBNN__BBLLIINNDDIINNGG param-
+       eters or NULL on error.
+
+SSEEEE AALLSSOO
+       _b_n(3)
+
+HHIISSTTOORRYY
+       BN_BLINDING_thread_id was first introduced in OpenSSL 1.0.0, and it
+       deprecates BN_BLINDING_set_thread_id and BN_BLINDING_get_thread_id.
+
+       BN_BLINDING_convert_ex, BN_BLINDIND_invert_ex, BN_BLIND-
+       ING_get_thread_id, BN_BLINDING_set_thread_id, BN_BLINDING_set_flags,
+       BN_BLINDING_get_flags and BN_BLINDING_create_param were first intro-
+       duced in OpenSSL 0.9.8
+
+AAUUTTHHOORR
+       Nils Larsch for the OpenSSL project (http://www.openssl.org).
+
+
+
+1.0.0g                            2009-10-01                BN_BLINDING_new(3)

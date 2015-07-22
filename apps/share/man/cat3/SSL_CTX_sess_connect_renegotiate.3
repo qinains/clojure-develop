@@ -1,0 +1,81 @@
+SSL_CTX_sess_number(3)              OpenSSL             SSL_CTX_sess_number(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_sess_number, SSL_CTX_sess_connect, SSL_CTX_sess_connect_good,
+       SSL_CTX_sess_connect_renegotiate, SSL_CTX_sess_accept,
+       SSL_CTX_sess_accept_good, SSL_CTX_sess_accept_renegotiate,
+       SSL_CTX_sess_hits, SSL_CTX_sess_cb_hits, SSL_CTX_sess_misses,
+       SSL_CTX_sess_timeouts, SSL_CTX_sess_cache_full - obtain session cache
+       statistics
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        long SSL_CTX_sess_number(SSL_CTX *ctx);
+        long SSL_CTX_sess_connect(SSL_CTX *ctx);
+        long SSL_CTX_sess_connect_good(SSL_CTX *ctx);
+        long SSL_CTX_sess_connect_renegotiate(SSL_CTX *ctx);
+        long SSL_CTX_sess_accept(SSL_CTX *ctx);
+        long SSL_CTX_sess_accept_good(SSL_CTX *ctx);
+        long SSL_CTX_sess_accept_renegotiate(SSL_CTX *ctx);
+        long SSL_CTX_sess_hits(SSL_CTX *ctx);
+        long SSL_CTX_sess_cb_hits(SSL_CTX *ctx);
+        long SSL_CTX_sess_misses(SSL_CTX *ctx);
+        long SSL_CTX_sess_timeouts(SSL_CTX *ctx);
+        long SSL_CTX_sess_cache_full(SSL_CTX *ctx);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___C_T_X___s_e_s_s___n_u_m_b_e_r_(_) returns the current number of sessions in the
+       internal session cache.
+
+       _S_S_L___C_T_X___s_e_s_s___c_o_n_n_e_c_t_(_) returns the number of started SSL/TLS handshakes
+       in client mode.
+
+       _S_S_L___C_T_X___s_e_s_s___c_o_n_n_e_c_t___g_o_o_d_(_) returns the number of successfully estab-
+       lished SSL/TLS sessions in client mode.
+
+       _S_S_L___C_T_X___s_e_s_s___c_o_n_n_e_c_t___r_e_n_e_g_o_t_i_a_t_e_(_) returns the number of start renego-
+       tiations in client mode.
+
+       _S_S_L___C_T_X___s_e_s_s___a_c_c_e_p_t_(_) returns the number of started SSL/TLS handshakes
+       in server mode.
+
+       _S_S_L___C_T_X___s_e_s_s___a_c_c_e_p_t___g_o_o_d_(_) returns the number of successfully estab-
+       lished SSL/TLS sessions in server mode.
+
+       _S_S_L___C_T_X___s_e_s_s___a_c_c_e_p_t___r_e_n_e_g_o_t_i_a_t_e_(_) returns the number of start renegoti-
+       ations in server mode.
+
+       _S_S_L___C_T_X___s_e_s_s___h_i_t_s_(_) returns the number of successfully reused sessions.
+       In client mode a session set with _S_S_L___s_e_t___s_e_s_s_i_o_n(3) successfully
+       reused is counted as a hit. In server mode a session successfully
+       retrieved from internal or external cache is counted as a hit.
+
+       _S_S_L___C_T_X___s_e_s_s___c_b___h_i_t_s_(_) returns the number of successfully retrieved
+       sessions from the external session cache in server mode.
+
+       _S_S_L___C_T_X___s_e_s_s___m_i_s_s_e_s_(_) returns the number of sessions proposed by
+       clients that were not found in the internal session cache in server
+       mode.
+
+       _S_S_L___C_T_X___s_e_s_s___t_i_m_e_o_u_t_s_(_) returns the number of sessions proposed by
+       clients and either found in the internal or external session cache in
+       server mode,
+        but that were invalid due to timeout. These sessions are not included
+       in the _S_S_L___C_T_X___s_e_s_s___h_i_t_s_(_) count.
+
+       _S_S_L___C_T_X___s_e_s_s___c_a_c_h_e___f_u_l_l_(_) returns the number of sessions that were
+       removed because the maximum session cache size was exceeded.
+
+RREETTUURRNN VVAALLUUEESS
+       The functions return the values indicated in the DESCRIPTION section.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___s_e_t___s_e_s_s_i_o_n(3), _S_S_L___C_T_X___s_e_t___s_e_s_s_i_o_n___c_a_c_h_e___m_o_d_e(3)
+       _S_S_L___C_T_X___s_e_s_s___s_e_t___c_a_c_h_e___s_i_z_e(3)
+
+
+
+1.0.0g                            2001-02-16            SSL_CTX_sess_number(3)

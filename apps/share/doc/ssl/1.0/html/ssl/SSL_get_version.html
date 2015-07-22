@@ -1,0 +1,84 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_get_version - get the protocol version of a connection.</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_get_version - get the protocol version of a connection.</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ const char *SSL_get_version(const SSL *ssl);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_get_cipher_version()</code> returns the name of the protocol used for the
+connection <strong>ssl</strong>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>The following strings can occur:</p>
+<dl>
+<dt><strong><a name="item_sslv2">SSLv2</a></strong>
+
+<dd>
+<p>The connection uses the SSLv2 protocol.</p>
+</dd>
+</li>
+<dt><strong><a name="item_sslv3">SSLv3</a></strong>
+
+<dd>
+<p>The connection uses the SSLv3 protocol.</p>
+</dd>
+</li>
+<dt><strong><a name="item_tlsv1">TLSv1</a></strong>
+
+<dd>
+<p>The connection uses the TLSv1 protocol.</p>
+</dd>
+</li>
+<dt><strong><a name="item_unknown">unknown</a></strong>
+
+<dd>
+<p>This indicates that no version has been set (no connection established).</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a></p>
+
+</body>
+
+</html>

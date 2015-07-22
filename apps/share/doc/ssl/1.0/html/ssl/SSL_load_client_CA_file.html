@@ -1,0 +1,100 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_load_client_CA_file - load certificate names from file</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_load_client_CA_file - load certificate names from file</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ STACK_OF(X509_NAME) *SSL_load_client_CA_file(const char *file);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_load_client_CA_file()</code> reads certificates from <strong>file</strong> and returns
+a <a href="#item_stack_of"><code>STACK_OF(X509_NAME)</code></a> with the subject names found.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p><code>SSL_load_client_CA_file()</code> reads a file of PEM formatted certificates and
+extracts the X509_NAMES of the certificates found. While the name suggests
+the specific usage as support function for
+<a href="../ssl/SSL_CTX_set_client_CA_list.html">SSL_CTX_set_client_CA_list</a>,
+it is not limited to CA certificates.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>Load names of CAs from file and use it as a client CA list:</p>
+<pre>
+ SSL_CTX *ctx;
+ STACK_OF(X509_NAME) *cert_names;</pre>
+<pre>
+ ... 
+ cert_names = SSL_load_client_CA_file(&quot;/path/to/CAfile.pem&quot;);
+ if (cert_names != NULL)
+   SSL_CTX_set_client_CA_list(ctx, cert_names);
+ else
+   error_handling();
+ ...</pre>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>The following return values can occur:</p>
+<dl>
+<dt><strong><a name="item_null">NULL</a></strong>
+
+<dd>
+<p>The operation failed, check out the error stack for the reason.</p>
+</dd>
+</li>
+<dt><strong><a name="item_stack_of">Pointer to <code>STACK_OF(X509_NAME)</code></a></strong>
+
+<dd>
+<p>Pointer to the subject names of the successfully read certificates.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a>,
+<a href="../ssl/SSL_CTX_set_client_CA_list.html">SSL_CTX_set_client_CA_list</a></p>
+
+</body>
+
+</html>

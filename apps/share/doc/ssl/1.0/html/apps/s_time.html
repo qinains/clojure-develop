@@ -1,0 +1,230 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>s_time - SSL/TLS performance timing program</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#options">OPTIONS</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>s_time - SSL/TLS performance timing program</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>openssl</strong> <strong>s_time</strong>
+[<strong>-connect host:port</strong>]
+[<strong>-www page</strong>]
+[<strong>-cert filename</strong>]
+[<strong>-key filename</strong>]
+[<strong>-CApath directory</strong>]
+[<strong>-CAfile filename</strong>]
+[<strong>-reuse</strong>]
+[<strong>-new</strong>]
+[<strong>-verify depth</strong>]
+[<strong>-nbio</strong>]
+[<strong>-time seconds</strong>]
+[<strong>-ssl2</strong>]
+[<strong>-ssl3</strong>]
+[<strong>-bugs</strong>]
+[<strong>-cipher cipherlist</strong>]</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>s_client</strong> command implements a generic SSL/TLS client which connects to a
+remote host using SSL/TLS. It can request a page from the server and includes
+the time to transfer the payload data in its timing measurements. It measures
+the number of connections within a given timeframe, the amount of data
+transferred (if any), and calculates the average time spent for one connection.</p>
+<p>
+</p>
+<hr />
+<h1><a name="options">OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item__2dconnect_host_3aport"><strong>-connect host:port</strong></a></strong>
+
+<dd>
+<p>This specifies the host and optional port to connect to.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dwww_page"><strong>-www page</strong></a></strong>
+
+<dd>
+<p>This specifies the page to GET from the server. A value of '/' gets the
+index.htm[l] page. If this parameter is not specified, then <strong>s_time</strong> will only
+perform the handshake to establish SSL connections but not transfer any
+payload data.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dcert_certname"><strong>-cert certname</strong></a></strong>
+
+<dd>
+<p>The certificate to use, if one is requested by the server. The default is
+not to use a certificate. The file is in PEM format.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dkey_keyfile"><strong>-key keyfile</strong></a></strong>
+
+<dd>
+<p>The private key to use. If not specified then the certificate file will
+be used. The file is in PEM format.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dverify_depth"><strong>-verify depth</strong></a></strong>
+
+<dd>
+<p>The verify depth to use. This specifies the maximum length of the
+server certificate chain and turns on server certificate verification.
+Currently the verify operation continues after errors so all the problems
+with a certificate chain can be seen. As a side effect the connection
+will never fail due to a server certificate verify failure.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dcapath_directory"><strong>-CApath directory</strong></a></strong>
+
+<dd>
+<p>The directory to use for server certificate verification. This directory
+must be in ``hash format'', see <strong>verify</strong> for more information. These are
+also used when building the client certificate chain.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dcafile_file"><strong>-CAfile file</strong></a></strong>
+
+<dd>
+<p>A file containing trusted certificates to use during server authentication
+and to use when attempting to build the client certificate chain.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dnew"><strong>-new</strong></a></strong>
+
+<dd>
+<p>performs the timing test using a new session ID for each connection.
+If neither <strong>-new</strong> nor <strong>-reuse</strong> are specified, they are both on by default
+and executed in sequence.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dreuse"><strong>-reuse</strong></a></strong>
+
+<dd>
+<p>performs the timing test using the same session ID; this can be used as a test
+that session caching is working. If neither <strong>-new</strong> nor <strong>-reuse</strong> are
+specified, they are both on by default and executed in sequence.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dnbio"><strong>-nbio</strong></a></strong>
+
+<dd>
+<p>turns on non-blocking I/O.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dssl2_2c__2dssl3"><strong>-ssl2</strong>, <strong>-ssl3</strong></a></strong>
+
+<dd>
+<p>these options disable the use of certain SSL or TLS protocols. By default
+the initial handshake uses a method which should be compatible with all
+servers and permit them to use SSL v3, SSL v2 or TLS as appropriate.
+The timing program is not as rich in options to turn protocols on and off as
+the <a href="../apps/s_client.html">s_client</a> program and may not connect to all servers.</p>
+</dd>
+<dd>
+<p>Unfortunately there are a lot of ancient and broken servers in use which
+cannot handle this technique and will fail to connect. Some servers only
+work if TLS is turned off with the <strong>-ssl3</strong> option; others
+will only support SSL v2 and may need the <strong>-ssl2</strong> option.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dbugs"><strong>-bugs</strong></a></strong>
+
+<dd>
+<p>there are several known bug in SSL and TLS implementations. Adding this
+option enables various workarounds.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dcipher_cipherlist"><strong>-cipher cipherlist</strong></a></strong>
+
+<dd>
+<p>this allows the cipher list sent by the client to be modified. Although
+the server determines which cipher suite is used it should take the first
+supported cipher in the list sent by the client.
+See the <a href="../apps/ciphers.html">ciphers</a> command for more information.</p>
+</dd>
+</li>
+<dt><strong><a name="item__2dtime_length"><strong>-time length</strong></a></strong>
+
+<dd>
+<p>specifies how long (in seconds) <strong>s_time</strong> should establish connections and
+optionally transfer payload data from a server. Server and client performance
+and the link speed determine how many connections <strong>s_time</strong> can establish.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p><strong>s_client</strong> can be used to measure the performance of an SSL connection.
+To connect to an SSL HTTP server and get the default page the command</p>
+<pre>
+ openssl s_time -connect servername:443 -www / -CApath yourdir -CAfile yourfile.pem -cipher commoncipher [-ssl3]</pre>
+<p>would typically be used (https uses port 443). 'commoncipher' is a cipher to
+which both client and server can agree, see the <a href="../apps/ciphers.html">ciphers</a> command
+for details.</p>
+<p>If the handshake fails then there are several possible causes, if it is
+nothing obvious like no client certificate then the <strong>-bugs</strong>, <strong>-ssl2</strong>,
+<strong>-ssl3</strong> options can be tried
+in case it is a buggy server. In particular you should play with these
+options <strong>before</strong> submitting a bug report to an OpenSSL mailing list.</p>
+<p>A frequent problem when attempting to get client certificates working
+is that a web client complains it has no certificates or gives an empty
+list to choose from. This is normally because the server is not sending
+the clients certificate authority in its ``acceptable CA list'' when it
+requests a certificate. By using <a href="../apps/s_client.html">s_client</a> the CA list can be
+viewed and checked. However some servers only request client authentication
+after a specific URL is requested. To obtain the list in this case it
+is necessary to use the <strong>-prexit</strong> option of <a href="../apps/s_client.html">s_client</a> and
+send an HTTP request for an appropriate page.</p>
+<p>If a certificate is specified on the command line using the <strong>-cert</strong>
+option it will not be used unless the server specifically requests
+a client certificate. Therefor merely including a client certificate
+on the command line is no guarantee that the certificate works.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>Because this program does not have all the options of the
+<a href="../apps/s_client.html">s_client</a> program to turn protocols on and off, you may not be
+able to measure the performance of all protocols with all servers.</p>
+<p>The <strong>-verify</strong> option should really exit if the server verification
+fails.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../apps/s_client.html">s_client</a>, <a href="../apps/s_server.html">s_server</a>, <a href="../apps/ciphers.html">ciphers</a></p>
+
+</body>
+
+</html>

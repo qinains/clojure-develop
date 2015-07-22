@@ -1,0 +1,313 @@
+SSL_CTX_set_options(3)              OpenSSL             SSL_CTX_set_options(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_set_options, SSL_set_options, SSL_CTX_clear_options,
+       SSL_clear_options, SSL_CTX_get_options, SSL_get_options,
+       SSL_get_secure_renegotiation_support - manipulate SSL options
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        long SSL_CTX_set_options(SSL_CTX *ctx, long options);
+        long SSL_set_options(SSL *ssl, long options);
+
+        long SSL_CTX_clear_options(SSL_CTX *ctx, long options);
+        long SSL_clear_options(SSL *ssl, long options);
+
+        long SSL_CTX_get_options(SSL_CTX *ctx);
+        long SSL_get_options(SSL *ssl);
+
+        long SSL_get_secure_renegotiation_support(SSL *ssl);
+
+DDEESSCCRRIIPPTTIIOONN
+       Note: all these functions are implemented using macros.
+
+       _S_S_L___C_T_X___s_e_t___o_p_t_i_o_n_s_(_) adds the options set via bitmask in ooppttiioonnss to
+       ccttxx.  Options already set before are not cleared!
+
+       _S_S_L___s_e_t___o_p_t_i_o_n_s_(_) adds the options set via bitmask in ooppttiioonnss to ssssll.
+       Options already set before are not cleared!
+
+       _S_S_L___C_T_X___c_l_e_a_r___o_p_t_i_o_n_s_(_) clears the options set via bitmask in ooppttiioonnss
+       to ccttxx.
+
+       _S_S_L___c_l_e_a_r___o_p_t_i_o_n_s_(_) clears the options set via bitmask in ooppttiioonnss to
+       ssssll.
+
+       _S_S_L___C_T_X___g_e_t___o_p_t_i_o_n_s_(_) returns the options set for ccttxx.
+
+       _S_S_L___g_e_t___o_p_t_i_o_n_s_(_) returns the options set for ssssll.
+
+       _S_S_L___g_e_t___s_e_c_u_r_e___r_e_n_e_g_o_t_i_a_t_i_o_n___s_u_p_p_o_r_t_(_) indicates whether the peer sup-
+       ports secure renegotiation.
+
+NNOOTTEESS
+       The behaviour of the SSL library can be changed by setting several
+       options.  The options are coded as bitmasks and can be combined by a
+       logical oorr operation (|).
+
+       _S_S_L___C_T_X___s_e_t___o_p_t_i_o_n_s_(_) and _S_S_L___s_e_t___o_p_t_i_o_n_s_(_) affect the (external) pro-
+       tocol behaviour of the SSL library. The (internal) behaviour of the API
+       can be changed by using the similar _S_S_L___C_T_X___s_e_t___m_o_d_e(3) and
+       _S_S_L___s_e_t___m_o_d_e_(_) functions.
+
+       During a handshake, the option settings of the SSL object are used.
+       When a new SSL object is created from a context using _S_S_L___n_e_w_(_), the
+       current option setting is copied. Changes to ccttxx do not affect already
+       created SSL objects. _S_S_L___c_l_e_a_r_(_) does not affect the settings.
+
+       The following bbuugg wwoorrkkaarroouunndd options are available:
+
+       SSL_OP_MICROSOFT_SESS_ID_BUG
+           www.microsoft.com - when talking SSLv2, if session-id reuse is per-
+           formed, the session-id passed back in the server-finished message
+           is different from the one decided upon.
+
+       SSL_OP_NETSCAPE_CHALLENGE_BUG
+           Netscape-Commerce/1.12, when talking SSLv2, accepts a 32 byte chal-
+           lenge but then appears to only use 16 bytes when generating the
+           encryption keys.  Using 16 bytes is ok but it should be ok to use
+           32.  According to the SSLv3 spec, one should use 32 bytes for the
+           challenge when operating in SSLv2/v3 compatibility mode, but as
+           mentioned above, this breaks this server so 16 bytes is the way to
+           go.
+
+       SSL_OP_NETSCAPE_REUSE_CIPHER_CHANGE_BUG
+           As of OpenSSL 0.9.8q and 1.0.0c, this option has no effect.
+
+       SSL_OP_SSLREF2_REUSE_CERT_TYPE_BUG
+           ...
+
+       SSL_OP_MICROSOFT_BIG_SSLV3_BUFFER
+           ...
+
+       SSL_OP_MSIE_SSLV2_RSA_PADDING
+           As of OpenSSL 0.9.7h and 0.9.8a, this option has no effect.
+
+       SSL_OP_SSLEAY_080_CLIENT_DH_BUG
+           ...
+
+       SSL_OP_TLS_D5_BUG
+           ...
+
+       SSL_OP_TLS_BLOCK_PADDING_BUG
+           ...
+
+       SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS
+           Disables a countermeasure against a SSL 3.0/TLS 1.0 protocol vul-
+           nerability affecting CBC ciphers, which cannot be handled by some
+           broken SSL implementations.  This option has no effect for connec-
+           tions using other ciphers.
+
+       SSL_OP_ALL
+           All of the above bug workarounds.
+
+       It is usually safe to use SSSSLL__OOPP__AALLLL to enable the bug workaround
+       options if compatibility with somewhat broken implementations is
+       desired.
+
+       The following mmooddiiffyyiinngg options are available:
+
+       SSL_OP_TLS_ROLLBACK_BUG
+           Disable version rollback attack detection.
+
+           During the client key exchange, the client must send the same
+           information about acceptable SSL/TLS protocol levels as during the
+           first hello. Some clients violate this rule by adapting to the
+           server's answer. (Example: the client sends a SSLv2 hello and
+           accepts up to SSLv3.1=TLSv1, the server only understands up to
+           SSLv3. In this case the client must still use the same
+           SSLv3.1=TLSv1 announcement. Some clients step down to SSLv3 with
+           respect to the server's answer and violate the version rollback
+           protection.)
+
+       SSL_OP_SINGLE_DH_USE
+           Always create a new key when using temporary/ephemeral DH parame-
+           ters (see _S_S_L___C_T_X___s_e_t___t_m_p___d_h___c_a_l_l_b_a_c_k(3)).  This option must be
+           used to prevent small subgroup attacks, when the DH parameters were
+           not generated using "strong" primes (e.g. when using DSA-parame-
+           ters, see _d_h_p_a_r_a_m(1)).  If "strong" primes were used, it is not
+           strictly necessary to generate a new DH key during each handshake
+           but it is also recommended.  SSSSLL__OOPP__SSIINNGGLLEE__DDHH__UUSSEE should therefore
+           be enabled whenever temporary/ephemeral DH parameters are used.
+
+       SSL_OP_EPHEMERAL_RSA
+           Always use ephemeral (temporary) RSA key when doing RSA operations
+           (see _S_S_L___C_T_X___s_e_t___t_m_p___r_s_a___c_a_l_l_b_a_c_k(3)).  According to the specifica-
+           tions this is only done, when a RSA key can only be used for signa-
+           ture operations (namely under export ciphers with restricted RSA
+           keylength). By setting this option, ephemeral RSA keys are always
+           used. This option breaks compatibility with the SSL/TLS specifica-
+           tions and may lead to interoperability problems with clients and
+           should therefore never be used. Ciphers with EDH (ephemeral
+           Diffie-Hellman) key exchange should be used instead.
+
+       SSL_OP_CIPHER_SERVER_PREFERENCE
+           When choosing a cipher, use the server's preferences instead of the
+           client preferences. When not set, the SSL server will always follow
+           the clients preferences. When set, the SSLv3/TLSv1 server will
+           choose following its own preferences. Because of the different pro-
+           tocol, for SSLv2 the server will send its list of preferences to
+           the client and the client chooses.
+
+       SSL_OP_PKCS1_CHECK_1
+           ...
+
+       SSL_OP_PKCS1_CHECK_2
+           ...
+
+       SSL_OP_NETSCAPE_CA_DN_BUG
+           If we accept a netscape connection, demand a client cert, have a
+           non-self-signed CA which does not have its CA in netscape, and the
+           browser has a cert, it will crash/hang.  Works for 3.x and 4.xbeta
+
+       SSL_OP_NETSCAPE_DEMO_CIPHER_CHANGE_BUG
+           ...
+
+       SSL_OP_NO_SSLv2
+           Do not use the SSLv2 protocol.
+
+       SSL_OP_NO_SSLv3
+           Do not use the SSLv3 protocol.
+
+       SSL_OP_NO_TLSv1
+           Do not use the TLSv1 protocol.
+
+       SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION
+           When performing renegotiation as a server, always start a new ses-
+           sion (i.e., session resumption requests are only accepted in the
+           initial handshake). This option is not needed for clients.
+
+       SSL_OP_NO_TICKET
+           Normally clients and servers will, where possible, transparently
+           make use of RFC4507bis tickets for stateless session resumption.
+
+           If this option is set this functionality is disabled and tickets
+           will not be used by clients or servers.
+
+       SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION
+           Allow legacy insecure renegotiation between OpenSSL and unpatched
+           clients or servers. See the SSEECCUURREE RREENNEEGGOOTTIIAATTIIOONN section for more
+           details.
+
+       SSL_OP_LEGACY_SERVER_CONNECT
+           Allow legacy insecure renegotiation between OpenSSL and unpatched
+           servers oonnllyy: this option is currently set by default. See the
+           SSEECCUURREE RREENNEEGGOOTTIIAATTIIOONN section for more details.
+
+SSEECCUURREE RREENNEEGGOOTTIIAATTIIOONN
+       OpenSSL 0.9.8m and later always attempts to use secure renegotiation as
+       described in RFC5746. This counters the prefix attack described in
+       CVE-2009-3555 and elsewhere.
+
+       The deprecated and highly broken SSLv2 protocol does not support rene-
+       gotiation at all: its use is ssttrroonnggllyy discouraged.
+
+       This attack has far reaching consequences which application writers
+       should be aware of. In the description below an implementation support-
+       ing secure renegotiation is referred to as _p_a_t_c_h_e_d. A server not sup-
+       porting secure renegotiation is referred to as _u_n_p_a_t_c_h_e_d.
+
+       The following sections describe the operations permitted by OpenSSL's
+       secure renegotiation implementation.
+
+       PPaattcchheedd cclliieenntt aanndd sseerrvveerr
+
+       Connections and renegotiation are always permitted by OpenSSL implemen-
+       tations.
+
+       UUnnppaattcchheedd cclliieenntt aanndd ppaattcchheedd OOppeennSSSSLL sseerrvveerr
+
+       The initial connection suceeds but client renegotiation is denied by
+       the server with a nnoo__rreenneeggoottiiaattiioonn warning alert if TLS v1.0 is used or
+       a fatal hhaannddsshhaakkee__ffaaiilluurree alert in SSL v3.0.
+
+       If the patched OpenSSL server attempts to renegotiate a fatal hhaanndd--
+       sshhaakkee__ffaaiilluurree alert is sent. This is because the server code may be
+       unaware of the unpatched nature of the client.
+
+       If the option SSSSLL__OOPP__AALLLLOOWW__UUNNSSAAFFEE__LLEEGGAACCYY__RREENNEEGGOOTTIIAATTIIOONN is set then
+       renegotiation aallwwaayyss succeeds.
+
+       NNBB:: a bug in OpenSSL clients earlier than 0.9.8m (all of which are
+       unpatched) will result in the connection hanging if it receives a
+       nnoo__rreenneeggoottiiaattiioonn alert. OpenSSL versions 0.9.8m and later will regard a
+       nnoo__rreenneeggoottiiaattiioonn alert as fatal and respond with a fatal hhaanndd--
+       sshhaakkee__ffaaiilluurree alert. This is because the OpenSSL API currently has no
+       provision to indicate to an application that a renegotiation attempt
+       was refused.
+
+       PPaattcchheedd OOppeennSSSSLL cclliieenntt aanndd uunnppaattcchheedd sseerrvveerr..
+
+       If the option SSSSLL__OOPP__LLEEGGAACCYY__SSEERRVVEERR__CCOONNNNEECCTT or
+       SSSSLL__OOPP__AALLLLOOWW__UUNNSSAAFFEE__LLEEGGAACCYY__RREENNEEGGOOTTIIAATTIIOONN is set then initial connec-
+       tions and renegotiation between patched OpenSSL clients and unpatched
+       servers succeeds. If neither option is set then initial connections to
+       unpatched servers will fail.
+
+       The option SSSSLL__OOPP__LLEEGGAACCYY__SSEERRVVEERR__CCOONNNNEECCTT is currently set by default
+       even though it has security implications: otherwise it would be impos-
+       sible to connect to unpatched servers (i.e. all of them initially) and
+       this is clearly not acceptable. Renegotiation is permitted because this
+       does not add any additional security issues: during an attack clients
+       do not see any renegotiations anyway.
+
+       As more servers become patched the option SSSSLL__OOPP__LLEEGGAACCYY__SSEERRVVEERR__CCOONNNNEECCTT
+       will nnoott be set by default in a future version of OpenSSL.
+
+       OpenSSL client applications wishing to ensure they can connect to
+       unpatched servers should always sseett SSSSLL__OOPP__LLEEGGAACCYY__SSEERRVVEERR__CCOONNNNEECCTT
+
+       OpenSSL client applications that want to ensure they can nnoott connect to
+       unpatched servers (and thus avoid any security issues) should always
+       cclleeaarr SSSSLL__OOPP__LLEEGGAACCYY__SSEERRVVEERR__CCOONNNNEECCTT using _S_S_L___C_T_X___c_l_e_a_r___o_p_t_i_o_n_s_(_) or
+       _S_S_L___c_l_e_a_r___o_p_t_i_o_n_s_(_).
+
+       The difference between the SSSSLL__OOPP__LLEEGGAACCYY__SSEERRVVEERR__CCOONNNNEECCTT and
+       SSSSLL__OOPP__AALLLLOOWW__UUNNSSAAFFEE__LLEEGGAACCYY__RREENNEEGGOOTTIIAATTIIOONN options is that
+       SSSSLL__OOPP__LLEEGGAACCYY__SSEERRVVEERR__CCOONNNNEECCTT enables initial connections and secure
+       renegotiation between OpenSSL clients and unpatched servers oonnllyy, while
+       SSSSLL__OOPP__AALLLLOOWW__UUNNSSAAFFEE__LLEEGGAACCYY__RREENNEEGGOOTTIIAATTIIOONN allows initial connections and
+       renegotiation between OpenSSL and unpatched clients or servers.
+
+RREETTUURRNN VVAALLUUEESS
+       _S_S_L___C_T_X___s_e_t___o_p_t_i_o_n_s_(_) and _S_S_L___s_e_t___o_p_t_i_o_n_s_(_) return the new options bit-
+       mask after adding ooppttiioonnss.
+
+       _S_S_L___C_T_X___c_l_e_a_r___o_p_t_i_o_n_s_(_) and _S_S_L___c_l_e_a_r___o_p_t_i_o_n_s_(_) return the new options
+       bitmask after clearing ooppttiioonnss.
+
+       _S_S_L___C_T_X___g_e_t___o_p_t_i_o_n_s_(_) and _S_S_L___g_e_t___o_p_t_i_o_n_s_(_) return the current bitmask.
+
+       _S_S_L___g_e_t___s_e_c_u_r_e___r_e_n_e_g_o_t_i_a_t_i_o_n___s_u_p_p_o_r_t_(_) returns 1 is the peer supports
+       secure renegotiation and 0 if it does not.
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___n_e_w(3), _S_S_L___c_l_e_a_r(3), _S_S_L___C_T_X___s_e_t___t_m_p___d_h___c_a_l_l_b_a_c_k(3),
+       _S_S_L___C_T_X___s_e_t___t_m_p___r_s_a___c_a_l_l_b_a_c_k(3), _d_h_p_a_r_a_m(1)
+
+HHIISSTTOORRYY
+       SSSSLL__OOPP__CCIIPPHHEERR__SSEERRVVEERR__PPRREEFFEERREENNCCEE and SSSSLL__OOPP__NNOO__SSEESSSSIIOONN__RREESSUUMMPP--
+       TTIIOONN__OONN__RREENNEEGGOOTTIIAATTIIOONN have been added in OpenSSL 0.9.7.
+
+       SSSSLL__OOPP__TTLLSS__RROOLLLLBBAACCKK__BBUUGG has been added in OpenSSL 0.9.6 and was auto-
+       matically enabled with SSSSLL__OOPP__AALLLL. As of 0.9.7, it is no longer
+       included in SSSSLL__OOPP__AALLLL and must be explicitly set.
+
+       SSSSLL__OOPP__DDOONNTT__IINNSSEERRTT__EEMMPPTTYY__FFRRAAGGMMEENNTTSS has been added in OpenSSL 0.9.6e.
+       Versions up to OpenSSL 0.9.6c do not include the countermeasure that
+       can be disabled with this option (in OpenSSL 0.9.6d, it was always
+       enabled).
+
+       _S_S_L___C_T_X___c_l_e_a_r___o_p_t_i_o_n_s_(_) and _S_S_L___c_l_e_a_r___o_p_t_i_o_n_s_(_) were first added in
+       OpenSSL 0.9.8m.
+
+       SSSSLL__OOPP__AALLLLOOWW__UUNNSSAAFFEE__LLEEGGAACCYY__RREENNEEGGOOTTIIAATTIIOONN, SSSSLL__OOPP__LLEEGGAACCYY__SSEERRVVEERR__CCOONNNNEECCTT
+       and the function _S_S_L___g_e_t___s_e_c_u_r_e___r_e_n_e_g_o_t_i_a_t_i_o_n___s_u_p_p_o_r_t_(_) were first
+       added in OpenSSL 0.9.8m.
+
+
+
+1.0.0g                            2010-12-02            SSL_CTX_set_options(3)

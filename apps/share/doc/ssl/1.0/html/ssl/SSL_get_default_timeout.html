@@ -1,0 +1,74 @@
+<?xml version="1.0" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_get_default_timeout - get default session timeout value</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:mingw-dvlpr@lists.sourceforge.net" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_get_default_timeout - get default session timeout value</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ #include &lt;openssl/ssl.h&gt;</pre>
+<pre>
+ long SSL_get_default_timeout(const SSL *ssl);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_get_default_timeout()</code> returns the default timeout value assigned to
+SSL_SESSION objects negotiated for the protocol valid for <strong>ssl</strong>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>Whenever a new session is negotiated, it is assigned a timeout value,
+after which it will not be accepted for session reuse. If the timeout
+value was not explicitly set using
+<a href="../ssl/SSL_CTX_set_timeout.html">SSL_CTX_set_timeout</a>, the hardcoded default
+timeout for the protocol will be used.</p>
+<p><code>SSL_get_default_timeout()</code> return this hardcoded value, which is 300 seconds
+for all currently supported protocols (SSLv2, SSLv3, and TLSv1).</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>See description.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../ssl/ssl.html">ssl</a>,
+<a href="../ssl/SSL_CTX_set_session_cache_mode.html">SSL_CTX_set_session_cache_mode</a>,
+<a href="../ssl/SSL_SESSION_get_time.html">SSL_SESSION_get_time</a>,
+<a href="../ssl/SSL_CTX_flush_sessions.html">SSL_CTX_flush_sessions</a>,
+<a href="../ssl/SSL_get_default_timeout.html">SSL_get_default_timeout</a></p>
+
+</body>
+
+</html>

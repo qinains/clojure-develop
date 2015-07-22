@@ -1,0 +1,100 @@
+SSL_CIPHER_get_name(3)              OpenSSL             SSL_CIPHER_get_name(3)
+
+
+
+NNAAMMEE
+       SSL_CIPHER_get_name, SSL_CIPHER_get_bits, SSL_CIPHER_get_version,
+       SSL_CIPHER_description - get SSL_CIPHER properties
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        const char *SSL_CIPHER_get_name(const SSL_CIPHER *cipher);
+        int SSL_CIPHER_get_bits(const SSL_CIPHER *cipher, int *alg_bits);
+        char *SSL_CIPHER_get_version(const SSL_CIPHER *cipher);
+        char *SSL_CIPHER_description(const SSL_CIPHER *cipher, char *buf, int size);
+
+DDEESSCCRRIIPPTTIIOONN
+       _S_S_L___C_I_P_H_E_R___g_e_t___n_a_m_e_(_) returns a pointer to the name of cciipphheerr. If the
+       argument is the NULL pointer, a pointer to the constant value "NONE" is
+       returned.
+
+       _S_S_L___C_I_P_H_E_R___g_e_t___b_i_t_s_(_) returns the number of secret bits used for
+       cciipphheerr. If aallgg__bbiittss is not NULL, it contains the number of bits pro-
+       cessed by the chosen algorithm. If cciipphheerr is NULL, 0 is returned.
+
+       _S_S_L___C_I_P_H_E_R___g_e_t___v_e_r_s_i_o_n_(_) returns the protocol version for cciipphheerr, cur-
+       rently "SSLv2", "SSLv3", or "TLSv1". If cciipphheerr is NULL, "(NONE)" is
+       returned.
+
+       _S_S_L___C_I_P_H_E_R___d_e_s_c_r_i_p_t_i_o_n_(_) returns a textual description of the cipher
+       used into the buffer bbuuff of length lleenn provided. lleenn must be at least
+       128 bytes, otherwise a pointer to the string "Buffer too small" is
+       returned. If bbuuff is NULL, a buffer of 128 bytes is allocated using
+       _O_P_E_N_S_S_L___m_a_l_l_o_c_(_). If the allocation fails, a pointer to the string
+       "OPENSSL_malloc Error" is returned.
+
+NNOOTTEESS
+       The number of bits processed can be different from the secret bits. An
+       export cipher like e.g. EXP-RC4-MD5 has only 40 secret bits. The algo-
+       rithm does use the full 128 bits (which would be returned for
+       aallgg__bbiittss), of which however 88bits are fixed. The search space is hence
+       only 40 bits.
+
+       The string returned by _S_S_L___C_I_P_H_E_R___d_e_s_c_r_i_p_t_i_o_n_(_) in case of success con-
+       sists of cleartext information separated by one or more blanks in the
+       following sequence:
+
+       <ciphername>
+           Textual representation of the cipher name.
+
+       <protocol version>
+           Protocol version: SSSSLLvv22, SSSSLLvv33. The TLSv1 ciphers are flagged with
+           SSLv3.
+
+       Kx=<key exchange>
+           Key exchange method: RRSSAA (for export ciphers as RRSSAA((551122)) or
+           RRSSAA((11002244))), DDHH (for export ciphers as DDHH((551122)) or DDHH((11002244))), DDHH//RRSSAA,
+           DDHH//DDSSSS, FFoorrtteezzzzaa.
+
+       Au=<authentication>
+           Authentication method: RRSSAA, DDSSSS, DDHH, NNoonnee. None is the representa-
+           tion of anonymous ciphers.
+
+       Enc=<symmetric encryption method>
+           Encryption method with number of secret bits: DDEESS((4400)), DDEESS((5566)),
+           33DDEESS((116688)), RRCC44((4400)), RRCC44((5566)), RRCC44((6644)), RRCC44((112288)), RRCC22((4400)), RRCC22((5566)),
+           RRCC22((112288)), IIDDEEAA((112288)), FFoorrtteezzzzaa, NNoonnee.
+
+       Mac=<message authentication code>
+           Message digest: MMDD55, SSHHAA11.
+
+       <export flag>
+           If the cipher is flagged exportable with respect to old US crypto
+           regulations, the word "eexxppoorrtt" is printed.
+
+EEXXAAMMPPLLEESS
+       Some examples for the output of _S_S_L___C_I_P_H_E_R___d_e_s_c_r_i_p_t_i_o_n_(_):
+
+        EDH-RSA-DES-CBC3-SHA    SSLv3 Kx=DH       Au=RSA  Enc=3DES(168) Mac=SHA1
+        EDH-DSS-DES-CBC3-SHA    SSLv3 Kx=DH       Au=DSS  Enc=3DES(168) Mac=SHA1
+        RC4-MD5                 SSLv3 Kx=RSA      Au=RSA  Enc=RC4(128)  Mac=MD5
+        EXP-RC4-MD5             SSLv3 Kx=RSA(512) Au=RSA  Enc=RC4(40)   Mac=MD5  export
+
+BBUUGGSS
+       If _S_S_L___C_I_P_H_E_R___d_e_s_c_r_i_p_t_i_o_n_(_) is called with cciipphheerr being NULL, the
+       library crashes.
+
+       If _S_S_L___C_I_P_H_E_R___d_e_s_c_r_i_p_t_i_o_n_(_) cannot handle a built-in cipher, the
+       according description of the cipher property is uunnkknnoowwnn. This case
+       should not occur.
+
+RREETTUURRNN VVAALLUUEESS
+       See DESCRIPTION
+
+SSEEEE AALLSSOO
+       _s_s_l(3), _S_S_L___g_e_t___c_u_r_r_e_n_t___c_i_p_h_e_r(3), _S_S_L___g_e_t___c_i_p_h_e_r_s(3), _c_i_p_h_e_r_s(1)
+
+
+
+1.0.0g                            2009-09-13            SSL_CIPHER_get_name(3)
