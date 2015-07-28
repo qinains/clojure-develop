@@ -26,7 +26,8 @@
 (add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/"))
 (package-initialize)
 (when (not package-archive-contents) (package-refresh-contents))
-(defvar melpa-stable-packages '(cider
+(defvar melpa-stable-packages '(paredit
+                                cider
                                 clj-refactor
                                 projectile
                                 flx-ido
@@ -39,8 +40,8 @@
                                 magit
                                 smex
                                 undo-tree
-                                hl-sexp
-                                rainbow-delimiters))
+                                rainbow-delimiters
+                                org))
 
 (dolist (p melpa-stable-packages)
   (unless (package-installed-p p)
@@ -118,6 +119,17 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "文泉驿等宽微米黑" :foundry "outline" :slant normal :weight normal :height 105 :width normal)))))
+
+;;按键说明请参考：http://mumble.net/~campbell/emacs/paredit.html
+(require 'paredit)
+(add-hook 'lisp-mode-hook #'paredit-mode)
+(add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+(add-hook 'emacs-lisp-mode-hook #'paredit-mode)
+(add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+(add-hook 'ielm-mode-hook #'enable-paredit-mode)
+(add-hook 'scheme-mode-hook #'enable-paredit-mode)
+(add-hook 'clojure-mode-hook #'paredit-mode)
+(add-hook 'cider-repl-mode-hook #'paredit-mode)
 
 ;;开启ido模式，显示备选项
 (require 'flx-ido)
@@ -222,10 +234,6 @@
 (when (fboundp 'windmove-default-keybindings)
   (windmove-default-keybindings))
 
-;;光标所在行高亮
-(require 'hl-sexp)
-(global-hl-sexp-mode)
-
 ;;C-x u开启。p n f b q试试这几个键
 (require 'undo-tree)
 (global-undo-tree-mode)
@@ -236,5 +244,8 @@
 ;;添加主题。白天黑夜自动切换主题，19:00自动切换
 (require 'moe-theme)
 (require 'moe-theme-switcher)
+
+;;F4键弹出eshell
+(global-set-key [f4] 'eshell)
 
 ;;; init.el ends here
