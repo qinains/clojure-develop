@@ -72,8 +72,18 @@ lein安装到的默认目录是 ~/bin/ ，git clone本项目后，在控制台�
 
 
 #安装clojure开发相关插件
+开启emacs，
+
 打开home/.emacs即可看到相关的配置。
-第一次启动的时候，打开会比较久，这是因为emacs会自动去下载相关的插件。
+
+
+安装emacs插件：
+Alt + x install<回车键>
+等几分钟后，即可安装插件成功。
+
+更新emacs插件：
+Alt + x update<回车键>
+
 
 #使用lein的注意事项
 
