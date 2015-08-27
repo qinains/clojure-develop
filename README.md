@@ -5,12 +5,12 @@
 ##前期准备
 
 ###目录结构
-假设本文件位于C:/path/to/this/dir/文件夹中，有目录结构
+假设本文件位于c:/path/to/this/dir/文件夹中，有目录结构
 
-    /README.md --本文件
-    /init.el --配置文件,插件的按键以及细节说明请看该文件注解
-    /apps/bin/ --常用的可执行文件，包括install.sh、install.bat、lein.bat(执行install.bat后生成)、wget、markdown
-    /others/ 字体文件、leiningen-{version}-standalone.jar等
+    README.md --本文件
+    init.el --配置文件,插件的按键以及细节说明请看该文件注解
+    apps/bin/ --常用的可执行文件，包括install.sh、install.bat、lein.bat(执行install.bat后生成)、wget、markdown
+    others/ 字体文件、leiningen-{version}-standalone.jar、profiles.clj等
 
 
 ###安装字体
@@ -20,24 +20,24 @@
 以Win7为例，
 计算机-右键-属性-高级系统设置-环境变量-系统变量-双击Path-在“变量值”中添加：
 
-    C:\path\to\this\dir\apps\bin\;
+    c:\path\to\this\dir\apps\bin\;
 
 ##安装lein
 双击
 
-    C:/path/to/this/dir/apps/bin/install.bat
+    c:/path/to/this/dir/apps/bin/install.bat
 
 即可安装lein的依赖包。
 
 
 ##安装emacs
 可到 http://ftp.gnu.org/pub/gnu/emacs/windows/ 下载安装包。
-假设emacs安装在C:\develop\目录下，双击C:\develop\emacs\bin\addpm.exe即可添加emacs到程序启动项中。
+假设emacs安装在c:\develop\目录下，双击c:\develop\emacs\bin\addpm.exe即可添加emacs到程序启动项中。
 
 ###更改.emacs的默认路径
 打开emacs，输入C-x C-f ~/.emacs <回车>，添加
 
-    (load-file "/path/to/this/dir/init.el")
+    (load-file "c:/path/to/this/dir/init.el")
 
 。
 
@@ -62,7 +62,11 @@ lein安装到的默认目录是 ~/bin/ ，git clone本项目后，在控制台�
 	sudo pacman -S emacs xorg-fonts-encodings wqy-microhei #ArchLinux系统
 
 
-之后将home/.emacs文件复制到用户目录中(如果有可以覆盖)
+之后打开emacs，输入C-x C-f ~/.emacs <回车>，添加
+
+    (load-file "/path/to/this/dir/init.el")
+
+。
 
 
 如果需要markdown预览功能，则安装
@@ -72,10 +76,20 @@ lein安装到的默认目录是 ~/bin/ ，git clone本项目后，在控制台�
 
 
 #安装clojure开发相关插件
-开启emacs，
 
-打开home/.emacs即可看到相关的配置。
+新建或编辑文件 ~/.lein/profiles.clj（windows系统一般为c:\Users\xxx\.lein\profiles.clj），内容为
 
+     ;;clojure开发需要插件cider/cider-nrepl。在cider模式下可开启代码自动提示功能
+     ;;重构需要插件refactor-nrepl。详情请看[演示](https://github.com/clojure-emacs/clj-refactor.el/wiki)
+     ;;语法检查需要依赖包acyclic/squiggly-clojure
+	{:user {:plugins [[cider/cider-nrepl "0.9.1"]
+	                  [refactor-nrepl "1.1.0"]]
+	        :dependencies [[acyclic/squiggly-clojure "0.1.4"]]}}
+
+可直接将others/profiles.clj复制到~/.lein/目录下。
+
+
+#安装和更新emacs插件
 
 安装emacs插件：
 Alt + x install<回车键>
@@ -83,6 +97,8 @@ Alt + x install<回车键>
 
 更新emacs插件：
 Alt + x update<回车键>
+
+**更新之后，~/.lein/profiles.clj 文件中的相应版本号可能要改变，否则启动cider之后会提示版本不对应的错误**
 
 
 #使用lein的注意事项
@@ -98,8 +114,7 @@ Windows系统下，
         set http_proxy=127.0.0.1:8580
         set https_proxy=127.0.0.1:8580
 
-**每次运行C:/develop/apps/bin/install.bat文件之后，都要重新编辑。**
-
+**每次运行c:/path/to/this/dir/apps/bin/install.bat文件之后，都要重新编辑。**
 
 在Linux系统下，
 编辑~/bin/lein文件，在“#!/usr/bin/env bash”下，添加
@@ -113,56 +128,6 @@ Windows系统下，
 添加环境变量 http\_proxy 和 https_proxy，值都是127.0.0.1:8580。
 
 
-## .clj代码自动提示问题
-
-代码提示功能是用company插件来启用的。在cider-mode模式下，才更好的开启代码功能。要使cider-mode能够启用，在用lein创建项目之后，需要在lein根配置文件(~/.lein/profiles.clj (windows系统.lein/文件夹在用户目录下，如C:\Users\xxx\.lein\) )或lein项目中添加cider-nrepl插件:
-
-在lein根配置文件添加，打开~/.lein/profiles.clj文件，添加
-
-	:plugins [[..其他包..][cider/cider-nrepl "0.9.1"]]
-	:dependencies [[org.clojure/tools.nrepl "0.2.10"]]
-
-如果profiles.clj还未创建，则创建文件并添加以下内容
-
-	{:user {:plugins [[cider/cider-nrepl "0.9.1"]]
-	        :dependencies [[org.clojure/tools.nrepl "0.2.10"]]}}
-
-或者在lein项目中添加，打开project.clj文件，添加
-
-	:plugins [[cider/cider-nrepl "0.9.1"]]
-	:dependencies [[org.clojure/tools.nrepl "0.2.10"]]
-
-**截止2015-07-03，cider的稳定版本是0.9.1。如果使用最新版本，则上面的“0.9.1”需要修改成“0.10.0-SNAPSHOT”，或者更高的版本(需要根据所下载的cider版本而定)**
-
-之后用emacs打开.clj文件，执行
-
-    M-x cider-jack-in 或者 C-c M-j
-
-即可开启cider-mode模式，享受代码自动提示吧 :-)
-
-##重构
-添加
-
-	:plugins [[..其他包..][refactor-nrepl "1.1.0"]]
-
-到依赖文件中。
-按C-c C-m .. 即可启用重构插件。详情请看[演示](https://github.com/clojure-emacs/clj-refactor.el/wiki)
-
-##语法检查
-添加
-
-	:dependencies [[acyclic/squiggly-clojure "0.1.2-SNAPSHOT"]]
-
-到依赖文件中。
-
-最后~/.lein/profiles.clj文件内容为
-
-	{:user {:plugins [[cider/cider-nrepl "0.9.1"]
-	                  [refactor-nrepl "1.1.1"]]
-	        :dependencies [[acyclic/squigglyf-clojure "0.1.2-SNAPSHOT"]
-	                       [org.clojure/tools.nrepl "0.2.10"]]}}
-
-
 #如何在REPL模式下进行WEB开发
 
 以luminus框架为例，
@@ -172,15 +137,15 @@ Windows系统下，
 	emacs project.clj
 	#之后
 	#按C-c M-j键，在启动的cider-repl的shell中，输入
-	(start-server)
+	(start-http-server)
 
 即可启动web服务器。如果想停止服务器，在cider-repl的shell中输入
 
-	(stop-server)
+	(stop-http-server)
 
 即可。
 
-**如果没有(start-server)函数，说明源码中有错误。可以在命令行中输入“lein ring server”，手动启动服务，如果源码中有错误，即可看到错误信息**
+**如果没有(start-http-server)函数，说明源码中有错误。可以在命令行中输入“lein ring server”，手动启动服务，如果源码中有错误，即可看到错误信息**
 
 #其他问题
 

@@ -224,6 +224,16 @@
 (after-load "moe-theme-autoloads"
   (require 'moe-theme-switcher))
 
+;;配置markdown插件
+(after-load "markdown-mode-autoloads"
+  (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+  (defun markdown-custom()
+    "markdown-mode-hook"
+    (setq markdown-command "markdown"))
+  (add-hook 'markdown-mode-hook '(lambda() (markdown-custom))))
+
 ;; clojure
 (after-load "clojure-mode-autoloads"
   (add-hook 'clojure-mode-hook 'subword-mode)

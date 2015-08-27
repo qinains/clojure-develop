@@ -16,4 +16,4 @@ chmod a+x $LEIN_DIR/lein
 #复制leingingen-VERSION-standalone.jar包
 mkdir -p ~/.lein/self-installs
 cd ../../others/
-cp leiningen-2.5.1-standalone.jar ~/.lein/self-installs/
+cp leiningen-2.5.2-standalone.jar ~/.lein/self-installs/
