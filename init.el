@@ -13,6 +13,17 @@
 
 (setq inhibit-startup-screen t)
 
+(defun melpa-package()
+  "设置melpa安装包链接"
+  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                           ("melpa" . "http://melpa.org/packages/"))))
+
+(defun melpa-stable-package()
+  "设置melpa-stable安装包链接"
+    (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                           ("melpa-stable" . "http://stable.melpa.org/packages/"))))
+(melpa-package)
+
 ;; 稳定的安装包
 (defvar melpa-stable-packages
   '(cider
@@ -37,22 +48,21 @@
     flycheck-pos-tip
     moe-theme
     smartparens
-    sr-speedbar))
+    sr-speedbar
+    restclient))
 
 (defun install ()
   "Install the packages."
   (interactive)
   (package-initialize)
-  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                           ("melpa-stable" . "http://stable.melpa.org/packages/")))
+  (melpa-stable-package)
   (package-refresh-contents)
   (dolist (p melpa-stable-packages)
     (unless (package-installed-p p)
       (message "Installing %s" (symbol-name p))
       (package-install p)))
 
-  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                           ("melpa" . "http://melpa.org/packages/")))
+  (melpa-package)
   (package-refresh-contents)
   (dolist (p melpa-dev-packages)
     (unless (package-installed-p p)
@@ -69,16 +79,14 @@
 (defun update-stable－packages ()
   "只更新稳定的安装包."
   (interactive)
-  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                           ("melpa" . "http://stable.melpa.org/packages/")))
+  (melpa-stable-package)
   (update-packages)
   (message "Stable－packages has updated."))
 
 (defun update-dev－packages ()
   "只更新开发中的安装包."
   (interactive )
-  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                           ("melpa" . "http://melpa.org/packages/")))
+  (melpa-package)
   (package-refresh-contents)
   (require 'epl)
   (dolist (p melpa-dev-packages)
@@ -91,8 +99,7 @@
 (defun update ()
   "所有的安装包都更新到开发中的版本."
   (interactive)
-  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                           ("melpa" . "http://melpa.org/packages/")))
+  (melpa-package)
   (update-packages)
   (message "All packages has updated."))
 
@@ -309,6 +316,10 @@
   (flx-ido-mode)
   (setq ido-enable-flex-matching t)
   (setq ido-use-faces nil))
+
+(after-load "restclient-autoloads"
+  (add-to-list 'auto-mode-alist '("\\.rc\\'" . restclient-mode))
+  (add-to-list 'auto-mode-alist '("\\.restclient\\'" . restclient-mode)))
 
 (provide 'init)
 ;;; init.el ends here

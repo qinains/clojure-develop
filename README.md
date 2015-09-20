@@ -33,7 +33,7 @@
 
 
 ####<a name="install-font"/>安装字体
-双击others/wqy-microhei-0.2.0-beta.tar.gz或者去[这里下载](http://sourceforge.net/projects/wqy/files/wqy-microhei/)等宽字体之后解压安装。
+双击others/wqy-microhei.ttc或者去[这里下载](http://sourceforge.net/projects/wqy/files/wqy-microhei/)等宽字体之后解压安装。
 
 ####<a name="add-to-path"/>将“apps/bin/”文件夹添加到PATH中
 以Win7为例，
@@ -117,7 +117,7 @@ Alt + x install<回车键>
 ####<a name="update-emacs-plugins"/>更新emacs插件
 Alt + x update<回车键>
 
-**更新之后，~/.lein/profiles.clj 文件中的相应版本号可能要改变，否则启动cider之后会提示版本不对应的错误**
+**更新之后，~/.lein/profiles.clj 文件中的相应版本号可能要改变（可参考others/profiles_snapshot.clj），否则启动cider之后会提示版本不对应的错误**
 
 
 ##<a name="lein-notice"/>使用lein的注意事项
