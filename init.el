@@ -108,7 +108,7 @@
             (when (not (version< emacs-version "24.1"))
 
               ;; 设置字体
-              (set-frame-font "-outline-文泉驿等宽微米黑-normal-normal-normal-sans-13-*-*-*-p-*-iso8859-1")
+              (set-frame-font "-outline-WenQuanYi Micro Hei Mono-normal-normal-normal-sans-13-*-*-*-p-*-iso8859-1")
               (tool-bar-mode -1)
               (scroll-bar-mode -1)
               (electric-indent-mode)
