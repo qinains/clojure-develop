@@ -101,7 +101,7 @@ lein安装到的默认目录是 ~/bin/ ，git clone本项目后，在控制台�
      ;;clojure开发需要插件cider/cider-nrepl。在cider模式下可开启代码自动提示功能
      ;;重构需要插件refactor-nrepl。详情请看[演示](https://github.com/clojure-emacs/clj-refactor.el/wiki)
      ;;语法检查需要依赖包acyclic/squiggly-clojure
-	{:user {:plugins [[cider/cider-nrepl "0.10.0"]
+	{:user {:plugins [[cider/cider-nrepl "0.10.1"]
 	                  [refactor-nrepl "2.0.0-SNAPSHOT"]]
 	        :dependencies [[acyclic/squiggly-clojure "0.1.4"]]}}
 
