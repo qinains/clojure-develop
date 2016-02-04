@@ -20,14 +20,13 @@
 
 (defun melpa-stable-package()
   "设置melpa-stable安装包链接"
-    (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                            ("melpa-stable" . "http://stable.melpa.org/packages/"))))
 (melpa-package)
 
 ;; 稳定的安装包
 (defvar melpa-stable-packages
   '(cider
-    clj-refactor
     clojure-mode
     clojure-mode-extra-font-locking
     clojure-snippets
@@ -39,17 +38,19 @@
     rainbow-delimiters
     smex
     undo-tree
-    web-mode))
+    smartparens
+    web-mode
+    adoc-mode
+    solarized-theme
+    flycheck-clojure
+    flycheck-pos-tip))
 
 ;; 开发中的安装包
 (defvar melpa-dev-packages
   '(4clojure
-    flycheck-clojure
-    flycheck-pos-tip
-    moe-theme
-    smartparens
     sr-speedbar
-    restclient))
+    restclient
+    clj-refactor))
 
 (defun install ()
   "Install the packages."
@@ -228,15 +229,30 @@
   (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command))
 
 ;; 添加主题。白天黑夜自动切换主题，19:00自动切换
-(after-load "moe-theme-autoloads"
-  (require 'moe-theme-switcher))
+(after-load "solarized-theme-autoloads"
+  (defvar current-theme nil "当前的主题，防止刷新")
+  (defun theme-auto-switch ()
+    "Automatically switch between dark and light theme."
+    (interactive)
+    (let ((now (string-to-int (format-time-string "%H"))))
+      (if (and (>= now 06) (<= now 18))
+          (if (not (equal current-theme 'light))
+              (progn
+                (load-theme 'solarized-light)
+                (setq current-theme 'light)))
+        (if (not (equal current-theme 'dark))
+            (progn
+              (load-theme 'solarized-dark)
+              (setq current-theme 'dark))))
+      nil))
+  (setq theme-timer (run-with-timer 0 (* 1 60) 'theme-auto-switch)))
 
 ;;配置markdown插件
 (after-load "markdown-mode-autoloads"
   (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-  (defun markdown-custom()
+  (defun markdown-custom ()
     "markdown-mode-hook"
     (setq markdown-command "markdown"))
   (add-hook 'markdown-mode-hook '(lambda() (markdown-custom))))
@@ -320,6 +336,9 @@
 (after-load "restclient-autoloads"
   (add-to-list 'auto-mode-alist '("\\.rc\\'" . restclient-mode))
   (add-to-list 'auto-mode-alist '("\\.restclient\\'" . restclient-mode)))
+
+(after-load "adoc-mode-autoloads"
+  (add-to-list 'auto-mode-alist '("\\.adoc\\'" . adoc-mode)))
 
 (provide 'init)
 ;;; init.el ends here
