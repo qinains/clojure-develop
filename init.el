@@ -5,6 +5,9 @@
 
 ;;; Code:
 
+;; 记录启动时间
+(defconst emacs-start-time (current-time))
+
 ;; 40MB以后才进行垃圾回收(默认是 400000 )
 (setq gc-cons-threshold 40000000)
 
@@ -12,6 +15,14 @@
 (setq large-file-warning-threshold 100000000)
 
 (setq inhibit-startup-screen t)
+
+;; 最大化窗口
+(x-send-client-message
+ nil 0 nil "_NET_WM_STATE" 32
+ '(1 "_NET_WM_STATE_MAXIMIZED_HORZ" 0))
+(x-send-client-message
+ nil 0 nil "_NET_WM_STATE" 32
+ '(1 "_NET_WM_STATE_MAXIMIZED_VERT" 0))
 
 (defun melpa-package()
   "设置melpa安装包链接"
@@ -22,6 +33,7 @@
   "设置melpa-stable安装包链接"
   (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                            ("melpa-stable" . "http://stable.melpa.org/packages/"))))
+
 (melpa-package)
 
 ;; 稳定的安装包
@@ -77,14 +89,14 @@
   (require 'epl)
   (epl-upgrade))
 
-(defun update-stable－packages ()
+(defun update-stable-packages ()
   "只更新稳定的安装包."
   (interactive)
   (melpa-stable-package)
   (update-packages)
   (message "Stable－packages has updated."))
 
-(defun update-dev－packages ()
+(defun update-dev-packages ()
   "只更新开发中的安装包."
   (interactive )
   (melpa-package)
@@ -181,6 +193,12 @@
             ;; 按Shift+方向键即可切换窗口
             (when (fboundp 'windmove-default-keybindings)
               (windmove-default-keybindings))))
+
+(add-hook
+ 'emacs-startup-hook
+ (lambda()
+   (let ((elapsed (float-time (time-subtract (current-time) emacs-start-time))))
+     (message (format "[Loaded in %.3fs]" elapsed)))))
 
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
