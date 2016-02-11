@@ -102,7 +102,7 @@ lein安装到的默认目录是 ~/bin/ ，git clone本项目后，在控制台�
      ;;重构需要插件refactor-nrepl。详情请看[演示](https://github.com/clojure-emacs/clj-refactor.el/wiki)
      ;;语法检查需要依赖包acyclic/squiggly-clojure
 	{:user {:plugins [[cider/cider-nrepl "0.10.2"]
-	                  [refactor-nrepl "2.0.0-SNAPSHOT"]]
+	                  [refactor-nrepl "2.0.0"]]
 	        :dependencies [[acyclic/squiggly-clojure "0.1.4"]]}}
 
 可直接将others/profiles.clj复制到~/.lein/目录下。

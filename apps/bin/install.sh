@@ -3,6 +3,9 @@
 #lein默认安装路径，可更改
 LEIN_DIR=~/bin
 
+#创建目录
+mkdir -p $LEIN_DIR
+
 #备份之前的lein文件
 mv $LEIN_DIR/lein $LEIN_DIR/lein.bk
 

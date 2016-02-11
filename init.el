@@ -24,12 +24,12 @@
  nil 0 nil "_NET_WM_STATE" 32
  '(1 "_NET_WM_STATE_MAXIMIZED_VERT" 0))
 
-(defun melpa-package()
+(defun melpa-package ()
   "设置melpa安装包链接"
   (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                            ("melpa" . "http://melpa.org/packages/"))))
 
-(defun melpa-stable-package()
+(defun melpa-stable-package ()
   "设置melpa-stable安装包链接"
   (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                            ("melpa-stable" . "http://stable.melpa.org/packages/"))))
@@ -38,10 +38,11 @@
 
 ;; 稳定的安装包
 (defvar melpa-stable-packages
-  '(cider
-    clojure-mode
+  '(clojure-mode
     clojure-mode-extra-font-locking
     clojure-snippets
+    cider
+    clj-refactor
     company
     flx-ido
     magit
@@ -61,8 +62,7 @@
 (defvar melpa-dev-packages
   '(4clojure
     sr-speedbar
-    restclient
-    clj-refactor))
+    restclient))
 
 (defun install ()
   "Install the packages."
@@ -115,6 +115,10 @@
   (melpa-package)
   (update-packages)
   (message "All packages has updated."))
+
+(defun loaded-time (name start-time)
+  "统计NAME从START-TIME开始到现在所用的时间."
+  (message "Loaded in %.3fs for %s" (float-time (time-since start-time)) name))
 
 (add-hook 'after-init-hook
           (lambda ()
@@ -170,7 +174,7 @@
             ;; C-c,C-v,C-x,C-z复制、粘贴、剪切、撤销
             (cua-mode)
             (setq cua-auto-tabify-rectangles nil)
-            (transient-mark-mode 1)
+            (transient-mark-mode)
             (setq cua-keep-region-after-copy t)
             (setq x-select-enable-clipboard t)
             (setq mouse-yank-at-point t)
@@ -197,8 +201,7 @@
 (add-hook
  'emacs-startup-hook
  (lambda()
-   (let ((elapsed (float-time (time-subtract (current-time) emacs-start-time))))
-     (message (format "[Loaded in %.3fs]" elapsed)))))
+   (loaded-time "all-packages" emacs-start-time)))
 
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
@@ -207,11 +210,14 @@
 (require 'saveplace)
 (setq-default save-place t)
 
-(defmacro after-load (mode &rest body)
-  "`eval-after-load' MODE evaluate BODY."
+(defmacro after-load (name &rest body)
+  "`eval-after-load' NAME evaluate BODY."
   (declare (indent defun))
-  `(eval-after-load ,mode
-     '(progn ,@body)))
+  `(eval-after-load ,name
+     ',(append (list 'progn
+                     `(let ((ts (current-time)))
+                        ,@body
+                        (loaded-time ,name ts))))))
 
 ;; 括号高亮
 (after-load "rainbow-delimiters-autoloads"
@@ -227,7 +233,7 @@
 
 ;;开启自动补齐模式
 (after-load "company-autoloads"
-  (global-company-mode)
+  (add-hook 'after-init-hook #'global-company-mode)
   (global-set-key "\t" 'company-complete-common))
 
 ;; 显示左侧导航，按F9键可以切换
@@ -240,7 +246,7 @@
 
 ;; 扩展M-x功能
 (after-load "smex-autoloads"
-  (smex-initialize)
+  (add-hook 'after-init-hook #'smex-initialize)
   (global-set-key (kbd "M-x") 'smex)
   (global-set-key (kbd "M-X") 'smex-major-mode-commands)
   ;; 原配的M-x
@@ -342,7 +348,7 @@
     (setq web-mode-code-indent-offset 2)
     (setq web-mode-enable-auto-pairing t)
     (setq web-mode-enable-current-element-highlight t))
-  (add-hook 'web-mode-hook  'my-web-mode-hook))
+  (add-hook 'web-mode-hook 'my-web-mode-hook))
 
 (after-load "flx-ido-autoloads"
   (ido-mode)
