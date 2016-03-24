@@ -17,12 +17,11 @@
 (setq inhibit-startup-screen t)
 
 ;; 最大化窗口
-(x-send-client-message
- nil 0 nil "_NET_WM_STATE" 32
- '(1 "_NET_WM_STATE_MAXIMIZED_HORZ" 0))
-(x-send-client-message
- nil 0 nil "_NET_WM_STATE" 32
- '(1 "_NET_WM_STATE_MAXIMIZED_VERT" 0))
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+;; 手动初始化包
+(setq package-enable-at-startup nil)
+(package-initialize)
 
 (defun melpa-package ()
   "设置melpa安装包链接"
@@ -38,31 +37,31 @@
 
 ;; 稳定的安装包
 (defvar melpa-stable-packages
-  '(clojure-mode
+  '(adoc-mode
+    cider
+    clojure-mode
     clojure-mode-extra-font-locking
     clojure-snippets
-    cider
-    clj-refactor
     company
     flx-ido
     magit
     markdown-mode
     projectile
     rainbow-delimiters
-    smex
-    undo-tree
     smartparens
-    web-mode
-    adoc-mode
+    smex
     solarized-theme
-    flycheck-clojure
-    flycheck-pos-tip))
+    undo-tree
+    web-mode))
 
 ;; 开发中的安装包
 (defvar melpa-dev-packages
   '(4clojure
-    sr-speedbar
-    restclient))
+    clj-refactor
+    flycheck-clojure
+    flycheck-pos-tip
+    restclient
+    sr-speedbar))
 
 (defun install ()
   "Install the packages."
@@ -94,7 +93,7 @@
   (interactive)
   (melpa-stable-package)
   (update-packages)
-  (message "Stable－packages has updated."))
+  (message "Stable-packages has updated."))
 
 (defun update-dev-packages ()
   "只更新开发中的安装包."
@@ -107,7 +106,7 @@
         (progn
           (epl-package-install (epl-upgrade-available (car (epl-find-upgrades (epl-find-installed-packages p)))) 'force)
           (epl-package-delete (epl-upgrade-installed (car (epl-find-upgrades (epl-find-installed-packages p))))))))
-  (message "Dev－packages has updated."))
+  (message "Dev-packages has updated."))
 
 (defun update ()
   "所有的安装包都更新到开发中的版本."
@@ -120,12 +119,18 @@
   "统计NAME从START-TIME开始到现在所用的时间."
   (message "Loaded in %.3fs for %s" (float-time (time-since start-time)) name))
 
+(defun indent-whole ()
+  "格式化整个buffer，且避免光标位置移动."
+  (interactive)
+  (save-excursion
+    (indent-region (point-min) (point-max) nil)))
+
 (add-hook 'after-init-hook
           (lambda ()
             (when (not (version< emacs-version "24.1"))
 
               ;; 设置字体
-              (set-frame-font "-outline-WenQuanYi Micro Hei Mono-normal-normal-normal-sans-13-*-*-*-p-*-iso8859-1")
+              ;;(set-frame-font "-outline-WenQuanYi Micro Hei Mono-normal-normal-normal-sans-13-*-*-*-p-*-iso8859-1")
               (tool-bar-mode -1)
               (scroll-bar-mode -1)
               (electric-indent-mode)
@@ -196,7 +201,10 @@
 
             ;; 按Shift+方向键即可切换窗口
             (when (fboundp 'windmove-default-keybindings)
-              (windmove-default-keybindings))))
+              (windmove-default-keybindings))
+
+            ;;按C-M-\键格式化
+            (global-set-key (kbd "C-M-\\") 'indent-whole)))
 
 (add-hook
  'emacs-startup-hook
@@ -231,7 +239,7 @@
 (after-load "magit-autoloads"
   (global-set-key [f12] 'magit-status))
 
-;;开启自动补齐模式
+;; 开启自动补齐模式
 (after-load "company-autoloads"
   (add-hook 'after-init-hook #'global-company-mode)
   (global-set-key "\t" 'company-complete-common))
@@ -239,10 +247,50 @@
 ;; 显示左侧导航，按F9键可以切换
 (after-load "sr-speedbar-autoloads"
   (global-set-key [f9] 'sr-speedbar-toggle)
-  (setq speedbar-show-unknown-files t)
-  (setq speedbar-verbosity-level 1)
-  (setq sr-speedbar-auto-refresh nil)
-  (setq sr-speedbar-right-side nil))
+  (setq speedbar-hide-button-brackets-flag t
+        speedbar-show-unknown-files t
+        speedbar-smart-directory-expand-flag t
+        speedbar-directory-button-trim-method 'trim
+        speedbar-use-images nil
+        speedbar-indentation-width 2
+        speedbar-use-imenu-flag t
+        sr-speedbar-width 40
+        sr-speedbar-width-x 40
+        sr-speedbar-auto-refresh nil
+        sr-speedbar-skip-other-window-p t
+        sr-speedbar-right-side nil))
+
+;; 在最后一次光标处打开文件
+(after-load "sr-speedbar"
+  (defvar sr-speedbar--target-window
+    (if (not (eq (selected-window) sr-speedbar-window))
+        (selected-window)
+      (other-window 1)))
+
+  (defadvice select-window (after remember-selected-window activate)
+    (unless (or (eq (selected-window) sr-speedbar-window)
+                (not (window-live-p (selected-window))))
+      (setq sr-speedbar--target-window (selected-window))))
+
+  (defun select-next-window ()
+    (select-window sr-speedbar--target-window))
+
+  ;;Override
+  (defun sr-speedbar-before-visiting-file-hook ()
+    "Function that hooks `speedbar-before-visiting-file-hook'."
+    (select-next-window))
+
+  (defun sr-speedbar-before-visiting-tag-hook ()
+    "Function that hooks `speedbar-before-visiting-tag-hook'."
+    (select-next-window))
+
+  (defun sr-speedbar-visiting-file-hook ()
+    "Function that hooks `speedbar-visiting-file-hook'."
+    (select-next-window))
+
+  (defun sr-speedbar-visiting-tag-hook ()
+    "Function that hooks `speedbar-visiting-tag-hook'."
+    (select-next-window)))
 
 ;; 扩展M-x功能
 (after-load "smex-autoloads"
@@ -258,15 +306,15 @@
   (defun theme-auto-switch ()
     "Automatically switch between dark and light theme."
     (interactive)
-    (let ((now (string-to-int (format-time-string "%H"))))
+    (let ((now (string-to-number (format-time-string "%H"))))
       (if (and (>= now 06) (<= now 18))
           (if (not (equal current-theme 'light))
               (progn
-                (load-theme 'solarized-light)
+                (load-theme 'solarized-light t)
                 (setq current-theme 'light)))
         (if (not (equal current-theme 'dark))
             (progn
-              (load-theme 'solarized-dark)
+              (load-theme 'solarized-dark t)
               (setq current-theme 'dark))))
       nil))
   (setq theme-timer (run-with-timer 0 (* 1 60) 'theme-auto-switch)))
@@ -300,6 +348,7 @@
   (setq nrepl-log-messages t)
   (setq cider-repl-history-size 3000)
   (setq cider-repl-history-file "~/.emacs.d/cider-history")
+  (setq cider-refresh-show-log-buffer t)
   (add-hook 'cider-mode-hook #'eldoc-mode)
   (add-hook 'cider-repl-mode-hook #'subword-mode)
   (global-set-key (kbd "C-c C-z") 'cider-switch-to-repl-buffer))

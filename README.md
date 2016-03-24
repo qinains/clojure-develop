@@ -10,13 +10,13 @@
     - [安装emacs](#install-emacs)
         - [更改.emacs的默认路径](#change-emacs-init)
 - [Linux下安装lein和emacs](#linux-install-lein-emacs)
-- [安装clojure开发相关插件](#install-clojure-profiles)
 - [安装和更新emacs插件](#emacs-plugins)
     - [安装emacs插件](#install-emacs-plugins)
     - [更新emacs插件](#update-emacs-plugins)
 - [使用lein的注意事项](#lein-notice)
     - [jar包下载不了](#jar-cannot-download)
     - [如何在REPL模式下进行WEB开发](#repl-web)
+- [常用按键](#key)
 - [其他问题](#other-problem)
 
 ##<a name="windows-install-lein-emacs"/>Windows下安装lein和emacs
@@ -56,7 +56,7 @@
 ####<a name="change-emacs-init"/>更改.emacs的默认路径
 打开emacs，输入C-x C-f ~/.emacs <回车>，添加
 
-    (load-file "c:/path/to/this/dir/init.el")
+    (load "c:/path/to/this/dir/init")
 
 。
 
@@ -83,7 +83,7 @@ lein安装到的默认目录是 ~/bin/ ，git clone本项目后，在控制台�
 
 之后打开emacs，输入C-x C-f ~/.emacs <回车>，添加
 
-    (load-file "/path/to/this/dir/init.el")
+    (load "/path/to/this/dir/init")
 
 。
 
@@ -94,20 +94,6 @@ lein安装到的默认目录是 ~/bin/ ，git clone本项目后，在控制台�
 	sudo pacman -S markdown #ArchLinux系统
 
 
-##<a name="install-clojure-profiles"/>安装clojure开发相关插件
-
-新建或编辑文件 ~/.lein/profiles.clj（windows系统一般为c:\Users\xxx\\.lein\profiles.clj），内容为
-
-     ;;clojure开发需要插件cider/cider-nrepl。在cider模式下可开启代码自动提示功能
-     ;;重构需要插件refactor-nrepl。详情请看[演示](https://github.com/clojure-emacs/clj-refactor.el/wiki)
-     ;;语法检查需要依赖包acyclic/squiggly-clojure
-	{:user {:plugins [[cider/cider-nrepl "0.10.2"]
-	                  [refactor-nrepl "2.0.0"]]
-	        :dependencies [[acyclic/squiggly-clojure "0.1.4"]]}}
-
-可直接将others/profiles.clj复制到~/.lein/目录下。
-
-
 ##<a name="emacs-plugins"/>安装和更新emacs插件
 
 ###<a name="update-emacs-plugins"/>安装emacs插件
@@ -116,8 +102,6 @@ Alt + x install<回车键>
 
 ####<a name="update-emacs-plugins"/>更新emacs插件
 Alt + x update<回车键>
-
-**更新之后，~/.lein/profiles.clj 文件中的相应版本号可能要改变（可参考others/profiles_snapshot.clj），否则启动cider之后会提示版本不对应的错误**
 
 
 ##<a name="lein-notice"/>使用lein的注意事项
@@ -177,6 +161,15 @@ Windows系统下，
 即可。
 
 **如果没有(start-http-server)函数，说明源码中有错误。可以在命令行中输入“lein run”或者“lein ring server”，手动启动服务，如果源码中有错误，即可看到错误信息。**
+
+##<a name="key"/>常用按键
+选定区域全部改为大写：C-x C-u
+选定区域全部改为小写：C-x C-l
+
+从光标位置开始，
+单词首字母转为大写：M-c
+整个单词转为大写：M-u
+整个单词转为小写：M-l
 
 ##<a name="other-problem"/>其他问题
 
