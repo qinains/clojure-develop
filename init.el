@@ -39,10 +39,12 @@
 (defvar melpa-stable-packages
   '(adoc-mode
     cider
+    clj-refactor
     clojure-mode
     clojure-mode-extra-font-locking
     clojure-snippets
     company
+    flycheck-pos-tip
     flx-ido
     magit
     markdown-mode
@@ -57,9 +59,7 @@
 ;; 开发中的安装包
 (defvar melpa-dev-packages
   '(4clojure
-    clj-refactor
     flycheck-clojure
-    flycheck-pos-tip
     restclient
     sr-speedbar))
 
@@ -122,8 +122,12 @@
 (defun indent-whole ()
   "格式化整个buffer，且避免光标位置移动."
   (interactive)
-  (save-excursion
-    (indent-region (point-min) (point-max) nil)))
+  (delete-trailing-whitespace)
+  (untabify (point-min) (point-max))
+  (indent-region (point-min) (point-max) nil))
+
+;; 保存自动格式化
+(add-hook 'before-save-hook 'indent-whole)
 
 (add-hook 'after-init-hook
           (lambda ()
@@ -331,6 +335,7 @@
 
 ;; clojure
 (after-load "clojure-mode-autoloads"
+  (add-hook 'clojure-mode-hook 'flycheck-clojure-setup)
   (add-hook 'clojure-mode-hook 'subword-mode)
   (add-hook 'clojure-mode-hook 'turn-on-eldoc-mode))
 
@@ -355,9 +360,6 @@
 
 (after-load "flycheck-autoloads"
   (add-hook 'after-init-hook #'global-flycheck-mode))
-
-(after-load "flycheck-clojure-autoloads"
-  (flycheck-clojure-setup))
 
 (after-load "flycheck-pos-tip-autoloads"
   (setq flycheck-display-errors-function #'flycheck-pos-tip-error-messages))
