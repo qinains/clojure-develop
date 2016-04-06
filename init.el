@@ -47,6 +47,7 @@
     flycheck-pos-tip
     flx-ido
     magit
+    magit-gitflow
     markdown-mode
     projectile
     rainbow-delimiters
@@ -57,7 +58,7 @@
     web-mode))
 
 ;; 开发中的安装包
-(defvar melpa-dev-packages
+(defvar melpa-develop-packages
   '(4clojure
     flycheck-clojure
     restclient
@@ -76,7 +77,7 @@
 
   (melpa-package)
   (package-refresh-contents)
-  (dolist (p melpa-dev-packages)
+  (dolist (p melpa-develop-packages)
     (unless (package-installed-p p)
       (message "Installing %s" (symbol-name p))
       (package-install p)))
@@ -95,18 +96,18 @@
   (update-packages)
   (message "Stable-packages has updated."))
 
-(defun update-dev-packages ()
+(defun update-develop-packages ()
   "只更新开发中的安装包."
   (interactive )
   (melpa-package)
   (package-refresh-contents)
   (require 'epl)
-  (dolist (p melpa-dev-packages)
+  (dolist (p melpa-develop-packages)
     (if (epl-package-outdated-p p)
         (progn
           (epl-package-install (epl-upgrade-available (car (epl-find-upgrades (epl-find-installed-packages p)))) 'force)
           (epl-package-delete (epl-upgrade-installed (car (epl-find-upgrades (epl-find-installed-packages p))))))))
-  (message "Dev-packages has updated."))
+  (message "Develop-packages has updated."))
 
 (defun update ()
   "所有的安装包都更新到开发中的版本."
@@ -138,10 +139,7 @@
               (tool-bar-mode -1)
               (scroll-bar-mode -1)
               (electric-indent-mode)
-              (global-linum-mode)
-
-              ;; 更好的显示函数名
-              (global-prettify-symbols-mode))
+              (global-linum-mode))
 
             ;; 如果是windows系统
             (if (memq window-system '(w32))
@@ -181,12 +179,26 @@
             (setq visible-bell t)
 
             ;; C-c,C-v,C-x,C-z复制、粘贴、剪切、撤销
+            (transient-mark-mode)
             (cua-mode)
             (setq cua-auto-tabify-rectangles nil)
-            (transient-mark-mode)
             (setq cua-keep-region-after-copy t)
             (setq x-select-enable-clipboard t)
             (setq mouse-yank-at-point t)
+
+            ;; Fix problem with cua-delete-region in Emacs 24.4
+            ;; 参考http://pastebin.com/sDNqakF3
+            (unless (fboundp 'cua-replace-region)
+              (defun cua-replace-region ()
+                "Replace the active region with the character you type."
+                (interactive)
+                (let ((not-empty (and cua-delete-selection (cua-delete-region))))
+                  (unless (eq this-original-command this-command)
+                    (let ((overwrite-mode
+                           (and overwrite-mode
+                                not-empty
+                                (not (eq this-original-command 'self-insert-command)))))
+                      (cua--fallback))))))
 
             ;; 选择文字后输入文字，不再追加，而是直接替换
             (delete-selection-mode)
@@ -215,12 +227,12 @@
  (lambda()
    (loaded-time "all-packages" emacs-start-time)))
 
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'forward)
-
 ;; 记住关闭前光标的位置
 (require 'saveplace)
 (setq-default save-place t)
+
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
 
 (defmacro after-load (name &rest body)
   "`eval-after-load' NAME evaluate BODY."
@@ -231,38 +243,118 @@
                         ,@body
                         (loaded-time ,name ts))))))
 
-;; 括号高亮
-(after-load "rainbow-delimiters-autoloads"
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode-enable))
-
-;; C-x u开启。p n f b q试试这几个键
-(after-load "undo-tree-autoloads"
-  (global-undo-tree-mode))
-
-;; 按F12键启动magit-status
-(after-load "magit-autoloads"
-  (global-set-key [f12] 'magit-status))
+(after-load "adoc-mode-autoloads"
+  (add-to-list 'auto-mode-alist '("\\.adoc\\'" . adoc-mode)))
 
 ;; 开启自动补齐模式
 (after-load "company-autoloads"
   (add-hook 'after-init-hook #'global-company-mode)
   (global-set-key "\t" 'company-complete-common))
 
-;; 显示左侧导航，按F9键可以切换
-(after-load "sr-speedbar-autoloads"
-  (global-set-key [f9] 'sr-speedbar-toggle)
-  (setq speedbar-hide-button-brackets-flag t
-        speedbar-show-unknown-files t
-        speedbar-smart-directory-expand-flag t
-        speedbar-directory-button-trim-method 'trim
-        speedbar-use-images nil
-        speedbar-indentation-width 2
-        speedbar-use-imenu-flag t
-        sr-speedbar-width 40
-        sr-speedbar-width-x 40
-        sr-speedbar-auto-refresh nil
-        sr-speedbar-skip-other-window-p t
-        sr-speedbar-right-side nil))
+(after-load "cider-autoloads"
+  (setq cider-repl-wrap-history t)
+  (setq nrepl-log-messages t)
+  (setq cider-repl-history-size 3000)
+  (setq cider-repl-history-file "~/.emacs.d/cider-history")
+  (setq cider-refresh-show-log-buffer t)
+  (add-hook 'cider-mode-hook #'eldoc-mode)
+  (add-hook 'cider-repl-mode-hook #'subword-mode)
+  (global-set-key (kbd "C-c C-z") 'cider-switch-to-repl-buffer))
+
+(after-load "clj-refactor-autoloads"
+  (add-hook 'clojure-mode-hook
+            (lambda ()
+              (clj-refactor-mode)
+              (cljr-add-keybindings-with-prefix "C-c RET"))))
+
+;; Clojure
+(after-load "clojure-mode-autoloads"
+  (add-hook 'clojure-mode-hook 'flycheck-clojure-setup)
+  (add-hook 'clojure-mode-hook 'subword-mode)
+  (add-hook 'clojure-mode-hook 'turn-on-eldoc-mode))
+
+(after-load "clojure-mode-extra-font-locking-autoloads"
+  (setq cider-repl-use-clojure-font-lock t))
+
+(after-load "flycheck-autoloads"
+  (add-hook 'after-init-hook #'global-flycheck-mode))
+
+(after-load "flycheck-pos-tip-autoloads"
+  (setq flycheck-display-errors-function #'flycheck-pos-tip-error-messages))
+
+(after-load "flx-ido-autoloads"
+  (ido-mode)
+  (ido-everywhere)
+  (flx-ido-mode)
+  (setq ido-enable-flex-matching t)
+  (setq ido-use-faces nil))
+
+;; 按F12键启动magit-status
+(after-load "magit-autoloads"
+  (add-hook 'magit-mode-hook
+            ;;添加gitflow插件
+            (lambda ()
+              (require 'magit-gitflow)
+              (turn-on-magit-gitflow)))
+  (global-set-key [f12] 'magit-status))
+
+;;配置markdown插件
+(after-load "markdown-mode-autoloads"
+  (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+  (defun markdown-custom ()
+    "markdown-mode-hook"
+    (setq markdown-command "markdown"))
+  (add-hook 'markdown-mode-hook '(lambda() (markdown-custom))))
+
+(after-load "projectile-autoloads"
+  (projectile-global-mode))
+
+;; 括号高亮
+(after-load "rainbow-delimiters-autoloads"
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode-enable))
+
+(after-load "restclient-autoloads"
+  (add-to-list 'auto-mode-alist '("\\.rc\\'" . restclient-mode))
+  (add-to-list 'auto-mode-alist '("\\.restclient\\'" . restclient-mode)))
+
+(after-load "smartparens-autoloads"
+  (add-hook 'lisp-mode-hook #'smartparens-strict-mode)
+  (add-hook 'lisp-interaction-mode-hook #'smartparens-strict-mode)
+  (add-hook 'emacs-lisp-mode-hook #'smartparens-strict-mode)
+  (add-hook 'eval-expression-minibuffer-setup-hook #'smartparens-strict-mode)
+  (add-hook 'ielm-mode-hook #'smartparens-strict-mode)
+  (add-hook 'scheme-mode-hook #'smartparens-strict-mode)
+  (add-hook 'clojure-mode-hook #'smartparens-strict-mode)
+  (add-hook 'cider-repl-mode-hook #'smartparens-strict-mode))
+
+;; 扩展M-x功能
+(after-load "smex-autoloads"
+  (add-hook 'after-init-hook #'smex-initialize)
+  (global-set-key (kbd "M-x") 'smex)
+  (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+  ;; 原配的M-x
+  (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command))
+
+;; 添加主题：白天黑夜自动切换主题，19:00自动切换
+(after-load "solarized-theme-autoloads"
+  (defvar current-theme nil "当前的主题，防止刷新")
+  (defun theme-auto-switch ()
+    "Automatically switch between dark and light theme."
+    (interactive)
+    (let ((now (string-to-number (format-time-string "%H"))))
+      (if (and (>= now 06) (<= now 18))
+          (if (not (equal current-theme 'light))
+              (progn
+                (load-theme 'solarized-light t)
+                (setq current-theme 'light)))
+        (if (not (equal current-theme 'dark))
+            (progn
+              (load-theme 'solarized-dark t)
+              (setq current-theme 'dark))))
+      nil))
+  (setq theme-timer (run-with-timer 0 (* 1 60) 'theme-auto-switch)))
 
 ;; 在最后一次光标处打开文件
 (after-load "sr-speedbar"
@@ -296,93 +388,25 @@
     "Function that hooks `speedbar-visiting-tag-hook'."
     (select-next-window)))
 
-;; 扩展M-x功能
-(after-load "smex-autoloads"
-  (add-hook 'after-init-hook #'smex-initialize)
-  (global-set-key (kbd "M-x") 'smex)
-  (global-set-key (kbd "M-X") 'smex-major-mode-commands)
-  ;; 原配的M-x
-  (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command))
+;; 显示左侧导航，按F9键可以切换
+(after-load "sr-speedbar-autoloads"
+  (global-set-key [f9] 'sr-speedbar-toggle)
+  (setq speedbar-hide-button-brackets-flag t
+        speedbar-show-unknown-files t
+        speedbar-smart-directory-expand-flag t
+        speedbar-directory-button-trim-method 'trim
+        speedbar-use-images nil
+        speedbar-indentation-width 2
+        speedbar-use-imenu-flag t
+        sr-speedbar-width 40
+        sr-speedbar-width-x 40
+        sr-speedbar-auto-refresh nil
+        sr-speedbar-skip-other-window-p t
+        sr-speedbar-right-side nil))
 
-;; 添加主题。白天黑夜自动切换主题，19:00自动切换
-(after-load "solarized-theme-autoloads"
-  (defvar current-theme nil "当前的主题，防止刷新")
-  (defun theme-auto-switch ()
-    "Automatically switch between dark and light theme."
-    (interactive)
-    (let ((now (string-to-number (format-time-string "%H"))))
-      (if (and (>= now 06) (<= now 18))
-          (if (not (equal current-theme 'light))
-              (progn
-                (load-theme 'solarized-light t)
-                (setq current-theme 'light)))
-        (if (not (equal current-theme 'dark))
-            (progn
-              (load-theme 'solarized-dark t)
-              (setq current-theme 'dark))))
-      nil))
-  (setq theme-timer (run-with-timer 0 (* 1 60) 'theme-auto-switch)))
-
-;;配置markdown插件
-(after-load "markdown-mode-autoloads"
-  (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
-  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-  (defun markdown-custom ()
-    "markdown-mode-hook"
-    (setq markdown-command "markdown"))
-  (add-hook 'markdown-mode-hook '(lambda() (markdown-custom))))
-
-;; clojure
-(after-load "clojure-mode-autoloads"
-  (add-hook 'clojure-mode-hook 'flycheck-clojure-setup)
-  (add-hook 'clojure-mode-hook 'subword-mode)
-  (add-hook 'clojure-mode-hook 'turn-on-eldoc-mode))
-
-(after-load "clojure-mode-extra-font-locking-autoloads"
-  (setq cider-repl-use-clojure-font-lock t))
-
-(after-load "clj-refactor-autoloads"
-  (add-hook 'clojure-mode-hook
-            (lambda ()
-              (clj-refactor-mode)
-              (cljr-add-keybindings-with-prefix "C-c RET"))))
-
-(after-load "cider-autoloads"
-  (setq cider-repl-wrap-history t)
-  (setq nrepl-log-messages t)
-  (setq cider-repl-history-size 3000)
-  (setq cider-repl-history-file "~/.emacs.d/cider-history")
-  (setq cider-refresh-show-log-buffer t)
-  (add-hook 'cider-mode-hook #'eldoc-mode)
-  (add-hook 'cider-repl-mode-hook #'subword-mode)
-  (global-set-key (kbd "C-c C-z") 'cider-switch-to-repl-buffer))
-
-(after-load "flycheck-autoloads"
-  (add-hook 'after-init-hook #'global-flycheck-mode))
-
-(after-load "flycheck-pos-tip-autoloads"
-  (setq flycheck-display-errors-function #'flycheck-pos-tip-error-messages))
-
-(after-load "yasnippet-autoloads"
-  (add-hook 'web-mode-hook #'(lambda () (yas-activate-extra-mode 'html-mode)))
-  (add-hook 'prog-mode-hook #'yas-minor-mode)
-  (add-hook 'clojure-mode-hook #'yas-minor-mode)
-  (add-hook 'cider-repl-mode-hook #'yas-minor-mode)
-  (add-hook 'emacs-lisp-mode-hook #'yas-minor-mode))
-
-(after-load "projectile-autoloads"
-  (projectile-global-mode))
-
-(after-load "smartparens-autoloads"
-  (add-hook 'lisp-mode-hook #'smartparens-strict-mode)
-  (add-hook 'lisp-interaction-mode-hook #'smartparens-strict-mode)
-  (add-hook 'emacs-lisp-mode-hook #'smartparens-strict-mode)
-  (add-hook 'eval-expression-minibuffer-setup-hook #'smartparens-strict-mode)
-  (add-hook 'ielm-mode-hook #'smartparens-strict-mode)
-  (add-hook 'scheme-mode-hook #'smartparens-strict-mode)
-  (add-hook 'clojure-mode-hook #'smartparens-strict-mode)
-  (add-hook 'cider-repl-mode-hook #'smartparens-strict-mode))
+;; C-x u开启。p n f b q试试这几个键
+(after-load "undo-tree-autoloads"
+  (global-undo-tree-mode))
 
 (after-load "web-mode-autoloads"
   (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
@@ -401,19 +425,12 @@
     (setq web-mode-enable-current-element-highlight t))
   (add-hook 'web-mode-hook 'my-web-mode-hook))
 
-(after-load "flx-ido-autoloads"
-  (ido-mode)
-  (ido-everywhere)
-  (flx-ido-mode)
-  (setq ido-enable-flex-matching t)
-  (setq ido-use-faces nil))
-
-(after-load "restclient-autoloads"
-  (add-to-list 'auto-mode-alist '("\\.rc\\'" . restclient-mode))
-  (add-to-list 'auto-mode-alist '("\\.restclient\\'" . restclient-mode)))
-
-(after-load "adoc-mode-autoloads"
-  (add-to-list 'auto-mode-alist '("\\.adoc\\'" . adoc-mode)))
+(after-load "yasnippet-autoloads"
+  (add-hook 'web-mode-hook #'(lambda () (yas-activate-extra-mode 'html-mode)))
+  (add-hook 'prog-mode-hook #'yas-minor-mode)
+  (add-hook 'clojure-mode-hook #'yas-minor-mode)
+  (add-hook 'cider-repl-mode-hook #'yas-minor-mode)
+  (add-hook 'emacs-lisp-mode-hook #'yas-minor-mode))
 
 (provide 'init)
 ;;; init.el ends here
