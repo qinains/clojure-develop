@@ -176,3 +176,8 @@ Windows系统下，
 1. 启动或者进行某个操作的时候提示“The directory ~/.emacs.d/server is unsafe”，如何修复？
 解决方法：右击“~/.emacs.d/server”文件夹 => 属性 => 安全 => 高级 => 所有者 => 编辑 => 选择当前用户 => 勾选“替换子容器和对象的所有者” => 确定
 
+2. 在Linux系统下打不开输入法
+解决方法：打开 ~/.profile , 之后添加
+
+    export LC_CTYPE="zh_CN.UTF-8"
+

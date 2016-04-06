@@ -127,9 +127,6 @@
   (untabify (point-min) (point-max))
   (indent-region (point-min) (point-max) nil))
 
-;; 保存自动格式化
-(add-hook 'before-save-hook 'indent-whole)
-
 (add-hook 'after-init-hook
           (lambda ()
             (when (not (version< emacs-version "24.1"))
