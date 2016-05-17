@@ -60,6 +60,10 @@
 ;; 开发中的安装包
 (defvar melpa-develop-packages
   '(4clojure
+    company-flx
+    docker
+    docker-api
+    dockerfile-mode
     flycheck-clojure
     restclient
     sr-speedbar))
@@ -110,10 +114,10 @@
   (message "Develop-packages has updated."))
 
 (defun update ()
-  "所有的安装包都更新到开发中的版本."
+  "稳定版和开发版各更新到最新版本."
   (interactive)
-  (melpa-package)
-  (update-packages)
+  (update-stable-packages)
+  (update-develop-packages)
   (message "All packages has updated."))
 
 (defun loaded-time (name start-time)
@@ -246,6 +250,11 @@
 ;; 开启自动补齐模式
 (after-load "company-autoloads"
   (add-hook 'after-init-hook #'global-company-mode)
+  (setq company-dabbrev-downcase nil)
+  (setq company-dabbrev-ignore-case nil)
+  (setq company-minimum-prefix-length 1)
+  (setq company-show-numbers t)
+  (company-flx-mode)
   (global-set-key "\t" 'company-complete-common))
 
 (after-load "cider-autoloads"
