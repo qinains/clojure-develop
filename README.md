@@ -1,4 +1,4 @@
-﻿#用emacs24开发clojure
+﻿#用emacs24开发clojure。项目迁移到 https://github.com/qinains/emacs.d 。当前项目只保留clojure开发需要到leiningen包和emacs在windows下需要的一些命令（比如grep）
 
 ##目录
 - [Windows下安装lein和emacs](#windows-install-lein-emacs)
